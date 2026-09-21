@@ -1,0 +1,29 @@
+{
+  "reviewType": "self-review",
+  "assetFingerprint": null,
+  "checks": {
+    "engineering": {
+      "status": "passed",
+      "details": "Constant-area storage balance was checked at the documented 600 s and 1200 s reference states, including explicit upper-bound overflow and lower-bound outlet-shortfall conservation behavior."
+    },
+    "functionality": {
+      "status": "passed",
+      "details": "Source review confirms algebraic absolute-time sampling, bounded level, valid input guards, reproducible backward seeks, isolated state, and idempotent cleanup."
+    },
+    "accessibility": {
+      "status": "not-reviewed",
+      "details": "Semantic SVG labels and keyboard-accessible demo controls are present in source; no assistive-technology browser session was available."
+    },
+    "visual": {
+      "status": "not-reviewed",
+      "details": "Repository preview SVG was inspected as source; no live browser capture was available."
+    },
+    "reuse": {
+      "status": "passed",
+      "details": "Dependency-free ES module follows runtime v1, scopes DOM/CSS to the instance root, uses deterministic absolute time, and disposes owned DOM idempotently."
+    }
+  },
+  "unresolvedBlockers": [
+    "Interactive browser/assistive-technology execution was unavailable in the connector-only environment; retain candidate status until that review is completed."
+  ]
+}

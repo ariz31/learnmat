@@ -1,0 +1,27 @@
+{
+  "agent": "water-ground",
+  "task": "geo-pipe-flow",
+  "runId": "2026-09-22-batch-001",
+  "base": "78addf774b735211dcd672346bfcea4817a5413c",
+  "status": "blocked",
+  "attempts": 1,
+  "updatedAt": "2026-09-22T01:15:00+08:00",
+  "reason": "Browser execution is unavailable in the connector-only environment; source, equations, and static preview are complete, but live interaction review remains pending.",
+  "history": [
+    {
+      "action": "begin",
+      "attempt": 1,
+      "at": "2026-09-22T01:10:00+08:00"
+    },
+    {
+      "action": "checking",
+      "attempt": 1,
+      "at": "2026-09-22T01:14:00+08:00"
+    },
+    {
+      "action": "block",
+      "attempt": 1,
+      "at": "2026-09-22T01:15:00+08:00"
+    }
+  ]
+}

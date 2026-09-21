@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "geo-open-channel",
+  "version": "0.1.0",
+  "title": "Open channel: section hydraulics and flow regime",
+  "description": "Reusable SVG rectangular open-channel component for continuity, hydraulic radius, Froude number, specific energy, and a Manning-capacity comparison at a specified depth.",
+  "category": "hydraulics-and-hydrology",
+  "topics": [
+    "open-channel flow",
+    "Froude number",
+    "Manning equation",
+    "hydraulic radius",
+    "specific energy"
+  ],
+  "learningObjectives": [
+    "Compute section velocity and hydraulic radius for a rectangular channel.",
+    "Classify subcritical, near-critical, or supercritical flow using the Froude number while distinguishing a specified depth from a solved normal depth."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/hydraulics-and-hydrology/geo-open-channel/demo/index.html",
+  "readme": "assets/hydraulics-and-hydrology/geo-open-channel/README.md",
+  "previewImage": "assets/hydraulics-and-hydrology/geo-open-channel/previews/preview.svg",
+  "reviewFile": "assets/hydraulics-and-hydrology/geo-open-channel/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Equations and representative reference calculations were reviewed from source. Interactive browser and assistive-technology review remain pending."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat water-ground asset contribution, 2026-09-22.",
+    "sha256": null
+  }
+}
