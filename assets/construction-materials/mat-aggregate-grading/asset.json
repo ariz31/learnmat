@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "mat-aggregate-grading",
+  "version": "0.1.0",
+  "title": "Aggregate specimens and grading visualization",
+  "description": "Illustrative aggregate specimen and percent-passing grading curve with retained-fraction and sample-mass calculations.",
+  "category": "construction-materials",
+  "topics": [
+    "aggregate",
+    "gradation",
+    "sieve-analysis",
+    "percent-passing",
+    "particle-size-distribution"
+  ],
+  "learningObjectives": [
+    "Interpret percent passing across nominal sieve openings using a logarithmic grading curve.",
+    "Relate successive percent-passing values to percent retained and retained sample mass without confusing the example with a specification envelope."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/construction-materials/mat-aggregate-grading/demo/index.html",
+  "readme": "assets/construction-materials/mat-aggregate-grading/README.md",
+  "previewImage": "assets/construction-materials/mat-aggregate-grading/previews/default.svg",
+  "reviewFile": "assets/construction-materials/mat-aggregate-grading/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat contribution; no external grading specification, product dataset, or third-party media embedded."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Focused source/arithmetic review completed; browser and assistive-technology execution are intentionally not claimed."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat contribution for reserved materials task mat-aggregate-grading.",
+    "sha256": null
+  }
+}
