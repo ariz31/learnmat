@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Physical frame joints are A=(0,0), B=(bayWidthM,0), C=(0,storyHeightM), D=(bayWidthM,storyHeightM). Prescribed sway translates C and D by deltaX=driftRatio*storyHeightM while fixed bases remain unmoved.",
+  "boundsDescription": "Physical frame joints are centered about x=0 for presentation. True model translation remains deltaX=driftRatio*storyHeightM; only the rendered deformed frame multiplies deltaX by the explicit exaggeration parameter.",
   "parameters": {
     "bayWidthM": {
       "unit": "m",
@@ -32,5 +32,11 @@
       "default": 3
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs",
+  "threePeerVersion": "0.185.1",
+  "hostCapabilities": [
+    "THREE",
+    "scene"
+  ]
 }

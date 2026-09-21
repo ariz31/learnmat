@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Connection geometry is represented in an elevation/assembly coordinate system. Plate width and height are physical dimensions; exploded separation is display/assembly translation and does not represent deformation.",
+  "boundsDescription": "The support, plate and beam are rendered as a spatial assembly around the model bolt group. explodeM translates the plate and beam in assembly space and is not structural deformation.",
   "parameters": {
     "plateWidthM": {
       "unit": "m",
@@ -57,5 +57,11 @@
       "default": 0.08
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs",
+  "threePeerVersion": "0.185.1",
+  "hostCapabilities": [
+    "THREE",
+    "scene"
+  ]
 }

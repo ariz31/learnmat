@@ -1,37 +1,34 @@
 # Asset review
 
-- Asset ID and version: str-frame-sway 0.1.0
-- Reviewer and review date: structures self-review, 2026-09-22
-- Environment/browser/device/viewport: source review only; browser execution unavailable
-- Dependencies available: none
+- Asset ID and version: str-frame-sway 0.2.0
+- Reviewer and review date: structures redesign self-review, 2026-09-22
+- Environment/browser/device/viewport: source review only; independent runtime capture remains required
+- Dependencies: Three.js 0.185.1 declared as a non-embedded peer
 
 ## Engineering
 
-- Model: prescribed single-story portal-frame drift, fixed bases, rigid horizontal top beam.
-- Independent check: 3.5 m × 0.015 = 0.0525 m = 52.5 mm.
-- Boundary checks: zero drift produces zero displacement; display exaggeration does not modify physical snapshot geometry.
+True prescribed displacement remains deltaX=driftRatio×storyHeight. The 3D renderer uses deltaX×exaggeration only for displayed top-joint positions and reports both true and displayed values.
 - Gate: not-reviewed independently
 
 ## Browser and functionality
 
-- Runtime-v1 source and state flow inspected; live browser not executed.
+- Component adds only owned Three.js objects to the host scene; renderer/camera/clock stay host-owned.
+- Demo provides OrbitControls, camera reset, model reset, focus mode, antialiased rendering, shadows, and ResizeObserver behavior.
+- Live WebGL execution and context-loss behavior remain to be observed.
 - Gate: not-reviewed
 
 ## Accessibility
 
-- Native labeled demo controls, SVG role/text equivalent, and visible numeric output included.
+- Native controls are labeled and live numerical meaning is duplicated outside the canvas.
+- Focus mode has an explicit exit control.
+- Screen-reader/keyboard execution remains to be observed.
 - Gate: not-reviewed
 
 ## Rights
 
-- Original repository contribution; no embedded third-party content.
-- Gate: cleared
-
-## Visual evidence
-
-- Actual preview file: previews/default.svg
-- Source-authored representative preview; not a runtime screenshot.
+- No third-party visual assets are embedded; Three.js is a declared external runtime peer.
+- Gate: cleared for repository-authored content.
 
 ## Decision
 
-- Candidate only. Independent engineering/browser/accessibility review remains required before approval.
+Candidate only. Premium visual fidelity does not substitute for independent engineering, browser, or accessibility approval.

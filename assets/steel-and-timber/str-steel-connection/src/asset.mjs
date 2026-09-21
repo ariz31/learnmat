@@ -1,39 +1,25 @@
-import{DEFAULT_CONNECTION_PARAMETERS,solveSteelConnection,validateConnectionParameters}from'./model.mjs';
-const NS='http://www.w3.org/2000/svg';function e(n,a={},t=''){const x=document.createElementNS(NS,n);for(const[k,v]of Object.entries(a))x.setAttribute(k,String(v));if(t)x.textContent=t;return x;}
+import {DEFAULT_CONNECTION_PARAMETERS,solveSteelConnection,validateConnectionParameters} from './model.mjs';
+import {requireThreeRuntime,premiumMaterials,makeCylinderBetween,makeLabelSprite,clearGroup,disposeGroup} from './three-utils.mjs';
+
+function addColumn(THREE,root,m,x,height=2.7){
+ const web=new THREE.Mesh(new THREE.BoxGeometry(.035,height,.58),m.steel);web.position.set(x,height/2,0);web.castShadow=true;root.add(web);
+ for(const z of[-.31,.31]){const flange=new THREE.Mesh(new THREE.BoxGeometry(.36,height,.035),m.steel);flange.position.set(x,height/2,z);flange.castShadow=true;root.add(flange);}
+}
+function addBeam(THREE,root,m,startX,length,y,z=0){
+ const cx=startX+length/2;const web=new THREE.Mesh(new THREE.BoxGeometry(length,.48,.025),m.steel);web.position.set(cx,y,z);web.castShadow=true;root.add(web);
+ for(const yy of[y-.255,y+.255]){const flange=new THREE.Mesh(new THREE.BoxGeometry(length,.035,.3),m.steel);flange.position.set(cx,yy,z);flange.castShadow=true;root.add(flange);}
+}
 export function createAsset(context){
- if(!context||!(context.container instanceof Element))throw new TypeError('context.container must be a DOM Element');
- let disposed=false,p={...DEFAULT_CONNECTION_PARAMETERS},timeSeconds=0,viewport={width:820,height:480,pixelRatio:1};
- const host=document.createElement('div'),shadow=host.attachShadow({mode:'open'}),style=document.createElement('style'),card=document.createElement('div'),svg=e('svg',{viewBox:'0 0 820 480',role:'img'}),note=document.createElement('p');
- style.textContent=':host{display:block}.card{font:13px/1.4 system-ui,sans-serif;color:#111827;background:#fff;border:1px solid #d1d5db;border-radius:12px;padding:10px}svg{display:block;width:100%;height:auto}.note{margin:.5rem 0 0}';card.className='card';note.className='note';shadow.append(style,card);card.append(svg,note);context.container.append(host);
- const line=(x1,y1,x2,y2,a={})=>svg.append(e('line',{x1,y1,x2,y2,stroke:'currentColor','stroke-width':2.5,...a}));const text=(x,y,t,a='middle',s=12,w=500)=>svg.append(e('text',{x,y,'text-anchor':a,'font-size':s,'font-family':'system-ui,sans-serif','font-weight':w,fill:'currentColor'},t));
- function draw(){
-  svg.replaceChildren();const s=solveSteelConnection(p);text(410,28,'Exploded bolted steel shear connection','middle',21,750);
-  const scale=Math.min(330/p.plateHeightM,190/p.plateWidthM,110/Math.max(p.explodeM,.001));
-  const plateH=p.plateHeightM*scale, plateW=p.plateWidthM*scale, y0=80+(330-plateH)/2;
-  const explodePx=p.explodeM*scale, supportX=150,plateX=supportX+95+explodePx,webX=plateX+plateW+70+explodePx;
-  svg.append(e('rect',{x:supportX,y:70,width:55,height:350,fill:'none',stroke:'currentColor','stroke-width':5}));
-  line(supportX-55,70,supportX+110,70,{'stroke-width':12});line(supportX-55,420,supportX+110,420,{'stroke-width':12});
-  text(supportX+28,450,'support','middle',12,700);
-  svg.append(e('rect',{x:plateX,y:y0,width:plateW,height:plateH,fill:'none',stroke:'currentColor','stroke-width':4}));
-  text(plateX+plateW/2,450,'shear plate','middle',12,700);
-  svg.append(e('rect',{x:webX,y:80,width:32,height:330,fill:'none',stroke:'currentColor','stroke-width':5}));
-  line(webX-65,80,webX+95,80,{'stroke-width':12});line(webX-65,410,webX+95,410,{'stroke-width':12});text(webX+16,450,'beam web','middle',12,700);
-  for(const b of s.boltCentersM){
-    const cy=y0+plateH-b.y*scale,cx=plateX+b.x*scale;
-    svg.append(e('circle',{cx,cy,r:Math.max(5,p.boltDiameterM*scale/2),fill:'none',stroke:'currentColor','stroke-width':3}));
-    line(cx+8,cy,webX-8,cy,{'stroke-width':1.5,'stroke-dasharray':'6 5'});
-  }
-  text(410,57,'Exploded separation = '+(p.explodeM*1000).toFixed(0)+' mm per assembly step (not deformation)','middle',12,650);
-  text(410,465,'Bolts Ø'+(p.boltDiameterM*1000).toFixed(0)+' mm · spacing '+(p.boltSpacingM*1000).toFixed(0)+' mm · vertical edge '+(s.actualVerticalEdgeDistanceM*1000).toFixed(1)+' mm','middle',11,600);
-  note.textContent='Assembly geometry only. Plate, bolt, weld, bearing, block shear, slip, prying, and design-code capacities are not evaluated.';
-  svg.setAttribute('aria-label','Exploded support, shear plate, and beam web with '+p.boltCount+' bolts of diameter '+(p.boltDiameterM*1000).toFixed(0)+' millimetres at '+(p.boltSpacingM*1000).toFixed(0)+' millimetre spacing. Actual vertical edge distance is '+(s.actualVerticalEdgeDistanceM*1000).toFixed(1)+' millimetres.');
+ const {THREE,scene}=requireThreeRuntime(context);let disposed=false,parameters={...DEFAULT_CONNECTION_PARAMETERS},timeSeconds=0,viewport={width:1,height:1,pixelRatio:1};
+ const root=new THREE.Group();root.name='str-steel-connection';root.position.y=-.66;scene.add(root);
+ function rebuild(){
+  clearGroup(root);const s=solveSteelConnection(parameters),m=premiumMaterials(THREE),p=parameters;
+  const supportX=-1.05,faceX=-.86,plateX=faceX+.07+s.assemblyOffsetsM.plate,beamStart=faceX+.16+s.assemblyOffsetsM.beamWeb,beamY=1.38,beamLength=2.65;
+  addColumn(THREE,root,m,supportX,2.8);addBeam(THREE,root,m,beamStart,beamLength,beamY,0);
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(p.plateThicknessM,p.plateHeightM,p.plateWidthM),m.teal);plate.position.set(plateX,beamY,0);plate.castShadow=true;root.add(plate);
+  const yBottom=beamY-p.plateHeightM/2;for(const bc of s.boltCentersM){const y=yBottom+bc.y,z=bc.x-p.plateWidthM/2;const a=new THREE.Vector3(plateX-.08,y,z),b=new THREE.Vector3(beamStart+.09,y,z);root.add(makeCylinderBetween(THREE,a,b,p.boltDiameterM/2,m.bolt,20));for(const x of[plateX-.06,beamStart+.07]){const washer=new THREE.Mesh(new THREE.CylinderGeometry(p.boltDiameterM*.9,p.boltDiameterM*.9,.018,22),m.dark);washer.rotation.z=Math.PI/2;washer.position.set(x,y,z);washer.castShadow=true;root.add(washer);}const nut=new THREE.Mesh(new THREE.CylinderGeometry(p.boltDiameterM*.82,p.boltDiameterM*.82,p.boltDiameterM*.55,6),m.bolt);nut.rotation.z=Math.PI/2;nut.position.set(beamStart+.13,y,z);nut.castShadow=true;root.add(nut);}
+  const l1=makeLabelSprite(THREE,'support',{scale:.48});l1.position.set(supportX,2.95,.42);root.add(l1);const l2=makeLabelSprite(THREE,'shear plate',{color:'#007d80',scale:.52});l2.position.set(plateX,2.22,.42);root.add(l2);const l3=makeLabelSprite(THREE,'beam',{scale:.48});l3.position.set(beamStart+1.5,2.1,.42);root.add(l3);
+  const info=makeLabelSprite(THREE,'explode '+(p.explodeM*1000).toFixed(0)+' mm / step',{color:'#8a451f',scale:.5});info.position.set(.3,.45,.42);root.add(info);
  }
- draw();return{
-  setParameters(next={}){if(disposed)throw new Error('Asset is disposed');p=validateConnectionParameters(next,p);draw();},
-  update(t){if(disposed)throw new Error('Asset is disposed');if(!Number.isFinite(t)||t<0)throw new RangeError('timeSeconds must be finite and nonnegative');timeSeconds=t;},
-  reset(){if(disposed)throw new Error('Asset is disposed');p={...DEFAULT_CONNECTION_PARAMETERS};timeSeconds=0;draw();},
-  resize(width,height,pixelRatio=1){if(disposed)throw new Error('Asset is disposed');for(const v of[width,height,pixelRatio])if(!Number.isFinite(v)||v<=0)throw new RangeError('resize values must be finite and positive');viewport={width,height,pixelRatio};host.style.width=width+'px';host.style.maxWidth='100%';},
-  snapshot(){return{...solveSteelConnection(p),timeSeconds,viewport:{...viewport}};},
-  dispose(){if(disposed)return;disposed=true;host.remove();}
- };
+ rebuild();return{setParameters(next={}){if(disposed)throw new Error('Asset is disposed');parameters=validateConnectionParameters(next,parameters);rebuild();},update(t){if(disposed)throw new Error('Asset is disposed');if(!Number.isFinite(t)||t<0)throw new RangeError('timeSeconds must be finite and nonnegative');timeSeconds=t;},reset(){if(disposed)throw new Error('Asset is disposed');parameters={...DEFAULT_CONNECTION_PARAMETERS};timeSeconds=0;rebuild();},resize(w,h,p=1){if(disposed)throw new Error('Asset is disposed');if(![w,h,p].every(v=>Number.isFinite(v)&&v>0))throw new RangeError('resize values must be finite and positive');viewport={width:w,height:h,pixelRatio:p};},snapshot(){return{...solveSteelConnection(parameters),timeSeconds,viewport:{...viewport},rendering:'Three.js 0.185.1 host scene'};},dispose(){if(disposed)return;disposed=true;disposeGroup(root,scene);}};
 }

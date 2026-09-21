@@ -1,33 +1,34 @@
 # Asset review
 
-- Asset ID and version: str-steel-connection 0.1.0
-- Reviewer and review date: structures self-review, 2026-09-22
-- Environment/browser/device/viewport: source review only; browser unavailable
+- Asset ID and version: str-steel-connection 0.2.0
+- Reviewer and review date: structures redesign self-review, 2026-09-22
+- Environment/browser/device/viewport: source review only; independent runtime capture remains required
+- Dependencies: Three.js 0.185.1 declared as a non-embedded peer
 
 ## Engineering
 
-- Default four-bolt group length is 225 mm.
-- Centered group in 340 mm plate gives 57.5 mm vertical edge distance.
-- Centered bolt line in 140 mm plate gives 70 mm horizontal edge distance.
-- Both exceed the user-requested illustrative 45 mm minimum; 75 mm spacing exceeds 20 mm bolt diameter.
-- No capacity or code-compliance result is claimed.
+The geometric fit equations remain unchanged. Default four-bolt group length is 225 mm; a 340 mm plate gives 57.5 mm vertical edge distance, and a 140 mm width gives 70 mm horizontal edge distance. Exploded translation is not deformation.
 - Gate: not-reviewed independently
 
 ## Browser and functionality
 
-- Runtime-v1 source inspected; live browser unavailable.
+- Component adds only owned Three.js objects to the host scene; renderer/camera/clock stay host-owned.
+- Demo provides OrbitControls, camera reset, model reset, focus mode, antialiased rendering, shadows, and ResizeObserver behavior.
+- Live WebGL execution and context-loss behavior remain to be observed.
 - Gate: not-reviewed
 
 ## Accessibility
 
-- Labeled native controls, SVG aria-label, and visible numerical output included.
+- Native controls are labeled and live numerical meaning is duplicated outside the canvas.
+- Focus mode has an explicit exit control.
+- Screen-reader/keyboard execution remains to be observed.
 - Gate: not-reviewed
 
 ## Rights
 
-- Original contribution; no third-party content.
-- Gate: cleared
+- No third-party visual assets are embedded; Three.js is a declared external runtime peer.
+- Gate: cleared for repository-authored content.
 
 ## Decision
 
-Candidate only. Independent engineering/browser/accessibility review remains required before approval.
+Candidate only. Premium visual fidelity does not substitute for independent engineering, browser, or accessibility approval.

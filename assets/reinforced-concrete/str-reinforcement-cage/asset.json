@@ -1,44 +1,52 @@
 {
   "schemaVersion": "1.0.0",
   "id": "str-reinforcement-cage",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Parametric reinforcement cage",
-  "description": "Reusable SVG detailing-geometry component for a rectangular reinforced-concrete column cage with explicit clear cover, longitudinal-bar layout, and transverse-tie spacing.",
+  "description": "Premium Three.js reinforced-concrete cage study with transparent concrete shell, longitudinal bars, transverse ties, cover and spacing readouts.",
   "category": "reinforced-concrete",
   "topics": [
     "reinforcement-cage",
     "clear-cover",
     "tie-spacing",
-    "column-reinforcement"
+    "column-reinforcement",
+    "3d-visualization"
   ],
   "learningObjectives": [
-    "Visualize how clear cover, tie diameter, longitudinal-bar diameter, bar counts, and tie spacing determine reinforcement-cage geometry."
+    "Visualize how clear cover, tie diameter, longitudinal-bar diameter, perimeter bar counts and tie spacing define a three-dimensional reinforcement cage."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/reinforced-concrete/str-reinforcement-cage/demo/index.html",
   "readme": "assets/reinforced-concrete/str-reinforcement-cage/README.md",
   "previewImage": "assets/reinforced-concrete/str-reinforcement-cage/previews/default.svg",
   "reviewFile": "assets/reinforced-concrete/str-reinforcement-cage/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+    "attribution": "Original LearnMat repository contribution. Runtime uses the declared Three.js 0.185.1 peer; no third-party models, textures, fonts, or datasets are embedded."
   },
   "verification": {
     "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Candidate includes deterministic detailing geometry and reproducible spacing checks. It does not claim code compliance. Independent engineering, browser, screenshot, and accessibility review remain required."
+    "notes": "0.2.0 replaces the flat renderer with a host-rendered Three.js scene while preserving the analytical/detailing model. Independent engineering, live-browser, screenshot, and accessibility review remain required before approval."
   },
   "source": {
     "type": "original",
-    "reference": "Reserved structures-agent task str-reinforcement-cage; original dependency-free SVG/DOM implementation.",
+    "reference": "Premium 3D rebuild of reserved structures task str-reinforcement-cage; model logic retained from the original repository contribution.",
     "sha256": null
   }
 }
