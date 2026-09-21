@@ -1,11 +1,6 @@
+import { DEFAULT_BEAM_PARAMETERS, beamResponseAt, solveBeam, validateBeamParameters } from './model.mjs';
+
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const DEFAULTS = Object.freeze({ spanM: 6, loadN: 20000, elasticModulusPa: 200e9, inertiaM4: 8e-5 });
-const LIMITS = {
-  spanM: [2, 20],
-  loadN: [0, 1e6],
-  elasticModulusPa: [1e9, 300e9],
-  inertiaM4: [1e-8, 1]
-};
 
 function svgEl(name, attrs = {}, text = '') {
   const node = document.createElementNS(SVG_NS, name);
@@ -14,33 +9,10 @@ function svgEl(name, attrs = {}, text = '') {
   return node;
 }
 
-function validate(next, current) {
-  for (const key of Object.keys(next)) if (!Object.hasOwn(DEFAULTS, key)) throw new TypeError('Unknown parameter: ' + key);
-  const merged = { ...current, ...next };
-  for (const [key, [min, max]] of Object.entries(LIMITS)) {
-    const value = merged[key];
-    if (!Number.isFinite(value) || value < min || value > max) throw new RangeError(key + ' must be finite and within [' + min + ', ' + max + ']');
-  }
-  return merged;
-}
-
-function responseAt(x, p) {
-  const L = p.spanM;
-  if (!Number.isFinite(x) || x < 0 || x > L) throw new RangeError('x must lie on the beam span');
-  const P = p.loadN;
-  const half = L / 2;
-  const reaction = P / 2;
-  const shearN = x < half ? reaction : x > half ? -reaction : 0;
-  const momentNm = x <= half ? reaction * x : reaction * (L - x);
-  const a = Math.min(x, L - x);
-  const deflectionM = P === 0 ? 0 : -P * a * (3 * L * L - 4 * a * a) / (48 * p.elasticModulusPa * p.inertiaM4);
-  return { xM: x, shearN, momentNm, deflectionM };
-}
-
 export function createAsset(context) {
   if (!context || !(context.container instanceof Element)) throw new TypeError('context.container must be a DOM Element');
   let disposed = false;
-  let parameters = { ...DEFAULTS };
+  let parameters = { ...DEFAULT_BEAM_PARAMETERS };
   let timeSeconds = 0;
   let viewport = { width: 760, height: 500, pixelRatio: 1 };
 
@@ -70,16 +42,16 @@ export function createAsset(context) {
     line(x, y1, x, y2, { 'stroke-width': 3 });
     svg.append(svgEl('polygon', { points: (x-8)+','+(y2-12)+' '+(x+8)+','+(y2-12)+' '+x+','+y2, fill: 'currentColor' }));
   }
-
   function draw() {
     svg.replaceChildren();
-    const p = parameters;
+    const solved = solveBeam(parameters);
+    const p = solved.parameters;
     const L = p.spanM, P = p.loadN;
+    const reaction = solved.reactionsN.left;
+    const maxMoment = solved.maxMomentNm;
+    const maxDeflection = solved.maxDeflectionM;
     const left = 80, right = 690, beamY = 82, width = right - left;
     const xPix = x => left + width * x / L;
-    const reaction = P / 2;
-    const maxMoment = P * L / 4;
-    const maxDeflection = P === 0 ? 0 : -P * L ** 3 / (48 * p.elasticModulusPa * p.inertiaM4);
 
     text(380, 28, 'Simply supported beam — centered point load', 'middle', 20, 750);
     line(left, beamY, right, beamY, { 'stroke-width': 7 });
@@ -98,23 +70,19 @@ export function createAsset(context) {
       { name:'Moment M', y:300, value:r=>r.momentNm, max:Math.max(Math.abs(maxMoment),1), unit:'kN·m', scale:1e-3 },
       { name:'Deflection v', y:420, value:r=>r.deflectionM, max:Math.max(Math.abs(maxDeflection),1e-12), unit:'mm', scale:1e3 }
     ];
-
     for (const panel of panels) {
       text(28, panel.y-42, panel.name, 'start', 13, 750);
       line(left, panel.y, right, panel.y, { 'stroke-width': 1.2, 'stroke-dasharray':'5 4' });
       const pts=[];
-      const n=80;
-      for (let i=0;i<=n;i++) {
-        const x=L*i/n;
-        const r=responseAt(x,p);
+      for (let i=0;i<=80;i++) {
+        const x=L*i/80;
+        const r=beamResponseAt(x,p);
         const value=panel.value(r);
         const visual=panel.name.startsWith('Deflection') ? -value : value;
         pts.push([xPix(x), panel.y - 42 * visual / panel.max]);
       }
       poly(pts);
-      if (panel.name.startsWith('Shear') && P > 0) {
-        line(xPix(L/2), panel.y-42, xPix(L/2), panel.y+42, { 'stroke-width':2.5 });
-      }
+      if (panel.name.startsWith('Shear') && P > 0) line(xPix(L/2), panel.y-42, xPix(L/2), panel.y+42, { 'stroke-width':2.5 });
       let labelValue;
       if (panel.name.startsWith('Shear')) labelValue=reaction*panel.scale;
       else if (panel.name.startsWith('Moment')) labelValue=maxMoment*panel.scale;
@@ -132,7 +100,7 @@ export function createAsset(context) {
   return {
     setParameters(next = {}) {
       if (disposed) throw new Error('Asset is disposed');
-      parameters = validate(next, parameters);
+      parameters = validateBeamParameters(next, parameters);
       draw();
     },
     update(nextTimeSeconds) {
@@ -142,7 +110,7 @@ export function createAsset(context) {
     },
     reset() {
       if (disposed) throw new Error('Asset is disposed');
-      parameters = { ...DEFAULTS };
+      parameters = { ...DEFAULT_BEAM_PARAMETERS };
       timeSeconds = 0;
       draw();
     },
@@ -154,18 +122,7 @@ export function createAsset(context) {
       host.style.maxWidth = '100%';
     },
     snapshot() {
-      const L=parameters.spanM, P=parameters.loadN;
-      const xs=[0,L/4,L/2,3*L/4,L];
-      return {
-        parameters:{...parameters},
-        reactionsN:{left:P/2,right:P/2},
-        maxMomentNm:P*L/4,
-        maxDeflectionM:P===0?0:-P*L**3/(48*parameters.elasticModulusPa*parameters.inertiaM4),
-        samples:xs.map(x=>responseAt(x,parameters)),
-        shearAtLoadConvention:'zero at the discontinuity; left/right limits are +P/2 and -P/2',
-        timeSeconds,
-        viewport:{...viewport}
-      };
+      return { ...solveBeam(parameters), timeSeconds, viewport: { ...viewport } };
     },
     dispose() {
       if (disposed) return;
