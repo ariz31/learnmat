@@ -4,26 +4,38 @@
   "checks": {
     "engineering": {
       "status": "passed",
-      "details": "Slope geometry, planar slice stresses, pore-pressure ratio, effective normal stress, and simplified infinite-slope factor of safety were independently recalculated for the documented reference state."
+      "details": "Existing slope angle, planar stress, pore-pressure ratio, shear resistance and FS model retained unchanged."
+    },
+    "pedagogy": {
+      "status": "passed",
+      "details": "Four steps teach slope geometry, explicit infinite-slope scope, stress resolution and model FS without a safety verdict."
     },
     "functionality": {
       "status": "passed",
-      "details": "Source review confirms radians at the API boundary, bounded pore-pressure ratio, validated geometry/material inputs, deterministic state, and idempotent cleanup."
+      "details": "Source rebuilds terrain/slice from validated inputs and supports deterministic update/reset/snapshot/resize/dispose."
+    },
+    "animation": {
+      "status": "passed",
+      "details": "Pore-pressure/slice emphasis is deterministic and instructional without changing engineering state."
+    },
+    "spatial3d": {
+      "status": "not-reviewed",
+      "details": "Real extruded Three.js terrain, planar slice and spatial force cues implemented; rendered comparison unavailable."
     },
     "accessibility": {
       "status": "not-reviewed",
-      "details": "Source includes semantic SVG descriptions and labelled native demo controls; no assistive-technology browser session was available."
+      "details": "Keyboard controls, explicit scope text, HUD and reduced-motion-aware camera behavior implemented; AT check pending."
     },
     "visual": {
       "status": "not-reviewed",
-      "details": "A deterministic repository preview is included; no live browser capture was available in this connector-only session."
+      "details": "Surveying-style depth, camera staging, responsive overlays and focus presentation implemented in source; no fabricated render pass."
     },
     "reuse": {
       "status": "passed",
-      "details": "Dependency-free runtime-v1 ES module with isolated instance state, finite input validation, deterministic output, snapshot support, and idempotent disposal."
+      "details": "Host scene/time ownership and exact Three.js peer preserved; component disposes owned resources."
     }
   },
   "unresolvedBlockers": [
-    "Live browser and assistive-technology execution remain pending; retain candidate status until independent review."
+    "Independent WebGL render and surveying-reference visual comparison remain required."
   ]
 }
