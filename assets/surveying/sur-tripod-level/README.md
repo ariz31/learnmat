@@ -1,33 +1,24 @@
-# Surveying Tripod and Level
+# 3D Surveying Tripod and Level
 
-Status: in-review component.
+Status: in-review. Version 0.2.0 replaces the schematic SVG with a real procedural Three.js instrument.
 
 ## Learning objective
+Identify the tripod, tribrach/leveling screws, instrument body, telescope, objective, eyepiece, focus knob, bubble element, instrument height, and spatial sight axis. Connect surveying azimuth/elevation inputs to the actual 3D sight direction.
 
-Make instrument height, tripod spread, sight elevation, and surveying azimuth explicit in a reusable level-instrument visual.
+## Model
+Optical-axis origin is **(0, instrumentHeight, 0)**. With azimuth A clockwise from north (-Z) and sight elevation e, the unit direction remains **(cos e sin A, sin e, -cos e cos A)**. A=0° points north; A=90° points east.
 
-## Model and assumptions
+## 3D implementation
+The tripod has three real volumetric legs positioned from the current spread. The level is assembled from metal/plastic/glass procedural meshes, with a dashed 3D sight ray and target cone. Camera presets make the elevation and plan relationships directly inspectable.
 
-- SI units and LearnMat coordinates: +X east/right, +Y up, north along -Z.
-- Instrument optical-axis origin is at (0, instrumentHeight, 0).
-- Surveying azimuth A is clockwise from north.
-- With sight elevation e, the unit sight vector is (cos(e) sin(A), sin(e), -cos(e) cos(A)).
-- A=0 points north (0,0,-1); A=90° points east (+1,0,0).
-- Instrument height range is 1.0–2.2 m; tripod spread 0.4–1.2 m; sight elevation ±5°.
-- The elevation drawing is a schematic projection. Azimuth is shown separately in the plan inset to avoid implying that a 2D side view carries full plan orientation.
+The component requires host-supplied Three.js and scene; the host owns camera/renderer/clock. Demo pins Three.js 0.185.1 and supplies orbit/pan/zoom, PBR lighting, shadows, ground, grid, focus mode and responsive presentation.
 
-## Usage
-
-Import `src/asset.mjs`, call `createAsset(context)`, then use `setParameters`, absolute-time `update`, `reset`, `resize`, `snapshot`, and idempotent `dispose`. No network dependency is required.
-
-## Reuse and rights
-
-Original repository contribution under the repository MIT license. No third-party models, textures, fonts, or libraries are embedded.
+## Rights
+Original procedural geometry only; no images or downloaded 3D models.
 
 ## Review evidence
-
-See `REVIEW.md`. The checked-in SVG preview is a deterministic source-authored default view, not a claimed browser screenshot.
+Live rendered/browser evidence remains pending; the former SVG is not referenced as the upgraded preview.
 
 ## Change history
-
-- 0.1.0 — Initial tripod-and-level component with explicit instrument height and line-of-sight vector.
+- 0.2.0 — Detailed Three.js tripod/level, volumetric parts and true 3D sight vector.
+- 0.1.0 — SVG schematic.
