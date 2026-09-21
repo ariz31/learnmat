@@ -9,7 +9,7 @@ Show two-person tape handling while separating the horizontal endpoint span from
 ## Model and assumptions
 
 - SI units; +X is along the measured line, +Y is up.
-- Both tape endpoints are held at equal elevation `supportHeight`.
+- Both tape endpoints are shown at an equal schematic hand elevation of 1.2 m. Absolute support elevation does not affect the equal-height catenary sag calculation.
 - Straight mode is the reference chord of length `horizontalSpan`.
 - Sag mode uses a symmetric catenary under tape self-weight:
   - weight per unit length: `w = massPerLength × g`
