@@ -1,18 +1,7 @@
-# Open-channel section hydraulics
+# Open-channel flow — surveying-grade 3D rebuild
 
-Rectangular-channel learning component using explicit SI inputs.
+The analytical rectangular-channel model remains authoritative. The former SVG-primary renderer is replaced with a real host-scene Three.js channel: concrete floor and sidewalls, transparent water prism, depth staff, downstream arrow, moving tracer lanes, ground context, and an explicitly exaggerated longitudinal bed-slope cue.
 
-## Model
+The demo follows four compact teaching steps: section geometry, continuity/velocity, Froude regime, and specified-depth Manning capacity. It provides camera presets, OrbitControls, soft lighting/shadows, play/pause/reset, responsive metrics, and focus/fullscreen presentation.
 
-- Area: `A = by`
-- Wetted perimeter: `P = b + 2y`
-- Hydraulic radius: `R = A/P`
-- Mean velocity: `V = Q/A`
-- Hydraulic depth for a rectangular channel: `D_h = A/T = y`
-- Froude number: `Fr = V/√(gD_h)`
-- Specific energy: `E = y + V²/(2g)`
-- Manning capacity at the supplied depth: `Q_M = (1/n)AR^(2/3)S^(1/2)`
-
-The component does **not** solve normal depth. It compares the supplied discharge to the Manning uniform-flow capacity associated with the supplied depth, roughness, and slope. This distinction is displayed directly in the visualization.
-
-No third-party runtime or network access is required.
+The longitudinal scene length, tracer speed, and slope cue are visual aids. Exact width, depth, velocity, Froude number and Manning capacity come from `src/model.mjs`. The asset still does **not** claim to solve normal depth.
