@@ -1,18 +1,7 @@
-# Review — geo-soil-layers
+# Review — geo-soil-layers 3D replacement
 
-Reference profile:
+The validated layer-integration and hydrostatic pore-pressure model remains unchanged. The 3D renderer consumes total/pore/effective stress outputs and does not calculate a second stress solution.
 
-- Layer 1: 2.0 m, γnat=17.5, γsat=19.5 kN/m³
-- Layer 2: 3.0 m, γnat=18.0, γsat=20.0 kN/m³
-- Layer 3: 4.0 m, γnat=19.0, γsat=21.0 kN/m³
-- Water table depth = 2.5 m
-- Query depth = 5.5 m
-- γw = 9.81 kN/m³
+The previous flat profile is replaced by a cutaway 3D soil block with stacked strata, water-table plane, query-depth probe, pulsing spatial marker, stress vectors, depth, occlusion, camera presets, lighting/shadows, step teaching, responsive HUD and focus mode. Stress-arrow lengths are expressly normalized and are not measurements.
 
-Total stress contributions: 2(17.5) + 0.5(18) + 2.5(20) + 0.5(21) = 104.5 kPa.
-
-Pore pressure: u = 9.81(5.5−2.5) = 29.43 kPa.
-
-Effective vertical stress: σ′v = 104.5 − 29.43 = 75.07 kPa.
-
-The source integrates partial layers and splits a layer at the water table when required. Query/water-table depths are constrained to the profile. Live browser/accessibility review remains pending.
+No browser/WebGL rendering was available via the repository connector, so surveying-reference visual parity and assistive-technology review remain pending.
