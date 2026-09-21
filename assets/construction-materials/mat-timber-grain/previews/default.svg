@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Preview of a timber specimen with stylized directional grain">
+  <rect width="1200" height="675" fill="#eef2f6"/>
+  <rect x="78" y="70" width="1044" height="535" rx="28" fill="#fff" stroke="#d7dde5"/>
+  <text x="126" y="137" font-family="system-ui,sans-serif" font-size="34" font-weight="700" fill="#0f172a">Timber specimen grain orientation</text>
+  <text x="126" y="175" font-family="system-ui,sans-serif" font-size="18" fill="#64748b">Default state · 300 × 75 × 25 mm · stylized 8° surface grain angle</text>
+
+  <g transform="translate(204 255)">
+    <rect x="0" y="0" width="560" height="140" rx="6" fill="#d5a96f" stroke="#6b4423" stroke-width="3"/>
+    <g stroke="#7b4f28" stroke-linecap="round" opacity=".58">
+      <line x1="0" y1="24" x2="560" y2="0" stroke-width="3"/>
+      <line x1="0" y1="46" x2="560" y2="22" stroke-width="2"/>
+      <line x1="0" y1="67" x2="560" y2="43" stroke-width="3"/>
+      <line x1="0" y1="88" x2="560" y2="64" stroke-width="2"/>
+      <line x1="0" y1="110" x2="560" y2="86" stroke-width="3"/>
+      <line x1="0" y1="132" x2="560" y2="108" stroke-width="2"/>
+    </g>
+    <g stroke="#334155" stroke-width="2" fill="none">
+      <line x1="0" y1="178" x2="560" y2="178"/><line x1="0" y1="168" x2="0" y2="188"/><line x1="560" y1="168" x2="560" y2="188"/>
+    </g>
+    <text x="280" y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="650" fill="#0f172a">300 mm length</text>
+  </g>
+
+  <g transform="translate(800 260)">
+    <line x1="0" y1="0" x2="145" y2="0" stroke="#0f172a" stroke-width="3"/>
+    <polygon points="145,0 132,-7 132,7" fill="#0f172a"/>
+    <text x="155" y="5" font-family="system-ui,sans-serif" font-size="16" font-weight="700" fill="#0f172a">specimen +X</text>
+    <line x1="0" y1="0" x2="143" y2="-20" stroke="#0f172a" stroke-width="3"/>
+    <polygon points="143,-20 129,-25 131,-11" fill="#0f172a"/>
+    <text x="150" y="-29" font-family="system-ui,sans-serif" font-size="16" font-weight="700" fill="#0f172a">grain 8°</text>
+    <text x="0" y="87" font-family="system-ui,sans-serif" font-size="15" fill="#64748b">Illustrative direction only.</text>
+    <text x="0" y="112" font-family="system-ui,sans-serif" font-size="15" fill="#64748b">No species, grade, or strength claim.</text>
+  </g>
+
+  <text x="126" y="558" font-family="system-ui,sans-serif" font-size="15" fill="#64748b">Static reference preview; browser and assistive-technology execution remain separate review gates.</text>
+</svg>

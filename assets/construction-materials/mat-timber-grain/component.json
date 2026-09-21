@@ -1,0 +1,59 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/construction-materials/mat-timber-grain/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Specimen longitudinal axis is +X, thickness is +Y, and width spans Z. Displayed top-surface grain angle is measured from +X toward -Z.",
+  "parameters": {
+    "lengthM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.1,
+      "max": 1.2,
+      "default": 0.3
+    },
+    "widthM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.025,
+      "max": 0.3,
+      "default": 0.075
+    },
+    "thicknessM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.005,
+      "max": 0.1,
+      "default": 0.025
+    },
+    "grainAngleRad": {
+      "type": "number",
+      "unit": "rad",
+      "min": -0.7853981633974483,
+      "max": 0.7853981633974483,
+      "default": 0.13962634015954636
+    },
+    "grainDensity": {
+      "type": "enum",
+      "values": [
+        "none",
+        "light",
+        "medium",
+        "dense"
+      ],
+      "default": "medium",
+      "meaning": "Illustrative line density only; no physical grain-spacing meaning."
+    },
+    "showDimensions": {
+      "type": "boolean",
+      "default": true
+    },
+    "showOrientation": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "assetDependencies": []
+}
