@@ -21,16 +21,27 @@ remote Three.js imports. Do not replace dependency versions opportunistically.
 4. Select a delivery mode matching the user's environment.
 5. Reuse an approved component or derive a new component from a candidate in a
    separate directory; avoid pasting entire presentation shells into another shell.
-6. Scope DOM selectors and CSS. Avoid window-global state conflicts and duplicate
+6. Preserve the educational intent. When the lesson teaches a real procedure,
+   expose meaningful steps and intermediate reasoning rather than only the final
+   animation or answer. For nonprocedural assets, preserve the intended observation,
+   comparison, assumptions, and interpretation.
+7. Keep default visible text minimal. Prefer concise labels, active-step details,
+   tooltips, expandable derivations, and optional tables over persistent long prose.
+8. Provide a focus/maximize presentation mode for animated or interactive lessons
+   so steps and nonessential panels can be hidden while keeping an obvious exit and
+   essential pause/play/reset controls.
+9. Scope DOM selectors and CSS. Avoid window-global state conflicts and duplicate
    element IDs. Dispose animation frames, controls, observers, and GPU resources.
-7. Keep numerical results and visual geometry consistent after parameter changes.
-8. Preserve required attribution and dependency license notices.
-9. Check desktop and mobile layouts, controls, reset, resize, and failure states.
+10. Keep numerical results and visual geometry consistent after parameter changes.
+11. Preserve required attribution and dependency license notices.
+12. Check desktop, tablet, and mobile layouts, controls, reset, resize, focused
+    presentation mode, reduced-motion behavior, and failure states.
 
 ## Consumer contract for future components
 
 Document initialization, units, bounded inputs, outputs/events, pause/reset,
-capture state, and disposal. Tell consumers whether multiple instances are
+capture state, disposal, and how the component behaves when lesson chrome is hidden
+for a focused presentation. Tell consumers whether multiple instances are
 supported and whether the drawing is to scale. Use adapters when a lesson needs
 a different UI; do not change a model's physics to fit a desired animation.
 
