@@ -1,0 +1,84 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/geotechnical/geo-soil-layers/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Vertical profile depth equals t1+t2+t3. SVG horizontal width is schematic; stresses are one-dimensional vertical geostatic values without surcharge or capillarity.",
+  "parameters": {
+    "layer1Thickness": {
+      "unit": "m",
+      "min": 0.01,
+      "max": 100,
+      "default": 2
+    },
+    "layer1NaturalUnitWeight": {
+      "unit": "kN/m^3",
+      "min": 1,
+      "max": 40,
+      "default": 17.5
+    },
+    "layer1SaturatedUnitWeight": {
+      "unit": "kN/m^3",
+      "min": 1,
+      "max": 40,
+      "default": 19.5
+    },
+    "layer2Thickness": {
+      "unit": "m",
+      "min": 0.01,
+      "max": 100,
+      "default": 3
+    },
+    "layer2NaturalUnitWeight": {
+      "unit": "kN/m^3",
+      "min": 1,
+      "max": 40,
+      "default": 18
+    },
+    "layer2SaturatedUnitWeight": {
+      "unit": "kN/m^3",
+      "min": 1,
+      "max": 40,
+      "default": 20
+    },
+    "layer3Thickness": {
+      "unit": "m",
+      "min": 0.01,
+      "max": 100,
+      "default": 4
+    },
+    "layer3NaturalUnitWeight": {
+      "unit": "kN/m^3",
+      "min": 1,
+      "max": 40,
+      "default": 19
+    },
+    "layer3SaturatedUnitWeight": {
+      "unit": "kN/m^3",
+      "min": 1,
+      "max": 40,
+      "default": 21
+    },
+    "waterTableDepth": {
+      "unit": "m",
+      "min": 0,
+      "max": 300,
+      "default": 2.5
+    },
+    "queryDepth": {
+      "unit": "m",
+      "min": 0,
+      "max": 300,
+      "default": 5.5
+    },
+    "waterUnitWeight": {
+      "unit": "kN/m^3",
+      "min": 1,
+      "max": 20,
+      "default": 9.81
+    }
+  },
+  "assetDependencies": []
+}
