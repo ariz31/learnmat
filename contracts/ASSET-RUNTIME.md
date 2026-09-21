@@ -33,6 +33,24 @@ Document whether setters after disposal throw; use the same policy consistently.
 Multiple instances must not share mutable state. Scope CSS to the instance root;
 no global IDs, window state, document-wide keyboard capture, or top-level side effects.
 
+## Educational presentation compatibility
+
+Reusable assets must support both a teaching context and a focused presentation
+context without changing their engineering model. The host may hide lesson text,
+step panels, derivations, tables, and other chrome while keeping the rendered asset
+visible. Components must therefore not depend on those panels for simulation state.
+
+Interactive/animated demos should expose a focus/maximize control at the host/demo
+layer. Focused presentation shows the animation or interactive scene with minimal
+chrome and preserves an obvious exit plus essential pause/play/reset controls.
+Exiting focus restores the previous instructional step, parameters, and simulation
+time unless the user explicitly reset them.
+
+The default teaching UI should keep visible prose minimal. Detailed derivations and
+long explanations belong in active-step regions or progressive disclosure. The
+underlying snapshot/model may retain complete numerical state even when the focused
+view hides it.
+
 ## Geometry, units, and composition
 
 Right-handed geometry uses metres, +Y up, +X east/right, and north along -Z.
