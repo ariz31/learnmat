@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "sur-tape-team",
+  "version": "0.1.0",
+  "title": "Surveying Tape Team",
+  "description": "Two-person tape-handling component comparing a straight reference line with a tensioned sagging tape.",
+  "category": "surveying",
+  "topics": ["taping", "distance-measurement", "sag", "fieldwork"],
+  "learningObjectives": [
+    "Distinguish horizontal endpoint span from the curved length of a sagging tape.",
+    "Relate tape self-weight and horizontal tension to catenary sag."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "in-review",
+  "entrypoint": "assets/surveying/sur-tape-team/demo/index.html",
+  "readme": "assets/surveying/sur-tape-team/README.md",
+  "previewImage": "assets/surveying/sur-tape-team/previews/default.svg",
+  "reviewFile": "assets/surveying/sur-tape-team/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Catenary geometry and straight-line limiting behavior reviewed from source; browser and assistive-technology checks remain."
+  },
+  "source": {"type":"original","reference":"Reserved surveying queue task sur-tape-team.","sha256":null}
+}
