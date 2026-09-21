@@ -16,7 +16,8 @@ licenses, GLB exports, performance scores, or preview URLs.
 For a published asset, also provide an actual preview, completed review record,
 license text path, versioned distributable, and usage instructions. The review
 record must also demonstrate the educational design requirements in
-EDUCATIONAL-DESIGN.md: a meaningful learning outcome, stepwise reasoning when a real
+EDUCATIONAL-DESIGN.md, including the repository's 3D-first rule and documented
+justification for any 2D-primary exception: a meaningful learning outcome, stepwise reasoning when a real
 procedure exists, minimal-text information hierarchy, purposeful animation when
 used, and focus/maximize presentation behavior for interactive animation. Asset previews
 are evidence from the source, not AI-generated substitutes. Component APIs need
