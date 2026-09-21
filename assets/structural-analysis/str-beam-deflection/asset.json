@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "str-beam-deflection",
+  "version": "0.1.0",
+  "title": "Simply supported beam response",
+  "description": "Linked load, shear, bending-moment, and elastic-deflection diagrams for a simply supported beam carrying one centered point load.",
+  "category": "structural-analysis",
+  "topics": [
+    "beam-deflection",
+    "shear-force",
+    "bending-moment",
+    "simply-supported-beam"
+  ],
+  "learningObjectives": [
+    "Relate support reactions, shear, bending moment, and elastic deflection for a simply supported beam with a centered point load."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/structural-analysis/str-beam-deflection/demo/index.html",
+  "readme": "assets/structural-analysis/str-beam-deflection/README.md",
+  "previewImage": "assets/structural-analysis/str-beam-deflection/previews/preview.svg",
+  "reviewFile": "assets/structural-analysis/str-beam-deflection/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Closed-form reactions, shear, moment, and centered-load elastic deflection were independently cross-checked. Browser and assistive-technology execution remain for independent review."
+  },
+  "source": {
+    "type": "original",
+    "reference": "LearnMat structures queue task str-beam-deflection.",
+    "sha256": null
+  }
+}
