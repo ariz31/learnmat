@@ -71,4 +71,10 @@ interface rather than duplicating or editing it.
 The scaffold template throws until implemented. It is deliberately not a fabricated
 finished asset. Static validation checks file presence and declarations, not JS
 semantics, physical correctness, browser rendering, or runtime conformance. These
-remain observed review gates. Three.js is optional; no new framework is required.
+remain observed review gates.
+
+Real 3D is the preferred renderer for spatial assets. Three.js is the repository's
+preferred reference approach when it fits the delivery constraints, especially for
+the surveying-style scenes, but a specific 3D library is not mandatory. Do not claim
+3D for flat SVG/Canvas2D/CSS-perspective output. A 2D-primary component must document
+why 3D is not educationally useful or practical for that asset.
