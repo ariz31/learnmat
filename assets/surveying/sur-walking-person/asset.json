@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "sur-walking-person",
+  "version": "0.1.0",
+  "title": "Surveying Walking Person",
+  "description": "Reusable deterministic surveying-field person with straight-path, speed, height, and gait-frequency controls.",
+  "category": "surveying",
+  "topics": ["fieldwork", "pacing", "surveying-crew", "animation"],
+  "learningObjectives": [
+    "Relate walking speed, elapsed time, and path distance in a surveying-field context.",
+    "Reuse a deterministic animated person without coupling it to a complete lesson."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "in-review",
+  "entrypoint": "assets/surveying/sur-walking-person/demo/index.html",
+  "readme": "assets/surveying/sur-walking-person/README.md",
+  "previewImage": "assets/surveying/sur-walking-person/previews/default.svg",
+  "reviewFile": "assets/surveying/sur-walking-person/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Distance/time and endpoint invariants reviewed from source. Browser and assistive-technology checks remain for independent review."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Reserved surveying queue task sur-walking-person.",
+    "sha256": null
+  }
+}
