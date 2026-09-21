@@ -1,6 +1,6 @@
+import { DEFAULT_TRUSS_PARAMETERS, solveTriangularTruss, validateTrussParameters } from './model.mjs';
+
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const DEFAULTS = Object.freeze({ spanM: 8, riseM: 3, loadN: 40000 });
-const LIMITS = { spanM:[2,30], riseM:[0.5,15], loadN:[0,1e6] };
 
 function svgEl(name, attrs = {}, text = '') {
   const node=document.createElementNS(SVG_NS,name);
@@ -9,37 +9,10 @@ function svgEl(name, attrs = {}, text = '') {
   return node;
 }
 
-function validate(next,current) {
-  for (const key of Object.keys(next)) if (!Object.hasOwn(DEFAULTS,key)) throw new TypeError('Unknown parameter: '+key);
-  const merged={...current,...next};
-  for (const [key,[min,max]] of Object.entries(LIMITS)) {
-    const value=merged[key];
-    if (!Number.isFinite(value) || value<min || value>max) throw new RangeError(key+' must be finite and within ['+min+', '+max+']');
-  }
-  return merged;
-}
-
-function solve(p) {
-  const half=p.spanM/2;
-  const length=Math.hypot(half,p.riseM);
-  const sinTheta=p.riseM/length;
-  const cosTheta=half/length;
-  const tanTheta=p.riseM/half;
-  const compressionMagnitude=p.loadN===0?0:p.loadN/(2*sinTheta);
-  const bottomTension=p.loadN===0?0:p.loadN/(2*tanTheta);
-  return {
-    thetaRad:Math.atan2(p.riseM,half),
-    reactionsN:{Ax:0,Ay:p.loadN/2,Cy:p.loadN/2},
-    memberForcesN:{AB:-compressionMagnitude,BC:-compressionMagnitude,AC:bottomTension},
-    geometryM:{A:{x:0,y:0},B:{x:half,y:p.riseM},C:{x:p.spanM,y:0}},
-    directionCosines:{diagonal:{cos:cosTheta,sin:sinTheta}}
-  };
-}
-
 export function createAsset(context) {
   if (!context || !(context.container instanceof Element)) throw new TypeError('context.container must be a DOM Element');
   let disposed=false;
-  let parameters={...DEFAULTS};
+  let parameters={...DEFAULT_TRUSS_PARAMETERS};
   let timeSeconds=0;
   let viewport={width:760,height:420,pixelRatio:1};
 
@@ -69,15 +42,12 @@ export function createAsset(context) {
     svg.append(svgEl('polygon',{points:(x-8)+','+(tip+(down?-13:13))+' '+(x+8)+','+(tip+(down?-13:13))+' '+x+','+tip,fill:'currentColor'}));
     text(x+14,(y1+y2)/2,label,'start',12,700);
   }
-
   function draw() {
     svg.replaceChildren();
-    const s=solve(parameters);
-    const left=95,right=665,baseY=315,topY=90;
-    const spanPx=right-left;
-    const scaleX=spanPx/parameters.spanM;
-    const maxRisePx=205;
-    const scaleY=maxRisePx/parameters.riseM;
+    const s=solveTriangularTruss(parameters);
+    const left=95,right=665,baseY=315;
+    const scaleX=(right-left)/parameters.spanM;
+    const scaleY=205/parameters.riseM;
     const map=pt=>[left+pt.x*scaleX,baseY-pt.y*scaleY];
     const A=map(s.geometryM.A),B=map(s.geometryM.B),C=map(s.geometryM.C);
 
@@ -85,7 +55,6 @@ export function createAsset(context) {
     line(A[0],A[1],B[0],B[1],{'stroke-width':7});
     line(B[0],B[1],C[0],C[1],{'stroke-width':7});
     line(A[0],A[1],C[0],C[1],{'stroke-width':7,'stroke-dasharray':'14 7'});
-
     for (const [name,pt] of [['A',A],['B',B],['C',C]]) {
       svg.append(svgEl('circle',{cx:pt[0],cy:pt[1],r:8,fill:'#fff',stroke:'currentColor','stroke-width':3}));
       text(pt[0],pt[1]-14,name,'middle',13,750);
@@ -118,7 +87,7 @@ export function createAsset(context) {
   return {
     setParameters(next={}) {
       if (disposed) throw new Error('Asset is disposed');
-      parameters=validate(next,parameters);
+      parameters=validateTrussParameters(next,parameters);
       draw();
     },
     update(nextTimeSeconds) {
@@ -128,7 +97,7 @@ export function createAsset(context) {
     },
     reset() {
       if (disposed) throw new Error('Asset is disposed');
-      parameters={...DEFAULTS};
+      parameters={...DEFAULT_TRUSS_PARAMETERS};
       timeSeconds=0;
       draw();
     },
@@ -140,7 +109,7 @@ export function createAsset(context) {
       host.style.maxWidth='100%';
     },
     snapshot() {
-      return {parameters:{...parameters},...solve(parameters),timeSeconds,viewport:{...viewport},axialForceConvention:'positive tension; negative compression'};
+      return {...solveTriangularTruss(parameters),timeSeconds,viewport:{...viewport}};
     },
     dispose() {
       if (disposed) return;
