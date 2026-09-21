@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "geo-pipe-flow",
+  "version": "0.1.0",
+  "title": "Pipe flow: continuity and Darcy-Weisbach head loss",
+  "description": "Reusable SVG pipe-flow component that computes cross-sectional area, mean velocity, Reynolds number, friction factor, and Darcy-Weisbach head loss from explicit SI inputs.",
+  "category": "hydraulics-and-hydrology",
+  "topics": [
+    "pipe flow",
+    "continuity",
+    "Darcy-Weisbach",
+    "Reynolds number",
+    "head loss"
+  ],
+  "learningObjectives": [
+    "Relate discharge, area, and mean velocity using Q = AV.",
+    "Interpret Darcy-Weisbach head loss and friction-factor regime without confusing dissipative loss with elevation head."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/hydraulics-and-hydrology/geo-pipe-flow/demo/index.html",
+  "readme": "assets/hydraulics-and-hydrology/geo-pipe-flow/README.md",
+  "previewImage": "assets/hydraulics-and-hydrology/geo-pipe-flow/previews/preview.svg",
+  "reviewFile": "assets/hydraulics-and-hydrology/geo-pipe-flow/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Equations and representative reference calculations were reviewed from source. Interactive browser and assistive-technology review remain pending."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat water-ground asset contribution, 2026-09-22.",
+    "sha256": null
+  }
+}
