@@ -1,42 +1,27 @@
 # Asset review
 
-- Asset ID and version: sur-walking-person 0.1.0
-- Source commit or source hash: to be recorded by integrator
-- Reviewer and review date: self-review, 2026-09-22
-- Environment/browser/device/viewport: source and static-preview review only; browser run not claimed
-- Dependencies available: none
+- Asset: sur-walking-person 0.2.0
+- Review type: source/model remediation review, 2026-09-22
+- Renderer: Three.js 0.185.1 supplied by the host/demo
+- Browser screenshot: not claimed
 
 ## Engineering
+The distance, arrival, path fraction, and gait phase equations are unchanged from the verified 0.1.0 model. Representative check: L=10 m, v=1.2 m/s gives d(5)=6 m and arrival=8.333333 s. Zero speed remains at the start. Motion stops at the path endpoint.
+Gate: passed at source/model level.
 
-- Model: d = min(L, v t); gait phase uses absolute active walking time.
-- Independent check: L=10 m, v=1.2 m/s, t=5 s gives d=6.0 m; endpoint occurs at 8.333333 s.
-- Boundary checks: v=0 remains at x=0; t beyond arrival clamps at L and freezes gait phase; invalid/out-of-range parameters throw before mutation.
-- Diagram and numerical agreement: status text and snapshot read from the same state function.
-- Gate: passed
+## Spatial 3D
+Primary visualization is now actual mesh geometry: articulated human, clothing/hardhat, boots, path and markers in a perspective scene. The demo adds lighting, shadows, fog, ground, grid, OrbitControls, camera framing, and focus presentation. It no longer uses SVG as the primary visual.
+Gate: implemented; live rendered comparison evidence still pending.
 
-## Browser and functionality
+## Animation and pedagogy
+Host time drives deterministic limb motion and translation. Limb cycling freezes at arrival. Reduced motion preserves translation while suppressing gait swing. Controls expose path, speed, and gait with minimal text and live distance.
+Gate: source-reviewed; live interaction review pending.
 
-- Source confirms absolute-time update, reset, resize, snapshot, idempotent dispose, and no component-owned animation loop.
-- Browser interaction/resize execution: not independently run in this connector-only contribution.
-- Gate: not-reviewed
-
-## Accessibility
-
-- SVG has role=img and a descriptive aria-label; demo controls use native labels/buttons and status region.
-- Reduced motion suppresses gait swing and bob while distance still updates.
-- Gate: not-reviewed
+## Accessibility / browser
+Native controls and role text are present in the demo. Actual browser, keyboard, mobile, WebGL failure, and assistive-technology checks remain not-reviewed.
 
 ## Rights
-
-- Original code and vector geometry; no third-party content.
-- Gate: cleared
-
-## Visual evidence
-
-- Actual preview file: previews/default.svg
-- Preview is a deterministic source-authored default state, not a claimed browser screenshot.
+Procedural original geometry only; Three.js is a declared external runtime dependency. No generated images or third-party 3D models are included.
 
 ## Decision
-
-- No known engineering blocker. Browser and assistive-technology review remain.
-- Release eligible: no; independent browser/accessibility gates are still open.
+Remain in-review until live browser, responsive, accessibility, and captured visual evidence are completed.
