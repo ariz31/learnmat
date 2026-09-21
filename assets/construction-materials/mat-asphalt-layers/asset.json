@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "mat-asphalt-layers",
+  "version": "0.1.0",
+  "title": "Asphalt material specimen and layered sample",
+  "description": "Generic three-layer asphalt slab and core specimen geometry with thickness proportions and geometric volume calculations.",
+  "category": "construction-materials",
+  "topics": [
+    "asphalt",
+    "layered-sample",
+    "core-specimen",
+    "layer-thickness",
+    "material-appearance"
+  ],
+  "learningObjectives": [
+    "Relate individual asphalt-layer thicknesses to total specimen thickness and geometric volume.",
+    "Compare slab and core sample geometry without inferring pavement-design compliance or material performance."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/construction-materials/mat-asphalt-layers/demo/index.html",
+  "readme": "assets/construction-materials/mat-asphalt-layers/README.md",
+  "previewImage": "assets/construction-materials/mat-asphalt-layers/previews/default.svg",
+  "reviewFile": "assets/construction-materials/mat-asphalt-layers/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat contribution; no external asphalt texture, mix data, pavement-design catalogue, or third-party media embedded."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Focused source/arithmetic/pedagogy review completed; browser and assistive-technology execution are intentionally not claimed."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat contribution for reserved materials task mat-asphalt-layers.",
+    "sha256": null
+  }
+}
