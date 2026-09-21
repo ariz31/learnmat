@@ -23,8 +23,14 @@ hides lesson steps and nonessential chrome while keeping an obvious exit and
 essential pause/play/reset controls.
 
 Animation should explain sequence, causality, direction, scale, or state change.
-Improve abrupt, misleading, cluttered, or decorative motion; do not add animation
-when a static annotated visual teaches the concept better.
+Improve abrupt, misleading, cluttered, or decorative motion.
+
+For spatial subjects, treat a flat primary visual as an improvement target. Prefer
+real 3D geometry, coherent depth, camera framing, contextual scene elements, and
+spatial animation comparable in ambition to the surveying examples. Preserve exact
+2D equations, plots, labels, dimensions, and sections as overlays. If the primary
+visual should remain 2D, record the concrete educational reason instead of silently
+choosing the easier renderer.
 
 Check engineering and interaction consequences, including reset mid-animation,
 repeated actions, resize, focus/maximize entry and exit, mobile/touch behavior,
