@@ -48,9 +48,26 @@ A strong walkthrough normally includes:
 9. **Final conclusion** — state what the result means, not only its number.
 
 For long procedures, group closely related algebra into a readable substep rather
-than displaying every trivial arithmetic operation. "As complete as practical"
+than displaying every trivial arithmetic operation. “As complete as practical”
 means preserving the reasoning chain that a learner needs to reproduce or explain
 the method, without creating needless visual clutter.
+
+## Minimal-text information design
+
+Educational completeness does not mean permanently showing all explanation.
+
+- Keep the default view dominated by the engineering visual or animation.
+- Use short labels, symbols, units, and one concise active-step explanation.
+- Put derivations, long assumptions, tables, references, and secondary explanation
+  behind progressive disclosure, expandable details, tooltips, or a dedicated
+  calculation/details view.
+- Avoid duplicating the same explanation in headers, cards, legends, and footers.
+- Prefer a diagram annotation or highlighted relationship when it communicates the
+  idea more clearly than a paragraph.
+- On small screens, prioritize the visual and the active step; move secondary
+  information below or behind disclosure rather than shrinking it into illegibility.
+
+The learner must still be able to reach the complete reasoning where it is needed.
 
 ## Computation transparency
 
@@ -94,6 +111,28 @@ Use 3D only when depth, spatial relationships, occlusion, assembly, or motion ma
 it educationally superior to a clear 2D/SVG representation. High quality means
 clear, accurate, purposeful, smooth, legible, and stable—not merely visually busy.
 
+## Focus/maximize presentation mode
+
+Interactive or animated assets should provide a presentation mode that lets an
+instructor maximize/focus the engineering visual and hide lesson steps, long
+explanations, derivation panels, tables, and other nonessential chrome.
+
+The focused mode should:
+
+- maximize useful visual area without changing the engineering state;
+- retain an obvious exit/back control;
+- retain essential pause/play and reset/replay controls when animation uses them;
+- keep critical units, safety/assumption warnings, or indispensable labels visible
+  when hiding them would make the animation misleading;
+- avoid resetting parameters, simulation time, camera state, or current step merely
+  because the view was maximized;
+- restore the previous teaching view and instructional state on exit;
+- work on desktop, tablet, and mobile;
+- remain understandable with reduced motion.
+
+Focus mode is not a second simulation. It is another presentation of the same
+authoritative model and state.
+
 ## Learner interaction
 
 Interaction should support inquiry rather than distract from the lesson. When
@@ -112,10 +151,12 @@ must cover all of the following:
 
 - **engineering** — correctness of model, units, conventions, and representative results;
 - **pedagogy** — learning objective, instructional sequence or concept explanation,
-  intermediate reasoning where applicable, and a meaningful conclusion/check;
+  intermediate reasoning where applicable, meaningful conclusion/check, and
+  minimal-text information hierarchy;
 - **functionality** — controls, reset, resize, invalid/boundary states, and lifecycle;
 - **animation** — purpose, state continuity, pause/step/replay behavior where
-  applicable, and agreement between motion and the model;
+  applicable, agreement between motion and the model, focus/maximize behavior,
+  exit/state restoration, and reduced-motion behavior;
 - **accessibility** — keyboard/focus/labels, text equivalents, and reduced motion;
 - **visual** — legibility, hierarchy, responsive layout, and actual captured evidence;
 - **reuse** — documented inputs/outputs, dependencies, limits, rights, and cleanup.
@@ -130,4 +171,4 @@ Existing candidate or integrated assets are not automatically declared deficient
 because this standard was introduced later. Apply it when an asset is substantially
 revised, promoted toward approval, or selected for educational-quality improvement.
 Prioritize assets that currently present a final visual without enough explanation,
-procedure, computation, or learner guidance.
+procedure, computation, learner guidance, or presentation-quality focus behavior.
