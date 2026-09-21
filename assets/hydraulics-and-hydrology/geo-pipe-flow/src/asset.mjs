@@ -7,7 +7,7 @@ export function createAsset(context={}){
   const T=context.three;
   if(!T||String(T.REVISION)!==THREE_VERSION) throw new Error('geo-pipe-flow requires host Three.js r185.');
   if(!context.scene||typeof context.scene.add!=='function') throw new TypeError('geo-pipe-flow requires a host-owned THREE.Scene.');
-  let disposed=false,timeSeconds=0,parameters={...DEFAULTS},state=computePipeFlow(parameters);
+  const reducedMotion=Boolean(context.reducedMotion);let disposed=false,timeSeconds=0,parameters={...DEFAULTS},state=computePipeFlow(parameters);
   const root=new T.Group(); root.name='geo-pipe-flow';
   context.scene.add(root);
   const ownedGeometries=[],ownedMaterials=[],particles=[];
@@ -28,10 +28,9 @@ export function createAsset(context={}){
   ]);
   addMesh(new T.TubeGeometry(curve,96,.38,24,false),steel);
   addMesh(new T.TubeGeometry(curve,96,.255,20,false),water);
-  const ringGeo=new T.TorusGeometry(.48,.075,10,32);
   for(const u of [.02,.31,.67,.97]){
     const p=curve.getPointAt(u),tan=curve.getTangentAt(u);
-    const ring=addMesh(ringGeo.clone(),dark); ownedGeometries.push(ring.geometry);
+    const ring=addMesh(new T.TorusGeometry(.48,.075,10,32),dark);
     ring.position.copy(p);
     ring.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),tan.clone().normalize());
   }
@@ -58,9 +57,10 @@ export function createAsset(context={}){
   function ensure(){if(disposed)throw new Error('geo-pipe-flow has been disposed.')}
   function renderAt(t){
     const dir=state.flowDirection||1;
+    const tt=reducedMotion?0:t;
     const visualSpeed=state.speed===0?0:clamp(.06+state.speed*.055,.06,.24);
     particles.forEach((mesh,i)=>{
-      let u=(i/particles.length+dir*t*visualSpeed)%1;if(u<0)u+=1;
+      let u=(i/particles.length+dir*tt*visualSpeed)%1;if(u<0)u+=1;
       mesh.position.copy(curve.getPointAt(u));
       mesh.visible=state.speed>0;
     });
@@ -80,6 +80,6 @@ export function createAsset(context={}){
     reset(){ensure();parameters={...DEFAULTS};state=computePipeFlow(parameters);timeSeconds=0;renderAt(0);return snapshot();},
     resize(width,height,pixelRatio=1){ensure();if(![width,height,pixelRatio].every(Number.isFinite)||width<=0||height<=0||pixelRatio<=0)throw new RangeError('resize values must be positive finite numbers.');return snapshot();},
     snapshot,
-    dispose(){if(disposed)return;disposed=true;context.scene.remove(root);root.traverse(o=>{if(o.geometry&&!ownedGeometries.includes(o.geometry))o.geometry.dispose?.()});ownedGeometries.forEach(g=>g.dispose?.());ownedMaterials.forEach(m=>m.dispose?.());root.clear();}
+    dispose(){if(disposed)return;disposed=true;context.scene.remove(root);root.traverse(o=>{if(o.geometry&&!ownedGeometries.includes(o.geometry))o.geometry.dispose?.();if(o.material&&!ownedMaterials.includes(o.material))o.material.dispose?.()});ownedGeometries.forEach(g=>g.dispose?.());ownedMaterials.forEach(m=>m.dispose?.());root.clear();}
   };
 }
