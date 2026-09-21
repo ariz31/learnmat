@@ -9,4 +9,30 @@
 | Self-contained HTML | All necessary runtime code/assets in one file | Offline only after verification |
 | Download bundle | HTML plus local JS, textures, fonts, or models | May need a local HTTP server |
 
-One HTMLš[H\È›İ]šY[˜ÙHÙˆÙ™›[™HÜ\˜][Û‹ˆ›Û™HÙˆHİ\YY^[\\Âš\ÈH™\šYšYYÙ™›[™HÛZ[KˆHXÙKY˜XİÜˆ[™›Ùš[K[]™[[™ÈÛİ\˜Ù\ÈXÛ\™Bœ™[[İH™YKšœÈ[\ÜËˆÈ›İ™\XÙH\[™[˜ŞH™\œÚ[ÛœÈÜÜ[š\İXØ[K‚‚ˆÈÈRHÜˆ]™[Ü\ˆ™]\ÙHÛÜšÙ›İÂ‚ŒKˆÙ[XİH™XÛÜ™œ›ÛHHØ][ÙÈ[™ÚXÚÈ]È™]šY]Èİ]H[™šYÚË‚Œ‹ˆ™XYHX\›š[™ÈØš™Xİ]™K\Üİ[\[ÛœË[š]Ë[œ][Z]Ë[™‘PQQK‚ŒËˆ[œÜXİHÛİ\˜ÙH[™[[YH\[™[˜ŞHXÛ\˜][Û‹‚ˆÙ[XİH[]™\H[ÙHX]Ú[™ÈH\Ù\‰ÜÈ[š\›Û›Y[‚Kˆ™]\ÙH[ˆ\›İ™YÛÛ\Û™[Üˆ\š]™HH™]ÈÛÛ\Û™[œ›ÛHHØ[™Y]H[ˆBˆÙ\\˜]H\™XİÜNÈ]›ÚY\İ[™È[\™H™\Ù[][ÛˆÚ[È[È[›İ\ˆÚ[‚‹ˆØÛÜHÓHÙ[XİÜœÈ[™ÔÔËˆ]›ÚYÚ[™İËYÛØ˜[İ]HÛÛ™›XİÈ[™\XØ]Bˆ[[Y[QËˆ\ÜÜÙH[š[X][Ûˆœ˜[Y\ËÛÛ›ÛËØœÙ\™\œË[™ÔH™\Ûİ\˜Ù\Ë‚ËˆÙY\[Y\šXØ[™\İ[È[™š\İX[Ù[ÛY]HÛÛœÚ\İ[Y\ˆ\˜[Y]\ˆÚ[™Ù\Ë‚ˆ™\Ù\™H™\]Z\™Y]šX][Ûˆ[™\[™[˜ŞHXÙ[œÙH›İXÙ\Ë‚KˆÚXÚÈ\ÚİÜ[™[Øš[H^[İ]ËÛÛ›ÛË™\Ù]™\Ú^™K[™˜Z[\™Hİ]\Ë‚‚ˆÈÈÛÛœİ[Y\ˆÛÛ˜Xİ›Üˆ]\™HÛÛ\Û™[Â‚‘Øİ[Y[[š]X[^˜][Û‹[š]Ë›İ[™Y[œ]Ëİ]]ËÙ]™[Ë]\ÙKÜ™\Ù]˜Ø\\™Hİ]K[™\ÜÜØ[ˆ[ÛÛœİ[Y\œÈÚ]\ˆ][\H[œİ[˜Ù\È\™Bœİ\ÜY[™Ú]\ˆH˜]Ú[™È\ÈÈØØ[Kˆ\ÙHY\\œÈÚ[ˆH\ÜÛÛˆ™YYÂ˜HY™™\™[RNÈÈ›İÚ[™ÙHH[Ù[	ÜÈ\ÚXÜÈÈš]H\Ú\™Y[š[X][Û‹‚‚’ÜİY[X™YÛš\]È]\İ\ÙHH™X[\ŞYYT“ÛÜYYœ›ÛHHİXØÙ\ÜÙ[™\Ş[Y[ˆ›È›ÙXİ[ÛˆT“Üˆ[˜İ[Ûš[™È[X™Y[™Ú[\Èİ\YY\™K‚
+One HTML file is not evidence of offline operation. None of the supplied examples
+has a verified offline claim. The pace-factor and profile-leveling sources declare
+remote Three.js imports. Do not replace dependency versions opportunistically.
+
+## AI or developer reuse workflow
+
+1. Select a record from the catalog and check its review state and rights.
+2. Read the learning objective, assumptions, units, input limits, and README.
+3. Inspect the source and runtime dependency declaration.
+4. Select a delivery mode matching the user's environment.
+5. Reuse an approved component or derive a new component from a candidate in a
+   separate directory; avoid pasting entire presentation shells into another shell.
+6. Scope DOM selectors and CSS. Avoid window-global state conflicts and duplicate
+   element IDs. Dispose animation frames, controls, observers, and GPU resources.
+7. Keep numerical results and visual geometry consistent after parameter changes.
+8. Preserve required attribution and dependency license notices.
+9. Check desktop and mobile layouts, controls, reset, resize, and failure states.
+
+## Consumer contract for future components
+
+Document initialization, units, bounded inputs, outputs/events, pause/reset,
+capture state, and disposal. Tell consumers whether multiple instances are
+supported and whether the drawing is to scale. Use adapters when a lesson needs
+a different UI; do not change a model's physics to fit a desired animation.
+
+Hosted embed snippets must use a real deployed URL copied from a successful
+deployment. No production URL or functioning embed endpoint is supplied here.

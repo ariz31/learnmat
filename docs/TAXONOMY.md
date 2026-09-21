@@ -21,5 +21,5 @@ Use descriptive tags such as `pace-factor`, `height-of-instrument`, and
 Preserve IDs when reorganizing; update paths and references together.
 
 Kinds: `presentation`, `simulation`, `component`, `model`, `diagram`.
-Renderers: `threejs , `canvas2d`, `svg`, `html`, `mixed`, `unknown`.
+Renderers: `threejs`, `canvas2d`, `svg`, `html`, `mixed`, `unknown`.
 The renderer records technology, not fidelity or engineering validity.
