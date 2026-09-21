@@ -248,7 +248,7 @@ def validate_ready(root, task, agent):
     evidence = read(safe(f"work/{agent}/{task['id']}/evidence.json", root))
     need(evidence['assetFingerprint'] == fingerprint(root/directory), 'Stale asset evidence')
     need(evidence.get('reviewType') == 'self-review', 'Do not invent an independent review')
-    for key in ['engineering', 'pedagogy', 'functionality', 'animation', 'accessibility', 'visual', 'reuse']:
+    for key in ['engineering', 'pedagogy', 'functionality', 'animation', 'spatial3d', 'accessibility', 'visual', 'reuse']:
         item = evidence['checks'][key]
         need(item['status'] == 'passed' and bool(item['details']), f'Missing readiness check: {key}')
     need(not evidence.get('unresolvedBlockers'), 'Unresolved task blockers')
