@@ -1,0 +1,15 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/surveying/sur-prism-pole/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Pole base is fixed at local ground point (0,0,0). The prism center is targetHeight metres along the pole; positive poleTiltRad leans toward +X.",
+  "parameters": {
+    "targetHeight": {"type":"number","unit":"m","min":1,"max":3.5,"default":2},
+    "poleTiltRad": {"type":"number","unit":"rad","min":-0.1745329,"max":0.1745329,"default":0},
+    "personHeight": {"type":"number","unit":"m","min":1.4,"max":2.1,"default":1.7}
+  },
+  "assetDependencies": []
+}
