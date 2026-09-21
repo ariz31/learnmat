@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Concrete specimen geometry — LearnMat</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#0f172a;background:#eef2f6}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh}
+    main{width:min(1100px,calc(100% - 28px));margin:0 auto;padding:28px 0 48px}
+    header{margin-bottom:18px}
+    h1{margin:0 0 7px;font-size:clamp(1.5rem,3vw,2.25rem);letter-spacing:-.03em}
+    header p{margin:0;color:#475569;max-width:72ch;line-height:1.55}
+    .layout{display:grid;grid-template-columns:minmax(240px,300px) minmax(0,1fr);gap:18px;align-items:start}
+    .controls{background:#fff;border:1px solid #d7dde5;border-radius:18px;padding:16px;box-shadow:0 10px 25px rgba(15,23,42,.06)}
+    label{display:grid;gap:6px;margin-bottom:13px;font-size:13px;font-weight:700;color:#334155}
+    select,input[type=number]{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:9px 10px;background:#fff;color:#0f172a;font:inherit}
+    .check{display:flex;align-items:center;gap:9px}
+    .check input{width:18px;height:18px}
+    button{width:100%;border:0;border-radius:11px;padding:10px 12px;background:#0f172a;color:white;font:inherit;font-weight:750;cursor:pointer}
+    button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
+    #status{font-size:13px;line-height:1.5;color:#475569;margin:13px 2px 0}
+    .note{margin-top:13px;padding-top:13px;border-top:1px solid #e2e8f0;color:#64748b;font-size:12px;line-height:1.5}
+    @media(max-width:760px){main{padding-top:18px}.layout{grid-template-columns:1fr}.controls{order:2}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Concrete specimen geometry</h1>
+    <p>Compare nominal cylinder and cube specimen geometry. Dimensions drive the geometry and calculated volume; the aggregate-like surface marks are illustrative only and do not represent measured aggregate size, mix composition, strength, or certification.</p>
+  </header>
+  <div class="layout">
+    <form class="controls" onsubmit="return false" aria-label="Concrete specimen controls">
+      <label>Shape
+        <select id="shape">
+          <option value="cylinder">Cylinder</option>
+          <option value="cube">Cube</option>
+        </select>
+      </label>
+      <label id="diameter-wrap">Diameter (mm)
+        <input id="diameter" type="number" min="50" max="300" step="5" value="150" inputmode="decimal">
+      </label>
+      <label id="height-wrap">Height (mm)
+        <input id="height" type="number" min="50" max="600" step="5" value="300" inputmode="decimal">
+      </label>
+      <label id="side-wrap" hidden>Cube side (mm)
+        <input id="side" type="number" min="50" max="300" step="5" value="150" inputmode="decimal">
+      </label>
+      <label>Illustrative surface detail
+        <select id="aggregate">
+          <option value="none">None</option>
+          <option value="light">Light</option>
+          <option value="medium" selected>Medium</option>
+        </select>
+      </label>
+      <label class="check"><input id="dimensions" type="checkbox" checked> Show nominal dimensions</label>
+      <button id="reset" type="button">Reset specimen</button>
+      <p id="status" role="status" aria-live="polite"></p>
+      <p class="note">SI values are used internally. This component is a geometry/appearance teaching asset, not a material-property database or testing standard.</p>
+    </form>
+    <div id="asset-root"></div>
+  </div>
+</main>
+<script type="module">
+  import { createAsset } from '../src/asset.mjs';
+
+  const root = document.querySelector('#asset-root');
+  const status = document.querySelector('#status');
+  const shape = document.querySelector('#shape');
+  const diameter = document.querySelector('#diameter');
+  const height = document.querySelector('#height');
+  const side = document.querySelector('#side');
+  const aggregate = document.querySelector('#aggregate');
+  const dimensions = document.querySelector('#dimensions');
+  const diameterWrap = document.querySelector('#diameter-wrap');
+  const heightWrap = document.querySelector('#height-wrap');
+  const sideWrap = document.querySelector('#side-wrap');
+
+  const asset = createAsset({
+    container: root,
+    seed: 20260922,
+    reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+  });
+
+  function syncVisibility() {
+    const cube = shape.value === 'cube';
+    diameterWrap.hidden = cube;
+    heightWrap.hidden = cube;
+    sideWrap.hidden = !cube;
+  }
+
+  function updateStatus() {
+    const snapshot = asset.snapshot();
+    const geometry = snapshot.state.geometry;
+    status.textContent = `Volume: ${(geometry.volumeM3 * 1000).toFixed(3)} L · Surface area: ${geometry.surfaceAreaM2.toFixed(4)} m²`;
+  }
+
+  function apply() {
+    try {
+      asset.setParameters({
+        shape: shape.value,
+        diameterM: Number(diameter.value) / 1000,
+        heightM: Number(height.value) / 1000,
+        sideM: Number(side.value) / 1000,
+        aggregateLevel: aggregate.value,
+        showDimensions: dimensions.checked,
+      });
+      syncVisibility();
+      updateStatus();
+    } catch (error) {
+      status.textContent = error.message;
+    }
+  }
+
+  document.querySelector('.controls').addEventListener('input', apply);
+  document.querySelector('#reset').addEventListener('click', () => {
+    asset.reset();
+    shape.value = 'cylinder';
+    diameter.value = '150';
+    height.value = '300';
+    side.value = '150';
+    aggregate.value = 'medium';
+    dimensions.checked = true;
+    syncVisibility();
+    updateStatus();
+  });
+
+  const observer = new ResizeObserver((entries) => {
+    const rect = entries[0]?.contentRect;
+    if (rect && rect.width > 0 && rect.height > 0) {
+      asset.resize(rect.width, rect.height, devicePixelRatio || 1);
+    }
+  });
+  observer.observe(root);
+
+  addEventListener('beforeunload', () => {
+    observer.disconnect();
+    asset.dispose();
+  }, { once: true });
+
+  syncVisibility();
+  updateStatus();
+</script>
+</body>
+</html>

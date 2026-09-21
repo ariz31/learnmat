@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "mat-concrete-specimen",
+  "version": "0.1.0",
+  "title": "Concrete specimen geometry",
+  "description": "Reusable dimensioned concrete cylinder and cube specimen geometry with deterministic illustrative surface appearance.",
+  "category": "construction-materials",
+  "topics": [
+    "concrete",
+    "specimen-geometry",
+    "cylinder",
+    "cube",
+    "material-appearance"
+  ],
+  "learningObjectives": [
+    "Compare nominal concrete cylinder and cube specimen geometry using explicit SI dimensions.",
+    "Relate specimen dimensions to geometric volume and surface area without treating illustrative texture as measured material data."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/construction-materials/mat-concrete-specimen/demo/index.html",
+  "readme": "assets/construction-materials/mat-concrete-specimen/README.md",
+  "previewImage": "assets/construction-materials/mat-concrete-specimen/previews/default.svg",
+  "reviewFile": "assets/construction-materials/mat-concrete-specimen/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party media or material-property dataset embedded."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Candidate source/formula review completed. Browser and assistive-technology execution are intentionally not claimed; see REVIEW.md."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat contribution for reserved materials task mat-concrete-specimen.",
+    "sha256": null
+  }
+}
