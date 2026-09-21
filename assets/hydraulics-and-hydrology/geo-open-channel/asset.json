@@ -17,15 +17,22 @@
     "Classify subcritical, near-critical, or supercritical flow using the Froude number while distinguishing a specified depth from a solved normal depth."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/hydraulics-and-hydrology/geo-open-channel/demo/index.html",
   "readme": "assets/hydraulics-and-hydrology/geo-open-channel/README.md",
-  "previewImage": "assets/hydraulics-and-hydrology/geo-open-channel/previews/preview.svg",
+  "previewImage": null,
   "reviewFile": "assets/hydraulics-and-hydrology/geo-open-channel/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
@@ -36,7 +43,7 @@
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Equations and representative reference calculations were reviewed from source. Interactive browser and assistive-technology review remain pending."
+    "notes": "Rebuilt as a host-scene Three.js open-channel teaching component. Analytical model retained; independent rendered surveying-reference comparison remains pending."
   },
   "source": {
     "type": "original",
