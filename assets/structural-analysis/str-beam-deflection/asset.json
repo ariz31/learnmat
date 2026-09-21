@@ -31,10 +31,10 @@
     "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
   },
   "verification": {
-    "engineeringReview": "passed",
+    "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Closed-form reactions, shear, moment, and centered-load elastic deflection were independently cross-checked. Browser and assistive-technology execution remain for independent review."
+    "notes": "Candidate includes documented analytical self-checks and reproducible check notes. Independent engineering, live browser, screenshot, and accessibility review remain required before approval."
   },
   "source": {
     "type": "original",
