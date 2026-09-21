@@ -12,7 +12,10 @@ they do not install or schedule agents. Scaffold integration must precede launch
 | Water and ground | [water-ground.md](water-ground.md) | 8 hydraulic/soil assets |
 
 Every agent follows [the educational design standard](../../docs/EDUCATIONAL-DESIGN.md):
-assets must teach a meaningful concept or procedure; real procedures should expose
+assets must teach a meaningful concept or procedure and are 3D-first for spatial
+subjects. Use real 3D geometry/scenes by default, with the surveying examples as
+the preferred visual direction; a 2D-primary exception requires documented
+educational justification; real procedures should expose
 accurate meaningful steps and intermediate reasoning as far as practical; visible
 copy should remain minimal through progressive disclosure; and interactive/animated
 demos should provide a focus/maximize mode that can show the animation without
