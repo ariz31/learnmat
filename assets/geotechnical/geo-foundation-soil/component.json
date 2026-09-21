@@ -1,0 +1,36 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/geotechnical/geo-foundation-soil/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Plan width B is shown across the page; footing length L acts out of plane. Contact-pressure diagram assumes rigid footing and linear full contact only while qmin >= 0.",
+  "parameters": {
+    "footingWidth": {
+      "unit": "m",
+      "min": 0.1,
+      "max": 100,
+      "default": 2
+    },
+    "footingLength": {
+      "unit": "m",
+      "min": 0.1,
+      "max": 100,
+      "default": 3
+    },
+    "verticalLoad": {
+      "unit": "kN",
+      "min": 0.001,
+      "max": 1000000000,
+      "default": 1200
+    },
+    "moment": {
+      "unit": "kN*m",
+      "min": -1000000000,
+      "max": 1000000000,
+      "default": 100
+    }
+  },
+  "assetDependencies": []
+}

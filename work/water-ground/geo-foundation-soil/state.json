@@ -1,0 +1,27 @@
+{
+  "agent": "water-ground",
+  "task": "geo-foundation-soil",
+  "runId": "2026-09-22-batch-003",
+  "base": "fd1f80cd89a9aa5d006bb2a662ccc177bf1fb8b5",
+  "status": "blocked",
+  "attempts": 1,
+  "updatedAt": "2026-09-22T01:39:00+08:00",
+  "reason": "Live browser execution is unavailable in the connector-only environment; implementation and engineering checks are complete but interaction/accessibility review remains pending.",
+  "history": [
+    {
+      "action": "begin",
+      "attempt": 1,
+      "at": "2026-09-22T01:35:00+08:00"
+    },
+    {
+      "action": "checking",
+      "attempt": 1,
+      "at": "2026-09-22T01:38:00+08:00"
+    },
+    {
+      "action": "block",
+      "attempt": 1,
+      "at": "2026-09-22T01:39:00+08:00"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "geo-slope-profile",
+  "version": "0.1.0",
+  "title": "Slope profile with scoped infinite-slope stability model",
+  "description": "Reusable SVG slope geometry component with a clearly stated planar infinite-slope force model using normal soil thickness, cohesion, friction angle, unit weight, and a pore-pressure ratio.",
+  "category": "geotechnical",
+  "topics": [
+    "slope geometry",
+    "infinite slope",
+    "factor of safety",
+    "effective stress",
+    "pore pressure"
+  ],
+  "learningObjectives": [
+    "Relate slope rise/run to inclination and slope length.",
+    "Evaluate a simplified planar infinite-slope factor of safety while distinguishing it from circular-slip or full limit-equilibrium analysis."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/geotechnical/geo-slope-profile/demo/index.html",
+  "readme": "assets/geotechnical/geo-slope-profile/README.md",
+  "previewImage": "assets/geotechnical/geo-slope-profile/previews/preview.svg",
+  "reviewFile": "assets/geotechnical/geo-slope-profile/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Planar infinite-slope equations and reference case reviewed; live browser/accessibility review pending."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat water-ground contribution, 2026-09-22.",
+    "sha256": null
+  }
+}

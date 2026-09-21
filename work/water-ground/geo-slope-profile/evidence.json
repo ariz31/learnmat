@@ -1,0 +1,29 @@
+{
+  "reviewType": "self-review",
+  "assetFingerprint": null,
+  "checks": {
+    "engineering": {
+      "status": "passed",
+      "details": "Slope geometry, planar slice stresses, pore-pressure ratio, effective normal stress, and simplified infinite-slope factor of safety were independently recalculated for the documented reference state."
+    },
+    "functionality": {
+      "status": "passed",
+      "details": "Source review confirms radians at the API boundary, bounded pore-pressure ratio, validated geometry/material inputs, deterministic state, and idempotent cleanup."
+    },
+    "accessibility": {
+      "status": "not-reviewed",
+      "details": "Source includes semantic SVG descriptions and labelled native demo controls; no assistive-technology browser session was available."
+    },
+    "visual": {
+      "status": "not-reviewed",
+      "details": "A deterministic repository preview is included; no live browser capture was available in this connector-only session."
+    },
+    "reuse": {
+      "status": "passed",
+      "details": "Dependency-free runtime-v1 ES module with isolated instance state, finite input validation, deterministic output, snapshot support, and idempotent disposal."
+    }
+  },
+  "unresolvedBlockers": [
+    "Live browser and assistive-technology execution remain pending; retain candidate status until independent review."
+  ]
+}
