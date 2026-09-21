@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "str-truss-load-path",
+  "version": "0.1.0",
+  "title": "Triangular truss load path",
+  "description": "Reusable SVG component showing reactions and axial member forces for a symmetric three-member triangular truss with a vertical apex load.",
+  "category": "structural-analysis",
+  "topics": [
+    "truss-analysis",
+    "load-path",
+    "method-of-joints",
+    "axial-force"
+  ],
+  "learningObjectives": [
+    "Trace a vertical apex load through a symmetric triangular truss into support reactions and distinguish tension from compression."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/structural-analysis/str-truss-load-path/demo/index.html",
+  "readme": "assets/structural-analysis/str-truss-load-path/README.md",
+  "previewImage": "assets/structural-analysis/str-truss-load-path/previews/preview.svg",
+  "reviewFile": "assets/structural-analysis/str-truss-load-path/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Symmetric support reactions and joint-equilibrium member forces were independently cross-checked. Browser and assistive-technology execution remain for independent review."
+  },
+  "source": {
+    "type": "original",
+    "reference": "LearnMat structures queue task str-truss-load-path.",
+    "sha256": null
+  }
+}
