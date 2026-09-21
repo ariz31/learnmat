@@ -1,0 +1,55 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/construction-materials/mat-concrete-specimen/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Specimen is centred on X/Z with base at Y=0. Maximum accepted envelope is 0.30 m × 0.60 m × 0.30 m.",
+  "parameters": {
+    "shape": {
+      "type": "enum",
+      "values": [
+        "cylinder",
+        "cube"
+      ],
+      "default": "cylinder"
+    },
+    "diameterM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.05,
+      "max": 0.3,
+      "default": 0.15
+    },
+    "heightM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.05,
+      "max": 0.6,
+      "default": 0.3
+    },
+    "sideM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.05,
+      "max": 0.3,
+      "default": 0.15
+    },
+    "aggregateLevel": {
+      "type": "enum",
+      "values": [
+        "none",
+        "light",
+        "medium"
+      ],
+      "default": "medium",
+      "meaning": "Illustrative surface density only; no physical aggregate-size meaning."
+    },
+    "showDimensions": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "assetDependencies": []
+}
