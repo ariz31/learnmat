@@ -1,16 +1,7 @@
-# Pump and system operating point
+# Pump/system operating point — surveying-grade 3D rebuild
 
-This component uses two explicit learning curves:
+The analytical quadratic pump/system intersection remains authoritative. The new primary scene is a recognizable centrifugal pump teaching assembly: motor, casing/volute region, impeller hub/blades, suction and discharge piping, gauges, base, animated flow tracers and direction cue.
 
-- Pump curve: `H_p(Q) = H0 − kp Q²`
-- System curve: `H_s(Q) = Hstatic + Ks Q²`
+Exact curve intersection and power remain 2D analytical overlays, complementing the 3D machine rather than being replaced by decorative geometry. A valid operating point drives tracer/impeller motion; if the analytical model has no non-negative intersection, the component suppresses the flow visualization.
 
-When `H0 ≥ Hstatic`, the non-negative analytical intersection is
-
-`Q* = sqrt((H0 − Hstatic)/(kp + Ks))`
-
-and `H* = H_p(Q*) = H_s(Q*)`.
-
-Hydraulic power is `ρgQ*H*`. Estimated shaft input is `P_hydraulic/η`. The efficiency is a user-supplied constant for this simplified asset; no manufacturer efficiency map is implied.
-
-If shutoff head is below static head, the component states that no non-negative curve intersection exists rather than fabricating an operating point.
+The pump is educational procedural geometry, not manufacturer-specific equipment. Three.js r185 is a declared host dependency and runtime-v1 ownership is preserved.
