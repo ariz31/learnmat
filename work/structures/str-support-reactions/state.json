@@ -1,0 +1,27 @@
+{
+  "agent": "structures",
+  "task": "str-support-reactions",
+  "runId": "structures-20260922-a",
+  "base": "78addf774b735211dcd672346bfcea4817a5413c",
+  "status": "blocked",
+  "attempts": 1,
+  "updatedAt": "2026-09-21T17:08:00+00:00",
+  "reason": "Live browser capture and assistive-technology execution are unavailable in this GitHub-only agent session; source implementation and engineering review are complete, but runtime evidence remains for independent review.",
+  "history": [
+    {
+      "action": "begin",
+      "attempt": 1,
+      "at": "2026-09-21T17:06:30+00:00"
+    },
+    {
+      "action": "checking",
+      "attempt": 1,
+      "at": "2026-09-21T17:07:30+00:00"
+    },
+    {
+      "action": "block",
+      "attempt": 1,
+      "at": "2026-09-21T17:08:00+00:00"
+    }
+  ]
+}
