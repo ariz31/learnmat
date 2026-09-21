@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LearnMat asset metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "version",
+    "title",
+    "description",
+    "category",
+    "topics",
+    "learningObjectives",
+    "kind",
+    "renderer",
+    "status",
+    "entrypoint",
+    "readme",
+    "previewImage",
+    "reviewFile",
+    "derivedFrom",
+    "networkRequired",
+    "dependencies",
+    "rights",
+    "verification",
+    "source"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "enum": [
+        "surveying",
+        "engineering-mechanics",
+        "structural-analysis",
+        "reinforced-concrete",
+        "steel-and-timber",
+        "geotechnical",
+        "hydraulics-and-hydrology",
+        "transportation",
+        "construction",
+        "engineering-geology",
+        "mathematics",
+        "building-systems"
+      ]
+    },
+    "topics": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "learningObjectives": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "kind": {
+      "enum": [
+        "presentation",
+        "simulation",
+        "component",
+        "model",
+        "diagram"
+      ]
+    },
+    "renderer": {
+      "enum": [
+        "threejs",
+        "canvas2d",
+        "svg",
+        "html",
+        "mixed",
+        "unknown"
+      ]
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "in-review",
+        "approved",
+        "deprecated"
+      ]
+    },
+    "entrypoint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "readme": {
+      "type": "string",
+      "minLength": 1
+    },
+    "previewImage": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "reviewFile": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "derivedFrom": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "networkRequired": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "version",
+          "url",
+          "embedded"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
+          },
+          "embedded": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "licenseExpression",
+        "licenseFile",
+        "attribution"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "needs-confirmation",
+            "cleared"
+          ]
+        },
+        "licenseExpression": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "licenseFile": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "attribution": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engineeringReview",
+        "browserReview",
+        "accessibilityReview",
+        "notes"
+      ],
+      "properties": {
+        "engineeringReview": {
+          "enum": [
+            "not-reviewed",
+            "passed",
+            "failed"
+          ]
+        },
+        "browserReview": {
+          "enum": [
+            "not-reviewed",
+            "passed",
+            "failed"
+          ]
+        },
+        "accessibilityReview": {
+          "enum": [
+            "not-reviewed",
+            "passed",
+            "failed"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "reference",
+        "sha256"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "user-supplied",
+            "original",
+            "third-party",
+            "derived"
+          ]
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}
