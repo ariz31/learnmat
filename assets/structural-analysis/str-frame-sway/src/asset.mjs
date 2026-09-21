@@ -15,8 +15,10 @@ export function createAsset(context){
   function draw(){
     svg.replaceChildren();
     const s=solveFrameSway(parameters), left=150, baseY=330, widthPx=430, heightPx=220;
-    const xScale=widthPx/parameters.bayWidthM, yScale=heightPx/parameters.storyHeightM;
-    const map=(pt,visual=false)=>[left+(pt.x+(visual?s.deltaXM*(parameters.exaggeration-1):0))*xScale,baseY-pt.y*yScale];
+    const shownDeltaM=s.deltaXM*parameters.exaggeration;
+    const minX=Math.min(0,shownDeltaM), maxX=parameters.bayWidthM+Math.max(0,shownDeltaM);
+    const xScale=widthPx/(maxX-minX), xOrigin=left-minX*xScale, yScale=heightPx/parameters.storyHeightM;
+    const map=(pt,visual=false)=>[xOrigin+(pt.x+(visual?s.deltaXM*(parameters.exaggeration-1):0))*xScale,baseY-pt.y*yScale];
     const u=s.undeformed,d=s.deformed;
     text(380,30,'Portal frame lateral sway','middle',21,750);
     for(const [p1,p2] of [[u.A,u.C],[u.C,u.D],[u.B,u.D]]){
@@ -27,11 +29,10 @@ export function createAsset(context){
     line(C[0],C[1],D[0],D[1],{'stroke-width':8});
     line(B[0],B[1],D[0],D[1],{'stroke-width':8});
     for(const p of [A,B]){line(p[0],p[1]-14,p[0],p[1]+22,{'stroke-width':11});for(let y=-6;y<=20;y+=10)line(p[0],p[1]+y,p[0]+22,p[1]+y-12,{'stroke-width':1.8});}
-    const trueDeltaPx=s.deltaXM*xScale;
-    const shownDeltaPx=s.deltaXM*xScale*parameters.exaggeration;
-    line(left,72,left+shownDeltaPx,72,{'stroke-width':2});
+    const shownDeltaPx=shownDeltaM*xScale;
+    line(xOrigin,72,xOrigin+shownDeltaPx,72,{'stroke-width':2});
     if(Math.abs(shownDeltaPx)>1){
-      const tip=left+shownDeltaPx,dir=Math.sign(shownDeltaPx);
+      const tip=xOrigin+shownDeltaPx,dir=Math.sign(shownDeltaPx);
       svg.append(el('polygon',{points:tip+',72 '+(tip-12*dir)+',64 '+(tip-12*dir)+',80',fill:'currentColor'}));
     }
     text(380,105,'True Δ = '+(s.deltaXM*1000).toFixed(1)+' mm · drift = '+s.driftPercent.toFixed(3)+'% · display ×'+parameters.exaggeration,'middle',13,700);
