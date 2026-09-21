@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Vertical profile depth equals t1+t2+t3. SVG horizontal width is schematic; stresses are one-dimensional vertical geostatic values without surcharge or capillarity.",
+  "boundsDescription": "3D cutaway soil prism with three stacked strata, water-table plane, query-depth probe, and display-scaled total/pore/effective stress vectors. Layer thicknesses drive vertical proportions.",
   "parameters": {
     "layer1Thickness": {
       "unit": "m",
@@ -80,5 +80,21 @@
       "default": 9.81
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs-host-scene",
+  "threePeerVersion": "0.185.1",
+  "presentation": {
+    "focusCompatible": true,
+    "recommendedCamera": [
+      8,
+      5.5,
+      8
+    ],
+    "cameraTarget": [
+      0,
+      -1.4,
+      0
+    ],
+    "visualScaleNote": "Stress-vector lengths are normalized for visibility; stress values remain exact model outputs."
+  }
 }
