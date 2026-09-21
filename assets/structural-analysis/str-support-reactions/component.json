@@ -1,0 +1,25 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/structural-analysis/str-support-reactions/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Diagram-space component; support glyph is centered in its responsive SVG viewport and carries no physical length scale.",
+  "parameters": {
+    "supportType": {
+      "type": "enum",
+      "values": [
+        "pin",
+        "roller",
+        "fixed"
+      ],
+      "default": "pin"
+    },
+    "showReactionDirections": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "assetDependencies": []
+}

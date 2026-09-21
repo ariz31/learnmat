@@ -1,0 +1,27 @@
+{
+  "agent": "structures",
+  "task": "str-truss-load-path",
+  "runId": "structures-20260922-a",
+  "base": "78addf774b735211dcd672346bfcea4817a5413c",
+  "status": "blocked",
+  "attempts": 1,
+  "updatedAt": "2026-09-21T17:16:00+00:00",
+  "reason": "Live browser capture and assistive-technology execution are unavailable in this GitHub-only agent session; joint-equilibrium source implementation is complete, but runtime visual and accessibility evidence remain for independent review.",
+  "history": [
+    {
+      "action": "begin",
+      "attempt": 1,
+      "at": "2026-09-21T17:13:00+00:00"
+    },
+    {
+      "action": "checking",
+      "attempt": 1,
+      "at": "2026-09-21T17:15:00+00:00"
+    },
+    {
+      "action": "block",
+      "attempt": 1,
+      "at": "2026-09-21T17:16:00+00:00"
+    }
+  ]
+}

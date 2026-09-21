@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Triangular truss load path</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;margin:0;background:#f6f7f9;color:#111827}main{max-width:950px;margin:auto;padding:24px}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}label{display:grid;gap:5px;font-weight:650}input,button{font:inherit;padding:8px}pre{white-space:pre-wrap;background:#fff;border:1px solid #d1d5db;padding:12px;border-radius:8px}
+</style>
+</head>
+<body>
+<main>
+<h1>Triangular truss load path</h1>
+<p>Ideal pin-jointed symmetric truss. Member-force sign convention: positive tension, negative compression.</p>
+<div class="controls">
+<label>Span L (m)<input id="span" type="number" min="2" max="30" step="0.1" value="8"></label>
+<label>Rise h (m)<input id="rise" type="number" min="0.5" max="15" step="0.1" value="3"></label>
+<label>Apex load P (kN)<input id="load" type="number" min="0" max="1000" step="1" value="40"></label>
+<button id="reset" type="button">Reset</button>
+</div>
+<div id="asset-root"></div>
+<pre id="summary" aria-live="polite"></pre>
+</main>
+<script type="module">
+import { createAsset } from '../src/asset.mjs';
+const root=document.querySelector('#asset-root');
+const asset=createAsset({container:root,seed:1,reducedMotion:true});
+function sync(){
+  asset.setParameters({
+    spanM:Number(document.querySelector('#span').value),
+    riseM:Number(document.querySelector('#rise').value),
+    loadN:Number(document.querySelector('#load').value)*1000
+  });
+  const s=asset.snapshot();
+  document.querySelector('#summary').textContent='RAy = RCy = '+(s.reactionsN.Ay/1000).toFixed(3)+' kN\nAB = BC = '+(s.memberForcesN.AB/1000).toFixed(3)+' kN (negative = compression)\nAC = '+(s.memberForcesN.AC/1000).toFixed(3)+' kN (positive = tension)';
+}
+['span','rise','load'].forEach(id=>document.querySelector('#'+id).addEventListener('input',sync));
+document.querySelector('#reset').addEventListener('click',()=>{asset.reset();document.querySelector('#span').value=8;document.querySelector('#rise').value=3;document.querySelector('#load').value=40;sync();});
+asset.resize(Math.min(880,root.clientWidth||880),420,window.devicePixelRatio||1);
+sync();
+</script>
+</body>
+</html>

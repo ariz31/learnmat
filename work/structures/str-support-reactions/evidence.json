@@ -1,0 +1,29 @@
+{
+  "reviewType": "self-review",
+  "assetFingerprint": null,
+  "checks": {
+    "engineering": {
+      "status": "passed",
+      "details": "Support restraint mapping independently checked: pin restrains x/y, horizontal roller restrains y, fixed restrains x/y/rz; arrows are explicitly symbolic."
+    },
+    "functionality": {
+      "status": "not-reviewed",
+      "details": "Source-level API and state transitions inspected; browser execution unavailable."
+    },
+    "accessibility": {
+      "status": "not-reviewed",
+      "details": "Native demo controls and SVG text equivalents are present; assistive-technology execution unavailable."
+    },
+    "visual": {
+      "status": "not-reviewed",
+      "details": "Source-authored SVG preview included; no runtime browser screenshot captured."
+    },
+    "reuse": {
+      "status": "passed",
+      "details": "No external dependencies; module implements runtime-v1 methods and uses instance-local shadow DOM."
+    }
+  },
+  "unresolvedBlockers": [
+    "Independent browser, responsive-layout, and accessibility execution remains required before readiness/public approval."
+  ]
+}
