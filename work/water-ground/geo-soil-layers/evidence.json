@@ -1,0 +1,29 @@
+{
+  "reviewType": "self-review",
+  "assetFingerprint": null,
+  "checks": {
+    "engineering": {
+      "status": "passed",
+      "details": "Layer-by-layer vertical stress integration was independently checked for a water table cutting through layer 2; the reference result is σv=104.50 kPa, u=29.43 kPa, σ′v=75.07 kPa at z=5.5 m."
+    },
+    "functionality": {
+      "status": "passed",
+      "details": "Source review confirms layer splitting at the water table, profile-bound depth guards, hydrostatic pore-pressure handling, deterministic state, and idempotent cleanup."
+    },
+    "accessibility": {
+      "status": "not-reviewed",
+      "details": "Source includes semantic SVG descriptions and labelled native demo controls, but no assistive-technology browser session was available."
+    },
+    "visual": {
+      "status": "not-reviewed",
+      "details": "A deterministic repository preview is included; no live browser capture was available in this connector-only session."
+    },
+    "reuse": {
+      "status": "passed",
+      "details": "Dependency-free runtime-v1 ES module with per-instance DOM/state, finite input validation, deterministic absolute-time behavior, snapshot support, and idempotent disposal."
+    }
+  },
+  "unresolvedBlockers": [
+    "Live browser and assistive-technology execution remain pending; retain candidate status until independent review."
+  ]
+}
