@@ -4,26 +4,38 @@
   "checks": {
     "engineering": {
       "status": "passed",
-      "details": "Constant-area storage balance was checked at the documented 600 s and 1200 s reference states, including explicit upper-bound overflow and lower-bound outlet-shortfall conservation behavior."
+      "details": "Existing constant-area mass-balance and storage-bound model retained unchanged; 3D water level consumes its result."
+    },
+    "pedagogy": {
+      "status": "passed",
+      "details": "Four steps show governing balance, storage change, boundary behavior, and conservation interpretation."
     },
     "functionality": {
       "status": "passed",
-      "details": "Source review confirms algebraic absolute-time sampling, bounded level, valid input guards, reproducible backward seeks, isolated state, and idempotent cleanup."
+      "details": "Source review covers parameter validation, deterministic absolute-time state, reset/snapshot/resize and disposal."
+    },
+    "animation": {
+      "status": "passed",
+      "details": "Water level and inlet/outlet/overflow tracers directly represent modeled state; demo time acceleration is explicitly disclosed."
+    },
+    "spatial3d": {
+      "status": "not-reviewed",
+      "details": "Real Three.js tank shell, water volume and routing are implemented with camera staging; rendered comparison unavailable."
     },
     "accessibility": {
       "status": "not-reviewed",
-      "details": "Semantic SVG labels and keyboard-accessible demo controls are present in source; no assistive-technology browser session was available."
+      "details": "Keyboard controls, text steps, numeric HUD and reduced-motion camera behavior implemented; browser/AT verification pending."
     },
     "visual": {
       "status": "not-reviewed",
-      "details": "Repository preview SVG was inspected as source; no live browser capture was available."
+      "details": "Surveying-style cinematic scene, restrained overlays and focus mode implemented in source; no fabricated visual pass."
     },
     "reuse": {
       "status": "passed",
-      "details": "Dependency-free ES module follows runtime v1, scopes DOM/CSS to the instance root, uses deterministic absolute time, and disposes owned DOM idempotently."
+      "details": "Exact Three.js peer declared; host owns renderer/camera/time; component owns/disposes only its scene group resources."
     }
   },
   "unresolvedBlockers": [
-    "Interactive browser/assistive-technology execution was unavailable in the connector-only environment; retain candidate status until that review is completed."
+    "Independent WebGL render and surveying-reference visual comparison remain required."
   ]
 }
