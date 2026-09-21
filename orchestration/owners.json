@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "maxTasksPerRun": 3,
+  "maxAttemptsPerTask": 3,
+  "agents": {
+    "structures": {
+      "title": "Structural systems",
+      "prefix": "str",
+      "categories": [
+        "engineering-mechanics",
+        "structural-analysis",
+        "reinforced-concrete",
+        "steel-and-timber"
+      ],
+      "queue": "orchestration/queues/structures.json",
+      "prompt": "instructions/agents/structures.md"
+    },
+    "materials": {
+      "title": "Construction materials",
+      "prefix": "mat",
+      "categories": [
+        "construction-materials"
+      ],
+      "queue": "orchestration/queues/materials.json",
+      "prompt": "instructions/agents/materials.md"
+    },
+    "surveying": {
+      "title": "Surveying people and equipment",
+      "prefix": "sur",
+      "categories": [
+        "surveying"
+      ],
+      "queue": "orchestration/queues/surveying.json",
+      "prompt": "instructions/agents/surveying.md"
+    },
+    "buildings": {
+      "title": "Buildings and construction systems",
+      "prefix": "bld",
+      "categories": [
+        "buildings",
+        "construction",
+        "building-systems"
+      ],
+      "queue": "orchestration/queues/buildings.json",
+      "prompt": "instructions/agents/buildings.md"
+    },
+    "water-ground": {
+      "title": "Hydraulic and ground systems",
+      "prefix": "geo",
+      "categories": [
+        "hydraulics-and-hydrology",
+        "geotechnical",
+        "engineering-geology"
+      ],
+      "queue": "orchestration/queues/water-ground.json",
+      "prompt": "instructions/agents/water-ground.md"
+    }
+  }
+}

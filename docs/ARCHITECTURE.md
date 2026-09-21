@@ -44,3 +44,12 @@ commit. Avoid direct UI edits to deployed assets that bypass source review.
 Use stable asset IDs with explicit versions, and retain older public versions
 where consumers depend on immutable URLs. A screenshot belongs to one source
 version and capture state, not to an unversioned visual promise.
+
+## Five-agent scaffold
+
+The new assets/ layout is populated by reserved tasks, not placeholder catalog
+entries. orchestration/ owns assignments and immutable queues; work/<agent>/<id>/
+holds task state/evidence; contracts/ defines the reusable runtime. Each agent uses
+a distinct Git worktree. Workers do not edit shared registries. The generator
+combines the legacy catalog with discovered asset.json files into ignored .build/.
+See [AGENT-ORCHESTRATION.md](AGENT-ORCHESTRATION.md) for command usage and limitations.

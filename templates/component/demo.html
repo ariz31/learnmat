@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Candidate asset scaffold</title></head>
+<body><main><h1>Candidate asset scaffold</h1><p>This is an unimplemented template.</p><div id="asset-root"></div><p id="status" role="status"></p></main>
+<script type="module">
+import { createAsset } from '../src/asset.mjs';
+try { createAsset({container: document.querySelector('#asset-root'), seed: 1, reducedMotion: true}); }
+catch (error) { document.querySelector('#status').textContent = error.message; }
+</script></body></html>

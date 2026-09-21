@@ -1,0 +1,45 @@
+{
+  "agent": "water-ground",
+  "tasks": [
+    {
+      "id": "geo-pipe-flow",
+      "category": "hydraulics-and-hydrology",
+      "objective": "Pipe-flow asset with continuity and head-loss annotations"
+    },
+    {
+      "id": "geo-open-channel",
+      "category": "hydraulics-and-hydrology",
+      "objective": "Open-channel cross-section and flow-depth visualization"
+    },
+    {
+      "id": "geo-tank-reservoir",
+      "category": "hydraulics-and-hydrology",
+      "objective": "Tank level and inlet/outlet mass-balance asset"
+    },
+    {
+      "id": "geo-pump-system",
+      "category": "hydraulics-and-hydrology",
+      "objective": "Pump/system operating-point visualization"
+    },
+    {
+      "id": "geo-soil-layers",
+      "category": "geotechnical",
+      "objective": "Layered soil profile with water table and labeled properties"
+    },
+    {
+      "id": "geo-seepage-section",
+      "category": "geotechnical",
+      "objective": "Seepage cross-section with explicit head boundary conditions"
+    },
+    {
+      "id": "geo-foundation-soil",
+      "category": "geotechnical",
+      "objective": "Foundation and soil interaction illustration"
+    },
+    {
+      "id": "geo-slope-profile",
+      "category": "geotechnical",
+      "objective": "Slope geometry and clearly scoped stability illustration"
+    }
+  ]
+}

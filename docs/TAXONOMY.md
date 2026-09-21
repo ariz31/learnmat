@@ -2,6 +2,8 @@
 
 | Category ID | Scope |
 | --- | --- |
+| construction-materials | Material specimens, appearance, and sourced property catalogs |
+| buildings | Building envelopes, spaces, and assemblies |
 | surveying | Measurements, field procedures, instruments, and spatial data |
 | engineering-mechanics | Forces, equilibrium, kinematics, and dynamics |
 | structural-analysis | Structural response, stability, and analysis methods |

@@ -12,3 +12,9 @@ can read through ordinary file or GitHub access; they are not an installed skill
 
 Read only the relevant asset and workflow, then follow its linked model/review
 documents. Do not load every presentation just to search the catalog.
+
+## Domain production agents
+
+Use [the five prompts](agents/README.md) and the
+[orchestration guide](../docs/AGENT-ORCHESTRATION.md) for isolated, bounded asset
+production. These are invoked task prompts, not scheduled background services.

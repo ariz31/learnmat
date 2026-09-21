@@ -53,3 +53,12 @@ agreement, local paths, candidate provenance hashes, and approval-gate metadata.
 It supports only the schema keywords used in this repository's current schema;
 extend it or use a full JSON Schema validator when extending the schema.
 It does not execute HTML or verify engineering, browser, or licensing claims.
+
+## Parallel contributions
+
+New assets are discovered from assets/<category>/<id>/asset.json without editing
+the shared legacy catalog. New domains construction-materials and buildings are
+additive taxonomy entries. Runtime fields live in a companion component.json,
+keeping the existing asset metadata shape compatible. See
+[the runtime contract](../contracts/ASSET-RUNTIME.md) and
+[agent orchestration](AGENT-ORCHESTRATION.md).
