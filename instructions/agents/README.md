@@ -1,29 +1,49 @@
 # Five asset-contributor prompts
 
-Use one prompt per dedicated agent/worktree. The prompts execute bounded task loops;
-they do not install or schedule agents. Scaffold integration must precede launches.
+Use one prompt per dedicated agent/worktree. These are bounded implementation
+prompts, not background services.
 
 | Agent | Prompt | Initial queue |
 | --- | --- | --- |
-| Structures | [structures.md](structures.md) | 8 member/response assets |
-| Materials | [materials.md](materials.md) | 8 specimens/catalog assets |
-| Surveying people and equipment | [surveying.md](surveying.md) | 8 actors/instruments |
-| Buildings | [buildings.md](buildings.md) | 8 assemblies/site/service assets |
-| Water and ground | [water-ground.md](water-ground.md) | 8 hydraulic/soil assets |
+| Structures | [structures.md](structures.md) | 8 structural/member-response assets |
+| Materials | [materials.md](materials.md) | 8 material/specimen assets |
+| Surveying | [surveying.md](surveying.md) | 8 people/instrument/field-action assets |
+| Buildings | [buildings.md](buildings.md) | 8 building/assembly/service assets |
+| Water and ground | [water-ground.md](water-ground.md) | 8 hydraulic/soil/ground assets |
 
-Every agent follows [the educational design standard](../../docs/EDUCATIONAL-DESIGN.md):
-assets must teach a meaningful concept or procedure and are 3D-first for spatial
-subjects. Use real 3D geometry/scenes by default, with the surveying examples as
-the preferred visual direction; a 2D-primary exception requires documented
-educational justification; real procedures should expose
-accurate meaningful steps and intermediate reasoning as far as practical; visible
-copy should remain minimal through progressive disclosure; and interactive/animated
-demos should provide a focus/maximize mode that can show the animation without
-lesson panels while preserving essential controls and a clear exit. Animation must
-serve learning rather than decoration.
+## Shared production bar
 
-Read [the orchestration guide](../../docs/AGENT-ORCHESTRATION.md) for setup, state
-transitions, interruption recovery, and integration. All 40 tasks are reserved
-backlog entries, not already implemented assets. Each run starts at most 3 tasks
-per agent; at most 3 implementation attempts per task. Continue additional runs
-only after the integrator reviews and integrates or resolves the prior run.
+All five prompts now use the same non-negotiable standard:
+
+**The best current surveying 3D assets are the minimum visual-quality reference for
+new spatial work.**
+
+That means a new asset should not be considered ready merely because it renders,
+computes correctly, or uses a 3D library. It must be a coherent educational 3D
+experience with recognizable geometry, deliberate camera composition, useful scene
+context, depth, appropriate materials/lighting, purposeful animation, minimal
+instructional chrome, focus/maximize presentation, responsive behavior, and real
+visual review evidence.
+
+A flat SVG, Canvas2D scene, faux-isometric drawing, or collection of generic
+primitives is not an acceptable shortcut for a spatial task. A 2D-primary exception
+must have a concrete educational justification in the asset documentation and
+`spatial3d` review evidence. Exact 2D equations, plots, dimensions, tables,
+sections, and annotations remain encouraged as analytical companions to the 3D
+scene.
+
+Every prompt also requires an adversarial compare-and-improve pass before handoff:
+if the new asset would visibly look unfinished, flatter, more generic, less coherent,
+or less classroom-ready beside the strongest surveying references, the worker must
+improve it within the task budget or block honestly when the required rendered
+evidence cannot be established.
+
+Engineering correctness, pedagogy, accessibility, rights, and runtime discipline
+remain independent gates. Matching the surveying visual quality does not copy or
+inherit the surveying assets' correctness or review status.
+
+Read [the educational design standard](../../docs/EDUCATIONAL-DESIGN.md) and
+[the orchestration guide](../../docs/AGENT-ORCHESTRATION.md) before launching a
+worker. Each run starts at most 3 new tasks per agent and each task receives at most
+3 total implementation attempts. The integrator performs independent review and
+serial integration.
