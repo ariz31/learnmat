@@ -1,44 +1,38 @@
-# Asset review
-
-- Asset ID and version: mat-masonry-units 0.1.0
-- Reviewer/date: self-review, 2026-09-22
-- Environment: source and arithmetic review only; browser execution not claimed
-- Dependencies: none
+# Asset review — mat-masonry-units 0.2.0
 
 ## Engineering
+- Existing validated analytical model is retained as the authoritative source.
+- Gross/void/solid volume arithmetic is unchanged; shell/web placement is a visual realization of the same rectangular through-void idealization.
+- Gate: passed for source/model review.
 
-- SI rectangular-prism geometry with rectangular through-voids.
-- Default gross volume: 0.0120 m³.
-- Default total void volume: 0.00432 m³.
-- Default idealized solid volume: 0.00768 m³.
-- Validation prevents non-finite/out-of-range dimensions, impossible void depth, excessive combined void length, unsupported view, and invalid void count.
-- Running bond is explicitly schematic and is not a wall-design prescription.
-- Gate: passed for source/formula review.
+## Pedagogy
+- Demo exposes objective, governing relation, visual consequence, check/interpretation, and conclusion with minimal default prose.
+- HUD values come from the same snapshot model as the 3D geometry.
+- Gate: passed for source/information-architecture review.
 
-## Browser and functionality
+## Spatial 3D
+- Real Three.js geometry replaces the previous SVG-primary asset.
+- Scene includes perspective camera, depth/occlusion, material response, edges/detail, cast/receive shadows, contextual pedestal/ground, orbit inspection, controlled inspection rotation, camera reset, responsive focus mode, and reduced-motion fixed pose.
+- No fake 3D/isometric substitute is used.
+- Source comparison target: current high-quality surveying examples such as profile-leveling.
+- Gate: source-reviewed; rendered/browser comparison not claimed.
 
-- Source provides create/set/update/reset/resize/snapshot/dispose.
-- SVG is responsive and demo has a narrow-screen layout.
-- Browser execution not performed.
-- Gate: not-reviewed.
+## Animation/presentation
+- Host-owned absolute time drives a slow deterministic inspection turntable to reveal 3D form.
+- Pause/play, camera reset, asset reset, and focus/exit controls are present.
+- Reduced-motion holds a fixed pose.
+- Browser continuity/state restoration has not been executed.
+- Gate: not-reviewed in browser.
 
 ## Accessibility
+- Native controls, keyboard-focus styles, text HUD, concise text-equivalent lesson, and reduced-motion path are implemented in source.
+- Assistive-technology execution not performed.
+- Gate: not-reviewed.
 
-- Native labelled form controls, visible focus styles, SVG accessible name, and text summary are present in source.
-- Gate: not-reviewed with assistive technology.
-
-## Rights
-
-- Original repository contribution; no third-party product geometry or media.
-- Gate: cleared for original content.
-
-## Visual evidence
-
-- Preview: `previews/default.svg`
-- Static default-state reference render only; not represented as a browser screenshot.
+## Rights and reuse
+- Procedural geometry/materials only; no third-party model or texture.
+- Three.js is declared as a pinned non-embedded peer/demo dependency.
+- Asset stays candidate because real browser/visual evidence is unavailable in this session.
 
 ## Decision
-
-- Candidate only.
-- No geometry or scope defect found in source review.
-- Browser/responsive/assistive-technology checks remain before approval.
+Integrated candidate only. The replacement addresses the requested real-3D quality direction without fabricating screenshot, browser, accessibility, or approval evidence.

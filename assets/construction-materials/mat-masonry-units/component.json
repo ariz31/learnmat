@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Unit dimensions are geometric extents. Top view uses length horizontally and depth vertically; running-bond view is schematic.",
+  "boundsDescription": "Unit length X, height Y, depth Z; through-voids are spatially open in Y.",
   "parameters": {
     "lengthM": {
       "type": "number",
@@ -53,8 +53,7 @@
       "unit": "m",
       "min": 0,
       "max": 0.03,
-      "default": 0.01,
-      "meaning": "schematic bond spacing only"
+      "default": 0.01
     },
     "view": {
       "type": "enum",
@@ -69,5 +68,12 @@
       "default": true
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "peerDependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "injectedByHost": true
+    }
+  ]
 }

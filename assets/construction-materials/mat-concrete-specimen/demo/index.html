@@ -1,147 +1,45 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Concrete specimen geometry — LearnMat</title>
-  <style>
-    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#0f172a;background:#eef2f6}
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh}
-    main{width:min(1100px,calc(100% - 28px));margin:0 auto;padding:28px 0 48px}
-    header{margin-bottom:18px}
-    h1{margin:0 0 7px;font-size:clamp(1.5rem,3vw,2.25rem);letter-spacing:-.03em}
-    header p{margin:0;color:#475569;max-width:72ch;line-height:1.55}
-    .layout{display:grid;grid-template-columns:minmax(240px,300px) minmax(0,1fr);gap:18px;align-items:start}
-    .controls{background:#fff;border:1px solid #d7dde5;border-radius:18px;padding:16px;box-shadow:0 10px 25px rgba(15,23,42,.06)}
-    label{display:grid;gap:6px;margin-bottom:13px;font-size:13px;font-weight:700;color:#334155}
-    select,input[type=number]{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:9px 10px;background:#fff;color:#0f172a;font:inherit}
-    .check{display:flex;align-items:center;gap:9px}
-    .check input{width:18px;height:18px}
-    button{width:100%;border:0;border-radius:11px;padding:10px 12px;background:#0f172a;color:white;font:inherit;font-weight:750;cursor:pointer}
-    button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
-    #status{font-size:13px;line-height:1.5;color:#475569;margin:13px 2px 0}
-    .note{margin-top:13px;padding-top:13px;border-top:1px solid #e2e8f0;color:#64748b;font-size:12px;line-height:1.5}
-    @media(max-width:760px){main{padding-top:18px}.layout{grid-template-columns:1fr}.controls{order:2}}
-  </style>
-</head>
-<body>
-<main>
-  <header>
-    <h1>Concrete specimen geometry</h1>
-    <p>Compare nominal cylinder and cube specimen geometry. Dimensions drive the geometry and calculated volume; the aggregate-like surface marks are illustrative only and do not represent measured aggregate size, mix composition, strength, or certification.</p>
-  </header>
-  <div class="layout">
-    <form class="controls" onsubmit="return false" aria-label="Concrete specimen controls">
-      <label>Shape
-        <select id="shape">
-          <option value="cylinder">Cylinder</option>
-          <option value="cube">Cube</option>
-        </select>
-      </label>
-      <label id="diameter-wrap">Diameter (mm)
-        <input id="diameter" type="number" min="50" max="300" step="5" value="150" inputmode="decimal">
-      </label>
-      <label id="height-wrap">Height (mm)
-        <input id="height" type="number" min="50" max="600" step="5" value="300" inputmode="decimal">
-      </label>
-      <label id="side-wrap" hidden>Cube side (mm)
-        <input id="side" type="number" min="50" max="300" step="5" value="150" inputmode="decimal">
-      </label>
-      <label>Illustrative surface detail
-        <select id="aggregate">
-          <option value="none">None</option>
-          <option value="light">Light</option>
-          <option value="medium" selected>Medium</option>
-        </select>
-      </label>
-      <label class="check"><input id="dimensions" type="checkbox" checked> Show nominal dimensions</label>
-      <button id="reset" type="button">Reset specimen</button>
-      <p id="status" role="status" aria-live="polite"></p>
-      <p class="note">SI values are used internally. This component is a geometry/appearance teaching asset, not a material-property database or testing standard.</p>
-    </form>
-    <div id="asset-root"></div>
-  </div>
-</main>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Concrete specimen — 3D — LearnMat</title>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"}}</script>
+<style>
+:root{--bg:#06111c;--panel:rgba(5,16,27,.90);--line:rgba(190,220,245,.16);--text:#eef7ff;--muted:#9fb8ca;--cyan:#50d8ff;--green:#66e4a8;--amber:#ffc857;--shadow:0 22px 70px rgba(0,0,0,.38)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:radial-gradient(circle at 18% 0%,rgba(80,216,255,.10),transparent 30%),linear-gradient(180deg,#091725,#06111c);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}.app{position:relative;width:100%;height:100%;padding:8px}.shell{display:grid;grid-template-columns:minmax(235px,300px) minmax(0,1fr);gap:8px;width:100%;height:100%}
+.panel,.stage{border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow)}.panel{border-radius:16px;padding:14px;overflow:auto}.stage{position:relative;border-radius:16px;overflow:hidden;background:#07131f}
+.eyebrow{color:var(--cyan);text-transform:uppercase;letter-spacing:.13em;font-size:.62rem;font-weight:850}.panel h1{margin:6px 0 6px;font-size:1.18rem;line-height:1.1}.lead{margin:0 0 12px;color:var(--muted);font-size:.73rem;line-height:1.46}
+label{display:grid;gap:5px;margin:10px 0;color:var(--muted);font-size:.66rem;font-weight:750}select,input[type=range],input[type=number]{width:100%}select,input[type=number]{border:1px solid var(--line);background:#0b1b29;color:var(--text);border-radius:9px;padding:7px 8px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.check{display:flex;align-items:center;gap:7px}.check input{width:17px;height:17px}
+.formula{border:1px solid rgba(80,216,255,.20);background:rgba(80,216,255,.055);border-radius:11px;padding:9px;margin:10px 0;color:#cdefff;font:650 .67rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
+.lesson{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}.lesson summary{cursor:pointer;color:var(--cyan);font-size:.67rem;font-weight:800}.lesson ol{padding-left:18px;color:var(--muted);font-size:.66rem;line-height:1.45}.lesson li+li{margin-top:5px}
+#threeHost{position:absolute;inset:0}#threeHost canvas{display:block;width:100%;height:100%}.hud{position:absolute;left:9px;top:9px;z-index:4;display:grid;gap:6px;pointer-events:none}.hud-card,.tools{border:1px solid var(--line);background:rgba(4,14,24,.78);backdrop-filter:blur(10px);border-radius:12px}.hud-card{padding:9px 11px;min-width:210px}.hud-card b{display:block;font-size:.92rem}.hud-card span{display:block;margin-top:3px;color:var(--muted);font-size:.62rem;line-height:1.35}.metrics{display:flex;flex-wrap:wrap;gap:5px}.metric{padding:5px 7px;border:1px solid var(--line);background:rgba(4,14,24,.72);border-radius:999px;font-size:.59rem;color:var(--muted)}.metric strong{color:var(--text);font-variant-numeric:tabular-nums}
+.tools{position:absolute;z-index:5;right:9px;top:9px;padding:5px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}.btn{min-height:31px;border:1px solid var(--line);background:rgba(255,255,255,.055);color:var(--text);border-radius:8px;padding:5px 8px;font-size:.63rem;font-weight:750}.btn.primary{background:var(--cyan);border-color:transparent;color:#03141d}
+.badge{position:absolute;z-index:4;left:9px;bottom:9px;max-width:min(520px,calc(100% - 18px));border:1px solid var(--line);background:rgba(4,14,24,.78);backdrop-filter:blur(10px);border-radius:12px;padding:8px 10px;color:var(--muted);font-size:.61rem;line-height:1.4}.badge strong{color:var(--green)}
+.app.focus .panel{display:none}.app.focus .shell{grid-template-columns:1fr}.app.focus{padding:0}.app.focus .stage{border-radius:0;border:0}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+@media(max-width:800px){.shell{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}.panel{order:2;max-height:43vh}.stage{order:1}.hud-card{min-width:170px}.row{grid-template-columns:1fr 1fr}}
+</style></head><body><main class="app" id="app"><div class="shell">
+<aside class="panel"><div class="eyebrow">LearnMat · Materials 3D</div><h1>Concrete specimen — 3D</h1><p class="lead">Inspect concrete cylinder and cube geometry with procedural aggregate cues. Appearance is illustrative; geometry drives the calculations.</p><label>Specimen<select id="shape" data-default="cylinder"><option value="cylinder">Cylinder</option><option value="cube">Cube</option></select></label><label>Surface detail<select id="aggregate" data-default="medium"><option value="none">Clean</option><option value="light">Light aggregate cues</option><option value="medium">Medium aggregate cues</option></select></label><div class="formula">Cylinder: V = π(d/2)²h<br>Cube: V = s³</div><details class="lesson"><summary>Teaching sequence</summary><ol><li>Identify the specimen form and nominal dimensions.</li><li>Use the governing geometric relationship.</li><li>Orbit the model to confirm the 3D form and surface-area context.</li><li>Check the computed volume and area in the HUD.</li><li>Do not infer strength, mix design, grade, or certification from appearance.</li></ol></details></aside>
+<section class="stage"><div id="threeHost"></div><div class="hud"><div class="hud-card"><b>Concrete specimen — 3D</b><span id="stateLabel">Interactive 3D specimen</span></div><div class="metrics" id="metrics"></div></div>
+<div class="tools"><button class="btn" id="play" type="button">Pause</button><button class="btn" id="home" type="button">Camera</button><button class="btn" id="reset" type="button">Reset</button><button class="btn primary" id="focus" type="button" aria-pressed="false">Focus</button></div>
+<div class="badge"><strong>3D inspection:</strong> drag to orbit · wheel/pinch to zoom · visual material detail is illustrative, not a measured property.</div></section></div></main>
 <script type="module">
-  import { createAsset } from '../src/asset.mjs';
-
-  const root = document.querySelector('#asset-root');
-  const status = document.querySelector('#status');
-  const shape = document.querySelector('#shape');
-  const diameter = document.querySelector('#diameter');
-  const height = document.querySelector('#height');
-  const side = document.querySelector('#side');
-  const aggregate = document.querySelector('#aggregate');
-  const dimensions = document.querySelector('#dimensions');
-  const diameterWrap = document.querySelector('#diameter-wrap');
-  const heightWrap = document.querySelector('#height-wrap');
-  const sideWrap = document.querySelector('#side-wrap');
-
-  const asset = createAsset({
-    container: root,
-    seed: 20260922,
-    reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
-  });
-
-  function syncVisibility() {
-    const cube = shape.value === 'cube';
-    diameterWrap.hidden = cube;
-    heightWrap.hidden = cube;
-    sideWrap.hidden = !cube;
-  }
-
-  function updateStatus() {
-    const snapshot = asset.snapshot();
-    const geometry = snapshot.state.geometry;
-    status.textContent = `Volume: ${(geometry.volumeM3 * 1000).toFixed(3)} L · Surface area: ${geometry.surfaceAreaM2.toFixed(4)} m²`;
-  }
-
-  function apply() {
-    try {
-      asset.setParameters({
-        shape: shape.value,
-        diameterM: Number(diameter.value) / 1000,
-        heightM: Number(height.value) / 1000,
-        sideM: Number(side.value) / 1000,
-        aggregateLevel: aggregate.value,
-        showDimensions: dimensions.checked,
-      });
-      syncVisibility();
-      updateStatus();
-    } catch (error) {
-      status.textContent = error.message;
-    }
-  }
-
-  document.querySelector('.controls').addEventListener('input', apply);
-  document.querySelector('#reset').addEventListener('click', () => {
-    asset.reset();
-    shape.value = 'cylinder';
-    diameter.value = '150';
-    height.value = '300';
-    side.value = '150';
-    aggregate.value = 'medium';
-    dimensions.checked = true;
-    syncVisibility();
-    updateStatus();
-  });
-
-  const observer = new ResizeObserver((entries) => {
-    const rect = entries[0]?.contentRect;
-    if (rect && rect.width > 0 && rect.height > 0) {
-      asset.resize(rect.width, rect.height, devicePixelRatio || 1);
-    }
-  });
-  observer.observe(root);
-
-  addEventListener('beforeunload', () => {
-    observer.disconnect();
-    asset.dispose();
-  }, { once: true });
-
-  syncVisibility();
-  updateStatus();
-</script>
-</body>
-</html>
+import * as THREE from 'three';import{OrbitControls}from'three/addons/controls/OrbitControls.js';import{createAsset}from'../src/asset.mjs';
+const q=s=>document.querySelector(s),host=q('#threeHost'),app=q('#app'),metrics=q('#metrics'),playBtn=q('#play');
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;host.append(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x07131f);scene.fog=new THREE.Fog(0x07131f,2.7,6.5);
+const camera=new THREE.PerspectiveCamera(42,1,.01,20);const homePos=new THREE.Vector3(1.55,1.1,1.65);const homeTarget=new THREE.Vector3(0,0.18,0);camera.position.copy(homePos);
+const controls3d=new OrbitControls(camera,renderer.domElement);controls3d.enableDamping=true;controls3d.dampingFactor=.065;controls3d.minDistance=.35;controls3d.maxDistance=4.8;controls3d.target.copy(homeTarget);
+scene.add(new THREE.HemisphereLight(0xbfe9ff,0x26313b,1.7));const key=new THREE.DirectionalLight(0xffffff,3.2);key.position.set(2.4,3.8,2.3);key.castShadow=true;key.shadow.mapSize.set(2048,2048);scene.add(key);const rim=new THREE.DirectionalLight(0x5edcff,1.25);rim.position.set(-2,1.5,-2.3);scene.add(rim);
+const floorMat=new THREE.MeshStandardMaterial({color:0x0b1a27,roughness:.82,metalness:.05});const floor=new THREE.Mesh(new THREE.CircleGeometry(3.5,96),floorMat);floor.rotation.x=-Math.PI/2;floor.position.y=-.012;floor.receiveShadow=true;scene.add(floor);
+const asset=createAsset({container:host,seed:20260922,reducedMotion:matchMedia('(prefers-reduced-motion:reduce)').matches,three:THREE,scene});
+function apply(){try{asset.setParameters({shape:q('#shape').value,aggregateLevel:q('#aggregate').value});refresh();}catch(error){q('#stateLabel').textContent=error.message;}}
+function refresh(){const s=asset.snapshot();const g=s.state.geometry;metrics.innerHTML='<span class="metric">Volume <strong>'+ (g.volumeM3*1000).toFixed(3)+' L</strong></span><span class="metric">Area <strong>'+g.surfaceAreaM2.toFixed(4)+' m²</strong></span>';q('#stateLabel').textContent=s.parameters.shape==='cylinder'?'150 mm-class cylinder geometry':'cube specimen geometry';}
+q('.panel').addEventListener('input',apply);q('#reset').addEventListener('click',()=>{asset.reset();document.querySelectorAll('[data-default]').forEach(el=>{if(el.type==='checkbox')el.checked=el.dataset.default==='true';else el.value=el.dataset.default;});apply();});
+q('#home').addEventListener('click',()=>{camera.position.copy(homePos);controls3d.target.copy(homeTarget);controls3d.update();});
+q('#focus').addEventListener('click',()=>{const active=!app.classList.contains('focus');app.classList.toggle('focus',active);q('#focus').textContent=active?'Exit':'Focus';q('#focus').setAttribute('aria-pressed',String(active));setTimeout(resize,0);});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&app.classList.contains('focus'))q('#focus').click();});
+let playing=true,simTime=0,last=performance.now();playBtn.addEventListener('click',()=>{playing=!playing;playBtn.textContent=playing?'Pause':'Play';});
+function resize(){const r=host.getBoundingClientRect();if(r.width<2||r.height<2)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();asset.resize(r.width,r.height,renderer.getPixelRatio());}
+new ResizeObserver(resize).observe(host);resize();apply();
+function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(playing)simTime+=dt;asset.update(simTime);controls3d.update();renderer.render(scene,camera);requestAnimationFrame(frame)}requestAnimationFrame(frame);
+addEventListener('beforeunload',()=>{asset.dispose();renderer.dispose();floor.geometry.dispose();floorMat.dispose();controls3d.dispose();},{once:true});
+</script></body></html>

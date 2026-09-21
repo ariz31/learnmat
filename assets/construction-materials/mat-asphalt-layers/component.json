@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Layer thickness is vertical (+Y). Slab plan dimensions define geometric sample area; core view uses a circular plan area.",
+  "boundsDescription": "Layer thickness along +Y; slab uses rectangular plan area and core uses circular plan area.",
   "parameters": {
     "topThicknessM": {
       "type": "number",
@@ -66,5 +66,12 @@
       "default": true
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "peerDependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "injectedByHost": true
+    }
+  ]
 }

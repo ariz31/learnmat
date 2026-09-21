@@ -1,75 +1,39 @@
-# Masonry units with dimensioned voids and bond
+# Masonry units and bond — 3D
 
-Status: candidate.
-
-A reusable SVG component for a generic hollow masonry unit and a schematic running-bond arrangement. It teaches geometry and bond offset while deliberately avoiding product, structural-capacity, or code-compliance claims.
+Status: candidate · version 0.2.0 3D replacement.
 
 ## Learning objective
 
-- Relate overall masonry-unit dimensions to simplified through-void geometry.
-- Compare gross and idealized solid volume.
-- Recognize the half-unit offset concept of running bond without treating the diagram as a complete construction detail.
+Inspect open hollow-unit geometry and running-bond offset in depth, then connect the voids to gross/removed/solid volume.
 
-## Model and assumptions
+## 3D educational design
 
-The unit is a rectangular prism with rectangular through-voids extending through the full unit height.
+The unit is assembled from face shells, end shells, and intermediate webs, leaving real open through-voids rather than drawing holes on a flat face. Running-bond mode composes multiple 3D units in alternating offset rows.
 
-`V_gross = L × H × D`
+The demo follows the current LearnMat surveying-quality pattern: a real Three.js scene, deliberate camera framing, lighting/shadows, orbit inspection, pause/play inspection rotation, camera reset, responsive HUD, focus mode, and concise progressive teaching text. The component itself does not own the renderer or animation loop; the host injects Three.js and the scene and advances absolute time through `update(timeSeconds)`.
 
-`V_void = n × l_v × d_v × H`
+## Governing model
 
-`V_solid = V_gross - V_void`
+Vsolid = LHD − n(lv dv H).
 
-Default inputs:
+The numerical model remains authoritative. 3D form, HUD values, and interaction are derived from the same validated parameter state.
 
-- L = 0.40 m
-- H = 0.20 m
-- D = 0.15 m
-- two voids
-- void length = 0.12 m
-- void depth = 0.09 m
-- schematic mortar joint = 0.01 m
+## Limits
 
-Expected:
+Generic prismatic idealization only; no face-shell taper, reinforcement, grout, mortar mechanics, wall capacity, fire rating, or code-compliance claim.
 
-- gross volume = **0.0120 m³ = 12.00 L**
-- total void volume = **0.00432 m³ = 4.32 L**
-- idealized solid volume = **0.00768 m³ = 7.68 L**
+## Runtime and dependencies
 
-The model omits face-shell taper, internal web shape, ribs, chamfers, manufacturing tolerances, reinforcement, mortar mechanics, grout, and code-specific detailing. The running-bond view demonstrates offset only.
-
-## Usage
-
-Open `demo/index.html` from a local static server, or import `src/asset.mjs`.
-
-The runtime supports `setParameters`, `update`, `reset`, `resize`, `snapshot`, and idempotent `dispose`. No network or third-party runtime dependency is required.
-
-## Parameters
-
-| Parameter | Default | Accepted |
-| --- | ---: | --- |
-| `lengthM` | 0.40 m | 0.20–0.60 m |
-| `heightM` | 0.20 m | 0.08–0.30 m |
-| `depthM` | 0.15 m | 0.08–0.30 m |
-| `voidLengthM` | 0.12 m | 0.03–0.24 m |
-| `voidDepthM` | 0.09 m | 0.03–0.20 m, less than depth |
-| `voidCount` | 2 | integer 1–3 |
-| `mortarJointM` | 0.01 m | 0–0.03 m |
-| `view` | `unit` | `unit`, `running-bond` |
-| `showDimensions` | true | boolean |
-
-## Reuse and rights
-
-Original LearnMat contribution. No manufacturer drawing, code table, texture, photo, or proprietary geometry is embedded. Repository license: MIT (`LICENSE`).
+- Renderer: Three.js 0.185.1 supplied by the host/demo.
+- Demo network requirement: yes, for the pinned jsDelivr Three.js module and OrbitControls.
+- Component: reusable `createAsset(context)`, deterministic seed/time, validated setters, reset, resize, serializable snapshot, idempotent disposal.
+- Geometry unit: metres; right-handed +Y-up basis.
+- The demo's slow turntable is an inspection aid that reveals depth/occlusion. Pause stops it; reduced-motion uses a fixed pose.
 
 ## Review evidence
 
-- `previews/default.svg`
-- `checks/geometry.md`
-- `REVIEW.md`
-
-The preview is a static reference render, not a claimed browser screenshot. Browser and assistive-technology execution remain separate gates before approval.
+This replacement intentionally removes the old flat SVG preview from metadata. No browser screenshot is fabricated. `REVIEW.md` records source-level engineering and 3D implementation review; browser, responsive, visual, and assistive-technology gates remain not-reviewed until a real browser capture is available.
 
 ## Change history
 
-- 0.1.0 — Initial generic hollow-unit geometry and schematic running-bond demonstration.
+- 0.2.0 — Replaced the flat SVG-primary presentation with a procedural real-3D Three.js educational scene and surveying-style presentation host.

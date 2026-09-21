@@ -1,46 +1,54 @@
 {
   "schemaVersion": "1.0.0",
   "id": "mat-aggregate-grading",
-  "version": "0.1.0",
-  "title": "Aggregate specimens and grading visualization",
-  "description": "Illustrative aggregate specimen and percent-passing grading curve with retained-fraction and sample-mass calculations.",
+  "version": "0.2.0",
+  "title": "Aggregate grading — 3D",
+  "description": "3D aggregate tray and sieve stack paired with authoritative retained-fraction/mass grading calculations.",
   "category": "construction-materials",
   "topics": [
     "aggregate",
     "gradation",
     "sieve-analysis",
     "percent-passing",
-    "particle-size-distribution"
+    "particle-size-distribution",
+    "3d"
   ],
   "learningObjectives": [
-    "Interpret percent passing across nominal sieve openings using a logarithmic grading curve.",
-    "Relate successive percent-passing values to percent retained and retained sample mass without confusing the example with a specification envelope."
+    "Use a spatial aggregate/sieve context while interpreting percent passing and retained fraction.",
+    "Check retained percentage and mass closure without confusing teaching presets with specification envelopes."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/construction-materials/mat-aggregate-grading/demo/index.html",
   "readme": "assets/construction-materials/mat-aggregate-grading/README.md",
-  "previewImage": "assets/construction-materials/mat-aggregate-grading/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/construction-materials/mat-aggregate-grading/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat contribution; no external grading specification, product dataset, or third-party media embedded."
+    "attribution": "Original LearnMat procedural 3D contribution; no third-party model, texture, material dataset, or manufacturer geometry embedded."
   },
   "verification": {
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Focused source/arithmetic review completed; browser and assistive-technology execution are intentionally not claimed."
+    "notes": "Engineering/model source review retained. 3D implementation is source-reviewed, but no browser screenshot or assistive-technology execution is claimed; see REVIEW.md."
   },
   "source": {
     "type": "original",
-    "reference": "Original LearnMat contribution for reserved materials task mat-aggregate-grading.",
+    "reference": "LearnMat 3D replacement for reserved materials asset mat-aggregate-grading.",
     "sha256": null
   }
 }

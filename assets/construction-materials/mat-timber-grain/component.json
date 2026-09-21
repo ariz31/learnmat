@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Specimen longitudinal axis is +X, thickness is +Y, and width spans Z. Displayed top-surface grain angle is measured from +X toward -Z.",
+  "boundsDescription": "Longitudinal specimen axis +X, thickness +Y, width across Z; grain direction lies on displayed top plane.",
   "parameters": {
     "lengthM": {
       "type": "number",
@@ -43,8 +43,7 @@
         "medium",
         "dense"
       ],
-      "default": "medium",
-      "meaning": "Illustrative line density only; no physical grain-spacing meaning."
+      "default": "medium"
     },
     "showDimensions": {
       "type": "boolean",
@@ -55,5 +54,12 @@
       "default": true
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "peerDependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "injectedByHost": true
+    }
+  ]
 }

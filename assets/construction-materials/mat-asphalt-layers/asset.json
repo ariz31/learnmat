@@ -1,46 +1,54 @@
 {
   "schemaVersion": "1.0.0",
   "id": "mat-asphalt-layers",
-  "version": "0.1.0",
-  "title": "Asphalt material specimen and layered sample",
-  "description": "Generic three-layer asphalt slab and core specimen geometry with thickness proportions and geometric volume calculations.",
+  "version": "0.2.0",
+  "title": "Asphalt layered sample — 3D",
+  "description": "Exploded real-3D layered asphalt slab/core specimen with procedural aggregate cues and authoritative thickness/volume calculations.",
   "category": "construction-materials",
   "topics": [
     "asphalt",
     "layered-sample",
     "core-specimen",
     "layer-thickness",
-    "material-appearance"
+    "material-appearance",
+    "3d"
   ],
   "learningObjectives": [
-    "Relate individual asphalt-layer thicknesses to total specimen thickness and geometric volume.",
-    "Compare slab and core sample geometry without inferring pavement-design compliance or material performance."
+    "Inspect layer interfaces and proportions in a spatial slab/core specimen.",
+    "Relate layer thicknesses to total thickness and geometric volume without inferring pavement-design or material-performance compliance."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/construction-materials/mat-asphalt-layers/demo/index.html",
   "readme": "assets/construction-materials/mat-asphalt-layers/README.md",
-  "previewImage": "assets/construction-materials/mat-asphalt-layers/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/construction-materials/mat-asphalt-layers/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat contribution; no external asphalt texture, mix data, pavement-design catalogue, or third-party media embedded."
+    "attribution": "Original LearnMat procedural 3D contribution; no third-party model, texture, material dataset, or manufacturer geometry embedded."
   },
   "verification": {
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Focused source/arithmetic/pedagogy review completed; browser and assistive-technology execution are intentionally not claimed."
+    "notes": "Engineering/model source review retained. 3D implementation is source-reviewed, but no browser screenshot or assistive-technology execution is claimed; see REVIEW.md."
   },
   "source": {
     "type": "original",
-    "reference": "Original LearnMat contribution for reserved materials task mat-asphalt-layers.",
+    "reference": "LearnMat 3D replacement for reserved materials asset mat-asphalt-layers.",
     "sha256": null
   }
 }

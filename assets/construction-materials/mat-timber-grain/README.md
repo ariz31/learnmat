@@ -1,91 +1,39 @@
-# Timber specimen grain orientation
+# Timber grain orientation — 3D
 
-Status: candidate.
-
-A reusable SVG component for a rectangular timber coupon with a **stylized surface grain direction** relative to the specimen longitudinal axis. It is intended to teach orientation and specimen geometry without implying species, grade, mechanical properties, moisture condition, or code classification.
+Status: candidate · version 0.2.0 3D replacement.
 
 ## Learning objective
 
-Relate a visible surface-grain direction to the specimen longitudinal axis, distinguish geometry from material properties, and understand that an illustrative wood texture does not establish anatomical orientation or engineering grade.
+Use spatial arrows and procedural grain to understand the relation between specimen +X and a visible surface-grain direction.
 
-## Model and assumptions
+## 3D educational design
 
-- Internal length unit: metres.
-- API angle unit: radians, per the runtime contract.
-- Specimen longitudinal axis: +X.
-- Thickness axis: +Y.
-- Width lies across Z.
-- Positive `grainAngleRad` is measured from +X toward -Z on the displayed top surface.
-- Grain direction unit vector: `(cos θ, 0, -sin θ)`.
-- Geometric volume: `V = length × width × thickness`.
-- Accepted grain-angle range: -π/4 to +π/4 rad (-45° to +45°).
-- The surface lines are deterministic decorative marks generated from the supplied seed. They have no physical growth-ring spacing, fiber-diameter scale, species identity, defect class, or grade meaning.
-- The asset does **not** model anatomical longitudinal/radial/tangential (L/R/T) classification, knots, checks, slope-of-grain grading rules, moisture, density, strength, stiffness, shrinkage, or treatment.
+A procedural CanvasTexture produces readable wood-grain direction on a real box specimen; cyan +X and amber grain arrows sit above the top face so angle sense is spatially explicit.
 
-Default specimen:
+The demo follows the current LearnMat surveying-quality pattern: a real Three.js scene, deliberate camera framing, lighting/shadows, orbit inspection, pause/play inspection rotation, camera reset, responsive HUD, focus mode, and concise progressive teaching text. The component itself does not own the renderer or animation loop; the host injects Three.js and the scene and advances absolute time through `update(timeSeconds)`.
 
-- length = 0.300 m
-- width = 0.075 m
-- thickness = 0.025 m
-- grain angle = 8° = 0.1396263402 rad
-- volume = 0.0005625 m³ = 562.5 cm³
-- grain direction ≈ (0.990268, 0, -0.139173)
+## Governing model
 
-## Usage
+Direction unit vector = (cos θ, 0, −sin θ). Volume = LWT.
 
-Open `demo/index.html` from a local static server, or import the component:
+The numerical model remains authoritative. 3D form, HUD values, and interaction are derived from the same validated parameter state.
 
-```js
-import { createAsset } from './src/asset.mjs';
+## Limits
 
-const timber = createAsset({
-  container: document.querySelector('#timber'),
-  seed: 20260922,
-  reducedMotion: true,
-});
+Texture is stylized; no species, L/R/T anatomy, knots, grade, moisture, density, strength, stiffness, or treatment is encoded.
 
-timber.setParameters({
-  lengthM: 0.30,
-  widthM: 0.075,
-  thicknessM: 0.025,
-  grainAngleRad: 8 * Math.PI / 180,
-  grainDensity: 'medium',
-  showDimensions: true,
-  showOrientation: true,
-});
+## Runtime and dependencies
 
-console.log(timber.snapshot());
-timber.dispose();
-```
-
-### Parameters
-
-| Parameter | Type | Default | Range / values |
-| --- | --- | --- | --- |
-| `lengthM` | number | 0.30 | 0.10–1.20 m |
-| `widthM` | number | 0.075 | 0.025–0.30 m |
-| `thicknessM` | number | 0.025 | 0.005–0.10 m |
-| `grainAngleRad` | number | π/22.5 | -π/4 to +π/4 rad |
-| `grainDensity` | string | `medium` | `none`, `light`, `medium`, `dense` |
-| `showDimensions` | boolean | true | true / false |
-| `showOrientation` | boolean | true | true / false |
-
-`setParameters` validates the complete next state before mutation. `update(timeSeconds)` records absolute non-negative time but does not animate this static asset. `reset` restores defaults. `resize` records the host viewport. `snapshot` returns serializable geometry and grain direction. `dispose` is idempotent.
-
-No network or third-party runtime dependency is required.
-
-## Reuse and rights
-
-Original LearnMat repository contribution. No third-party texture, wood species dataset, grading table, model, photo, or font file is embedded. Repository license: MIT (`LICENSE`).
+- Renderer: Three.js 0.185.1 supplied by the host/demo.
+- Demo network requirement: yes, for the pinned jsDelivr Three.js module and OrbitControls.
+- Component: reusable `createAsset(context)`, deterministic seed/time, validated setters, reset, resize, serializable snapshot, idempotent disposal.
+- Geometry unit: metres; right-handed +Y-up basis.
+- The demo's slow turntable is an inspection aid that reveals depth/occlusion. Pause stops it; reduced-motion uses a fixed pose.
 
 ## Review evidence
 
-- Static preview: `previews/default.svg`
-- Geometry/orientation targets: `checks/geometry.md`
-- Review record: `REVIEW.md`
-
-The preview is a static reference render, not a claimed browser screenshot. Browser, responsive, and assistive-technology execution remain separate gates before approval.
+This replacement intentionally removes the old flat SVG preview from metadata. No browser screenshot is fabricated. `REVIEW.md` records source-level engineering and 3D implementation review; browser, responsive, visual, and assistive-technology gates remain not-reviewed until a real browser capture is available.
 
 ## Change history
 
-- 0.1.0 — Initial candidate with timber coupon dimensions, deterministic stylized surface grain, grain-angle orientation arrows, and serializable geometry/orientation state.
+- 0.2.0 — Replaced the flat SVG-primary presentation with a procedural real-3D Three.js educational scene and surveying-style presentation host.
