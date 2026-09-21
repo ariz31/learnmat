@@ -8,7 +8,7 @@ Reference case: H=6 m, run=9 m, normal thickness z=1.5 m, γ=18 kN/m³, c′=5 k
 - Total σn = 18(1.5)cosβ = 22.4654 kPa.
 - u = 0.20σn = 4.4931 kPa.
 - Effective σ′n = 17.9723 kPa.
-- Resistance = 5 + 17.9723 tan32° ≈ 16.2323 kPa.
+- Resistance = 5 + 17.9723 tan32° ≈ 16.2303 kPa.
 - Simplified planar FS ≈ 1.08369.
 
 The component does not map this value to a safety verdict and explicitly states that it is not a circular-slip/general limit-equilibrium analysis. Live browser/accessibility review remains pending.
