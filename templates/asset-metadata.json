@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "replace-with-asset-id",
+  "version": "0.1.0",
+  "title": "Replace with title",
+  "description": "Replace with description",
+  "category": "surveying",
+  "topics": [
+    "replace-with-topic"
+  ],
+  "learningObjectives": [
+    "Replace with learning objective"
+  ],
+  "kind": "presentation",
+  "renderer": "unknown",
+  "status": "candidate",
+  "entrypoint": "assets/surveying/replace-with-asset-id/index.html",
+  "readme": "assets/surveying/replace-with-asset-id/README.md",
+  "previewImage": null,
+  "reviewFile": null,
+  "derivedFrom": null,
+  "networkRequired": null,
+  "dependencies": [],
+  "rights": {
+    "status": "needs-confirmation",
+    "licenseExpression": null,
+    "licenseFile": null,
+    "attribution": "User-supplied example; upstream authorship and reuse terms require confirmation."
+  },
+  "verification": {
+    "engineeringReview": "not-reviewed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Original source extracted without changes. Metadata and byte integrity checked; runtime and engineering behavior not verified."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Replace with source or authorship record",
+    "sha256": null
+  }
+}
