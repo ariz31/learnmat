@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Straight local path from x=0 to x=pathLength metres; person visual height follows personHeight and remains above the y=0 ground plane.",
+  "boundsDescription": "3D field path extends from x=0 to x=pathLength metres; articulated person stands above y=0 and travels along +X.",
   "parameters": {
     "pathLength": {"type":"number","unit":"m","min":0.5,"max":50,"default":10},
     "speed": {"type":"number","unit":"m/s","min":0,"max":2.5,"default":1.2},
