@@ -1,7 +1,13 @@
 # AI instruction library
 
-Read ../AGENTS.md first. These workflows are repository guidance that an assistant
-can read through ordinary file or GitHub access; they are not an installed skill.
+Read ../AGENTS.md and ../docs/EDUCATIONAL-DESIGN.md first. These workflows are
+repository guidance that an assistant can read through ordinary file or GitHub
+access; they are not an installed skill.
+
+All asset work is educational-first. Preserve accurate meaningful procedural steps
+when a real procedure exists, keep default visible text minimal, make animation
+serve learning, and provide a focus/maximize animation-only presentation mode for
+interactive/animated lessons whenever practical.
 
 | Task | Workflow |
 | --- | --- |
