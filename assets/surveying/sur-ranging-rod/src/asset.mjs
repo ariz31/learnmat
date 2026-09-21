@@ -1,85 +1,48 @@
-const SVG_NS='http://www.w3.org/2000/svg';
-const DEFAULTS=Object.freeze({sightDistance:30,rodStationDistance:15,crossTrackOffset:0.25,alignmentTolerance:0.05,rodHeight:2});
-const LIMITS=Object.freeze({sightDistance:[5,100],rodStationDistance:[1,99],crossTrackOffset:[-2,2],alignmentTolerance:[0.005,0.25],rodHeight:[1.5,3]});
-
-function node(name,attrs={}){const el=document.createElementNS(SVG_NS,name);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));return el}
-function validate(name,value){const [min,max]=LIMITS[name];if(!Number.isFinite(value)||value<min||value>max)throw new RangeError(name+' must be finite and between '+min+' and '+max+'.')}
-function normalize(next){const merged={...DEFAULTS,...next};for(const key of Object.keys(LIMITS))validate(key,merged[key]);if(merged.rodStationDistance>=merged.sightDistance)throw new RangeError('rodStationDistance must be less than sightDistance.');return merged}
-
-export function alignmentState(parameters={}){
-  const p=normalize(parameters);
-  const error=Math.abs(p.crossTrackOffset);
-  return {crossTrackError:error,aligned:error<=p.alignmentTolerance,signedOffset:p.crossTrackOffset};
+const DEFAULTS=Object.freeze({sightDistance:30,rodStationDistance:15,crossTrackOffset:.25,alignmentTolerance:.05,rodHeight:2});
+const LIMITS=Object.freeze({sightDistance:[5,100],rodStationDistance:[1,99],crossTrackOffset:[-2,2],alignmentTolerance:[.005,.25],rodHeight:[1.5,3]});
+function normalize(next){const p={...DEFAULTS,...next};for(const[k,[min,max]]of Object.entries(LIMITS)){if(!Number.isFinite(p[k])||p[k]<min||p[k]>max)throw new RangeError(k+' must be finite and between '+min+' and '+max+'.')}if(p.rodStationDistance>=p.sightDistance)throw new RangeError('rodStationDistance must be less than sightDistance.');return p}
+export function alignmentState(parameters={}){const p=normalize(parameters),e=Math.abs(p.crossTrackOffset);return{crossTrackError:e,aligned:e<=p.alignmentTolerance,signedOffset:p.crossTrackOffset}}
+function mat(T,c,r=.76,metal=.05){return new T.MeshStandardMaterial({color:c,roughness:r,metalness:metal})}
+function mesh(T,g,m){const x=new T.Mesh(g,m);x.castShadow=true;x.receiveShadow=true;return x}
+function rod(T,striped=true){
+ const g=new T.Group(),shaft=mesh(T,new T.CylinderGeometry(.03,.03,1,16),mat(T,0xe9ece9,.55,.15));shaft.position.y=.5;g.add(shaft);
+ if(striped)for(let i=0;i<10;i++){const b=mesh(T,new T.CylinderGeometry(.033,.033,.075,16),mat(T,i%2?0xf0f1ed:0xd74238,.62));b.position.y=.07+i*.095;g.add(b)}
+ const tip=mesh(T,new T.ConeGeometry(.045,.16,14),mat(T,0x24292b,.7,.15));tip.position.y=-.08;g.add(tip);const cap=mesh(T,new T.CylinderGeometry(.045,.045,.05,16),mat(T,0x24292b,.55,.2));cap.position.y=1.025;g.add(cap);return g
 }
-
+function observer(T){
+ const g=new T.Group(),skin=mat(T,0xc98e67,.84),cloth=mat(T,0x39444b,.9),vest=mat(T,0xd9ef3c,.72),pants=mat(T,0x9a8062,.93),hat=mat(T,0xf2f3ef,.55);
+ const torso=mesh(T,new T.BoxGeometry(.46,.60,.27),cloth);torso.position.y=1.25;g.add(torso);const v=mesh(T,new T.BoxGeometry(.49,.40,.29),vest);v.position.y=1.27;g.add(v);const head=mesh(T,new T.SphereGeometry(.15,18,14),skin);head.position.y=1.72;g.add(head);const brim=mesh(T,new T.CylinderGeometry(.19,.19,.035,20),hat);brim.position.y=1.875;g.add(brim);const dome=mesh(T,new T.SphereGeometry(.165,20,12,0,Math.PI*2,0,Math.PI/2),hat);dome.position.y=1.875;g.add(dome);
+ function limb(x,y,len,r,mtrl,rot=0){const j=new T.Group();j.position.set(x,y,0);j.rotation.z=rot;const q=mesh(T,new T.CylinderGeometry(r,r,len,12),mtrl);q.position.y=-len/2;j.add(q);g.add(j)}
+ limb(-.12,.94,.86,.07,pants,.05);limb(.12,.94,.86,.07,pants,-.05);limb(-.29,1.47,.60,.055,skin,.12);limb(.29,1.47,.60,.055,skin,-.12);g.rotation.y=Math.PI;return g
+}
+function disposeObj(o){o.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material)(Array.isArray(n.material)?n.material:[n.material]).forEach(x=>x.dispose())})}
 export function createAsset(context={}){
-  const container=context.container;
-  if(!container||typeof container.appendChild!=='function')throw new TypeError('createAsset requires a DOM container.');
-  let disposed=false,timeSeconds=0,params=normalize({});
-  const root=document.createElement('div');
-  root.setAttribute('data-learnmat-asset','sur-ranging-rod');
-  root.style.width='100%';root.style.maxWidth='800px';root.style.fontFamily='system-ui,sans-serif';root.style.color='CanvasText';
-
-  const svg=node('svg',{viewBox:'0 0 780 470',role:'img','aria-label':'Plan view of a ranging rod relative to a straight survey line, with elevation inset'});
-  svg.style.width='100%';svg.style.height='auto';svg.style.display='block';
-
-  const heading=node('text',{x:390,y:36,'text-anchor':'middle','font-size':18,fill:'currentColor'});
-  const planBox=node('rect',{x:55,y:60,width:470,height:340,rx:12,fill:'none',stroke:'currentColor','stroke-width':2});
-  const sight=node('line',{x1:290,y1:355,x2:290,y2:105,stroke:'currentColor','stroke-width':3,'stroke-dasharray':'9 6'});
-  const observer=node('circle',{cx:290,cy:355,r:10,fill:'currentColor'});
-  const target=node('polygon',{points:'290,92 280,110 300,110',fill:'currentColor'});
-  const rod=node('circle',{r:11,fill:'Canvas',stroke:'currentColor','stroke-width':4});
-  const offsetLine=node('line',{stroke:'currentColor','stroke-width':2});
-  const offsetText=node('text',{'font-size':15,fill:'currentColor','text-anchor':'middle'});
-  const observerText=node('text',{x:290,y:382,'font-size':14,fill:'currentColor','text-anchor':'middle'});
-  observerText.textContent='observer';
-  const targetText=node('text',{x:290,y:82,'font-size':14,fill:'currentColor','text-anchor':'middle'});
-  targetText.textContent='distant target';
-  const planLabel=node('text',{x:75,y:88,'font-size':14,fill:'currentColor'});
-  planLabel.textContent='PLAN';
-
-  const inset=node('rect',{x:555,y:100,width:170,height:250,rx:12,fill:'none',stroke:'currentColor','stroke-width':2});
-  const ground=node('line',{x1:575,y1:305,x2:705,y2:305,stroke:'currentColor','stroke-width':3});
-  const rodVertical=node('line',{x1:640,y1:305,x2:640,y2:145,stroke:'currentColor','stroke-width':8,'stroke-linecap':'round'});
-  const bands=node('g');
-  for(let i=0;i<5;i++)bands.appendChild(node('line',{x1:627,y1:175+i*28,x2:653,y2:175+i*28,stroke:'currentColor','stroke-width':3}));
-  const insetLabel=node('text',{x:640,y:128,'font-size':14,fill:'currentColor','text-anchor':'middle'});
-  insetLabel.textContent='ELEVATION';
-  const heightText=node('text',{x:640,y:335,'font-size':14,fill:'currentColor','text-anchor':'middle'});
-  const metrics=node('text',{x:390,y:440,'font-size':16,fill:'currentColor','text-anchor':'middle'});
-
-  svg.append(heading,planBox,sight,observer,target,rod,offsetLine,offsetText,observerText,targetText,planLabel,inset,ground,rodVertical,bands,insetLabel,heightText,metrics);
-  root.appendChild(svg);container.appendChild(root);
-
-  function ensure(){if(disposed)throw new Error('Asset has been disposed.')}
-  function state(){return alignmentState(params)}
-  function render(){
-    const topY=105,bottomY=355,usable=bottomY-topY;
-    const fraction=params.rodStationDistance/params.sightDistance;
-    const rodY=bottomY-usable*fraction;
-    const pxPerM=70;
-    const rodX=290+params.crossTrackOffset*pxPerM;
-    rod.setAttribute('cx',rodX);rod.setAttribute('cy',rodY);
-    offsetLine.setAttribute('x1',290);offsetLine.setAttribute('y1',rodY);offsetLine.setAttribute('x2',rodX);offsetLine.setAttribute('y2',rodY);
-    offsetText.setAttribute('x',(290+rodX)/2);offsetText.setAttribute('y',rodY-12);
-    offsetText.textContent=params.crossTrackOffset.toFixed(3)+' m';
-    const s=state();
-    heading.textContent=s.aligned?'Rod aligned within tolerance':'Rod outside alignment tolerance';
-    metrics.textContent='cross-track error '+s.crossTrackError.toFixed(3)+' m · tolerance '+params.alignmentTolerance.toFixed(3)+' m · station '+params.rodStationDistance.toFixed(1)+' / '+params.sightDistance.toFixed(1)+' m';
-    heightText.textContent='rod height '+params.rodHeight.toFixed(2)+' m';
-    rodVertical.setAttribute('y2',(305-160*(params.rodHeight/2)).toFixed(2));
-  }
-  function snapshot(){
-    ensure();const s=state();
-    return {id:'sur-ranging-rod',timeSeconds:Math.max(0,timeSeconds),parameters:{...params},result:s,pose:{observer:{x:0,y:0,z:0},target:{x:0,y:0,z:-params.sightDistance},rodBase:{x:params.crossTrackOffset,y:0,z:-params.rodStationDistance},rodTop:{x:params.crossTrackOffset,y:params.rodHeight,z:-params.rodStationDistance}}};
-  }
-  render();
-  return {
-    setParameters(next={}){ensure();params=normalize({...params,...next});render();return snapshot()},
-    update(t){ensure();if(!Number.isFinite(t))throw new TypeError('timeSeconds must be finite.');timeSeconds=Math.max(0,t);return snapshot()},
-    reset(){ensure();params=normalize({});timeSeconds=0;render();return snapshot()},
-    resize(width,height,pixelRatio=1){ensure();if(![width,height,pixelRatio].every(Number.isFinite)||width<=0||height<=0||pixelRatio<=0)throw new RangeError('resize requires positive finite values.');root.style.width=width+'px';root.style.maxWidth='100%';root.style.aspectRatio=width+' / '+height;return snapshot()},
-    snapshot,
-    dispose(){if(disposed)return;disposed=true;root.remove()}
-  };
+ const T=context.THREE,scene=context.scene;if(!T||!scene)throw new TypeError('sur-ranging-rod requires context.THREE and context.scene.');
+ let disposed=false,time=0,p=normalize({});
+ const root=new T.Group();scene.add(root);const person=observer(T);person.position.set(-.65,0,.8);root.add(person);
+ const intermediate=rod(T,true),target=rod(T,true);root.add(intermediate,target);
+ const observerMark=mesh(T,new T.CylinderGeometry(.08,.10,.025,20),mat(T,0xe6dcc7,.9));observerMark.position.y=.0125;root.add(observerMark);
+ const guideMat=new T.LineDashedMaterial({color:0x198d91,dashSize:.45,gapSize:.25,transparent:true,opacity:.82});const guide=new T.Line(new T.BufferGeometry(),guideMat);root.add(guide);
+ const crossMat=new T.LineBasicMaterial({color:0xd55343});const cross=new T.Line(new T.BufferGeometry(),crossMat);root.add(cross);
+ const tolerance=mesh(T,new T.PlaneGeometry(1,1),new T.MeshBasicMaterial({color:0x4c9a78,transparent:true,opacity:.16,side:T.DoubleSide,depthWrite:false}));tolerance.rotation.x=-Math.PI/2;tolerance.position.y=.012;root.add(tolerance);
+ const stationMarker=mesh(T,new T.TorusGeometry(.12,.018,10,28),mat(T,0xd55343,.6));stationMarker.rotation.x=Math.PI/2;stationMarker.position.y=.025;root.add(stationMarker);
+ function state(){return alignmentState(p)}
+ function render(){
+   intermediate.position.set(p.crossTrackOffset,0,-p.rodStationDistance);intermediate.scale.set(1,p.rodHeight,1);
+   target.position.set(0,0,-p.sightDistance);target.scale.set(1,p.rodHeight,1);
+   guide.geometry.dispose();guide.geometry=new T.BufferGeometry().setFromPoints([new T.Vector3(0,.06,0),new T.Vector3(0,.06,-p.sightDistance)]);guide.computeLineDistances();
+   cross.geometry.dispose();cross.geometry=new T.BufferGeometry().setFromPoints([new T.Vector3(0,.035,-p.rodStationDistance),new T.Vector3(p.crossTrackOffset,.035,-p.rodStationDistance)]);
+   tolerance.scale.set(p.alignmentTolerance*2,p.sightDistance,1);tolerance.position.set(0,.012,-p.sightDistance/2);
+   stationMarker.position.set(p.crossTrackOffset,.025,-p.rodStationDistance);
+   const s=state();const c=s.aligned?0x3c9a6d:0xd55343;stationMarker.material.color.setHex(c);
+   if(!context.reducedMotion)stationMarker.rotation.z=time*.4;else stationMarker.rotation.z=0;
+ }
+ function snap(){if(disposed)throw new Error('Asset has been disposed.');const s=state();return{id:'sur-ranging-rod',timeSeconds:Math.max(0,time),parameters:{...p},result:s,pose:{observer:{x:0,y:0,z:0},target:{x:0,y:0,z:-p.sightDistance},rodBase:{x:p.crossTrackOffset,y:0,z:-p.rodStationDistance},rodTop:{x:p.crossTrackOffset,y:p.rodHeight,z:-p.rodStationDistance}}}}
+ render();return{
+ setParameters(next={}){if(disposed)throw new Error('Asset has been disposed.');p=normalize({...p,...next});render();return snap()},
+ update(t){if(disposed)throw new Error('Asset has been disposed.');if(!Number.isFinite(t))throw new TypeError('timeSeconds must be finite.');time=Math.max(0,t);render();return snap()},
+ reset(){if(disposed)throw new Error('Asset has been disposed.');p=normalize({});time=0;render();return snap()},
+ resize(w,h,pr=1){if(disposed)throw new Error('Asset has been disposed.');if(![w,h,pr].every(Number.isFinite)||w<=0||h<=0||pr<=0)throw new RangeError('resize requires positive finite values.');return snap()},
+ snapshot:snap,dispose(){if(disposed)return;disposed=true;scene.remove(root);disposeObj(root);guide.geometry.dispose();guide.material.dispose();cross.geometry.dispose();cross.material.dispose()}
+ }};
 }
