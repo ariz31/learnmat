@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Plan width B is shown across the page; footing length L acts out of plane. Contact-pressure diagram assumes rigid footing and linear full contact only while qmin >= 0.",
+  "boundsDescription": "3D soil block, rectangular footing and column stub with eccentric load arrow, moment cue, and display-normalized compression reaction vectors beneath the base. Negative linear pressure is never rendered as soil tension.",
   "parameters": {
     "footingWidth": {
       "unit": "m",
@@ -32,5 +32,21 @@
       "default": 100
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs-host-scene",
+  "threePeerVersion": "0.185.1",
+  "presentation": {
+    "focusCompatible": true,
+    "recommendedCamera": [
+      7,
+      4.6,
+      7
+    ],
+    "cameraTarget": [
+      0,
+      0.1,
+      0
+    ],
+    "visualScaleNote": "Reaction-arrow lengths are normalized; footing plan proportions follow B:L while scene depth/soil extent are pedagogical."
+  }
 }
