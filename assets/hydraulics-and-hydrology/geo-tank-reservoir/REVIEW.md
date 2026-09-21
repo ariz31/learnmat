@@ -1,17 +1,9 @@
-# Review — geo-tank-reservoir
+# Review — geo-tank-reservoir 3D replacement
 
-## Engineering review
+The validated mass-balance and storage-bound model is retained. The Three.js component visualizes model-computed level, actual outlet, overflow and outlet shortfall without performing a second calculation path.
 
-Reference state: A = 12 m², h0 = 2 m, hmax = 5 m, Qin = 0.08 m³/s, Qout = 0.05 m³/s.
+The former flat representation is replaced by recognizable storage geometry with tank shell, water volume, pipe routing, flow tracers, lighting/shadow-compatible materials, perspective camera presets, instructional steps and focus mode. Time acceleration is a demo-layer presentation choice and is disclosed.
 
-Net storage flow is 0.03 m³/s, giving dh/dt = 0.0025 m/s. At t = 600 s, h = 3.5 m and stored volume is 42 m³. Time to the upper limit is (5−2)·12/0.03 = 1200 s. After that time the level remains at 5 m and overflow is 0.03 m³/s while outlet demand continues to be supplied.
+Runtime v1 ownership is preserved: host supplies Three.js, scene, camera/renderer/time loop; the component contributes an owned group and disposes its resources.
 
-For net negative flow, the symmetric lower-bound rule caps level at zero and reports the unsupplied portion of outlet demand instead of negative storage.
-
-## Runtime/source review
-
-The model is algebraic in absolute time; no Euler integration drift is introduced. Inputs reject invalid levels, negative flows, non-positive area/capacity, and non-finite values. Disposal is idempotent and instance state is isolated.
-
-## Accessibility / visual review
-
-The SVG describes current level and boundary condition in its accessible label, and the demo uses native labelled controls. Live browser/assistive-technology execution remains pending, so the asset remains candidate.
+No browser/WebGL render was available through this connector execution, so rendered surveying-reference comparison and accessibility remain pending.
