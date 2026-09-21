@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Surveying Walking Person</title>
+<style>body{font-family:system-ui,sans-serif;margin:0;padding:1rem;line-height:1.45;background:Canvas;color:CanvasText}main{max-width:900px;margin:auto}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem}label{display:grid;gap:.25rem}button{padding:.6rem .9rem}#stage{margin-top:1rem;border:1px solid color-mix(in srgb,CanvasText 25%,transparent);border-radius:.75rem;padding:.5rem}</style>
+</head><body><main>
+<h1>Surveying Walking Person</h1>
+<p>Host-controlled demo. Distance is <strong>speed × elapsed time</strong>, clamped at the path endpoint.</p>
+<div class="controls">
+<label>Path length (m)<input id="path" type="range" min=".5" max="50" step=".5" value="10"><output id="pathOut">10</output></label>
+<label>Speed (m/s)<input id="speed" type="range" min="0" max="2.5" step=".1" value="1.2"><output id="speedOut">1.2</output></label>
+<label>Gait frequency (Hz)<input id="gait" type="range" min=".5" max="3" step=".1" value="1.7"><output id="gaitOut">1.7</output></label>
+</div>
+<p><button id="play" type="button">Pause</button> <button id="reset" type="button">Reset</button></p>
+<div id="stage"></div><p id="status" role="status"></p>
+<script type="module">
+import { createAsset } from '../src/asset.mjs';
+const stage=document.querySelector('#stage');
+const status=document.querySelector('#status');
+const playButton=document.querySelector('#play');
+const resetButton=document.querySelector('#reset');
+const pathInput=document.querySelector('#path');
+const speedInput=document.querySelector('#speed');
+const gaitInput=document.querySelector('#gait');
+const asset=createAsset({container:stage,seed:1,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
+let playing=true,origin=performance.now(),elapsed=0;
+function apply(){
+  asset.setParameters({pathLength:Number(pathInput.value),speed:Number(speedInput.value),stepFrequency:Number(gaitInput.value)});
+  document.querySelector('#pathOut').value=pathInput.value;
+  document.querySelector('#speedOut').value=speedInput.value;
+  document.querySelector('#gaitOut').value=gaitInput.value;
+}
+[pathInput,speedInput,gaitInput].forEach(el=>el.addEventListener('input',apply)); apply();
+function frame(now){if(playing){elapsed+=(now-origin)/1000;asset.update(elapsed);status.textContent='Elapsed '+elapsed.toFixed(1)+' s';}origin=now;requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+playButton.addEventListener('click',()=>{playing=!playing;playButton.textContent=playing?'Pause':'Play';origin=performance.now()});
+resetButton.addEventListener('click',()=>{elapsed=0;origin=performance.now();asset.update(0)});
+</script></main></body></html>
