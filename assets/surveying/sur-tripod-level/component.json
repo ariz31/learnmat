@@ -1,0 +1,16 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/surveying/sur-tripod-level/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Tripod feet lie on y=0 around the local station; instrument optical axis origin is at (0,instrumentHeight,0). Azimuth is clockwise from north (-Z).",
+  "parameters": {
+    "instrumentHeight": {"type":"number","unit":"m","min":1,"max":2.2,"default":1.5},
+    "legSpread": {"type":"number","unit":"m","min":0.4,"max":1.2,"default":0.8},
+    "sightAzimuthRad": {"type":"number","unit":"rad","min":-3.141592653589793,"max":3.141592653589793,"default":0},
+    "sightElevationRad": {"type":"number","unit":"rad","min":-0.0872665,"max":0.0872665,"default":0}
+  },
+  "assetDependencies": []
+}

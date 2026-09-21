@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Leveling Staff Holder</title>
+<style>body{font-family:system-ui,sans-serif;margin:0;padding:1rem;line-height:1.45;background:Canvas;color:CanvasText}main{max-width:900px;margin:auto}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.8rem}label{display:grid;gap:.25rem}#stage{margin-top:1rem;border:1px solid color-mix(in srgb,CanvasText 25%,transparent);border-radius:.75rem;padding:.5rem}</style></head>
+<body><main><h1>Leveling Staff Holder</h1><p>The staff base stays fixed. Tilt changes the top horizontal offset and vertical projection.</p>
+<div class="controls">
+<label>Staff height (m)<input id="height" type="range" min="2" max="5" step=".1" value="3"><output id="heightOut">3.0</output></label>
+<label>Tilt (degrees)<input id="tilt" type="range" min="-5" max="5" step=".1" value="0"><output id="tiltOut">0.0</output></label>
+<label>Reading height (m)<input id="reading" type="range" min="0" max="3" step=".1" value="1.5"><output id="readingOut">1.5</output></label>
+</div><div id="stage"></div><p id="status" role="status"></p>
+<script type="module">
+import { createAsset } from '../src/asset.mjs';
+const asset=createAsset({container:document.querySelector('#stage'),reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
+const h=document.querySelector('#height'),t=document.querySelector('#tilt'),r=document.querySelector('#reading'),status=document.querySelector('#status');
+function apply(){r.max=h.value;if(Number(r.value)>Number(h.value))r.value=h.value;const snap=asset.setParameters({staffHeight:Number(h.value),staffTiltRad:Number(t.value)*Math.PI/180,readingHeight:Number(r.value)});heightOut.value=Number(h.value).toFixed(1);tiltOut.value=Number(t.value).toFixed(1);readingOut.value=Number(r.value).toFixed(1);status.textContent='Top offset '+snap.result.topOffsetX.toFixed(3)+' m';}
+[h,t,r].forEach(el=>el.addEventListener('input',apply));apply();
+</script></main></body></html>

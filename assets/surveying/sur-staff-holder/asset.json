@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "sur-staff-holder",
+  "version": "0.1.0",
+  "title": "Leveling Staff Holder",
+  "description": "Reusable surveying field person holding a graduated leveling staff with explicit height, reading elevation, and verticality error.",
+  "category": "surveying",
+  "topics": ["differential-leveling", "leveling-staff", "fieldwork"],
+  "learningObjectives": [
+    "Visualize a leveling staff held vertically at a surveyed point.",
+    "Relate staff tilt to horizontal top offset and vertical projection."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "in-review",
+  "entrypoint": "assets/surveying/sur-staff-holder/demo/index.html",
+  "readme": "assets/surveying/sur-staff-holder/README.md",
+  "previewImage": "assets/surveying/sur-staff-holder/previews/default.svg",
+  "reviewFile": "assets/surveying/sur-staff-holder/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Staff verticality and trigonometric projection invariants reviewed from source; browser and assistive-technology checks remain."
+  },
+  "source": {"type":"original","reference":"Reserved surveying queue task sur-staff-holder.","sha256":null}
+}
