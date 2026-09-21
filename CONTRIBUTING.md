@@ -22,17 +22,23 @@ Use templates/asset-metadata.json and templates/ASSET-README.md as starting poin
 5. For interactive/animated work, provide a focus/maximize presentation mode that
    hides steps and nonessential panels while retaining an obvious exit and essential
    animation controls. The focused view must remain responsive and understandable.
-6. Extract reusable geometry, calculations, or scene controls without importing
+6. Design the primary visualization as real 3D whenever practical. Prefer actual
+   spatial geometry, perspective/depth, meaningful camera framing, and animated
+   object relationships similar in visual ambition to the surveying examples.
+   A flat 2D/SVG primary visual must be justified in the review as educationally
+   clearer or inherently non-spatial. 2D equations, plots, labels, and overlays may
+   supplement the 3D scene.
+7. Extract reusable geometry, calculations, or scene controls without importing
    presentation-specific global IDs or unscoped CSS into the consumer.
-7. Make animation purposeful, smooth, deterministic where practical, and consistent
+8. Make animation purposeful, smooth, deterministic where practical, and consistent
    with the authoritative model. Avoid decorative motion.
-8. Provide a minimal usage example and documented lifecycle cleanup.
-9. Produce an actual preview image from a recorded state after implementation.
-10. Complete templates/REVIEW.md and the checks in docs/QUALITY.md and
+9. Provide a minimal usage example and documented lifecycle cleanup.
+10. Produce an actual preview image from a recorded state after implementation.
+11. Complete templates/REVIEW.md and the checks in docs/QUALITY.md and
     docs/EDUCATIONAL-DESIGN.md.
-11. Update catalog/catalog.json when working in the authorized integrator workflow;
+12. Update catalog/catalog.json when working in the authorized integrator workflow;
     run `python scripts/validate_catalog.py`.
-12. Open a focused change with evidence and known limitations. Do not run GitHub
+13. Open a focused change with evidence and known limitations. Do not run GitHub
     Actions. Merge and deployment depend on the authorized repository workflow.
 
 ## Testing policy
