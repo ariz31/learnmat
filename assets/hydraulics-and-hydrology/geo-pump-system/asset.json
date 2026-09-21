@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "geo-pump-system",
+  "version": "0.1.0",
+  "title": "Pump and system operating point",
+  "description": "Reusable SVG component showing the analytical intersection of a quadratic pump curve and quadratic system curve with explicit SI parameters.",
+  "category": "hydraulics-and-hydrology",
+  "topics": [
+    "pump curve",
+    "system curve",
+    "operating point",
+    "head",
+    "hydraulic power"
+  ],
+  "learningObjectives": [
+    "Locate the operating point where pump head equals required system head.",
+    "Distinguish shutoff head, static head, friction/system losses, and hydraulic versus shaft power."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/hydraulics-and-hydrology/geo-pump-system/demo/index.html",
+  "readme": "assets/hydraulics-and-hydrology/geo-pump-system/README.md",
+  "previewImage": "assets/hydraulics-and-hydrology/geo-pump-system/previews/preview.svg",
+  "reviewFile": "assets/hydraulics-and-hydrology/geo-pump-system/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Analytical curve intersection and power calculation reviewed from source; live browser/accessibility review pending."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat water-ground contribution, 2026-09-22.",
+    "sha256": null
+  }
+}
