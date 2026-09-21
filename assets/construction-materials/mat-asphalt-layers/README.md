@@ -1,91 +1,39 @@
-# Asphalt material specimen and layered sample
+# Asphalt layered sample — 3D
 
-Status: candidate.
-
-A reusable SVG component for inspecting generic asphalt-layer geometry as a rectangular slab sample or cylindrical core specimen. It teaches layer proportions and geometric volume, not pavement design or asphalt-mixture performance.
+Status: candidate · version 0.2.0 3D replacement.
 
 ## Learning objective
 
-After using the demo, a learner should be able to:
+Inspect layer interfaces and proportions spatially, then verify thickness and geometric-volume closure.
 
-- add individual asphalt-layer thicknesses to obtain total specimen thickness;
-- compute layer volume from area and thickness;
-- compare layer proportions in slab and core views;
-- verify thickness and volume closure;
-- distinguish geometric layer visualization from a pavement design recommendation or material-property claim.
+## 3D educational design
 
-## Educational sequence
+Three separately shaded asphalt lifts are stacked with small visual separation so interfaces are unmistakable. Slab and core modes use real box/cylinder geometry with procedural aggregate cues and a controlled inspection camera.
 
-1. Choose slab or core view.
-2. Set three generic layer thicknesses and relevant sample dimensions.
-3. Use the visible relationships `T = t1 + t2 + t3` and `Vi = area × ti`.
-4. Inspect the visual proportions.
-5. Expand the calculation table for per-layer thickness fraction and volume.
-6. Confirm the live thickness-sum and volume-sum checks.
-7. Conclude only about geometric proportions and sample volume.
+The demo follows the current LearnMat surveying-quality pattern: a real Three.js scene, deliberate camera framing, lighting/shadows, orbit inspection, pause/play inspection rotation, camera reset, responsive HUD, focus mode, and concise progressive teaching text. The component itself does not own the renderer or animation loop; the host injects Three.js and the scene and advances absolute time through `update(timeSeconds)`.
 
-The demo provides **Focus visual** mode; exiting focus preserves parameters and model state. Animation is intentionally omitted because this asset teaches static section geometry and arithmetic comparison. Decorative motion would not improve the learning objective.
+## Governing model
 
-## Default example
+T = t1 + t2 + t3; Vi = plan/cross-sectional area × ti.
 
-- top layer = 0.040 m
-- middle layer = 0.060 m
-- bottom layer = 0.080 m
-- total thickness = **0.180 m**
-- slab length = 0.400 m
-- slab width = 0.300 m
-- slab plan area = **0.120 m²**
-
-Layer slab volumes:
-
-- top = 0.120 × 0.040 = **0.0048 m³ = 4.80 L**
-- middle = 0.120 × 0.060 = **0.0072 m³ = 7.20 L**
-- bottom = 0.120 × 0.080 = **0.0096 m³ = 9.60 L**
-- total = **0.0216 m³ = 21.60 L**
-
-For the default 0.100 m diameter core:
-
-- core area = π(0.05)² = **0.0078539816 m²**
-- total core volume = area × 0.180 = **0.0014137167 m³ = 1.4137 L**
-
-Thickness fractions are 22.22%, 33.33%, and 44.44%.
+The numerical model remains authoritative. 3D form, HUD values, and interaction are derived from the same validated parameter state.
 
 ## Limits
 
-The three layers are generic **Layer A/B/C**. The component does not encode:
+Generic Layer A/B/C only; no mix gradation, density, air voids, binder content, temperature, compaction, stiffness, fatigue, rutting, construction tolerance, or pavement-design prescription.
 
-- surface/binder/base-course design requirements;
-- aggregate gradation, density, air voids, binder content, compaction, temperature, stiffness, fatigue, rutting, or moisture susceptibility;
-- construction tolerances, tack coat, prime coat, underlying base/subgrade, or any agency/project specification.
+## Runtime and dependencies
 
-Texture marks are deterministic and illustrative only.
-
-## Usage
-
-Open `demo/index.html` from a local static server or import `src/asset.mjs`.
-
-| Parameter | Default | Accepted |
-| --- | --- | --- |
-| `topThicknessM` | 0.04 | 0.01–0.15 m |
-| `middleThicknessM` | 0.06 | 0.01–0.20 m |
-| `bottomThicknessM` | 0.08 | 0.01–0.25 m |
-| `sampleLengthM` | 0.40 | 0.10–1.00 m |
-| `sampleWidthM` | 0.30 | 0.10–1.00 m |
-| `coreDiameterM` | 0.10 | 0.05–0.20 m |
-| `view` | `layered-slab` | `layered-slab`, `core` |
-| `showTexture` | true | boolean |
-| `showDimensions` | true | boolean |
-
-## Reuse and rights
-
-Original LearnMat contribution. No external asphalt texture, mix table, pavement-design catalogue, photo, or product data is embedded. Repository license: MIT.
+- Renderer: Three.js 0.185.1 supplied by the host/demo.
+- Demo network requirement: yes, for the pinned jsDelivr Three.js module and OrbitControls.
+- Component: reusable `createAsset(context)`, deterministic seed/time, validated setters, reset, resize, serializable snapshot, idempotent disposal.
+- Geometry unit: metres; right-handed +Y-up basis.
+- The demo's slow turntable is an inspection aid that reveals depth/occlusion. Pause stops it; reduced-motion uses a fixed pose.
 
 ## Review evidence
 
-- `previews/default.svg`
-- `checks/geometry.md`
-- `REVIEW.md`
+This replacement intentionally removes the old flat SVG preview from metadata. No browser screenshot is fabricated. `REVIEW.md` records source-level engineering and 3D implementation review; browser, responsive, visual, and assistive-technology gates remain not-reviewed until a real browser capture is available.
 
 ## Change history
 
-- 0.1.0 — Initial slab/core layered sample geometry, thickness/volume checks, progressive educational details, and focus presentation mode.
+- 0.2.0 — Replaced the flat SVG-primary presentation with a procedural real-3D Three.js educational scene and surveying-style presentation host.

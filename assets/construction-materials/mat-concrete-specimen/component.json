@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Specimen is centred on X/Z with base at Y=0. Maximum accepted envelope is 0.30 m × 0.60 m × 0.30 m.",
+  "boundsDescription": "Specimen centred at X/Z origin with base at Y=0; 3D scene adds only display context.",
   "parameters": {
     "shape": {
       "type": "enum",
@@ -43,13 +43,19 @@
         "light",
         "medium"
       ],
-      "default": "medium",
-      "meaning": "Illustrative surface density only; no physical aggregate-size meaning."
+      "default": "medium"
     },
     "showDimensions": {
       "type": "boolean",
       "default": true
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "peerDependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "injectedByHost": true
+    }
+  ]
 }

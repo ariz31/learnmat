@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Two-dimensional grading visualization; sieve openings are displayed in millimetres on a logarithmic horizontal axis.",
+  "boundsDescription": "3D tray/sieve scene is illustrative context; grading calculations remain analytical and use nominal sieve openings in millimetres.",
   "parameters": {
     "gradingPreset": {
       "type": "enum",
@@ -14,8 +14,7 @@
         "coarse-heavy",
         "fine-heavy"
       ],
-      "default": "balanced",
-      "meaning": "illustrative distribution only"
+      "default": "balanced"
     },
     "sampleMassKg": {
       "type": "number",
@@ -33,5 +32,12 @@
       "default": true
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "peerDependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "injectedByHost": true
+    }
+  ]
 }

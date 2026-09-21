@@ -1,53 +1,38 @@
-# Asset review
-
-- Asset ID/version: mat-asphalt-layers 0.1.0
-- Reviewer/date: self-review, 2026-09-22
-- Environment: source and arithmetic review only; browser execution not claimed
-- Dependencies: none
+# Asset review — mat-asphalt-layers 0.2.0
 
 ## Engineering
-
-- Total thickness is the exact sum of the three generic layer thicknesses.
-- Slab layer volumes use plan area × layer thickness.
-- Core layer volumes use π(d/2)² × layer thickness.
-- Default slab volumes are 4.80 L, 7.20 L, and 9.60 L; total 21.60 L.
-- Default 100 mm diameter core total is 1.4137 L for 180 mm total thickness.
-- Texture does not affect geometry or calculations.
-- No pavement design, mixture property, density, compaction, or code/project compliance claim is encoded.
-- Gate: passed for source/arithmetic review.
+- Existing validated analytical model is retained as the authoritative source.
+- Thickness and slab/core volume calculations are unchanged; 3D layer heights are driven by the same validated thickness parameters.
+- Gate: passed for source/model review.
 
 ## Pedagogy
-
-- Objective, known data, governing equations, intermediate layer fractions/volumes, checks, and interpretation are exposed.
-- The visible formula precedes the result.
-- Per-layer arithmetic is progressively disclosed in a table rather than permanently occupying the visual.
-- Live checks verify both thickness and volume closure.
+- Demo exposes objective, governing relation, visual consequence, check/interpretation, and conclusion with minimal default prose.
+- HUD values come from the same snapshot model as the 3D geometry.
 - Gate: passed for source/information-architecture review.
 
+## Spatial 3D
+- Real Three.js geometry replaces the previous SVG-primary asset.
+- Scene includes perspective camera, depth/occlusion, material response, edges/detail, cast/receive shadows, contextual pedestal/ground, orbit inspection, controlled inspection rotation, camera reset, responsive focus mode, and reduced-motion fixed pose.
+- No fake 3D/isometric substitute is used.
+- Source comparison target: current high-quality surveying examples such as profile-leveling.
+- Gate: source-reviewed; rendered/browser comparison not claimed.
+
 ## Animation/presentation
-
-- Animation is intentionally unnecessary because the concept is static layered geometry and arithmetic comparison.
-- Focus mode hides instructional chrome without mutating the component state; Escape exits.
-- Browser state restoration has not been executed.
-- Gate: source-reviewed; browser behavior not-reviewed.
-
-## Browser/functionality
-
-- Runtime lifecycle methods are implemented; responsive SVG and narrow-screen demo CSS are present.
-- Browser execution not performed.
-- Gate: not-reviewed.
+- Host-owned absolute time drives a slow deterministic inspection turntable to reveal 3D form.
+- Pause/play, camera reset, asset reset, and focus/exit controls are present.
+- Reduced-motion holds a fixed pose.
+- Browser continuity/state restoration has not been executed.
+- Gate: not-reviewed in browser.
 
 ## Accessibility
+- Native controls, keyboard-focus styles, text HUD, concise text-equivalent lesson, and reduced-motion path are implemented in source.
+- Assistive-technology execution not performed.
+- Gate: not-reviewed.
 
-- Native labelled controls, visible focus, accessible focus-button state, SVG accessible name, live status, and semantic details/table region are present in source.
-- Gate: not-reviewed with assistive technology.
-
-## Rights
-
-- Original contribution with no third-party texture, mix data, or product media.
-- Gate: cleared for original content.
+## Rights and reuse
+- Procedural geometry/materials only; no third-party model or texture.
+- Three.js is declared as a pinned non-embedded peer/demo dependency.
+- Asset stays candidate because real browser/visual evidence is unavailable in this session.
 
 ## Decision
-
-- Candidate only.
-- Browser/responsive/focus/accessibility evidence remains before approval.
+Integrated candidate only. The replacement addresses the requested real-3D quality direction without fabricating screenshot, browser, accessibility, or approval evidence.

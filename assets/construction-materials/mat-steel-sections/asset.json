@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
   "id": "mat-steel-sections",
-  "version": "0.1.0",
-  "title": "Parametric steel section specimens",
-  "description": "Reusable idealized I-section, channel, and angle geometry with explicit nominal dimensions and cross-sectional area.",
+  "version": "0.2.0",
+  "title": "Parametric steel sections — 3D",
+  "description": "Extruded real-3D I-section, channel, and angle specimens with highlighted analytical cross-section.",
   "category": "construction-materials",
   "topics": [
     "steel-sections",
@@ -11,37 +11,45 @@
     "rolled-shapes",
     "i-section",
     "channel",
-    "angle"
+    "angle",
+    "3d"
   ],
   "learningObjectives": [
-    "Recognize common idealized steel section forms from explicit nominal dimensions.",
-    "Relate idealized section dimensions to geometric cross-sectional area without inferring structural capacity or standard designation."
+    "Recognize I, channel, and angle form from an extruded 3D specimen and its highlighted cross-section.",
+    "Relate idealized section dimensions to cross-sectional area without inferring design capacity or standard designation."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/construction-materials/mat-steel-sections/demo/index.html",
   "readme": "assets/construction-materials/mat-steel-sections/README.md",
-  "previewImage": "assets/construction-materials/mat-steel-sections/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/construction-materials/mat-steel-sections/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party section table or manufacturer geometry embedded."
+    "attribution": "Original LearnMat procedural 3D contribution; no third-party model, texture, material dataset, or manufacturer geometry embedded."
   },
   "verification": {
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Focused source/formula review completed. Browser and assistive-technology execution are intentionally not claimed; see REVIEW.md."
+    "notes": "Engineering/model source review retained. 3D implementation is source-reviewed, but no browser screenshot or assistive-technology execution is claimed; see REVIEW.md."
   },
   "source": {
     "type": "original",
-    "reference": "Original LearnMat contribution for reserved materials task mat-steel-sections.",
+    "reference": "LearnMat 3D replacement for reserved materials asset mat-steel-sections.",
     "sha256": null
   }
 }

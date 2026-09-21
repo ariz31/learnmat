@@ -1,56 +1,38 @@
-# Asset review
-
-- Asset ID/version: mat-aggregate-grading 0.1.0
-- Reviewer/date: self-review, 2026-09-22
-- Environment: source and arithmetic review only; browser execution not claimed
-- Dependencies: none
+# Asset review — mat-aggregate-grading 0.2.0
 
 ## Engineering
-
-- Percent passing is non-increasing as sieve opening decreases.
-- Percent retained is computed from successive percent-passing differences.
-- Pan retains the fraction passing the smallest modeled sieve.
-- Default balanced retained percentages sum to 100%; for a 5 kg sample, retained mass sums to 5 kg.
-- Particle symbols are explicitly decorative and not physically scaled.
-- No grading envelope, acceptance criterion, or standard/project compliance claim is encoded.
-- Gate: passed for source/arithmetic review.
+- Existing validated analytical model is retained as the authoritative source.
+- Retained percentages/masses still close to 100% and the original sample mass; the 3D pile is explicitly non-authoritative visual context.
+- Gate: passed for source/model review.
 
 ## Pedagogy
-
-- Learning objective covers curve reading, retained-fraction calculation, retained mass, closure checking, and correct interpretation.
-- Governing relationships are visible before the result.
-- Full intermediate retained fractions and masses are available through progressive disclosure.
-- Live status provides the 100% and total-mass closure check.
-- Focus mode hides instructional chrome while retaining the same component/model state.
-- Default copy remains concise; detailed steps/table are collapsed until requested.
+- Demo exposes objective, governing relation, visual consequence, check/interpretation, and conclusion with minimal default prose.
+- HUD values come from the same snapshot model as the 3D geometry.
 - Gate: passed for source/information-architecture review.
 
+## Spatial 3D
+- Real Three.js geometry replaces the previous SVG-primary asset.
+- Scene includes perspective camera, depth/occlusion, material response, edges/detail, cast/receive shadows, contextual pedestal/ground, orbit inspection, controlled inspection rotation, camera reset, responsive focus mode, and reduced-motion fixed pose.
+- No fake 3D/isometric substitute is used.
+- Source comparison target: current high-quality surveying examples such as profile-leveling.
+- Gate: source-reviewed; rendered/browser comparison not claimed.
+
 ## Animation/presentation
-
-- Animation is intentionally unnecessary: the concept is a static distribution and arithmetic relationship; motion would be decorative rather than explanatory.
-- Focus/exit behavior is implemented at the demo layer and does not mutate model parameters.
-- Escape exits focus mode.
-- Browser state-restoration behavior has not been executed.
-- Gate: source-reviewed; browser behavior not-reviewed.
-
-## Browser/functionality
-
-- Source provides create/set/update/reset/resize/snapshot/dispose.
-- SVG is responsive; demo has a narrow-screen layout.
-- Browser execution not performed.
-- Gate: not-reviewed.
+- Host-owned absolute time drives a slow deterministic inspection turntable to reveal 3D form.
+- Pause/play, camera reset, asset reset, and focus/exit controls are present.
+- Reduced-motion holds a fixed pose.
+- Browser continuity/state restoration has not been executed.
+- Gate: not-reviewed in browser.
 
 ## Accessibility
+- Native controls, keyboard-focus styles, text HUD, concise text-equivalent lesson, and reduced-motion path are implemented in source.
+- Assistive-technology execution not performed.
+- Gate: not-reviewed.
 
-- Native controls, visible focus, accessible focus button state, SVG accessible name, text summary, and a semantic details/table region are present in source.
-- Gate: not-reviewed with assistive technology.
-
-## Rights
-
-- Original repository contribution with no external dataset or media.
-- Gate: cleared for original content.
+## Rights and reuse
+- Procedural geometry/materials only; no third-party model or texture.
+- Three.js is declared as a pinned non-embedded peer/demo dependency.
+- Asset stays candidate because real browser/visual evidence is unavailable in this session.
 
 ## Decision
-
-- Candidate only.
-- Browser/responsive/focus-state/assistive-technology review remains before approval.
+Integrated candidate only. The replacement addresses the requested real-3D quality direction without fabricating screenshot, browser, accessibility, or approval evidence.

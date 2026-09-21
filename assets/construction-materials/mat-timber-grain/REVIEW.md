@@ -1,46 +1,38 @@
-# Asset review
-
-- Asset ID and version: mat-timber-grain 0.1.0
-- Source commit or source hash: candidate PR source; exact integration commit assigned by GitHub
-- Reviewer and review date: self-review, 2026-09-22
-- Environment/browser/device/viewport: source review only; no browser execution claimed
-- Dependencies available: no runtime dependencies
+# Asset review — mat-timber-grain 0.2.0
 
 ## Engineering
+- Existing validated analytical model is retained as the authoritative source.
+- Angle remains radians at the API boundary and the displayed 3D arrow uses the same direction vector returned by the model.
+- Gate: passed for source/model review.
 
-- Model, units, assumptions, and references: SI dimensions and radians at the API boundary. Grain direction unit vector is (cos θ, 0, -sin θ), with positive θ from +X toward -Z on the displayed top surface. Volume is length × width × thickness.
-- Independent calculation with inputs, expected result, actual result, tolerance: For 0.300 × 0.075 × 0.025 m, expected volume is 0.0005625 m³ = 562.5 cm³. For θ=8°, expected direction ≈ (0.990268, 0, -0.139173). See checks/geometry.md.
-- Boundary/invalid-input checks: Source rejects unknown parameters, non-finite values, dimensions outside documented limits, grain angles outside ±π/4, unsupported density values, and non-boolean toggles before mutation.
-- Diagram and numerical agreement: Grain lines and orientation arrow use the same validated angle state. Grain density changes appearance only; it does not change geometry or imply physical grain spacing.
-- Gate: passed for source/formula review; runtime execution remains separate.
+## Pedagogy
+- Demo exposes objective, governing relation, visual consequence, check/interpretation, and conclusion with minimal default prose.
+- HUD values come from the same snapshot model as the 3D geometry.
+- Gate: passed for source/information-architecture review.
 
-## Browser and functionality
+## Spatial 3D
+- Real Three.js geometry replaces the previous SVG-primary asset.
+- Scene includes perspective camera, depth/occlusion, material response, edges/detail, cast/receive shadows, contextual pedestal/ground, orbit inspection, controlled inspection rotation, camera reset, responsive focus mode, and reduced-motion fixed pose.
+- No fake 3D/isometric substitute is used.
+- Source comparison target: current high-quality surveying examples such as profile-leveling.
+- Gate: source-reviewed; rendered/browser comparison not claimed.
 
-- Start, sequence, pause/resume, reset, repeated actions: Source provides deterministic create/set/update/reset/snapshot/dispose behavior; browser execution not performed.
-- Resize, mobile/touch, dependency failures: Responsive SVG and a mobile single-column demo are present; not browser-verified.
-- Resource cleanup and multiple-instance behavior where applicable: No timers, network calls, global keyboard handlers, global SVG IDs, or shared mutable component state. Dispose removes the owned root idempotently.
-- Gate: not-reviewed in a browser.
+## Animation/presentation
+- Host-owned absolute time drives a slow deterministic inspection turntable to reveal 3D form.
+- Pause/play, camera reset, asset reset, and focus/exit controls are present.
+- Reduced-motion holds a fixed pose.
+- Browser continuity/state restoration has not been executed.
+- Gate: not-reviewed in browser.
 
 ## Accessibility
+- Native controls, keyboard-focus styles, text HUD, concise text-equivalent lesson, and reduced-motion path are implemented in source.
+- Assistive-technology execution not performed.
+- Gate: not-reviewed.
 
-- Keyboard, focus, labels, contrast, text equivalents: Demo uses native labelled controls and visible focus styles. Component has a group label, SVG image label, and textual geometry/orientation summary.
-- Reduced-motion behavior: Asset is static and defines a reduced-motion fallback.
-- Gate: not-reviewed with assistive technology.
-
-## Rights
-
-- Original source and permission/license evidence: Original repository contribution under repository MIT license.
-- Embedded/third-party content and notices: None; no species image, texture, grading table, or external dataset is used.
-- Gate: cleared for original contribution content.
-
-## Visual evidence
-
-- Actual preview file: previews/default.svg
-- Source version, inputs, animation state, viewport, capture procedure: Static SVG reference render of the default 300 × 75 × 25 mm specimen with an 8° stylized surface-grain indicator. Not represented as a browser screenshot.
+## Rights and reuse
+- Procedural geometry/materials only; no third-party model or texture.
+- Three.js is declared as a pinned non-embedded peer/demo dependency.
+- Asset stays candidate because real browser/visual evidence is unavailable in this session.
 
 ## Decision
-
-- Defects and severity: No geometry, angle-unit, scope, or metadata defect found in source review.
-- Unavailable checks: Browser execution, phone/tablet visual inspection, keyboard traversal in a browser, assistive-technology verification.
-- Release eligible: no; keep candidate until independent browser/accessibility review.
-- Follow-up work: Independently execute the demo, compare snapshots to checks/geometry.md, inspect positive/negative grain angles and responsive widths, and capture browser evidence before approval.
+Integrated candidate only. The replacement addresses the requested real-3D quality direction without fabricating screenshot, browser, accessibility, or approval evidence.

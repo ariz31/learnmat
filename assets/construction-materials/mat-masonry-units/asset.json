@@ -1,45 +1,53 @@
 {
   "schemaVersion": "1.0.0",
   "id": "mat-masonry-units",
-  "version": "0.1.0",
-  "title": "Masonry units with dimensioned voids and bond",
-  "description": "Generic hollow masonry unit geometry with dimensioned rectangular through-voids and a schematic running-bond demonstration.",
+  "version": "0.2.0",
+  "title": "Masonry units and bond — 3D",
+  "description": "Procedural hollow masonry units constructed from shells/webs with open through-voids and a 3D running-bond wall fragment.",
   "category": "construction-materials",
   "topics": [
     "masonry",
     "hollow-masonry-unit",
     "void-geometry",
-    "running-bond"
+    "running-bond",
+    "3d"
   ],
   "learningObjectives": [
-    "Relate generic masonry-unit dimensions and through-void geometry to gross and idealized solid volume.",
-    "Recognize running-bond offset without treating the schematic as a complete code-compliant wall detail."
+    "Inspect true spatial through-voids and relate them to idealized removed volume.",
+    "Recognize running-bond horizontal offset in a 3D wall fragment without treating it as a complete construction detail."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/construction-materials/mat-masonry-units/demo/index.html",
   "readme": "assets/construction-materials/mat-masonry-units/README.md",
-  "previewImage": "assets/construction-materials/mat-masonry-units/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/construction-materials/mat-masonry-units/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no manufacturer geometry, product data, or third-party media embedded."
+    "attribution": "Original LearnMat procedural 3D contribution; no third-party model, texture, material dataset, or manufacturer geometry embedded."
   },
   "verification": {
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Focused source/formula review completed; browser and assistive-technology execution are intentionally not claimed."
+    "notes": "Engineering/model source review retained. 3D implementation is source-reviewed, but no browser screenshot or assistive-technology execution is claimed; see REVIEW.md."
   },
   "source": {
     "type": "original",
-    "reference": "Original LearnMat contribution for reserved materials task mat-masonry-units.",
+    "reference": "LearnMat 3D replacement for reserved materials asset mat-masonry-units.",
     "sha256": null
   }
 }

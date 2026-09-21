@@ -1,46 +1,38 @@
-# Asset review
-
-- Asset ID and version: mat-concrete-specimen 0.1.0
-- Source commit or source hash: candidate PR source; exact integration commit assigned by GitHub
-- Reviewer and review date: self-review, 2026-09-22
-- Environment/browser/device/viewport: source review only; no browser execution claimed
-- Dependencies available: no runtime dependencies
+# Asset review — mat-concrete-specimen 0.2.0
 
 ## Engineering
+- Existing validated analytical model is retained as the authoritative source.
+- Cylinder/cube volume and surface-area formulas are unchanged; 3D mesh dimensions use the same validated SI parameters.
+- Gate: passed for source/model review.
 
-- Model, units, assumptions, and references: Pure Euclidean specimen geometry in SI units. Cylinder uses V=πr²h and A=2πr(h+r); cube uses V=s³ and A=6s². Appearance is explicitly illustrative and carries no material-property meaning.
-- Independent calculation with inputs, expected result, actual result, tolerance: For d=0.15 m and h=0.30 m, expected cylinder volume 0.005301437602932776 m³ and surface area 0.17671458676442586 m². The implementation uses the same dimension definitions and direct formulas; see checks/geometry.md.
-- Boundary/invalid-input checks: Source validation rejects non-finite values, dimensions outside documented bounds, unknown keys, invalid enum values, and non-boolean dimension toggles before parameter mutation.
-- Diagram and numerical agreement: Dimension labels are produced from the same validated parameters used for the geometry snapshot. Drawn specimen proportions are pedagogical and not a scaled engineering drawing.
-- Gate: passed for source/formula review; runtime execution remains separate.
+## Pedagogy
+- Demo exposes objective, governing relation, visual consequence, check/interpretation, and conclusion with minimal default prose.
+- HUD values come from the same snapshot model as the 3D geometry.
+- Gate: passed for source/information-architecture review.
 
-## Browser and functionality
+## Spatial 3D
+- Real Three.js geometry replaces the previous SVG-primary asset.
+- Scene includes perspective camera, depth/occlusion, material response, edges/detail, cast/receive shadows, contextual pedestal/ground, orbit inspection, controlled inspection rotation, camera reset, responsive focus mode, and reduced-motion fixed pose.
+- No fake 3D/isometric substitute is used.
+- Source comparison target: current high-quality surveying examples such as profile-leveling.
+- Gate: source-reviewed; rendered/browser comparison not claimed.
 
-- Start, sequence, pause/resume, reset, repeated actions: Source implementation provides deterministic create/set/update/reset/snapshot/dispose methods; browser execution not performed in this review.
-- Resize, mobile/touch, dependency failures: SVG is responsive and demo uses a single-column mobile breakpoint; not browser-verified.
-- Resource cleanup and multiple-instance behavior where applicable: Each mount owns one section and dispose removes it idempotently. No timers, global keyboard capture, network dependencies, or shared mutable component state.
-- Gate: not-reviewed in a browser.
+## Animation/presentation
+- Host-owned absolute time drives a slow deterministic inspection turntable to reveal 3D form.
+- Pause/play, camera reset, asset reset, and focus/exit controls are present.
+- Reduced-motion holds a fixed pose.
+- Browser continuity/state restoration has not been executed.
+- Gate: not-reviewed in browser.
 
 ## Accessibility
+- Native controls, keyboard-focus styles, text HUD, concise text-equivalent lesson, and reduced-motion path are implemented in source.
+- Assistive-technology execution not performed.
+- Gate: not-reviewed.
 
-- Keyboard, focus, labels, contrast, text equivalents: Demo uses native labelled controls and visible focus styles. Component exposes a group label, SVG image label, and textual geometry summary. Assistive-technology behavior not executed.
-- Reduced-motion behavior: Asset is static; CSS disables incidental animation/transition under reduced motion.
-- Gate: not-reviewed with assistive technology.
-
-## Rights
-
-- Original source and permission/license evidence: Original repository contribution; intended for the repository MIT license.
-- Embedded/third-party content and notices: None.
-- Gate: cleared for original contribution content.
-
-## Visual evidence
-
-- Actual preview file: previews/default.svg
-- Source version, inputs, animation state, viewport, capture procedure: Static SVG reference render matching the default 150 mm × 300 mm cylinder geometry and default component labels. It is not represented as a browser screenshot.
+## Rights and reuse
+- Procedural geometry/materials only; no third-party model or texture.
+- Three.js is declared as a pinned non-embedded peer/demo dependency.
+- Asset stays candidate because real browser/visual evidence is unavailable in this session.
 
 ## Decision
-
-- Defects and severity: No formula or metadata defect found in source review.
-- Unavailable checks: Browser execution, narrow/mobile visual inspection, keyboard traversal in a browser, and assistive-technology verification.
-- Release eligible: no; keep candidate until independent browser/accessibility review.
-- Follow-up work: Independently run the demo in a browser, compare snapshot values against checks/geometry.md, inspect responsive layouts, and capture browser evidence before any approval.
+Integrated candidate only. The replacement addresses the requested real-3D quality direction without fabricating screenshot, browser, accessibility, or approval evidence.

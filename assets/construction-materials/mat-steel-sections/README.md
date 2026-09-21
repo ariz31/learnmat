@@ -1,111 +1,39 @@
-# Parametric steel section specimens
+# Parametric steel sections — 3D
 
-Status: candidate.
-
-A reusable SVG component for visualizing generic I-section, channel, and angle cross-section geometry. It is a **materials specimen and geometry asset**, not a structural design tool or standards catalogue.
+Status: candidate · version 0.2.0 3D replacement.
 
 ## Learning objective
 
-Use explicit nominal dimensions to recognize common steel section forms and relate those dimensions to idealized cross-sectional area without confusing geometry with structural capacity, steel grade, or a published standard designation.
+Inspect recognizable full-depth steel section geometry while keeping analytical area and idealization limits explicit.
 
-## Model and assumptions
+## 3D educational design
 
-### I-section and channel
+The analytical section polygon is extruded into a metallic specimen with edge definition and a cyan front-face section outline; orbiting reveals flange/web/leg relationships and extrusion depth.
 
-The idealized area is
+The demo follows the current LearnMat surveying-quality pattern: a real Three.js scene, deliberate camera framing, lighting/shadows, orbit inspection, pause/play inspection rotation, camera reset, responsive HUD, focus mode, and concise progressive teaching text. The component itself does not own the renderer or animation loop; the host injects Three.js and the scene and advances absolute time through `update(timeSeconds)`.
 
-`A = 2 b t_f + (d - 2 t_f) t_w`
+## Governing model
 
-where:
+I/channel: A = 2btf + (d − 2tf)tw. Angle: A = t(Lx + Ly − t).
 
-- `d` = overall depth,
-- `b` = flange width,
-- `t_w` = web thickness,
-- `t_f` = flange thickness.
+The numerical model remains authoritative. 3D form, HUD values, and interaction are derived from the same validated parameter state.
 
-The representation uses sharp corners. It omits root/toe radii, flange taper, rolling tolerances, residual stress, imperfections, and manufacturer/standard-specific geometry.
+## Limits
 
-Default I-section:
+Sharp-corner generic geometry only; no fillets, taper, rolling tolerances, section-table properties, grade, standard designation, or structural capacity.
 
-- `d = 0.300 m`
-- `b = 0.150 m`
-- `t_w = 0.008 m`
-- `t_f = 0.012 m`
-- `A = 0.005808 m² = 5808 mm²`
+## Runtime and dependencies
 
-### Angle
-
-The idealized area is
-
-`A = t (L_x + L_y - t)`
-
-for two orthogonal rectangular legs with common thickness `t`.
-
-Default angle:
-
-- `L_x = 0.100 m`
-- `L_y = 0.100 m`
-- `t = 0.010 m`
-- `A = 0.001900 m² = 1900 mm²`
-
-No section modulus, moment of inertia, shear area, torsional constant, buckling resistance, connection capacity, design resistance, or material strength is provided.
-
-## Usage
-
-Open `demo/index.html` from a local static server, or import the reusable component:
-
-```js
-import { createAsset } from './src/asset.mjs';
-
-const section = createAsset({
-  container: document.querySelector('#section'),
-  seed: 20260922,
-  reducedMotion: true,
-});
-
-section.setParameters({
-  shape: 'i-section',
-  depthM: 0.30,
-  flangeWidthM: 0.15,
-  webThicknessM: 0.008,
-  flangeThicknessM: 0.012,
-  showDimensions: true,
-});
-
-console.log(section.snapshot());
-section.dispose();
-```
-
-### Parameters
-
-| Parameter | Type | Default | Range / values |
-| --- | --- | --- | --- |
-| `shape` | string | `i-section` | `i-section`, `channel`, `angle` |
-| `depthM` | number | 0.30 | 0.08–0.60 m |
-| `flangeWidthM` | number | 0.15 | 0.05–0.30 m |
-| `webThicknessM` | number | 0.008 | 0.003–0.030 m |
-| `flangeThicknessM` | number | 0.012 | 0.004–0.040 m |
-| `legXM` | number | 0.10 | 0.04–0.30 m |
-| `legYM` | number | 0.10 | 0.04–0.30 m |
-| `thicknessM` | number | 0.010 | 0.003–0.030 m |
-| `showDimensions` | boolean | true | true / false |
-
-The setter validates the complete next state before mutation. `update(timeSeconds)` records absolute non-negative time but does not animate this static component. `reset` restores defaults. `resize` records the host viewport while SVG remains responsive. `snapshot` returns serializable dimensions, area, idealization note, and bounding box. `dispose` is idempotent.
-
-No network or third-party runtime dependency is required.
-
-## Reuse and rights
-
-Original LearnMat repository contribution. No third-party section table, manufacturer geometry, model, texture, font file, or dataset is embedded. Repository license: MIT (`LICENSE`).
+- Renderer: Three.js 0.185.1 supplied by the host/demo.
+- Demo network requirement: yes, for the pinned jsDelivr Three.js module and OrbitControls.
+- Component: reusable `createAsset(context)`, deterministic seed/time, validated setters, reset, resize, serializable snapshot, idempotent disposal.
+- Geometry unit: metres; right-handed +Y-up basis.
+- The demo's slow turntable is an inspection aid that reveals depth/occlusion. Pause stops it; reduced-motion uses a fixed pose.
 
 ## Review evidence
 
-- Static preview: `previews/default.svg`
-- Geometry targets: `checks/geometry.md`
-- Review record: `REVIEW.md`
-
-The preview is a static reference render, not a claimed browser screenshot. Browser, responsive, and assistive-technology execution remain separate gates before approval.
+This replacement intentionally removes the old flat SVG preview from metadata. No browser screenshot is fabricated. `REVIEW.md` records source-level engineering and 3D implementation review; browser, responsive, visual, and assistive-technology gates remain not-reviewed until a real browser capture is available.
 
 ## Change history
 
-- 0.1.0 — Initial candidate with parametric I-section, channel, and angle geometry, dimension labels, area calculations, and explicit sharp-corner limitations.
+- 0.2.0 — Replaced the flat SVG-primary presentation with a procedural real-3D Three.js educational scene and surveying-style presentation host.

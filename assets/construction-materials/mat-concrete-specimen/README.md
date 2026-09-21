@@ -1,84 +1,39 @@
-# Concrete specimen geometry
+# Concrete specimen geometry — 3D
 
-Status: candidate.
-
-A reusable, dependency-free SVG component for teaching the nominal geometry of concrete cylinder and cube specimens. The component deliberately separates **geometry and illustrative appearance** from engineering material properties.
+Status: candidate · version 0.2.0 3D replacement.
 
 ## Learning objective
 
-Use nominal specimen dimensions to distinguish cylinder and cube geometry, compare volume and surface area, and recognize that a visual concrete texture is not measured aggregate grading, mix composition, strength, density, or certification.
+Inspect cylinder/cube specimen form in depth and connect dimensions to geometric volume and surface area without inferring strength or mix properties.
 
-## Model and assumptions
+## 3D educational design
 
-- Internal length unit: metres.
-- Geometry basis: right-handed, +Y up, specimen base at Y = 0, specimen centred on X/Z.
-- Cylinder: radius (r=d/2), volume (V=\pi r^2h), surface area (A=2\pi r(h+r)).
-- Cube: volume (V=s^3), surface area (A=6s^2).
-- Diameter range: 0.05–0.30 m.
-- Cylinder height range: 0.05–0.60 m.
-- Cube side range: 0.05–0.30 m.
-- Default geometry: 0.15 m diameter × 0.30 m height cylinder.
-- Aggregate-like dots are deterministic decorative marks only. They do not have a physical particle scale and must not be interpreted as sieve size, petrography, void content, or mix design.
-- No concrete strength, elastic modulus, density, durability, curing, temperature, moisture, grade, manufacturer, or code-specific claim is encoded.
+Procedural cylinder/cube meshes use rough concrete shading, edge definition, deterministic small aggregate cues, contact context, and a controlled turntable so depth is immediately legible.
 
-The default cylinder check is:
+The demo follows the current LearnMat surveying-quality pattern: a real Three.js scene, deliberate camera framing, lighting/shadows, orbit inspection, pause/play inspection rotation, camera reset, responsive HUD, focus mode, and concise progressive teaching text. The component itself does not own the renderer or animation loop; the host injects Three.js and the scene and advances absolute time through `update(timeSeconds)`.
 
-- (r=0.075\,m)
-- (V=\pi(0.075)^2(0.30)=0.0053014376\,m^3=5.3014376\,L)
-- (A=2\pi(0.075)(0.30+0.075)=0.1767145868\,m^2)
+## Governing model
 
-## Usage
+Cylinder: V = π(d/2)²h, A = 2πr(h+r). Cube: V = s³, A = 6s².
 
-Open `demo/index.html` from a local static server, or import the reusable module:
+The numerical model remains authoritative. 3D form, HUD values, and interaction are derived from the same validated parameter state.
 
-```js
-import { createAsset } from './src/asset.mjs';
+## Limits
 
-const specimen = createAsset({
-  container: document.querySelector('#specimen'),
-  seed: 20260922,
-  reducedMotion: true,
-});
+Aggregate cues are illustrative only; no mix gradation, strength, density, curing, grade, or certification is encoded.
 
-specimen.setParameters({
-  shape: 'cylinder',
-  diameterM: 0.15,
-  heightM: 0.30,
-  aggregateLevel: 'medium',
-  showDimensions: true,
-});
+## Runtime and dependencies
 
-console.log(specimen.snapshot());
-specimen.dispose();
-```
-
-### Parameters
-
-| Parameter | Type | Default | Accepted values |
-| --- | --- | --- | --- |
-| `shape` | string | `cylinder` | `cylinder`, `cube` |
-| `diameterM` | number | 0.15 | 0.05–0.30 m |
-| `heightM` | number | 0.30 | 0.05–0.60 m |
-| `sideM` | number | 0.15 | 0.05–0.30 m |
-| `aggregateLevel` | string | `medium` | `none`, `light`, `medium` |
-| `showDimensions` | boolean | true | true / false |
-
-`setParameters` validates the complete next parameter state before mutation. `update(timeSeconds)` records absolute non-negative time but does not animate this static asset. `reset` restores defaults. `resize` records the host viewport while SVG remains responsive. `snapshot` returns serializable parameters and computed geometry. `dispose` is idempotent; all other methods throw after disposal.
-
-No network or third-party runtime dependency is required.
-
-## Reuse and rights
-
-Original LearnMat repository contribution. The implementation and preview use no third-party model, texture, font file, dataset, or manufacturer data. Repository license: MIT (`LICENSE`).
+- Renderer: Three.js 0.185.1 supplied by the host/demo.
+- Demo network requirement: yes, for the pinned jsDelivr Three.js module and OrbitControls.
+- Component: reusable `createAsset(context)`, deterministic seed/time, validated setters, reset, resize, serializable snapshot, idempotent disposal.
+- Geometry unit: metres; right-handed +Y-up basis.
+- The demo's slow turntable is an inspection aid that reveals depth/occlusion. Pause stops it; reduced-motion uses a fixed pose.
 
 ## Review evidence
 
-- Static preview: `previews/default.svg`.
-- Geometry check: `checks/geometry.md`.
-- Review record: `REVIEW.md`.
-
-The preview is a static reference render of the default component state, not a claimed browser screenshot. Browser, responsive, and assistive-technology execution remain separate gates before approval.
+This replacement intentionally removes the old flat SVG preview from metadata. No browser screenshot is fabricated. `REVIEW.md` records source-level engineering and 3D implementation review; browser, responsive, visual, and assistive-technology gates remain not-reviewed until a real browser capture is available.
 
 ## Change history
 
-- 0.1.0 — Initial candidate component with cylinder/cube geometry, deterministic illustrative surface detail, dimension labels, and serializable geometry snapshot.
+- 0.2.0 — Replaced the flat SVG-primary presentation with a procedural real-3D Three.js educational scene and surveying-style presentation host.

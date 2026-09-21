@@ -1,46 +1,54 @@
 {
   "schemaVersion": "1.0.0",
   "id": "mat-concrete-specimen",
-  "version": "0.1.0",
-  "title": "Concrete specimen geometry",
-  "description": "Reusable dimensioned concrete cylinder and cube specimen geometry with deterministic illustrative surface appearance.",
+  "version": "0.2.0",
+  "title": "Concrete specimen geometry — 3D",
+  "description": "Procedural 3D concrete cylinder/cube specimen with deterministic illustrative aggregate cues and geometry-driven volume/area.",
   "category": "construction-materials",
   "topics": [
     "concrete",
     "specimen-geometry",
     "cylinder",
     "cube",
-    "material-appearance"
+    "material-appearance",
+    "3d"
   ],
   "learningObjectives": [
-    "Compare nominal concrete cylinder and cube specimen geometry using explicit SI dimensions.",
-    "Relate specimen dimensions to geometric volume and surface area without treating illustrative texture as measured material data."
+    "Inspect concrete specimen form in real 3D and relate nominal dimensions to volume and surface area.",
+    "Distinguish illustrative concrete appearance from measured material properties."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/construction-materials/mat-concrete-specimen/demo/index.html",
   "readme": "assets/construction-materials/mat-concrete-specimen/README.md",
-  "previewImage": "assets/construction-materials/mat-concrete-specimen/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/construction-materials/mat-concrete-specimen/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party media or material-property dataset embedded."
+    "attribution": "Original LearnMat procedural 3D contribution; no third-party model, texture, material dataset, or manufacturer geometry embedded."
   },
   "verification": {
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Candidate source/formula review completed. Browser and assistive-technology execution are intentionally not claimed; see REVIEW.md."
+    "notes": "Engineering/model source review retained. 3D implementation is source-reviewed, but no browser screenshot or assistive-technology execution is claimed; see REVIEW.md."
   },
   "source": {
     "type": "original",
-    "reference": "Original LearnMat contribution for reserved materials task mat-concrete-specimen.",
+    "reference": "LearnMat 3D replacement for reserved materials asset mat-concrete-specimen.",
     "sha256": null
   }
 }

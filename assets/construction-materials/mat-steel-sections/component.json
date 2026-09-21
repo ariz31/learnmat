@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Cross-section is drawn in the X-Y plane as idealized sharp-corner geometry. Maximum accepted envelope is 0.30 m wide by 0.60 m high.",
+  "boundsDescription": "Cross-section lies in X-Y and is extruded along Z for spatial inspection.",
   "parameters": {
     "shape": {
       "type": "enum",
@@ -70,5 +70,12 @@
       "default": true
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "peerDependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "injectedByHost": true
+    }
+  ]
 }
