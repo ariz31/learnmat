@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simply supported beam response</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;margin:0;background:#f6f7f9;color:#111827}main{max-width:980px;margin:auto;padding:24px}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}label{display:grid;gap:5px;font-weight:650}input,button{font:inherit;padding:8px}#asset-root{min-height:480px}pre{white-space:pre-wrap;background:#fff;border:1px solid #d1d5db;padding:12px;border-radius:8px}
+</style>
+</head>
+<body>
+<main>
+<h1>Simply supported beam response</h1>
+<p>One centered point load. Deflection is visually exaggerated; values remain physical SI results.</p>
+<div class="controls">
+<label>Span L (m)<input id="span" type="number" min="2" max="20" step="0.1" value="6"></label>
+<label>Load P (kN)<input id="load" type="number" min="0" max="1000" step="1" value="20"></label>
+<label>E (GPa)<input id="e" type="number" min="1" max="300" step="1" value="200"></label>
+<label>I (m⁴)<input id="i" type="number" min="0.00000001" max="1" step="0.00001" value="0.00008"></label>
+<button id="reset" type="button">Reset</button>
+</div>
+<div id="asset-root"></div>
+<pre id="summary" aria-live="polite"></pre>
+</main>
+<script type="module">
+import { createAsset } from '../src/asset.mjs';
+const root=document.querySelector('#asset-root');
+const asset=createAsset({container:root,seed:1,reducedMotion:true});
+const ids=['span','load','e','i'];
+function sync(){
+  asset.setParameters({
+    spanM:Number(document.querySelector('#span').value),
+    loadN:Number(document.querySelector('#load').value)*1000,
+    elasticModulusPa:Number(document.querySelector('#e').value)*1e9,
+    inertiaM4:Number(document.querySelector('#i').value)
+  });
+  const s=asset.snapshot();
+  document.querySelector('#summary').textContent='RA = RB = '+(s.reactionsN.left/1000).toFixed(3)+' kN\nMmax = '+(s.maxMomentNm/1000).toFixed(3)+' kN·m\n|max deflection| = '+(Math.abs(s.maxDeflectionM)*1000).toFixed(3)+' mm';
+}
+ids.forEach(id=>document.querySelector('#'+id).addEventListener('input',sync));
+document.querySelector('#reset').addEventListener('click',()=>{asset.reset();document.querySelector('#span').value=6;document.querySelector('#load').value=20;document.querySelector('#e').value=200;document.querySelector('#i').value=0.00008;sync();});
+asset.resize(Math.min(900,root.clientWidth||900),500,window.devicePixelRatio||1);
+sync();
+</script>
+</body>
+</html>
