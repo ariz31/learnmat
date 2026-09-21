@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "str-frame-sway",
+  "version": "0.1.0",
+  "title": "Portal frame lateral sway",
+  "description": "Reusable SVG component showing the undeformed and prescribed laterally swayed geometry of a single-bay fixed-base portal frame.",
+  "category": "structural-analysis",
+  "topics": [
+    "portal-frame",
+    "lateral-drift",
+    "frame-sway",
+    "boundary-conditions"
+  ],
+  "learningObjectives": [
+    "Relate a prescribed story drift ratio to lateral top displacement and visualize the corresponding kinematic sway of a fixed-base portal frame."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/structural-analysis/str-frame-sway/demo/index.html",
+  "readme": "assets/structural-analysis/str-frame-sway/README.md",
+  "previewImage": "assets/structural-analysis/str-frame-sway/previews/default.svg",
+  "reviewFile": "assets/structural-analysis/str-frame-sway/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+  },
+  "verification": {
+    "engineeringReview": "not-reviewed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Candidate includes explicit kinematic assumptions and reproducible geometry checks. Independent engineering, browser, screenshot, and accessibility review remain required before approval."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Reserved structures-agent task str-frame-sway; original dependency-free SVG/DOM implementation.",
+    "sha256": null
+  }
+}
