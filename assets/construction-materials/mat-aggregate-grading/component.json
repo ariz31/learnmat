@@ -1,0 +1,37 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/construction-materials/mat-aggregate-grading/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Two-dimensional grading visualization; sieve openings are displayed in millimetres on a logarithmic horizontal axis.",
+  "parameters": {
+    "gradingPreset": {
+      "type": "enum",
+      "values": [
+        "balanced",
+        "coarse-heavy",
+        "fine-heavy"
+      ],
+      "default": "balanced",
+      "meaning": "illustrative distribution only"
+    },
+    "sampleMassKg": {
+      "type": "number",
+      "unit": "kg",
+      "min": 0.5,
+      "max": 50,
+      "default": 5
+    },
+    "showParticles": {
+      "type": "boolean",
+      "default": true
+    },
+    "showRetainedMass": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "assetDependencies": []
+}
