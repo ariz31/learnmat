@@ -23,6 +23,20 @@ List equations, units, axis/sign conventions, input ranges, scale exaggeration,
 assumptions, limits, and references supporting the model. Explain representative
 independent checks for instructional calculations.
 
+## 3D spatial presentation
+
+For spatial assets, describe the real 3D scene: geometry, scale relationships,
+camera/projection choice, environmental context, depth cues, materials/lighting
+where relevant, and how the 3D view improves the learning objective. Use the
+surveying examples as the preferred visual direction for spatial ambition.
+
+If the primary visual is intentionally 2D, document why real 3D would add no useful
+spatial information or would materially reduce clarity, accessibility, or
+performance. A flat implementation must not be chosen merely for convenience.
+
+2D equations, plots, labels, dimensions, sections, and tables may accompany the
+3D scene as analytical overlays.
+
 ## Animation and presentation
 
 State what the animation teaches. Describe meaningful start/end states, timing or
