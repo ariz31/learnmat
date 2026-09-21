@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "bld-staircase",
+  "version": "0.1.0",
+  "title": "Parametric Staircase Geometry",
+  "description": "Reusable SVG straight-flight staircase geometry with derived riser height, going count, total run, width, and geometric pitch labels.",
+  "category": "buildings",
+  "topics": [
+    "staircase-geometry",
+    "rise-and-going",
+    "building-circulation"
+  ],
+  "learningObjectives": [
+    "Compute individual riser height from total rise and number of risers.",
+    "Relate a straight stair flight's number of goings to its riser count and horizontal run.",
+    "Read rise, going, width, total rise, run, and geometric pitch without treating the graphic as a code-compliance check."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/buildings/bld-staircase/demo/index.html",
+  "readme": "assets/buildings/bld-staircase/README.md",
+  "previewImage": "assets/buildings/bld-staircase/previews/default.svg",
+  "reviewFile": "assets/buildings/bld-staircase/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party models, textures, fonts, or datasets are embedded."
+  },
+  "verification": {
+    "engineeringReview": "not-reviewed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Candidate geometry uses explicit stair-count conventions and independent arithmetic spot-checks. Independent browser, accessibility, and release engineering review remain required before approval."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Reserved buildings-agent task bld-staircase; implemented as original dependency-free SVG/DOM source.",
+    "sha256": null
+  }
+}
