@@ -8,7 +8,7 @@ Reference state: b = 3 m, y = 1.2 m, Q = 4 m³/s, S = 0.0015, n = 0.015, g = 9.8
 - V = 1.1111 m/s.
 - Fr = V/√(gy) ≈ 0.324, therefore subcritical.
 - E = y + V²/(2g) ≈ 1.263 m.
-- Manning capacity at the specified depth is about 6.59 m³/s.
+- Manning capacity at the specified depth is about 7.094 m³/s.
 
 The visual and copy explicitly avoid describing the supplied depth as a computed normal depth.
 
