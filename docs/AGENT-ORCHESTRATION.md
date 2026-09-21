@@ -101,8 +101,8 @@ fingerprint covers every asset file, so update it after the final asset edit.
 python scripts/agent_workflow.py ready --agent surveying --task sur-walking-person
 ```
 
-Ready requires self-review evidence for engineering, functionality, accessibility,
-visual quality, and reuse; an actual preview and review file; an implemented module;
+Ready requires self-review evidence for engineering, pedagogy, functionality,
+animation/presentation, accessibility, visual quality, and reuse; an actual preview and review file; an implemented module;
 current fingerprint; clean ownership checks; and passing catalog validation. It
 does not independently verify those claims or approve public release. Keep asset
 metadata candidate/in-review. Missing browser or graphics capabilities should
@@ -131,6 +131,19 @@ The integrator must establish that the previous writer has stopped, preserve its
 changes and state, and reconcile the lock before assigning a replacement. Do not
 delete another session's lock or reset the run ID to bypass budgets. Failed
 worktree preparation preserves existing directories/branches for inspection.
+
+## Educational production requirement
+
+Every worker follows docs/EDUCATIONAL-DESIGN.md. An asset is not ready merely
+because its geometry renders correctly. It must teach a meaningful concept or
+procedure. Where an ordered method exists, preserve the learner's reasoning chain
+with accurate intermediate states and checks. Keep the default interface concise
+through progressive disclosure. Interactive/animated demos should support a
+focus/maximize mode that removes lesson steps and nonessential chrome while
+retaining a clear exit and essential animation controls.
+
+Static assets may document that animation is not educationally necessary. Do not
+add decorative motion solely to satisfy an animation checklist.
 
 ## Shared catalog and runtime contract
 
@@ -162,8 +175,10 @@ separately, then all workers receive an explicitly planned updated base in a new
    Policy is read from the base commit, so changing local ownership cannot widen it.
    The check includes committed, staged, unstaged, untracked, deleted, and renamed
    paths. It is a cooperative guard, not an access-control sandbox.
-3. Independently review source, domain calculations, browser behavior, actual visual
-   evidence, runtime cleanup, and reuse rights. Re-run relevant checks. Self-review
+3. Independently review source, domain calculations, educational value, step-by-step
+   reasoning where a real procedure exists, animation/presentation quality, minimal
+   text hierarchy, focus/maximize behavior, browser behavior, actual visual evidence,
+   runtime cleanup, and reuse rights. Re-run relevant checks. Self-review
    and a fingerprint show what was reviewed, not that the review was correct.
 4. Integrate one branch at a time into a separate integration branch. If shared
    changes appear, stop and split/reconcile them; never choose ours/theirs blindly.
