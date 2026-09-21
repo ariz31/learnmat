@@ -38,6 +38,21 @@ progressively disclosed, expanded on demand, or shown only for the active step.
 Educational completeness belongs in the interaction and information architecture,
 not in permanently visible walls of text.
 
+## 3D spatial quality
+
+Treat real 3D as the preferred primary visualization for new spatial educational
+assets. Review whether the scene uses meaningful spatial geometry, perspective/depth,
+camera framing, scale relationships, occlusion, and contextual placement comparable
+in ambition to the surveying examples. Do not award 3D credit to a flat SVG,
+perspective-styled 2D drawing, or decorative CSS transform.
+
+Check that geometry is dimensionally coherent with the model, that camera choices do
+not hide critical relationships, that clipping/z-fighting/intersections are controlled,
+and that lighting/material treatment improves rather than obscures understanding.
+When the primary visual is 2D, require a concrete educational justification for why
+3D adds no useful information or would reduce clarity/accessibility/performance.
+2D analytical overlays remain encouraged on top of or beside a 3D scene.
+
 ## Animation and presentation quality
 
 Animation must support understanding of causality, sequence, direction, scale, or
