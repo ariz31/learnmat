@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="Browse and interact with LearnMat civil-engineering assets and catalog HTML previews.">
+  <title>LearnMat Asset Viewer</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="icon-button mobile-only" id="catalog-toggle" type="button" aria-label="Toggle asset catalog" aria-expanded="false">☰</button>
+      <a class="brand" href="/" aria-label="LearnMat Asset Viewer home">
+        <span class="brand-mark" aria-hidden="true">LM</span>
+        <span>
+          <strong>LearnMat</strong>
+          <small>Asset Viewer</small>
+        </span>
+      </a>
+      <div class="topbar-summary" id="catalog-summary" aria-live="polite">Loading catalog…</div>
+      <div class="topbar-actions">
+        <a class="text-button" href="https://github.com/ariz31/learnmat" target="_blank" rel="noopener noreferrer">Repository</a>
+        <button class="icon-button" id="theme-toggle" type="button" aria-label="Toggle color theme">◐</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="catalog-panel" id="catalog-panel" aria-label="Asset catalog">
+        <div class="catalog-controls">
+          <label class="search-box">
+            <span class="sr-only">Search assets</span>
+            <span aria-hidden="true">⌕</span>
+            <input id="search-input" type="search" placeholder="Search assets, topics, objectives…" autocomplete="off">
+            <kbd>/</kbd>
+          </label>
+
+          <div class="filter-grid">
+            <label>
+              <span>Category</span>
+              <select id="category-filter"><option value="">All categories</option></select>
+            </label>
+            <label>
+              <span>Status</span>
+              <select id="status-filter"><option value="">All statuses</option></select>
+            </label>
+            <label>
+              <span>Renderer</span>
+              <select id="renderer-filter"><option value="">All renderers</option></select>
+            </label>
+            <label>
+              <span>Source</span>
+              <select id="origin-filter">
+                <option value="">All sources</option>
+                <option value="curated">Curated assets</option>
+                <option value="legacy-example">Catalog examples</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="catalog-toolbar">
+            <span id="result-count">0 assets</span>
+            <button class="link-button" id="clear-filters" type="button">Clear filters</button>
+          </div>
+        </div>
+
+        <nav class="asset-list" id="asset-list" aria-label="Available assets"></nav>
+        <div class="catalog-empty" id="catalog-empty" hidden>
+          <strong>No matching assets</strong>
+          <span>Try clearing one or more filters.</span>
+        </div>
+      </aside>
+
+      <section class="viewer-panel" aria-label="Selected asset">
+        <div class="viewer-empty" id="viewer-empty">
+          <div class="empty-mark" aria-hidden="true">LM</div>
+          <h1>Explore the LearnMat catalog</h1>
+          <p>Select an asset to open its interactive HTML, preview image, metadata, runtime parameters, review state, dependencies, and source links.</p>
+          <p class="muted">Candidate and in-review records are visible here for development inspection. Their presence does not imply approval.</p>
+        </div>
+
+        <article class="asset-view" id="asset-view" hidden>
+          <header class="asset-header">
+            <div>
+              <div class="eyebrow" id="asset-eyebrow"></div>
+              <h1 id="asset-title"></h1>
+              <p id="asset-description"></p>
+            </div>
+            <div class="asset-header-actions">
+              <a class="text-button" id="source-link" target="_blank" rel="noopener noreferrer">Source</a>
+              <button class="text-button" id="share-button" type="button">Copy link</button>
+            </div>
+          </header>
+
+          <div class="viewer-toolbar" aria-label="Preview controls">
+            <div class="segmented" role="group" aria-label="Preview mode">
+              <button type="button" class="is-active" data-preview-mode="interactive">Interactive</button>
+              <button type="button" data-preview-mode="image">Image</button>
+            </div>
+
+            <label class="compact-select">
+              <span class="sr-only">Preview viewport</span>
+              <select id="viewport-select" aria-label="Preview viewport">
+                <option value="fit">Fit</option>
+                <option value="390x844">Phone · 390 × 844</option>
+                <option value="768x1024">Tablet · 768 × 1024</option>
+                <option value="1280x800">Desktop · 1280 × 800</option>
+              </select>
+            </label>
+
+            <div class="toolbar-spacer"></div>
+
+            <span class="preview-security" id="preview-security"></span>
+            <button class="icon-button" id="reload-preview" type="button" aria-label="Reload preview" title="Reload preview (R)">↻</button>
+            <button class="icon-button" id="open-preview" type="button" aria-label="Open preview in a new tab" title="Open standalone">↗</button>
+            <button class="icon-button" id="fullscreen-preview" type="button" aria-label="View preview fullscreen" title="Fullscreen (F)">⛶</button>
+          </div>
+
+          <div class="preview-stage" id="preview-stage">
+            <div class="preview-loading" id="preview-loading">Loading interactive preview…</div>
+            <div class="device-frame" id="device-frame">
+              <iframe
+                id="asset-frame"
+                title="Interactive LearnMat asset preview"
+                loading="eager"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="fullscreen"
+                allowfullscreen
+              ></iframe>
+              <img id="preview-image" alt="" hidden>
+            </div>
+          </div>
+
+          <div class="preview-notice" id="preview-notice" role="status"></div>
+
+          <div class="detail-grid">
+            <section class="detail-card">
+              <div class="detail-card-heading">
+                <h2>Overview</h2>
+                <span class="badge" id="asset-status"></span>
+              </div>
+              <dl class="metadata-list" id="overview-metadata"></dl>
+              <div class="topic-list" id="topic-list"></div>
+            </section>
+
+            <section class="detail-card">
+              <h2>Learning objectives</h2>
+              <ol class="objective-list" id="objective-list"></ol>
+            </section>
+
+            <section class="detail-card">
+              <h2>Review state</h2>
+              <div class="review-grid" id="review-grid"></div>
+              <p class="detail-note" id="verification-note"></p>
+            </section>
+
+            <section class="detail-card">
+              <h2>Rights & dependencies</h2>
+              <dl class="metadata-list" id="rights-metadata"></dl>
+              <div id="dependency-list"></div>
+            </section>
+
+            <section class="detail-card detail-card-wide">
+              <div class="detail-card-heading">
+                <h2>Runtime parameters</h2>
+                <span class="badge subtle" id="runtime-contract"></span>
+              </div>
+              <div class="parameter-wrap">
+                <table class="parameter-table">
+                  <thead>
+                    <tr><th>Parameter</th><th>Default</th><th>Range</th><th>Unit</th></tr>
+                  </thead>
+                  <tbody id="parameter-table-body"></tbody>
+                </table>
+                <p class="detail-note" id="parameter-empty" hidden>No component parameter contract is declared for this catalog entry.</p>
+              </div>
+            </section>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
