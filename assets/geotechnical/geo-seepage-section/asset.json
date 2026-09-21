@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "geo-seepage-section",
+  "version": "0.1.0",
+  "title": "1-D seepage section with fixed-head boundaries",
+  "description": "Reusable SVG Darcy-seepage component for a homogeneous soil section with explicit upstream/downstream total-head boundaries, hydraulic gradient, Darcy flux, and discharge.",
+  "category": "geotechnical",
+  "topics": [
+    "seepage",
+    "Darcy law",
+    "hydraulic gradient",
+    "total head",
+    "fixed-head boundary"
+  ],
+  "learningObjectives": [
+    "Compute signed hydraulic gradient from stated total-head boundary conditions.",
+    "Apply Darcy's law to obtain specific discharge and section discharge without misrepresenting the result as a two-dimensional flow net."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/geotechnical/geo-seepage-section/demo/index.html",
+  "readme": "assets/geotechnical/geo-seepage-section/README.md",
+  "previewImage": "assets/geotechnical/geo-seepage-section/previews/preview.svg",
+  "reviewFile": "assets/geotechnical/geo-seepage-section/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Darcy-law and fixed-head reference calculation reviewed; live browser/accessibility review pending."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat water-ground contribution, 2026-09-22.",
+    "sha256": null
+  }
+}

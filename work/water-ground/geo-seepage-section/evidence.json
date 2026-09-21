@@ -1,0 +1,29 @@
+{
+  "reviewType": "self-review",
+  "assetFingerprint": null,
+  "checks": {
+    "engineering": {
+      "status": "passed",
+      "details": "Darcy gradient, specific discharge, section discharge, midpoint head, equal-head limit, and reversed-boundary sign behavior were independently checked for the stated homogeneous 1-D assumptions."
+    },
+    "functionality": {
+      "status": "passed",
+      "details": "Source review confirms explicit fixed-head boundaries, signed flow direction, valid geometry/conductivity guards, deterministic state, and idempotent cleanup."
+    },
+    "accessibility": {
+      "status": "not-reviewed",
+      "details": "Source includes semantic SVG descriptions and labelled native demo controls, but no assistive-technology browser session was available."
+    },
+    "visual": {
+      "status": "not-reviewed",
+      "details": "A deterministic repository preview is included; no live browser capture was available in this connector-only session."
+    },
+    "reuse": {
+      "status": "passed",
+      "details": "Dependency-free runtime-v1 ES module with per-instance DOM/state, finite input validation, deterministic absolute-time behavior, snapshot support, and idempotent disposal."
+    }
+  },
+  "unresolvedBlockers": [
+    "Live browser and assistive-technology execution remain pending; retain candidate status until independent review."
+  ]
+}

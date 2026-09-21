@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "geo-soil-layers",
+  "version": "0.1.0",
+  "title": "Layered soil profile and effective vertical stress",
+  "description": "Reusable SVG soil-profile component with three configurable layers, water-table location, and total/pore/effective vertical stress at a query depth.",
+  "category": "geotechnical",
+  "topics": [
+    "soil layers",
+    "water table",
+    "total stress",
+    "pore pressure",
+    "effective stress"
+  ],
+  "learningObjectives": [
+    "Integrate vertical overburden stress through layered soils using stated natural and saturated unit weights.",
+    "Apply Terzaghi effective stress σ′v = σv − u below a hydrostatic water table."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/geotechnical/geo-soil-layers/demo/index.html",
+  "readme": "assets/geotechnical/geo-soil-layers/README.md",
+  "previewImage": "assets/geotechnical/geo-soil-layers/previews/preview.svg",
+  "reviewFile": "assets/geotechnical/geo-soil-layers/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Layer integration and hydrostatic pore-pressure reference calculation reviewed; live browser/accessibility review pending."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat water-ground contribution, 2026-09-22.",
+    "sha256": null
+  }
+}
