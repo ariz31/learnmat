@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "str-steel-connection",
+  "version": "0.1.0",
+  "title": "Exploded bolted steel shear connection",
+  "description": "Reusable SVG assembly component showing a support face, shear plate, beam web, and vertical bolt group with explicit geometric fit checks.",
+  "category": "steel-and-timber",
+  "topics": [
+    "steel-connection",
+    "bolted-connection",
+    "shear-tab",
+    "connection-geometry"
+  ],
+  "learningObjectives": [
+    "Identify the parts and geometric relationships of a simple bolted shear-plate connection without conflating assembly geometry with connection strength design."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/steel-and-timber/str-steel-connection/demo/index.html",
+  "readme": "assets/steel-and-timber/str-steel-connection/README.md",
+  "previewImage": "assets/steel-and-timber/str-steel-connection/previews/default.svg",
+  "reviewFile": "assets/steel-and-timber/str-steel-connection/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+  },
+  "verification": {
+    "engineeringReview": "not-reviewed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Candidate includes deterministic bolt-group geometry checks and explicitly excludes strength/code verification. Independent engineering, browser, screenshot, and accessibility review remain required."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Reserved structures-agent task str-steel-connection; original dependency-free SVG/DOM implementation.",
+    "sha256": null
+  }
+}
