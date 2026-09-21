@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-label="Two surveyors holding a sagging measuring tape with a straight reference line">
+<rect width="800" height="430" fill="white"/>
+<g fill="none" stroke="#172033" stroke-linecap="round">
+<line x1="60" y1="345" x2="740" y2="345" stroke-width="3"/>
+<line x1="130" y1="279" x2="670" y2="279" stroke-width="2" stroke-dasharray="8 6" opacity=".55"/>
+<path d="M130 279 C265 279 285 338 400 338 C515 338 535 279 670 279" stroke-width="5"/>
+<g transform="translate(85 345)"><circle cx="0" cy="-125" r="15" stroke-width="5"/><line x1="0" y1="-108" x2="0" y2="-55" stroke-width="7"/><line x1="0" y1="-55" x2="-18" y2="0" stroke-width="7"/><line x1="0" y1="-55" x2="18" y2="0" stroke-width="7"/><polyline points="0,-96 28,-78 48,-66" stroke-width="6" stroke-linejoin="round"/></g>
+<g transform="translate(715 345)"><circle cx="0" cy="-125" r="15" stroke-width="5"/><line x1="0" y1="-108" x2="0" y2="-55" stroke-width="7"/><line x1="0" y1="-55" x2="-18" y2="0" stroke-width="7"/><line x1="0" y1="-55" x2="18" y2="0" stroke-width="7"/><polyline points="0,-96 -28,-78 -48,-66" stroke-width="6" stroke-linejoin="round"/></g>
+</g>
+<g font-family="system-ui,sans-serif" fill="#172033" text-anchor="middle"><text x="400" y="38" font-size="18">Catenary tape · span 20.00 m</text><text x="100" y="370" font-size="14">rear tapeman</text><text x="700" y="370" font-size="14">forward tapeman</text><text x="400" y="402" font-size="16">Sag and excess length are computed; vertical display is magnified.</text></g>
+</svg>

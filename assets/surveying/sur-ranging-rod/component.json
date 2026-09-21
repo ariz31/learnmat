@@ -1,0 +1,17 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/surveying/sur-ranging-rod/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Observer is at (0,0,0), distant target at (0,0,-sightDistance), and rod base at (crossTrackOffset,0,-rodStationDistance). Rod extends vertically along +Y.",
+  "parameters": {
+    "sightDistance": {"type":"number","unit":"m","min":5,"max":100,"default":30},
+    "rodStationDistance": {"type":"number","unit":"m","min":1,"max":99,"default":15},
+    "crossTrackOffset": {"type":"number","unit":"m","min":-2,"max":2,"default":0.25},
+    "alignmentTolerance": {"type":"number","unit":"m","min":0.005,"max":0.25,"default":0.05},
+    "rodHeight": {"type":"number","unit":"m","min":1.5,"max":3,"default":2}
+  },
+  "assetDependencies": []
+}

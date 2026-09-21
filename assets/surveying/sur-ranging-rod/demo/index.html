@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ranging Rod Alignment</title>
+<style>body{font-family:system-ui,sans-serif;margin:0;padding:1rem;line-height:1.45;background:Canvas;color:CanvasText}main{max-width:920px;margin:auto}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.8rem}label{display:grid;gap:.25rem}#stage{margin-top:1rem;border:1px solid color-mix(in srgb,CanvasText 25%,transparent);border-radius:.75rem;padding:.5rem}</style></head>
+<body><main><h1>Ranging Rod Alignment</h1><p>Move the intermediate rod perpendicular to the straight observer–target line and compare its cross-track error with the selected tolerance.</p>
+<div class="controls">
+<label>Sight distance (m)<input id="sight" type="range" min="5" max="100" step="1" value="30"><output id="sightOut">30</output></label>
+<label>Rod station distance (m)<input id="station" type="range" min="1" max="29" step="1" value="15"><output id="stationOut">15</output></label>
+<label>Cross-track offset (m)<input id="offset" type="range" min="-2" max="2" step=".01" value=".25"><output id="offsetOut">0.25</output></label>
+<label>Alignment tolerance (m)<input id="tol" type="range" min=".005" max=".25" step=".005" value=".05"><output id="tolOut">0.050</output></label>
+</div><div id="stage"></div><p id="status" role="status"></p>
+<script type="module">
+import {createAsset} from '../src/asset.mjs';
+const asset=createAsset({container:document.querySelector('#stage')});
+const sight=document.querySelector('#sight'),station=document.querySelector('#station'),offset=document.querySelector('#offset'),tol=document.querySelector('#tol'),status=document.querySelector('#status');
+function apply(){station.max=String(Math.max(1,Number(sight.value)-1));if(Number(station.value)>=Number(sight.value))station.value=String(Number(sight.value)-1);const snap=asset.setParameters({sightDistance:Number(sight.value),rodStationDistance:Number(station.value),crossTrackOffset:Number(offset.value),alignmentTolerance:Number(tol.value)});document.querySelector('#sightOut').value=sight.value;document.querySelector('#stationOut').value=station.value;document.querySelector('#offsetOut').value=Number(offset.value).toFixed(2);document.querySelector('#tolOut').value=Number(tol.value).toFixed(3);status.textContent=snap.result.aligned?'Aligned within tolerance':'Outside tolerance';}
+[sight,station,offset,tol].forEach(el=>el.addEventListener('input',apply));apply();
+</script></main></body></html>

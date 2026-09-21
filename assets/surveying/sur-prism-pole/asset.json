@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "sur-prism-pole",
+  "version": "0.1.0",
+  "title": "Prism Pole Carrier",
+  "description": "Reusable surveyor-and-prism-pole component with explicit target height and pole verticality error.",
+  "category": "surveying",
+  "topics": ["total-station", "prism-pole", "target-height", "verticality"],
+  "learningObjectives": [
+    "Identify prism target height as the distance from the ground point to the prism center.",
+    "Relate pole tilt to horizontal target offset and reduced vertical projection."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "in-review",
+  "entrypoint": "assets/surveying/sur-prism-pole/demo/index.html",
+  "readme": "assets/surveying/sur-prism-pole/README.md",
+  "previewImage": "assets/surveying/sur-prism-pole/previews/default.svg",
+  "reviewFile": "assets/surveying/sur-prism-pole/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Target-height and pole-tilt geometry reviewed from source; browser and assistive-technology checks remain."
+  },
+  "source": {"type":"original","reference":"Reserved surveying queue task sur-prism-pole.","sha256":null}
+}
