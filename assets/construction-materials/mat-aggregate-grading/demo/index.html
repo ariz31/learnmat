@@ -1,15 +1,44 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aggregate grading — LearnMat</title>
-<style>:root{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#0f172a;background:#eef2f6}*{box-sizing:border-box}body{margin:0}main{width:min(1120px,calc(100% - 28px));margin:auto;padding:28px 0 48px}h1{margin:0 0 7px;font-size:clamp(1.5rem,3vw,2.2rem)}header p{margin:0 0 18px;color:#475569;max-width:80ch;line-height:1.55}.layout{display:grid;grid-template-columns:minmax(245px,310px) minmax(0,1fr);gap:18px;align-items:start}.controls{background:#fff;border:1px solid #d7dde5;border-radius:18px;padding:16px}label{display:grid;gap:6px;margin-bottom:12px;font-size:13px;font-weight:700;color:#334155}select,input{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:9px 10px;font:inherit}.check{display:flex;align-items:center;gap:9px}.check input{width:18px;height:18px}button{width:100%;border:0;border-radius:11px;padding:10px;background:#0f172a;color:#fff;font:inherit;font-weight:750}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}.note,#status{font-size:12px;line-height:1.5;color:#64748b}.note{border-top:1px solid #e2e8f0;padding-top:12px}@media(max-width:780px){.layout{grid-template-columns:1fr}.controls{order:2}}</style></head>
-<body><main><header><h1>Aggregate grading visualization</h1><p>Compare three deliberately illustrative grading distributions using nominal sieve openings and a percent-passing curve. The presets are teaching examples only; no ASTM, AASHTO, DPWH, project, or product specification envelope is encoded.</p></header><div class="layout">
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#0f172a;background:#eef2f6}*{box-sizing:border-box}body{margin:0}
+main{width:min(1120px,calc(100% - 28px));margin:auto;padding:28px 0 48px}h1{margin:0 0 7px;font-size:clamp(1.5rem,3vw,2.2rem)}header p{margin:0 0 18px;color:#475569;max-width:80ch;line-height:1.55}
+.layout{display:grid;grid-template-columns:minmax(245px,310px) minmax(0,1fr);gap:18px;align-items:start}.controls,.lesson{background:#fff;border:1px solid #d7dde5;border-radius:18px;padding:16px}
+label{display:grid;gap:6px;margin-bottom:12px;font-size:13px;font-weight:700;color:#334155}select,input{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:9px 10px;font:inherit}.check{display:flex;align-items:center;gap:9px}.check input{width:18px;height:18px}
+button{border:0;border-radius:11px;padding:10px;background:#0f172a;color:#fff;font:inherit;font-weight:750;cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
+#reset{width:100%}.formula{margin:12px 0;padding:10px;border-radius:12px;background:#f8fafc;font:600 12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:#334155}.note,#status{font-size:12px;line-height:1.5;color:#64748b}.note{border-top:1px solid #e2e8f0;padding-top:12px}
+.stage{min-width:0}.stagebar{display:flex;justify-content:flex-end;margin:0 0 8px}.stagebar button{padding:8px 11px;font-size:12px}.lesson{margin-top:12px;padding:12px 14px}.lesson summary{cursor:pointer;font-weight:750;color:#334155}.lesson ol{padding-left:22px;margin:10px 0 0;color:#475569;font-size:13px;line-height:1.55}.lesson table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}.lesson th,.lesson td{text-align:right;padding:5px;border-bottom:1px solid #e2e8f0}.lesson th:first-child,.lesson td:first-child{text-align:left}
+main.focus-mode{position:fixed;inset:0;z-index:9999;width:auto;max-width:none;padding:12px;background:#eef2f6;overflow:auto}main.focus-mode header,main.focus-mode .controls,main.focus-mode .lesson{display:none}main.focus-mode .layout{display:block}main.focus-mode .stage{min-height:calc(100vh - 24px)}main.focus-mode #asset-root{min-height:calc(100vh - 70px);display:grid;align-items:center}
+@media(max-width:780px){.layout{grid-template-columns:1fr}.controls{order:2}.lesson{order:3}}
+</style></head>
+<body><main id="page">
+<header><h1>Aggregate grading visualization</h1><p>Compare deliberately illustrative grading distributions using nominal sieve openings and a percent-passing curve. The presets are teaching examples only; no ASTM, AASHTO, DPWH, project, or product specification envelope is encoded.</p></header>
+<div class="layout">
 <form class="controls" onsubmit="return false" aria-label="Aggregate grading controls">
 <label>Illustrative distribution<select id="preset"><option value="balanced">Balanced</option><option value="coarse-heavy">Coarse-heavy</option><option value="fine-heavy">Fine-heavy</option></select></label>
 <label>Sample mass (kg)<input id="mass" type="number" min="0.5" max="50" step="0.5" value="5"></label>
 <label class="check"><input id="particles" type="checkbox" checked> Show particle specimen</label>
 <label class="check"><input id="retained" type="checkbox" checked> Show largest retained interval</label>
+<div class="formula">retainedᵢ = passingᵢ₋₁ − passingᵢ<br>massᵢ = sample mass × retainedᵢ / 100</div>
 <button id="reset" type="button">Reset grading</button><p id="status" role="status" aria-live="polite"></p>
-<p class="note">Particle circles are decorative symbols, not scaled stones. Percent passing and retained mass are derived from the selected illustrative preset.</p></form><div id="asset-root"></div></div></main>
-<script type="module">import{createAsset}from'../src/asset.mjs';const q=s=>document.querySelector(s),root=q('#asset-root'),status=q('#status');const asset=createAsset({container:root,seed:20260922,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
+<p class="note">Particle circles are decorative symbols, not scaled stones. Percent passing and retained mass are derived from the selected illustrative preset.</p></form>
+<div class="stage"><div class="stagebar"><button id="focus" type="button" aria-pressed="false">Focus visual</button></div><div id="asset-root"></div></div>
+<details class="lesson"><summary>Show calculation steps and retained-mass table</summary><ol>
+<li><strong>Objective:</strong> read percent passing and determine how much of the sample is retained between successive sieve openings.</li>
+<li><strong>Known data:</strong> selected percent-passing preset and sample mass.</li>
+<li><strong>Governing relationship:</strong> retained fraction equals the drop in percent passing between consecutive sieve openings; the pan receives the fraction passing the smallest modeled sieve.</li>
+<li><strong>Check:</strong> retained fractions including pan must total 100%, and retained masses must recover the original sample mass.</li>
+<li><strong>Conclusion:</strong> the curve describes this illustrative distribution only; compare shape and retained fractions, not specification compliance.</li></ol><table><thead><tr><th>Sieve / pan</th><th>% passing</th><th>% retained</th><th>Mass (kg)</th></tr></thead><tbody id="rows"></tbody></table></details>
+</div></main>
+<script type="module">
+import{createAsset}from'../src/asset.mjs';const q=s=>document.querySelector(s),root=q('#asset-root'),status=q('#status'),page=q('#page'),focus=q('#focus'),rows=q('#rows');
+const asset=createAsset({container:root,seed:20260922,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
 function params(){return{gradingPreset:q('#preset').value,sampleMassKg:+q('#mass').value,showParticles:q('#particles').checked,showRetainedMass:q('#retained').checked};}
-function stat(){const g=asset.snapshot().state.grading;status.textContent='Retained total: '+g.retainedPercentTotal.toFixed(1)+'% · mass check: '+g.retainedMassTotalKg.toFixed(2)+' kg';}
-q('.controls').addEventListener('input',()=>{try{asset.setParameters(params());stat();}catch(e){status.textContent=e.message;}});q('#reset').addEventListener('click',()=>{asset.reset();q('#preset').value='balanced';q('#mass').value=5;q('#particles').checked=true;q('#retained').checked=true;stat();});
-const ro=new ResizeObserver(es=>{const r=es[0]?.contentRect;if(r?.width>0&&r?.height>0)asset.resize(r.width,r.height,devicePixelRatio||1);});ro.observe(root);addEventListener('beforeunload',()=>{ro.disconnect();asset.dispose();},{once:true});stat();</script></body></html>
+function renderTable(g){rows.replaceChildren();for(const r of g.rows){const tr=document.createElement('tr');for(const v of [r.openingMm+' mm',r.percentPassing.toFixed(0),r.percentRetained.toFixed(0),r.retainedMassKg.toFixed(2)]){const td=document.createElement('td');td.textContent=v;tr.append(td);}rows.append(tr);}const tr=document.createElement('tr');for(const v of ['Pan','—',g.pan.percentRetained.toFixed(0),g.pan.retainedMassKg.toFixed(2)]){const td=document.createElement('td');td.textContent=v;tr.append(td);}rows.append(tr);}
+function stat(){const g=asset.snapshot().state.grading;status.textContent='Check: retained total '+g.retainedPercentTotal.toFixed(1)+'% · recovered mass '+g.retainedMassTotalKg.toFixed(2)+' kg';renderTable(g);}
+q('.controls').addEventListener('input',()=>{try{asset.setParameters(params());stat();}catch(e){status.textContent=e.message;}});
+q('#reset').addEventListener('click',()=>{asset.reset();q('#preset').value='balanced';q('#mass').value=5;q('#particles').checked=true;q('#retained').checked=true;stat();});
+focus.addEventListener('click',()=>{const active=!page.classList.contains('focus-mode');page.classList.toggle('focus-mode',active);focus.textContent=active?'Exit focus':'Focus visual';focus.setAttribute('aria-pressed',String(active));});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&page.classList.contains('focus-mode'))focus.click();});
+const ro=new ResizeObserver(es=>{const r=es[0]?.contentRect;if(r?.width>0&&r?.height>0)asset.resize(r.width,r.height,devicePixelRatio||1);});ro.observe(root);
+addEventListener('beforeunload',()=>{ro.disconnect();asset.dispose();},{once:true});stat();
+</script></body></html>

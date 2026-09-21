@@ -15,6 +15,24 @@
 - No grading envelope, acceptance criterion, or standard/project compliance claim is encoded.
 - Gate: passed for source/arithmetic review.
 
+## Pedagogy
+
+- Learning objective covers curve reading, retained-fraction calculation, retained mass, closure checking, and correct interpretation.
+- Governing relationships are visible before the result.
+- Full intermediate retained fractions and masses are available through progressive disclosure.
+- Live status provides the 100% and total-mass closure check.
+- Focus mode hides instructional chrome while retaining the same component/model state.
+- Default copy remains concise; detailed steps/table are collapsed until requested.
+- Gate: passed for source/information-architecture review.
+
+## Animation/presentation
+
+- Animation is intentionally unnecessary: the concept is a static distribution and arithmetic relationship; motion would be decorative rather than explanatory.
+- Focus/exit behavior is implemented at the demo layer and does not mutate model parameters.
+- Escape exits focus mode.
+- Browser state-restoration behavior has not been executed.
+- Gate: source-reviewed; browser behavior not-reviewed.
+
 ## Browser/functionality
 
 - Source provides create/set/update/reset/resize/snapshot/dispose.
@@ -24,7 +42,7 @@
 
 ## Accessibility
 
-- Native controls, visible focus, SVG accessible name, and text summary are present in source.
+- Native controls, visible focus, accessible focus button state, SVG accessible name, text summary, and a semantic details/table region are present in source.
 - Gate: not-reviewed with assistive technology.
 
 ## Rights
@@ -35,4 +53,4 @@
 ## Decision
 
 - Candidate only.
-- Browser/responsive/assistive-technology review remains before approval.
+- Browser/responsive/focus-state/assistive-technology review remains before approval.

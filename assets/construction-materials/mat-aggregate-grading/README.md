@@ -6,9 +6,26 @@ This dependency-free SVG component combines an illustrative aggregate specimen w
 
 ## Learning objective
 
-- Read percent passing against nominal sieve opening on a logarithmic horizontal axis.
-- Relate changes in percent passing to percent retained and retained sample mass.
-- Distinguish a grading visualization from a project or standard specification envelope.
+After using the demo, a learner should be able to:
+
+- read percent passing against nominal sieve opening on a logarithmic horizontal axis;
+- compute percent retained from successive percent-passing values;
+- convert retained percentage to retained sample mass;
+- check that retained fractions and masses close back to 100% and the original sample mass;
+- distinguish a grading visualization from a project or standard specification envelope.
+
+## Educational sequence
+
+The demo keeps the visual dominant and exposes the method progressively:
+
+1. select an illustrative distribution and sample mass;
+2. read the governing relationships shown beside the controls;
+3. inspect the curve and aggregate-symbol view;
+4. expand **Calculation steps and retained-mass table** to inspect intermediate retained fractions and masses;
+5. confirm the closure check in the live status line;
+6. conclude only about the shape of the illustrative distribution, not compliance.
+
+A **Focus visual** control hides instructional chrome without changing parameters or model state. Escape or **Exit focus** restores the teaching view. Animation is intentionally absent because the learning goal is comparison and calculation transparency; decorative motion would not improve understanding.
 
 ## Data and assumptions
 
@@ -27,6 +44,8 @@ These are not ASTM, AASHTO, DPWH, manufacturer, or project limits.
 For each sieve:
 
 `percent retained = previous percent passing - current percent passing`
+
+`retained mass = sample mass × percent retained / 100`
 
 The pan retains the fraction passing the smallest modeled sieve. Retained fractions, including pan, must sum to 100%.
 
@@ -65,4 +84,4 @@ Browser and assistive-technology execution remain separate gates before approval
 
 ## Change history
 
-- 0.1.0 — Initial illustrative grading presets, retained-mass calculation, log-axis curve, and decorative aggregate specimen.
+- 0.1.0 — Initial illustrative grading presets, retained-mass calculation, log-axis curve, progressive calculation disclosure, and focus presentation mode.
