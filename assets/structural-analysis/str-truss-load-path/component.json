@@ -1,0 +1,33 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/structural-analysis/str-truss-load-path/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Physical model uses joints A=(0,0), B=(spanM/2,riseM), C=(spanM,0) in metres. SVG drawing is responsively scaled without altering analytical geometry.",
+  "parameters": {
+    "spanM": {
+      "type": "number",
+      "unit": "m",
+      "default": 8,
+      "min": 2,
+      "max": 30
+    },
+    "riseM": {
+      "type": "number",
+      "unit": "m",
+      "default": 3,
+      "min": 0.5,
+      "max": 15
+    },
+    "loadN": {
+      "type": "number",
+      "unit": "N",
+      "default": 40000,
+      "min": 0,
+      "max": 1000000
+    }
+  },
+  "assetDependencies": []
+}
