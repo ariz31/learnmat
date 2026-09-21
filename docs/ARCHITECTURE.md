@@ -5,7 +5,7 @@
 | Path | Responsibility |
 | --- | --- |
 | README.md, AGENTS.md, CONTRIBUTING.md | Entry points and contributor rules |
-| docs/ | Product, engineering, reuse, hosting, and rights specifications |
+| docs/ | Product, educational design, engineering, reuse, hosting, and rights specifications |
 | instructions/ | Task-specific workflows for AI assistants |
 | catalog/catalog.json | Index of all records, including internal intake candidates |
 | catalog/provenance.json | Input and extracted-file byte hashes |
@@ -33,9 +33,22 @@ restricted preview environment described in HOSTING.md. Gallery search and cards
 must work without creating every scene or loading every 3D library.
 
 Reusable components should separate the engineering model, renderer, and lesson
-UI. The future component contract should support initialization, explicit parameter
-updates, pause/resume, reset, deterministic capture, and disposal. The supplied
-HTML examples do not claim to implement a common component API.
+UI. Educational state belongs above the model: active step, concise instructional
+labels, optional derivation/details, and learner controls should all consume the
+same authoritative calculations and geometry.
+
+Interactive/animated lessons should support two presentation layers without
+duplicating the model:
+
+- **Teaching mode** — concise active-step guidance with progressive disclosure for
+  derivations, assumptions, tables, and longer explanations.
+- **Focus/maximize mode** — renderer/animation-forward presentation with lesson
+  panels and nonessential chrome hidden; preserve a clear exit plus essential
+  pause/play/reset controls and restore the prior lesson state on exit.
+
+The reusable runtime supports initialization, explicit parameter updates,
+pause/resume, reset, deterministic capture, and disposal. The supplied HTML
+examples do not claim to implement a common component API.
 
 ## Source and publication
 

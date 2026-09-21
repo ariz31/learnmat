@@ -78,7 +78,7 @@ def scaffold(agent, task, root=ROOT):
          'parameters':{},'assetDependencies':[]})
     save(root/f"work/{agent}/{task['id']}/evidence.json",{'reviewType':'self-review',
          'assetFingerprint':None,'checks':{key:{'status':'not-reviewed','details':''} for key in
-         ['engineering','functionality','accessibility','visual','reuse']},'unresolvedBlockers':[]})
+         ['engineering','pedagogy','functionality','animation','accessibility','visual','reuse']},'unresolvedBlockers':[]})
 
 
 def transition(state, action, limit, reason=None):

@@ -6,22 +6,34 @@ Make high-quality civil-engineering learning assets discoverable and reusable in
 presentations, teaching websites, simulations, and single-HTML lessons. Preserve
 enough engineering context for reuse to remain correct.
 
+The product is educational-first: assets should help a learner understand,
+observe, compute, compare, or perform something meaningful. When a real procedure
+exists, show the meaningful steps and intermediate reasoning as completely as
+practical. Keep visible instructional text minimal through progressive disclosure,
+and let instructors maximize/focus the animation or interactive scene without the
+step panels when presenting.
+
 ## Users and intended tasks
 
 | User | Primary task |
 | --- | --- |
-| Instructor | Find a relevant visual, preview it, download it, and teach with it |
-| Student | Explore the visual through guided controls and readable explanations |
-| Developer | Reuse a component with documented inputs and cleanup behavior |
-| AI assistant | Find source, understand constraints, show a preview, propose improvements |
-| Maintainer | Review quality and rights, categorize assets, and publish versions |
+| Instructor | Find a relevant visual, teach through a concise guided sequence, or show the focused animation alone |
+| Student | Explore a concept/procedure through accurate steps, meaningful controls, and progressively disclosed detail |
+| Developer | Reuse a component with documented inputs, educational intent, presentation behavior, and cleanup |
+| AI assistant | Find source, understand constraints, preserve teaching intent, show a preview, propose improvements |
+| Maintainer | Review engineering, pedagogy, animation/presentation quality, rights, and publication state |
 
 ## Planned public experience
 
 - Browse by civil-engineering category, topic, format, and review state.
 - Search titles, learning objectives, and tags; clear filters and support empty states.
-- View a thumbnail, description, assumptions, dependency requirements, and rights.
+- View a thumbnail, concise description, assumptions, dependency requirements, and rights.
 - Open an isolated interactive preview with loading and failure feedback.
+- Step through meaningful instructional stages when the subject has a real procedure.
+- Reveal derivations, tables, or longer explanations only when requested or relevant
+  to the active step.
+- Enter a focus/maximize mode that hides lesson chrome and presents the animation
+  or interactive scene alone with essential controls and an obvious exit.
 - Download a versioned bundle or copy a documented reuse snippet.
 - View source, revision history, review evidence, and an improvement-report link.
 - Offer machine-readable metadata for AI-assisted discovery.

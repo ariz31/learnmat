@@ -37,6 +37,32 @@ Initial backlog:
 - `str-column-buckling` (structural-analysis): Euler buckling mode with effective-length assumptions.
 - `str-bridge-bearing` (structural-analysis): Bridge bearing translation and rotation constraints.
 
+## Educational delivery standard
+
+Follow docs/EDUCATIONAL-DESIGN.md for every task. The asset must teach a meaningful
+concept, relationship, observation, or procedure rather than merely render a
+technically impressive object.
+
+When the subject has a real ordered procedure, calculation, experiment, analysis,
+or construction/field sequence, make the educational demo expose the meaningful
+steps as completely as practical: objective and known data, conventions, governing
+relationship, important intermediate work, visual consequence, check or
+interpretation, and conclusion. Verify representative calculations independently.
+Do not skip directly from inputs to a final visual or number.
+
+Keep the default learner interface concise. Use short labels, the active step,
+tooltips, and progressive disclosure for longer derivations or explanations rather
+than permanent walls of text. Interactive or animated demos should provide a
+focus/maximize presentation mode that hides lesson steps and nonessential chrome
+while retaining an obvious exit and essential pause/play/reset controls. Exiting
+focus should restore the prior instructional state.
+
+Animation must be purposeful, smooth, legible, and consistent with the same
+authoritative model used for calculations and geometry. Use motion to explain
+sequence, causality, direction, scale, or state change; remove decorative motion.
+If a static annotated presentation teaches the asset better, document why animation
+is unnecessary instead of adding artificial movement.
+
 ## Self-correcting task loop
 
 1. Inspect existing assets and `work/structures/` reports. Resume your own unfinished
@@ -61,7 +87,7 @@ Initial backlog:
 7. When self-review is complete, replace the per-task evidence template with actual
    results. Generate its current content fingerprint using
    `python scripts/agent_workflow.py fingerprint --agent structures --task TASK_ID`.
-   Set evidence readiness accurately and use `ready` only with all required evidence.
+   Set evidence readiness accurately and use `ready` only with all required evidence, including pedagogy and animation/presentation evidence.
    `ready` runs validation, checks ownership, and queues the asset for independent
    review. Keep asset status candidate or in-review; you cannot self-approve it.
 8. After the retry limit or an unresolved dependency/capability gap, run `block`
@@ -79,7 +105,7 @@ Create reusable structural geometry and behavior, separating topology, calculati
 ## Delivery and integration
 
 Each asset includes asset.json, README.md, model/source, a contract-compliant
-component entry, demo/index.html, actual preview, REVIEW.md, focused independent calculations
+component entry, educational demo/index.html, actual preview, REVIEW.md, focused independent calculations
 or reproducible checks, and component.json describing units, bounds, dependencies,
 entrypoint, and reuse. Keep externally sourced rights explicit. The root MIT license
 does not automatically clear third-party models, textures, fonts, or datasets.
