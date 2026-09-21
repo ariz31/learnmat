@@ -1,14 +1,9 @@
-# Review — geo-foundation-soil
+# Review — geo-foundation-soil 3D replacement
 
-Reference case: B=2 m, L=3 m, P=1200 kN, M=100 kN·m.
+The existing q=P/A ± 6M/(LB²), eccentricity and middle-third model remains authoritative. The renderer interpolates those exact edge pressures to produce compression arrows and suppresses negative-pressure arrows rather than implying tensile soil contact.
 
-- A = 6 m².
-- qavg = 1200/6 = 200 kPa.
-- e = 100/1200 = 0.083333 m.
-- B/6 = 0.333333 m, so the resultant lies inside the middle third.
-- Pressure increment = 6M/(LB²) = 600/(3·4) = 50 kPa.
-- Edge pressures are 150 kPa and 250 kPa.
+The primary visualization is now true Three.js geometry: soil mass, footing, column, eccentric load, moment cue, compression field, invalid-contact zone, perspective camera, lighting/shadow-compatible materials, educational steps and focus mode.
 
-The component reverses the pressure gradient when M changes sign. If |e| exceeds B/6, qmin becomes negative and the visualization states that the linear full-contact assumption predicts tension; no no-tension redistribution is fabricated.
+The scene deliberately does not solve no-tension redistribution or any capacity/settlement check.
 
-Live browser and assistive-technology review remain pending.
+Rendered surveying-reference comparison and accessibility remain pending because no browser/WebGL session was available in this connector execution.
