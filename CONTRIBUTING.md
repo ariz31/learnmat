@@ -11,15 +11,29 @@ Use templates/asset-metadata.json and templates/ASSET-README.md as starting poin
 ## Development and review
 
 1. Confirm source rights and dependency licenses before public reuse.
-2. Describe the model and expected behavior before implementing an animation.
-3. Extract reusable geometry, calculations, or scene controls without importing
+2. Define the learning objective, engineering model, assumptions, expected behavior,
+   and the learner's required observation or conclusion before implementation.
+3. If the subject has an actual procedure or calculation, design the walkthrough
+   before the animation: show meaningful inputs, conventions, governing relation,
+   intermediate results, visual consequence, check, and conclusion. Do not jump
+   from raw inputs to a polished final answer.
+4. Keep visible copy minimal. Use concise labels and progressive disclosure for
+   derivations, assumptions, longer explanations, and tables.
+5. For interactive/animated work, provide a focus/maximize presentation mode that
+   hides steps and nonessential panels while retaining an obvious exit and essential
+   animation controls. The focused view must remain responsive and understandable.
+6. Extract reusable geometry, calculations, or scene controls without importing
    presentation-specific global IDs or unscoped CSS into the consumer.
-4. Provide a minimal usage example and documented lifecycle cleanup.
-5. Produce an actual preview image from a recorded state after implementation.
-6. Complete templates/REVIEW.md and the checks in docs/QUALITY.md.
-7. Update catalog/catalog.json; run `python scripts/validate_catalog.py`.
-8. Open a focused change with evidence and known limitations. Do not run GitHub
-   Actions. Merge and deployment depend on the authorized repository workflow.
+7. Make animation purposeful, smooth, deterministic where practical, and consistent
+   with the authoritative model. Avoid decorative motion.
+8. Provide a minimal usage example and documented lifecycle cleanup.
+9. Produce an actual preview image from a recorded state after implementation.
+10. Complete templates/REVIEW.md and the checks in docs/QUALITY.md and
+    docs/EDUCATIONAL-DESIGN.md.
+11. Update catalog/catalog.json when working in the authorized integrator workflow;
+    run `python scripts/validate_catalog.py`.
+12. Open a focused change with evidence and known limitations. Do not run GitHub
+    Actions. Merge and deployment depend on the authorized repository workflow.
 
 ## Testing policy
 
