@@ -1,76 +1,42 @@
-const SVG_NS='http://www.w3.org/2000/svg';
 const DEFAULTS=Object.freeze({staffHeight:3,staffTiltRad:0,readingHeight:1.5,personHeight:1.7});
 const LIMITS=Object.freeze({staffHeight:[2,5],staffTiltRad:[-0.0872665,0.0872665],readingHeight:[0,5],personHeight:[1.4,2.1]});
-
-function node(name,attrs={}){const el=document.createElementNS(SVG_NS,name);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));return el}
-function validate(name,value){const [min,max]=LIMITS[name];if(!Number.isFinite(value)||value<min||value>max)throw new RangeError(name+' must be finite and between '+min+' and '+max+'.')}
-function normalize(next){const merged={...DEFAULTS,...next};for(const key of Object.keys(LIMITS))validate(key,merged[key]);if(merged.readingHeight>merged.staffHeight)throw new RangeError('readingHeight cannot exceed staffHeight.');return merged}
-
+function normalize(next){const p={...DEFAULTS,...next};for(const [k,[min,max]] of Object.entries(LIMITS)){if(!Number.isFinite(p[k])||p[k]<min||p[k]>max)throw new RangeError(k+' must be finite and between '+min+' and '+max+'.');}if(p.readingHeight>p.staffHeight)throw new RangeError('readingHeight cannot exceed staffHeight.');return p;}
+function m(T,c,r=.76,metal=.04){return new T.MeshStandardMaterial({color:c,roughness:r,metalness:metal});}
+function mesh(T,g,mat){const x=new T.Mesh(g,mat);x.castShadow=true;x.receiveShadow=true;return x;}
+function human(T){
+ const root=new T.Group(),skin=m(T,0xc99068,.85),cloth=m(T,0x37434a,.9),pants=m(T,0xb99b73,.92),vest=m(T,0xdaf138,.74),white=m(T,0xf4f5f2,.55);
+ const torso=mesh(T,new T.BoxGeometry(.46,.62,.26),cloth);torso.position.set(-.58,1.25,0);root.add(torso);
+ const vestBox=mesh(T,new T.BoxGeometry(.49,.40,.285),vest);vestBox.position.set(-.58,1.27,0);root.add(vestBox);
+ const head=mesh(T,new T.SphereGeometry(.15,20,16),skin);head.position.set(-.58,1.72,0);root.add(head);
+ const brim=mesh(T,new T.CylinderGeometry(.19,.19,.035,24),white);brim.position.set(-.58,1.875,0);root.add(brim);
+ const dome=mesh(T,new T.SphereGeometry(.165,20,12,0,Math.PI*2,0,Math.PI/2),white);dome.position.set(-.58,1.875,0);root.add(dome);
+ function limb(x,y,len,r,mat,angle=0){const j=new T.Group();j.position.set(x,y,0);j.rotation.z=angle;const l=mesh(T,new T.CylinderGeometry(r,r,len,14),mat);l.position.y=-len/2;j.add(l);root.add(j);return j;}
+ limb(-.69,.94,.86,.07,pants,.08);limb(-.47,.94,.86,.07,pants,-.08);
+ const arm=limb(-.34,1.48,.55,.055,skin,-.72);const fore=new T.Group();fore.position.set(0,-.52,0);fore.rotation.z=.72;const fm=mesh(T,new T.CylinderGeometry(.05,.05,.42,14),skin);fm.position.y=-.21;fore.add(fm);arm.add(fore);
+ limb(-.82,1.48,.64,.055,skin,.18);
+ root.userData={torso};return root;
+}
+function staff(T){
+ const g=new T.Group(),shaft=mesh(T,new T.BoxGeometry(.055,1,.038),m(T,0xf2f2ee,.6,.1));shaft.position.y=.5;g.add(shaft);
+ for(let i=0;i<20;i++){const band=mesh(T,new T.BoxGeometry(.063,.035,.045),m(T,i%5===0?0xd63b32:0x22292d,.7));band.position.set(.004,(i+.5)/20,.004);g.add(band);}
+ const cap=mesh(T,new T.BoxGeometry(.075,.04,.055),m(T,0x171b1c,.6));cap.position.y=1.01;g.add(cap);return g;
+}
+function dispose(o){o.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material)(Array.isArray(n.material)?n.material:[n.material]).forEach(x=>x.dispose())});}
 export function createAsset(context={}){
-  const container=context.container;
-  if(!container||typeof container.appendChild!=='function')throw new TypeError('createAsset requires a DOM container.');
-  let disposed=false,timeSeconds=0,params=normalize({});
-  const reducedMotion=Boolean(context.reducedMotion);
-  const root=document.createElement('div');
-  root.setAttribute('data-learnmat-asset','sur-staff-holder');
-  root.style.width='100%';root.style.maxWidth='720px';root.style.fontFamily='system-ui,sans-serif';root.style.color='CanvasText';
-  const svg=node('svg',{viewBox:'0 0 700 430',role:'img','aria-label':'Surveyor holding a leveling staff with visible staff verticality and reading height'});
-  svg.style.width='100%';svg.style.height='auto';svg.style.display='block';
-  const ground=node('line',{x1:70,y1:350,x2:630,y2:350,stroke:'currentColor','stroke-width':3});
-  const staff=node('g');
-  const staffLine=node('line',{x1:0,y1:0,x2:0,y2:-270,stroke:'currentColor','stroke-width':8,'stroke-linecap':'round'});
-  const graduations=node('g');
-  for(let i=0;i<=12;i++){graduations.appendChild(node('line',{x1:0,y1:-i*22.5,x2:i%2===0?18:11,y2:-i*22.5,stroke:'currentColor','stroke-width':2}))}
-  staff.append(staffLine,graduations);
-  const reading=node('line',{x1:-28,y1:0,x2:28,y2:0,stroke:'currentColor','stroke-width':3,'stroke-dasharray':'6 4'});
-  staff.appendChild(reading);
-
-  const person=node('g');
-  const head=node('circle',{cx:-72,cy:-150,r:16,fill:'none',stroke:'currentColor','stroke-width':5});
-  const torso=node('line',{x1:-72,y1:-132,x2:-72,y2:-72,stroke:'currentColor','stroke-width':7,'stroke-linecap':'round'});
-  const legA=node('line',{x1:-72,y1:-72,x2:-92,y2:0,stroke:'currentColor','stroke-width':7,'stroke-linecap':'round'});
-  const legB=node('line',{x1:-72,y1:-72,x2:-52,y2:0,stroke:'currentColor','stroke-width':7,'stroke-linecap':'round'});
-  const arm=node('polyline',{points:'-72,-118 -42,-92 0,-105',fill:'none',stroke:'currentColor','stroke-width':6,'stroke-linecap':'round','stroke-linejoin':'round'});
-  person.append(head,torso,legA,legB,arm);
-
-  const title=node('text',{x:350,y:38,'text-anchor':'middle','font-size':18,fill:'currentColor'});
-  const result=node('text',{x:350,y:402,'text-anchor':'middle','font-size':17,fill:'currentColor'});
-  svg.append(ground,staff,person,title,result);root.appendChild(svg);container.appendChild(root);
-
-  function ensure(){if(disposed)throw new Error('Asset has been disposed.')}
-  function geometry(){
-    const tilt=params.staffTiltRad;
-    return {
-      topOffsetX:params.staffHeight*Math.sin(tilt),
-      topVerticalProjection:params.staffHeight*Math.cos(tilt),
-      verticalityErrorRad:tilt,
-      verticalityErrorDeg:tilt*180/Math.PI
-    };
-  }
-  function render(){
-    const scale=90;
-    const breathe=reducedMotion?0:Math.sin(Math.max(0,timeSeconds)*Math.PI/2)*1.5;
-    const angle=params.staffTiltRad*180/Math.PI;
-    const personScale=params.personHeight/1.7;
-    staff.setAttribute('transform','translate(430 350) rotate('+angle.toFixed(4)+') scale('+(params.staffHeight/3).toFixed(5)+')');
-    const readingY=-270*(params.readingHeight/params.staffHeight);
-    reading.setAttribute('y1',readingY.toFixed(3));reading.setAttribute('y2',readingY.toFixed(3));
-    person.setAttribute('transform','translate(430 '+(350+breathe).toFixed(3)+') scale('+personScale.toFixed(5)+')');
-    const g=geometry();
-    title.textContent='Staff '+params.staffHeight.toFixed(2)+' m · tilt '+g.verticalityErrorDeg.toFixed(2)+'°';
-    result.textContent='Top offset '+g.topOffsetX.toFixed(3)+' m · vertical projection '+g.topVerticalProjection.toFixed(3)+' m · reading '+params.readingHeight.toFixed(2)+' m';
-  }
-  function snapshot(){
-    ensure();const g=geometry();
-    return {id:'sur-staff-holder',timeSeconds:Math.max(0,timeSeconds),parameters:{...params},result:g,pose:{staffBase:{x:0,y:0,z:0},staffTop:{x:g.topOffsetX,y:g.topVerticalProjection,z:0}}};
-  }
-  render();
-  return {
-    setParameters(next={}){ensure();params=normalize({...params,...next});render();return snapshot()},
-    update(t){ensure();if(!Number.isFinite(t))throw new TypeError('timeSeconds must be finite.');timeSeconds=Math.max(0,t);render();return snapshot()},
-    reset(){ensure();params=normalize({});timeSeconds=0;render();return snapshot()},
-    resize(width,height,pixelRatio=1){ensure();if(![width,height,pixelRatio].every(Number.isFinite)||width<=0||height<=0||pixelRatio<=0)throw new RangeError('resize requires positive finite values.');root.style.width=width+'px';root.style.maxWidth='100%';root.style.aspectRatio=width+' / '+height;return snapshot()},
-    snapshot,
-    dispose(){if(disposed)return;disposed=true;root.remove()}
-  };
+ const T=context.THREE,scene=context.scene;if(!T||!scene)throw new TypeError('sur-staff-holder requires context.THREE and context.scene.');
+ let disposed=false,time=0,p=normalize({});
+ const root=new T.Group();scene.add(root);const person=human(T);root.add(person);const pole=staff(T);root.add(pole);
+ const base=mesh(T,new T.CylinderGeometry(.08,.10,.035,24),m(T,0x59645d,.85));base.position.y=.0175;root.add(base);
+ const reading=mesh(T,new T.TorusGeometry(.065,.008,10,24),m(T,0xe65b3e,.55));reading.rotation.x=Math.PI/2;pole.add(reading);
+ const plumbMat=new T.LineBasicMaterial({color:0x3d7a77,transparent:true,opacity:.55});const plumbGeo=new T.BufferGeometry().setFromPoints([new T.Vector3(0,0,0),new T.Vector3(0,5.2,0)]);const plumb=new T.Line(plumbGeo,plumbMat);root.add(plumb);
+ function geometry(){return {topOffsetX:p.staffHeight*Math.sin(p.staffTiltRad),topVerticalProjection:p.staffHeight*Math.cos(p.staffTiltRad),verticalityErrorRad:p.staffTiltRad,verticalityErrorDeg:p.staffTiltRad*180/Math.PI};}
+ function render(){pole.scale.set(1,p.staffHeight,1);pole.rotation.z=-p.staffTiltRad;reading.position.y=p.readingHeight/p.staffHeight;person.scale.setScalar(p.personHeight/1.7);if(!context.reducedMotion)person.position.y=Math.sin(time*1.4)*.004;else person.position.y=0;}
+ function snap(){if(disposed)throw new Error('Asset has been disposed.');const g=geometry();return{id:'sur-staff-holder',timeSeconds:Math.max(0,time),parameters:{...p},result:g,pose:{staffBase:{x:0,y:0,z:0},staffTop:{x:g.topOffsetX,y:g.topVerticalProjection,z:0}}};}
+ render();return{
+ setParameters(next={}){if(disposed)throw new Error('Asset has been disposed.');p=normalize({...p,...next});render();return snap();},
+ update(t){if(disposed)throw new Error('Asset has been disposed.');if(!Number.isFinite(t))throw new TypeError('timeSeconds must be finite.');time=Math.max(0,t);render();return snap();},
+ reset(){if(disposed)throw new Error('Asset has been disposed.');p=normalize({});time=0;render();return snap();},
+ resize(w,h,pr=1){if(disposed)throw new Error('Asset has been disposed.');if(![w,h,pr].every(Number.isFinite)||w<=0||h<=0||pr<=0)throw new RangeError('resize requires positive finite values.');return snap();},
+ snapshot:snap,dispose(){if(disposed)return;disposed=true;scene.remove(root);dispose(root);plumb.geometry.dispose();plumb.material.dispose();}
+ }};
 }
