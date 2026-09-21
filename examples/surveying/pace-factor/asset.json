@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "pace-factor",
+  "version": "0.1.0",
+  "title": "Pace Factor",
+  "description": "Calibrate and apply a distance-per-pace factor.",
+  "category": "surveying",
+  "topics": [
+    "pace-factor",
+    "distance-measurement"
+  ],
+  "learningObjectives": [
+    "Calibrate and apply a distance-per-pace factor."
+  ],
+  "kind": "presentation",
+  "renderer": "threejs",
+  "status": "candidate",
+  "entrypoint": "examples/surveying/pace-factor/index.html",
+  "readme": "examples/surveying/pace-factor/README.md",
+  "previewImage": null,
+  "reviewFile": null,
+  "derivedFrom": null,
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    },
+    {
+      "name": "three/addons",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/",
+      "embedded": false
+    }
+  ],
+  "rights": {
+    "status": "needs-confirmation",
+    "licenseExpression": null,
+    "licenseFile": null,
+    "attribution": "User-supplied example; upstream authorship and reuse terms require confirmation."
+  },
+  "verification": {
+    "engineeringReview": "not-reviewed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Original source extracted without changes. Metadata and byte integrity checked; runtime and engineering behavior not verified."
+  },
+  "source": {
+    "type": "user-supplied",
+    "reference": "Pasted text(20260921-161408).txt, HTML document 1",
+    "sha256": "5b72e8edc7001edd0c83ef181475f0b45aa1e545dc2a5657d2e818b2e9d47b39"
+  }
+}

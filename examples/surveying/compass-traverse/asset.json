@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "compass-traverse",
+  "version": "0.1.0",
+  "title": "Compass Traverse",
+  "description": "Explore traverse observations, misclosure, and Bowditch adjustment.",
+  "category": "surveying",
+  "topics": [
+    "compass-traverse",
+    "bowditch-adjustment"
+  ],
+  "learningObjectives": [
+    "Explore traverse observations, misclosure, and Bowditch adjustment."
+  ],
+  "kind": "presentation",
+  "renderer": "unknown",
+  "status": "candidate",
+  "entrypoint": "examples/surveying/compass-traverse/index.html",
+  "readme": "examples/surveying/compass-traverse/README.md",
+  "previewImage": null,
+  "reviewFile": null,
+  "derivedFrom": null,
+  "networkRequired": null,
+  "dependencies": [],
+  "rights": {
+    "status": "needs-confirmation",
+    "licenseExpression": null,
+    "licenseFile": null,
+    "attribution": "User-supplied example; upstream authorship and reuse terms require confirmation."
+  },
+  "verification": {
+    "engineeringReview": "not-reviewed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Original source extracted without changes. Metadata and byte integrity checked; runtime and engineering behavior not verified."
+  },
+  "source": {
+    "type": "user-supplied",
+    "reference": "Pasted text(20260921-161408).txt, HTML document 5",
+    "sha256": "d61f7f586fe0246f08766cf02cdfe916f09f845d85c1e6052765f6640b5979ea"
+  }
+}

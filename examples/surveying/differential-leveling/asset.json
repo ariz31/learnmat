@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "differential-leveling",
+  "version": "0.1.0",
+  "title": "Differential Leveling",
+  "description": "Explore height-of-instrument observations and elevation transfer.",
+  "category": "surveying",
+  "topics": [
+    "differential-leveling",
+    "height-of-instrument"
+  ],
+  "learningObjectives": [
+    "Explore height-of-instrument observations and elevation transfer."
+  ],
+  "kind": "presentation",
+  "renderer": "unknown",
+  "status": "candidate",
+  "entrypoint": "examples/surveying/differential-leveling/index.html",
+  "readme": "examples/surveying/differential-leveling/README.md",
+  "previewImage": null,
+  "reviewFile": null,
+  "derivedFrom": null,
+  "networkRequired": null,
+  "dependencies": [],
+  "rights": {
+    "status": "needs-confirmation",
+    "licenseExpression": null,
+    "licenseFile": null,
+    "attribution": "User-supplied example; upstream authorship and reuse terms require confirmation."
+  },
+  "verification": {
+    "engineeringReview": "not-reviewed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Original source extracted without changes. Metadata and byte integrity checked; runtime and engineering behavior not verified."
+  },
+  "source": {
+    "type": "user-supplied",
+    "reference": "Pasted text(20260921-161408).txt, HTML document 3",
+    "sha256": "42abb81efb2999ff6e5b6ea18c052da902ae475337d038bd94c11a2251a5f34c"
+  }
+}
