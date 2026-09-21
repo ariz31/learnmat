@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "geo-foundation-soil",
+  "version": "0.1.0",
+  "title": "Shallow footing contact-pressure interaction",
+  "description": "Reusable SVG rigid-footing component showing average and linearly varying soil contact pressure under vertical load and uniaxial moment, with an explicit middle-third/full-contact check.",
+  "category": "geotechnical",
+  "topics": [
+    "shallow foundation",
+    "contact pressure",
+    "eccentricity",
+    "middle third",
+    "soil-foundation interaction"
+  ],
+  "learningObjectives": [
+    "Compute average and edge contact pressures for a rectangular rigid footing under P and M.",
+    "Recognize when the linear full-contact pressure assumption predicts tension and must not be used as a soil contact solution."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/geotechnical/geo-foundation-soil/demo/index.html",
+  "readme": "assets/geotechnical/geo-foundation-soil/README.md",
+  "previewImage": "assets/geotechnical/geo-foundation-soil/previews/preview.svg",
+  "reviewFile": "assets/geotechnical/geo-foundation-soil/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Rigid-footing pressure equations and middle-third reference case reviewed; live browser/accessibility review pending."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat water-ground contribution, 2026-09-22.",
+    "sha256": null
+  }
+}
