@@ -14,7 +14,11 @@ Unknown values must be explicit; do not invent dimensions, author names, verifie
 licenses, GLB exports, performance scores, or preview URLs.
 
 For a published asset, also provide an actual preview, completed review record,
-license text path, versioned distributable, and usage instructions. Asset previews
+license text path, versioned distributable, and usage instructions. The review
+record must also demonstrate the educational design requirements in
+EDUCATIONAL-DESIGN.md: a meaningful learning outcome, stepwise reasoning when a real
+procedure exists, minimal-text information hierarchy, purposeful animation when
+used, and focus/maximize presentation behavior for interactive animation. Asset previews
 are evidence from the source, not AI-generated substitutes. Component APIs need
 documented input ranges, units, return values, errors, and resource disposal.
 
@@ -28,7 +32,8 @@ documented input ranges, units, return values, errors, and resource disposal.
 | deprecated | Previously approved, superseded or withdrawn | Keep notice; apply withdrawal policy |
 
 Approval requires `engineeringReview`, `browserReview`, and `accessibilityReview`
-all equal `passed`; rights status `cleared`; nonempty license expression and
+all equal `passed`; the completed review must also satisfy the educational and
+presentation requirements in docs/EDUCATIONAL-DESIGN.md; rights status `cleared`; nonempty license expression and
 existing license text; existing preview and review files. Passing metadata checks
 alone does not establish any of these facts. Deprecation records must retain the
 prior evidence and state the reason in the README. Unsafe or rights-disputed
