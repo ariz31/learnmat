@@ -4,26 +4,38 @@
   "checks": {
     "engineering": {
       "status": "passed",
-      "details": "Rectangular-section continuity, hydraulic radius, Froude number, specific energy, and Manning-capacity equations were checked against the documented reference state; the implementation explicitly avoids claiming a solved normal depth."
+      "details": "Existing continuity, hydraulic radius, Froude, specific-energy and Manning-capacity model remains authoritative; renderer consumes those outputs."
+    },
+    "pedagogy": {
+      "status": "passed",
+      "details": "Four-step sequence ties section geometry to continuity, regime classification, and Manning capacity without claiming solved normal depth."
     },
     "functionality": {
       "status": "passed",
-      "details": "Source review confirms valid limiting behavior at zero discharge and zero slope, finite-input guards, deterministic absolute-time display phase, isolated state, and idempotent cleanup."
+      "details": "Source review covers host-scene construction, validated parameter rebuild, deterministic host-time tracers, reset/snapshot/resize and disposal."
+    },
+    "animation": {
+      "status": "passed",
+      "details": "Tracer motion is purposeful, deterministic, reduced-motion compatible at host level, and explicitly presentation-scaled."
+    },
+    "spatial3d": {
+      "status": "not-reviewed",
+      "details": "Real Three.js U-channel, water volume, staff, contextual geometry and camera presets are implemented; rendered comparison was unavailable."
     },
     "accessibility": {
       "status": "not-reviewed",
-      "details": "Semantic SVG labels and keyboard-accessible demo controls are present in source; no assistive-technology browser session was available."
+      "details": "Keyboard buttons, step text, metrics and reduced-motion-aware camera behavior are present; browser/AT check pending."
     },
     "visual": {
       "status": "not-reviewed",
-      "details": "Repository preview SVG was inspected as source; no live browser capture was available."
+      "details": "Surveying-style layered HUD, restrained chrome, responsive composition and focus mode are implemented in source; no rendered pass is claimed."
     },
     "reuse": {
       "status": "passed",
-      "details": "Dependency-free ES module follows runtime v1, scopes DOM/CSS to the instance root, uses deterministic absolute time, and disposes owned DOM idempotently."
+      "details": "Runtime v1 host scene/time ownership retained with exact Three.js peer version and owned resource disposal."
     }
   },
   "unresolvedBlockers": [
-    "Interactive browser/assistive-technology execution was unavailable in the connector-only environment; retain candidate status until that review is completed."
+    "Independent WebGL render and surveying-reference visual comparison remain required before readiness/public approval."
   ]
 }
