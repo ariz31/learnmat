@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pipe flow asset demo</title>
+<style>body{font:15px system-ui,sans-serif;margin:0;padding:24px;background:#eef5f8;color:#10212b}main{max-width:980px;margin:auto;display:grid;gap:16px}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;background:#fff;padding:14px;border-radius:12px}label{display:grid;gap:4px}input{width:100%}</style></head>
+<body><main><h1>Pipe flow</h1><p>Change SI inputs. The component uses continuity and Darcy-Weisbach head loss; the friction factor is 64/Re in laminar flow and the Swamee-Jain explicit approximation otherwise.</p>
+<form class="controls" id="controls">
+<label>Length L (m)<input name="length" type="number" min="0.1" step="1" value="30"></label>
+<label>Diameter D (m)<input name="diameter" type="number" min="0.005" step="0.01" value="0.30"></label>
+<label>Roughness ε (m)<input name="roughness" type="number" min="0" step="0.00001" value="0.00015"></label>
+<label>Flow Q (m³/s)<input name="flowRate" type="number" step="0.01" value="0.08"></label>
+<label>Time (s)<input name="time" type="range" min="0" max="10" step="0.1" value="0"></label>
+</form><div id="asset"></div><p id="status" role="status"></p></main>
+<script type="module">import { createAsset } from '../src/asset.mjs';
+const asset=createAsset({container:document.querySelector('#asset'),seed:1,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
+const form=document.querySelector('#controls'),status=document.querySelector('#status');
+form.addEventListener('input',()=>{try{asset.setParameters({length:+form.length.value,diameter:+form.diameter.value,roughness:+form.roughness.value,flowRate:+form.flowRate.value});asset.update(+form.time.value);status.textContent='';}catch(e){status.textContent=e.message;}});
+</script></body></html>
