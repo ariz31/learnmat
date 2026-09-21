@@ -102,7 +102,7 @@ python scripts/agent_workflow.py ready --agent surveying --task sur-walking-pers
 ```
 
 Ready requires self-review evidence for engineering, pedagogy, functionality,
-animation/presentation, accessibility, visual quality, and reuse; an actual preview and review file; an implemented module;
+animation/presentation, spatial 3D quality, accessibility, visual quality, and reuse; an actual preview and review file; an implemented module;
 current fingerprint; clean ownership checks; and passing catalog validation. It
 does not independently verify those claims or approve public release. Keep asset
 metadata candidate/in-review. Missing browser or graphics capabilities should
@@ -134,7 +134,10 @@ worktree preparation preserves existing directories/branches for inspection.
 
 ## Educational production requirement
 
-Every worker follows docs/EDUCATIONAL-DESIGN.md. An asset is not ready merely
+Every worker follows docs/EDUCATIONAL-DESIGN.md. New spatial assets are 3D-first:
+workers should implement real 3D geometry/scenes comparable in visual ambition to
+the surveying references, with 2D-primary output allowed only when the review gives
+a concrete educational reason. An asset is not ready merely
 because its geometry renders correctly. It must teach a meaningful concept or
 procedure. Where an ordered method exists, preserve the learner's reasoning chain
 with accurate intermediate states and checks. Keep the default interface concise
