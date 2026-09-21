@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "description": "Internal inventory including unapproved candidates; not a public release catalog.",
+  "assets": [
+    {
+      "id": "pace-factor",
+      "metadata": "examples/surveying/pace-factor/asset.json"
+    },
+    {
+      "id": "taping-fieldwork",
+      "metadata": "examples/surveying/taping-fieldwork/asset.json"
+    },
+    {
+      "id": "differential-leveling",
+      "metadata": "examples/surveying/differential-leveling/asset.json"
+    },
+    {
+      "id": "profile-leveling",
+      "metadata": "examples/surveying/profile-leveling/asset.json"
+    },
+    {
+      "id": "compass-traverse",
+      "metadata": "examples/surveying/compass-traverse/asset.json"
+    }
+  ]
+}

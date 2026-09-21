@@ -1,0 +1,48 @@
+{
+  "sourceFilename": "Pasted text(20260921-161408).txt",
+  "sourceSha256": "35624ad902a93d075f3c3e7d46e8aeb87d0090db8c235357ca94e49f2b19844e",
+  "sourceSizeBytes": 344991,
+  "extraction": "Complete HTML documents extracted as unchanged byte ranges; intervening brief text omitted from HTML.",
+  "files": [
+    {
+      "path": "examples/surveying/pace-factor/index.html",
+      "sha256": "5b72e8edc7001edd0c83ef181475f0b45aa1e545dc2a5657d2e818b2e9d47b39",
+      "sizeBytes": 48149,
+      "sourceDocument": 1,
+      "sourceByteStart": 874,
+      "sourceByteEndExclusive": 49023
+    },
+    {
+      "path": "examples/surveying/taping-fieldwork/index.html",
+      "sha256": "db079c5b09d78e9b3a714372a6c2779c1a3718d57bb8490990ea3686a6fd1842",
+      "sizeBytes": 68633,
+      "sourceDocument": 2,
+      "sourceByteStart": 49023,
+      "sourceByteEndExclusive": 117656
+    },
+    {
+      "path": "examples/surveying/differential-leveling/index.html",
+      "sha256": "42abb81efb2999ff6e5b6ea18c052da902ae475337d038bd94c11a2251a5f34c",
+      "sizeBytes": 69205,
+      "sourceDocument": 3,
+      "sourceByteStart": 117705,
+      "sourceByteEndExclusive": 186910
+    },
+    {
+      "path": "examples/surveying/profile-leveling/index.html",
+      "sha256": "95b929984215e28ca4a0d89a41113a8f118de79b23c8f86aedced1ab5fcfb107",
+      "sizeBytes": 101784,
+      "sourceDocument": 4,
+      "sourceByteStart": 186910,
+      "sourceByteEndExclusive": 288694
+    },
+    {
+      "path": "examples/surveying/compass-traverse/index.html",
+      "sha256": "d61f7f586fe0246f08766cf02cdfe916f09f845d85c1e6052765f6640b5979ea",
+      "sizeBytes": 56297,
+      "sourceDocument": 5,
+      "sourceByteStart": 288694,
+      "sourceByteEndExclusive": 344991
+    }
+  ]
+}
