@@ -1,16 +1,11 @@
 {
-  "contractVersion": "1.0.0",
-  "implemented": true,
-  "module": "assets/surveying/sur-staff-holder/src/asset.mjs",
-  "lengthUnit": "m",
-  "timeUnit": "s",
-  "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Staff base is fixed at local ground point (0,0,0); positive staffTiltRad leans the staff toward +X. Person remains adjacent to the staff.",
-  "parameters": {
-    "staffHeight": {"type":"number","unit":"m","min":2,"max":5,"default":3},
-    "staffTiltRad": {"type":"number","unit":"rad","min":-0.0872665,"max":0.0872665,"default":0},
-    "readingHeight": {"type":"number","unit":"m","min":0,"max":5,"default":1.5},
-    "personHeight": {"type":"number","unit":"m","min":1.4,"max":2.1,"default":1.7}
-  },
-  "assetDependencies": []
+  "contractVersion":"1.0.0","implemented":true,"module":"assets/surveying/sur-staff-holder/src/asset.mjs","lengthUnit":"m","timeUnit":"s",
+  "coordinates":"right-handed-y-up-north-minus-z",
+  "boundsDescription":"Staff base is fixed at local ground point (0,0,0); positive staffTiltRad leans the staff toward +X. Procedural surveyor stands adjacent to the staff.",
+  "parameters":{
+    "staffHeight":{"type":"number","unit":"m","min":2,"max":5,"default":3},
+    "staffTiltRad":{"type":"number","unit":"rad","min":-0.0872665,"max":0.0872665,"default":0},
+    "readingHeight":{"type":"number","unit":"m","min":0,"max":5,"default":1.5},
+    "personHeight":{"type":"number","unit":"m","min":1.4,"max":2.1,"default":1.7}
+  },"assetDependencies":[]
 }
