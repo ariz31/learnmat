@@ -1,35 +1,21 @@
-# Prism Pole Carrier
+# 3D Prism Pole Carrier
 
-Status: in-review component.
+Status: in-review. Version 0.2.0 replaces the SVG schematic with a real Three.js field actor and target.
 
 ## Learning objective
+Understand target height, pole verticality, prism-center location, and how tilt displaces the target horizontally.
 
-Show the prism center, target height, plumb reference, and pole verticality error in one reusable surveying-field actor.
+## Model
+The base remains fixed at (0,0,0). For target height H and tilt θ, prism center is **(H sin θ, H cos θ, 0)**. Its distance from the base remains H.
 
-## Model and assumptions
+## 3D implementation
+The primary scene now contains a procedural articulated surveyor with hardhat/vest, striped volumetric pole, pointed foot, reflector frame, octahedral prism target, target ring, ground point and dashed plumb reference. “Plumb pole” animates the real tilt parameter toward zero, keeping geometry and metrics synchronized.
 
-- SI units; +Y is vertical and +X is the side-view horizontal axis.
-- The pole base remains fixed at the surveyed ground point.
-- `targetHeight` is the distance from the pole base to the prism center measured along the pole.
-- Positive `poleTiltRad` leans the pole toward +X.
-- Prism-center coordinates are:
-  - x = targetHeight × sin(tilt)
-  - y = targetHeight × cos(tilt)
-- Tilt range is ±10° and target height is 1.0–3.5 m.
-- The carrier pose and optional breathing motion are illustrative. The pole/prism geometry and numeric outputs are authoritative.
+The host demo supplies camera/orbit, PBR lighting, shadows, ground, grid, focus mode and responsive controls.
 
-## Usage
-
-Import `src/asset.mjs`, create the asset with a DOM container, and use `setParameters`, absolute-time `update`, `reset`, `resize`, `snapshot`, and idempotent `dispose`. The asset has no network dependencies.
-
-## Reuse and rights
-
-Original repository contribution under MIT. No third-party models, textures, fonts, or runtime libraries are embedded.
-
-## Review evidence
-
-See `REVIEW.md`. The checked-in SVG preview is a deterministic source-authored view and is not described as a browser screenshot.
+## Rights
+Original procedural geometry only. No generated images or downloaded 3D models.
 
 ## Change history
-
-- 0.1.0 — Initial prism-pole carrier with target-height and verticality geometry.
+- 0.2.0 — Full Three.js surveyor/pole/reflector rebuild.
+- 0.1.0 — SVG schematic.
