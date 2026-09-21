@@ -21,6 +21,37 @@ Surveying-specific checks include:
 These are review targets, not findings or claims that the supplied examples pass.
 Do not apply a code-specific requirement without naming its edition and scope.
 
+## Educational correctness
+
+Every curated asset must provide a meaningful learning outcome. Review
+[EDUCATIONAL-DESIGN.md](EDUCATIONAL-DESIGN.md) together with the engineering model.
+
+If a real procedure exists, verify that the learner can follow the reasoning chain
+without guessing omitted steps: objective and known data, conventions, governing
+relationship, meaningful intermediate work, visual consequence, a relevant check,
+and the final interpretation. Do not require artificial steps for a purely
+descriptive reference asset; in that case verify labels, comparisons, relationships,
+assumptions, and the intended observation instead.
+
+Keep instructional copy minimal in the default view. Detailed derivations may be
+progressively disclosed, expanded on demand, or shown only for the active step.
+Educational completeness belongs in the interaction and information architecture,
+not in permanently visible walls of text.
+
+## Animation and presentation quality
+
+Animation must support understanding of causality, sequence, direction, scale, or
+state change. Check that motion agrees with the same model that produces displayed
+values, remains spatially continuous, and does not imply unsupported physics.
+Acceleration, slow motion, deformation magnification, or other teaching
+exaggerations must be labelled when they could otherwise be misread.
+
+Interactive or animated assets should provide a focus/maximize mode that hides
+lesson steps and nonessential explanatory chrome so the animation can be presented
+alone. The focused view must keep a clear exit and essential pause/play/reset
+controls, remain usable on desktop/tablet/mobile, and restore the prior lesson state
+when closed. Reduced-motion users must retain an understandable stepped/static path.
+
 ## Functional and numerical review
 
 Check initial state, full sequence, pause/resume, reset during animation, repeated
@@ -37,7 +68,8 @@ regression cannot be verified adequately through those lighter methods.
 ## Visual and accessible delivery
 
 Use readable labels, sufficient contrast, explicit units, and consistent visual
-meaning. Keep panels clear of geometry and prevent clipped controls. Provide
+meaning. Prefer concise labels and progressive disclosure over persistent prose.
+Keep panels clear of geometry and prevent clipped controls. Provide
 keyboard access, visible focus, labeled buttons, and a text explanation of the
 result. Color alone must not distinguish observations. Reduced-motion mode should
 provide an understandable static or stepped state; pause and reset must remain
