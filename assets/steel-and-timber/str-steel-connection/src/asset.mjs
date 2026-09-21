@@ -8,7 +8,8 @@ export function createAsset(context){
  const line=(x1,y1,x2,y2,a={})=>svg.append(e('line',{x1,y1,x2,y2,stroke:'currentColor','stroke-width':2.5,...a}));const text=(x,y,t,a='middle',s=12,w=500)=>svg.append(e('text',{x,y,'text-anchor':a,'font-size':s,'font-family':'system-ui,sans-serif','font-weight':w,fill:'currentColor'},t));
  function draw(){
   svg.replaceChildren();const s=solveSteelConnection(p);text(410,28,'Exploded bolted steel shear connection','middle',21,750);
-  const scale=650/Math.max(.5,p.plateHeightM*1.25), plateH=p.plateHeightM*scale, plateW=p.plateWidthM*scale, y0=80+(330-plateH)/2;
+  const scale=Math.min(330/p.plateHeightM,190/p.plateWidthM,110/Math.max(p.explodeM,.001));
+  const plateH=p.plateHeightM*scale, plateW=p.plateWidthM*scale, y0=80+(330-plateH)/2;
   const explodePx=p.explodeM*scale, supportX=150,plateX=supportX+95+explodePx,webX=plateX+plateW+70+explodePx;
   svg.append(e('rect',{x:supportX,y:70,width:55,height:350,fill:'none',stroke:'currentColor','stroke-width':5}));
   line(supportX-55,70,supportX+110,70,{'stroke-width':12});line(supportX-55,420,supportX+110,420,{'stroke-width':12});
