@@ -6,6 +6,7 @@
 - Actual behavior:
 - Missing/inaccurate instructional steps or intermediate reasoning:
 - Unnecessary visible text or information-hierarchy problem:
+- 3D spatial quality issue or unjustified 2D-primary presentation:
 - Animation purpose/quality issue:
 - Focus/maximize presentation issue:
 - Reproduction steps, inputs, browser, and viewport:
