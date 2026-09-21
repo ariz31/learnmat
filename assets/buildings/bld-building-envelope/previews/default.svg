@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Parametric building envelope default reference</title>
+  <desc id="desc">Four-storey axonometric building envelope with facade openings, floor plates, dimensions, and a cutaway.</desc>
+  <rect width="1200" height="760" fill="#f4f7fa"/>
+  <polygon points="175,620 820,620 1010,520 365,520" fill="#e7ebe4" stroke="#bdc6b7"/>
+  <polygon points="250,560 660,560 820,475 410,475" fill="#dfe6ec" stroke="#70859a"/>
+  <polygon points="250,440 660,440 820,355 410,355" fill="#f9fbfd" stroke="#70859a"/>
+  <polygon points="250,320 660,320 820,235 410,235" fill="#f9fbfd" stroke="#70859a"/>
+  <polygon points="250,200 660,200 820,115 410,115" fill="#f9fbfd" stroke="#70859a"/>
+  <polygon points="250,80 510,80 670,-5 410,-5" fill="#eef2f5" stroke="#34475d"/>
+  <polygon points="250,560 250,80 410,-5 410,475" fill="#c2d1e0" stroke="#34475d" stroke-width="2"/>
+  <polygon points="250,560 510,560 510,80 250,80" fill="#d9e4f0" stroke="#34475d" stroke-width="2"/>
+  <g fill="#5f7895" stroke="#24384d">
+    <rect x="278" y="478" width="42" height="54"/><rect x="342" y="478" width="42" height="54"/><rect x="406" y="478" width="42" height="54"/>
+    <rect x="278" y="358" width="42" height="54"/><rect x="342" y="358" width="42" height="54"/><rect x="406" y="358" width="42" height="54"/>
+    <rect x="278" y="238" width="42" height="54"/><rect x="342" y="238" width="42" height="54"/><rect x="406" y="238" width="42" height="54"/>
+    <rect x="278" y="118" width="42" height="54"/><rect x="342" y="118" width="42" height="54"/><rect x="406" y="118" width="42" height="54"/>
+  </g>
+  <g fill="none" stroke="#c15454" stroke-width="4" stroke-dasharray="12 8">
+    <line x1="510" y1="560" x2="510" y2="80"/>
+    <line x1="510" y1="560" x2="670" y2="475"/>
+    <line x1="510" y1="80" x2="670" y2="-5"/>
+  </g>
+  <g stroke="#384a5b" stroke-width="2" stroke-dasharray="6 5" fill="none">
+    <line x1="250" y1="650" x2="660" y2="650"/>
+    <line x1="210" y1="560" x2="210" y2="80"/>
+    <line x1="220" y1="590" x2="380" y2="505"/>
+  </g>
+  <g font-family="system-ui,sans-serif" fill="#27394b" font-size="22" font-weight="650">
+    <text x="455" y="690" text-anchor="middle">18.0 m width</text>
+    <text x="190" y="325" text-anchor="end">12.8 m</text>
+    <text x="280" y="535" text-anchor="end">12.0 m depth</text>
+  </g>
+  <text x="70" y="70" font-family="system-ui,sans-serif" fill="#172033" font-size="30" font-weight="750">Parametric Building Envelope</text>
+  <text x="70" y="108" font-family="system-ui,sans-serif" fill="#58677a" font-size="20">Default reference · 4 floors · 4 bays · 36% cutaway</text>
+</svg>

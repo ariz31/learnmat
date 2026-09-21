@@ -1,0 +1,29 @@
+{
+  "reviewType": "self-review",
+  "assetFingerprint": null,
+  "checks": {
+    "engineering": {
+      "status": "not-reviewed",
+      "details": "Deterministic arithmetic is documented in the asset review and checks/geometry.md; independent release review remains pending."
+    },
+    "functionality": {
+      "status": "not-reviewed",
+      "details": "Source implements lifecycle and parameter validation; live browser behavior was not observed in this contribution path."
+    },
+    "accessibility": {
+      "status": "not-reviewed",
+      "details": "Labels, SVG text alternatives, native controls, and reduced-motion handling were inspected in source only."
+    },
+    "visual": {
+      "status": "not-reviewed",
+      "details": "A deterministic static reference SVG is included; it is not claimed as a browser screenshot."
+    },
+    "reuse": {
+      "status": "passed",
+      "details": "Component is dependency-free, instance-scoped, uses the runtime API, and embeds no third-party assets."
+    }
+  },
+  "unresolvedBlockers": [
+    "Independent live-browser, visual screenshot, and accessibility review remain required before the asset can be marked ready or approved."
+  ]
+}

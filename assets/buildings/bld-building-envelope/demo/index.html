@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LearnMat · Parametric Building Envelope</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,sans-serif;color:#172033;background:#f5f7fa}
+    *{box-sizing:border-box}
+    body{margin:0;padding:20px}
+    main{max-width:1120px;margin:auto;display:grid;grid-template-columns:minmax(240px,300px) minmax(0,1fr);gap:16px;align-items:start}
+    form{background:#fff;border:1px solid #d7deea;border-radius:14px;padding:16px;display:grid;gap:12px}
+    h1{font-size:1.2rem;margin:0 0 4px}
+    .note{font-size:.86rem;color:#58677a;margin:0}
+    label{display:grid;gap:5px;font-size:.86rem;font-weight:650}
+    input{width:100%;padding:8px;border:1px solid #aeb9c7;border-radius:8px;font:inherit}
+    button{padding:9px 12px;border:1px solid #8291a4;border-radius:9px;background:#fff;font:inherit;font-weight:650;cursor:pointer}
+    #error{min-height:1.3em;color:#a33;font-size:.83rem}
+    @media(max-width:760px){body{padding:10px}main{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main>
+    <form id="controls">
+      <div>
+        <h1>Building envelope</h1>
+        <p class="note">Geometry-only teaching asset. It does not assert building-code compliance.</p>
+      </div>
+      <label>Width (m)<input name="width" type="number" min="6" max="40" step="0.5" value="18"></label>
+      <label>Depth (m)<input name="depth" type="number" min="6" max="30" step="0.5" value="12"></label>
+      <label>Floors<input name="floors" type="number" min="1" max="12" step="1" value="4"></label>
+      <label>Floor height (m)<input name="floorHeight" type="number" min="2.4" max="5" step="0.1" value="3.2"></label>
+      <label>Facade bays<input name="bays" type="number" min="1" max="10" step="1" value="4"></label>
+      <label>Cutaway fraction<input name="cutaway" type="range" min="0" max="0.8" step="0.02" value="0.36"></label>
+      <button type="button" id="reset">Reset defaults</button>
+      <div id="error" role="status" aria-live="polite"></div>
+    </form>
+    <div id="asset"></div>
+  </main>
+  <script type="module">
+    import { createAsset } from "../src/asset.mjs";
+
+    const host = document.querySelector("#asset");
+    const form = document.querySelector("#controls");
+    const error = document.querySelector("#error");
+    const asset = createAsset({ container: host, reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches });
+
+    function values() {
+      const data = new FormData(form);
+      return {
+        width: Number(data.get("width")),
+        depth: Number(data.get("depth")),
+        floors: Number(data.get("floors")),
+        floorHeight: Number(data.get("floorHeight")),
+        bays: Number(data.get("bays")),
+        cutaway: Number(data.get("cutaway"))
+      };
+    }
+
+    form.addEventListener("input", () => {
+      try {
+        asset.setParameters(values());
+        error.textContent = "";
+      } catch (reason) {
+        error.textContent = reason instanceof Error ? reason.message : String(reason);
+      }
+    });
+
+    document.querySelector("#reset").addEventListener("click", () => {
+      form.reset();
+      asset.reset();
+      error.textContent = "";
+    });
+
+    addEventListener("beforeunload", () => asset.dispose(), { once: true });
+  </script>
+</body>
+</html>
