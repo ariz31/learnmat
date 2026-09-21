@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Display-only horizontal pipe spans x = 0 to L conceptually; SVG geometry is normalized and not a survey-scale model.",
+  "boundsDescription": "Recognizable 3D pipe run with transparent wall, internal water core, flanges, pressure taps, head-reference pylons, and animated flow tracers. Scene geometry is pedagogically scaled; analytical dimensions remain SI in the model.",
   "parameters": {
     "length": {
       "unit": "m",
@@ -44,5 +44,21 @@
       "default": 9.81
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs-host-scene",
+  "threePeerVersion": "0.185.1",
+  "presentation": {
+    "focusCompatible": true,
+    "cameraTarget": [
+      0,
+      0.7,
+      0
+    ],
+    "recommendedCamera": [
+      7,
+      4.6,
+      7
+    ],
+    "visualScaleNote": "Pipe routing and head pylons are display-scaled; numerical L, D and head loss are not inferred from scene extents."
+  }
 }

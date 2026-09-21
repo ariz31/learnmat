@@ -1,19 +1,7 @@
-# Slope profile with scoped infinite-slope model
+# Slope profile — surveying-grade 3D rebuild
 
-The geometry is defined by slope height H and horizontal run R:
+The scoped planar infinite-slope model remains the sole engineering calculation. The primary renderer is now a real Three.js terrain wedge preserving the analytical H:run slope angle, with a translucent planar representative slice, downslope and normal force cues, pore-pressure markers, spatial depth, occlusion and classroom camera framing.
 
-- `β = atan(H/R)`
-- `Lslope = sqrt(H²+R²)`
+The amber plane is explicitly **not** a circular slip surface. It represents the planar unit-area slice used by the existing model. Vector lengths, terrain size and marker motion are presentation-normalized; β, stresses, resistance and factor of safety remain exact model outputs.
 
-The stability calculation is deliberately limited to a **unit-area planar infinite-slope slice** with soil thickness `z` measured normal to the slope surface. For this defined slice:
-
-- Driving shear stress: `τ = γ z sinβ`
-- Total normal stress: `σn = γ z cosβ`
-- Pore pressure is parameterized explicitly as `u = r σn`, where `r` is the input ratio `u/σn`
-- Effective normal stress: `σ′n = σn − u`
-- Shear resistance: `c′ + σ′n tanφ′`
-- Model factor of safety: resistance / driving stress
-
-The API uses radians for `φ′`, consistent with the repository runtime contract.
-
-This is **not** a circular-slip search, Bishop/Janbu/Spencer analysis, finite-element model, rainfall infiltration analysis, or code-specific design check. The displayed FS is only the result of the stated simplified planar model and is not labeled safe/unsafe.
+The four-step demo teaches geometry, scope, stress resolution and the model factor of safety. It deliberately reports the FS without making a safe/unsafe judgment.

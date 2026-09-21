@@ -1,21 +1,15 @@
-# Review — geo-open-channel
+# Review — geo-open-channel 3D replacement
 
-## Engineering review
+## Engineering
+The existing rectangular-section model is retained unchanged. Renderer geometry uses the model's width/depth and displays model-computed area, velocity, hydraulic radius, Froude number, regime and Manning capacity. No normal-depth solver has been introduced.
 
-Reference state: b = 3 m, y = 1.2 m, Q = 4 m³/s, S = 0.0015, n = 0.015, g = 9.81 m/s².
+## 3D / teaching quality
+The primary scene is now actual Three.js spatial geometry rather than SVG: U-channel concrete, translucent water volume, measuring staff, animated internal tracers, direction arrow, contextual slab/ground, perspective camera, lights, shadows, fog, responsive HUD, step navigation, camera staging and focus/fullscreen mode. Exact equations stay in an analytical overlay.
 
-- A = 3.6 m²; P = 5.4 m; R = 0.6667 m.
-- V = 1.1111 m/s.
-- Fr = V/√(gy) ≈ 0.324, therefore subcritical.
-- E = y + V²/(2g) ≈ 1.263 m.
-- Manning capacity at the specified depth is about 7.094 m³/s.
+The amber bed-slope cue and longitudinal length are explicitly presentation-scaled so students do not infer dimensions from the scene.
 
-The visual and copy explicitly avoid describing the supplied depth as a computed normal depth.
+## Runtime
+The component requires host Three.js r185 and host scene/time. It creates no renderer, camera or animation loop. GPU resources owned by the component are disposed on teardown.
 
-## Robustness
-
-Zero discharge is supported. Negative discharge/slope and non-positive width/depth/n/gravity are rejected. Bed slope may be zero, producing zero Manning capacity without division errors in the displayed ratio.
-
-## Accessibility / visual review
-
-The SVG exposes the depth, Froude number, and regime in its accessible label. Demo controls are native labelled inputs. Live browser and assistive-technology review were unavailable, so this remains a candidate asset.
+## Pending rendered gate
+No WebGL browser was available through this repository connector execution. Surveying-reference pixel-level comparison and assistive-technology review therefore remain pending rather than being fabricated.

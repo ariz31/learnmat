@@ -1,20 +1,18 @@
-# Pipe flow
+# Pipe flow — surveying-grade 3D rebuild
 
-Reusable dependency-free SVG component for continuity and Darcy-Weisbach head loss.
+This replacement keeps the validated continuity/Reynolds/Darcy–Weisbach model in `src/model.mjs` and replaces the old SVG-primary renderer with a real host-scene Three.js component.
 
-## Model
+## 3D teaching scene
 
-- Area: `A = πD²/4`
-- Mean velocity: `V = Q/A`
-- Reynolds number: `Re = |V|D/ν`
-- Laminar friction factor: `f = 64/Re`
-- For `Re ≥ 2300`, the component uses the Swamee-Jain explicit approximation as a learning visualization.
-- Darcy-Weisbach loss magnitude: `h_f = f(L/D)V²/(2g)`.
+The reusable component contributes a recognizable transparent pipe run with a visible water core, flange rings, pressure taps/gauges, flow-direction arrow, animated internal tracers, and two head-reference pylons. The demo supplies a deliberate camera, soft shadows, atmospheric depth, step navigation, restrained metrics, OrbitControls, play/pause/reset, and focus/fullscreen presentation.
 
-The loss is always reported as a positive dissipative magnitude; flow direction is shown separately. At exactly zero flow, velocity, Reynolds number, friction factor, and head loss are zero. Transitional flow is explicitly labelled as an approximation rather than a solved turbulent state.
+The tracer speed and head-pylon vertical separation are **display-scaled** for teaching. Numerical velocity and head loss always come from the analytical model and are exposed in the snapshot/HUD.
 
-## Runtime
+## Educational sequence
 
-Import `src/asset.mjs` and call `createAsset(context)`. Inputs are SI and documented in `component.json`. No network access or third-party runtime is required. `update(t)` changes only the display phase of the flow cue and is deterministic in absolute time.
+1. Continuity: Q = AV.
+2. Flow regime: Re = |V|D/ν.
+3. Friction factor and Darcy–Weisbach loss.
+4. Direction/reversal and energy-loss interpretation.
 
-Setters, reset, resize, update, and snapshot throw after disposal; `dispose()` itself is idempotent.
+Three.js is a declared peer/runtime dependency at version 0.185.1. The reusable component never creates its own renderer, camera, or requestAnimationFrame loop; the demo/host owns those resources as required by runtime v1.

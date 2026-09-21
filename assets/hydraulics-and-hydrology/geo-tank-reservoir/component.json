@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Normalized vertical tank elevation from level 0 to maxLevel; horizontal tank area is represented numerically rather than to geometric scale.",
+  "boundsDescription": "3D cylindrical storage tank with transparent wall, dynamically scaled water body, inlet/outlet/overflow pipes and deterministic directional tracers. The shell is an illustrative storage vessel; water fill fraction maps exact modeled level/maxLevel while numerical tankArea governs storage volume.",
   "parameters": {
     "tankArea": {
       "unit": "m^2",
@@ -38,5 +38,21 @@
       "default": 0.05
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs-host-scene",
+  "threePeerVersion": "0.185.1",
+  "presentation": {
+    "focusCompatible": true,
+    "recommendedCamera": [
+      7,
+      5.2,
+      7
+    ],
+    "cameraTarget": [
+      0,
+      1.9,
+      0
+    ],
+    "visualScaleNote": "Tank shell plan geometry is illustrative; vertical fill fraction follows level/maxLevel. Numerical level, area and volume come only from the mass-balance model."
+  }
 }

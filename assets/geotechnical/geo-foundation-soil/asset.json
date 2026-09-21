@@ -17,15 +17,22 @@
     "Recognize when the linear full-contact pressure assumption predicts tension and must not be used as a soil contact solution."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/geotechnical/geo-foundation-soil/demo/index.html",
   "readme": "assets/geotechnical/geo-foundation-soil/README.md",
-  "previewImage": "assets/geotechnical/geo-foundation-soil/previews/preview.svg",
+  "previewImage": null,
   "reviewFile": "assets/geotechnical/geo-foundation-soil/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
@@ -36,7 +43,7 @@
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Rigid-footing pressure equations and middle-third reference case reviewed; live browser/accessibility review pending."
+    "notes": "Rebuilt as a real Three.js shallow-footing/soil interaction scene with contact-pressure vectors and middle-third validity cue; independent rendered comparison pending."
   },
   "source": {
     "type": "original",

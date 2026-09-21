@@ -4,26 +4,38 @@
   "checks": {
     "engineering": {
       "status": "passed",
-      "details": "Rigid-footing average pressure, eccentricity, middle-third limit, and edge pressures were independently checked for the reference case; sign reversal and loss-of-full-contact criteria are explicit."
+      "details": "Existing rigid-footing edge pressure, eccentricity and middle-third model retained; renderer never creates tensile soil reactions."
+    },
+    "pedagogy": {
+      "status": "passed",
+      "details": "Four steps connect P/M, resultant eccentricity, compression distribution and explicit validity boundary."
     },
     "functionality": {
       "status": "passed",
-      "details": "Source review confirms no-tension cases are flagged rather than silently redistributed, finite geometry/load validation, deterministic state, and idempotent cleanup."
+      "details": "Source rebuilds geometry from validated footing parameters and supports deterministic update/reset/snapshot/resize/dispose."
+    },
+    "animation": {
+      "status": "passed",
+      "details": "Moment/invalid-zone emphasis is deterministic and instructional; engineering state remains static unless parameters change."
+    },
+    "spatial3d": {
+      "status": "not-reviewed",
+      "details": "Real Three.js soil mass, footing, column, load and reaction field implemented; rendered comparison unavailable."
     },
     "accessibility": {
       "status": "not-reviewed",
-      "details": "Source includes semantic SVG descriptions and labelled native demo controls; no assistive-technology browser session was available."
+      "details": "Keyboard controls, text validity warning, HUD and reduced-motion-aware camera behavior implemented; AT check pending."
     },
     "visual": {
       "status": "not-reviewed",
-      "details": "A deterministic repository preview is included; no live browser capture was available in this connector-only session."
+      "details": "Surveying-style 3D framing, responsive analytical overlay and focus mode implemented; no fabricated rendered pass."
     },
     "reuse": {
       "status": "passed",
-      "details": "Dependency-free runtime-v1 ES module with isolated instance state, finite input validation, deterministic output, snapshot support, and idempotent disposal."
+      "details": "Host scene/time ownership and exact Three.js peer preserved; owned resources disposed."
     }
   },
   "unresolvedBlockers": [
-    "Live browser and assistive-technology execution remain pending; retain candidate status until independent review."
+    "Independent WebGL render and surveying-reference visual comparison remain required."
   ]
 }

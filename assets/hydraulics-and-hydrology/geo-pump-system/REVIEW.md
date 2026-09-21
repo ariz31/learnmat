@@ -1,12 +1,9 @@
-# Review — geo-pump-system
+# Review — geo-pump-system 3D replacement
 
-Reference case: H0=36 m, kp=800, Hstatic=8 m, Ks=1200, η=0.75, ρ=1000 kg/m³, g=9.81 m/s².
+The pre-existing pump/system equations and power calculation are retained unchanged. The 3D scene consumes the analytical operating-point state and does not estimate Q or H from geometry.
 
-- Q* = √(28/2000) = 0.1183216 m³/s.
-- H* = 36 − 800(0.1183216)² = 24.8 m.
-- Hydraulic power = ρgQH ≈ 28.786 kW.
-- Estimated shaft power = 28.786/0.75 ≈ 38.382 kW.
+The SVG-primary presentation is replaced with real Three.js machine geometry, piping, gauges, impeller motion, tracers, lights/shadow-ready materials, camera presets, step navigation, responsive metrics, analytical mini-plot and focus mode. The mini-plot remains schematic; displayed Q*/H* are exact model outputs.
 
-Both curve equations give the same operating head by construction. The no-intersection case H0 < Hstatic is explicitly represented. This quadratic pump curve is an educational idealization and is not presented as manufacturer data.
+No manufacturer performance map or efficiency curve is implied. Geometry is deliberately recognizable but generic.
 
-Runtime review found finite-input guards, no autonomous animation loop, isolated state, deterministic output, and idempotent disposal. Live browser and assistive-technology review remain pending.
+Independent WebGL rendering and surveying-reference visual comparison were unavailable in this connector-only execution and remain pending.

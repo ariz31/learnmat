@@ -1,15 +1,7 @@
-# Shallow footing contact-pressure interaction
+# Shallow footing contact pressure — surveying-grade 3D rebuild
 
-For a rectangular rigid footing of width B and out-of-plane length L under vertical load P and moment M about the length axis:
+The rigid-footing analytical model remains unchanged. The new Three.js scene places a recognizable concrete footing/column on a volumetric soil block, locates the eccentric vertical load, shows a moment cue, and renders a row of compression reaction arrows interpolated from the exact edge pressures.
 
-- Area `A = BL`
-- Average pressure `qavg = P/A`
-- Eccentricity `e = M/P`
-- Edge pressures under the **linear full-contact assumption**:
-  `q = P/(BL) ± 6M/(LB²)`
+Reaction lengths are normalized for readability. If the linear full-contact solution produces qmin < 0, negative soil tension is **not** rendered; a red spatial zone flags that the full-contact assumption has failed. No no-tension redistribution, bearing-capacity, settlement or reinforcement design is fabricated.
 
-The middle-third condition `|e| ≤ B/6` is equivalent to non-negative pressure across the full base for this model.
-
-If the computed minimum pressure is negative, the component explicitly flags the full-contact solution as invalid for soil contact. It does **not** silently truncate the pressure diagram or claim to solve the no-tension redistributed contact problem.
-
-The asset does not calculate bearing capacity, settlement, punching shear, footing reinforcement, or code-compliance capacity.
+The demo teaches load/moment, resultant eccentricity, pressure distribution and assumption validity with camera presets, analytical HUD, OrbitControls and focus/fullscreen mode.

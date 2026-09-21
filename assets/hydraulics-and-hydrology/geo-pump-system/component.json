@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Dimensionless chart viewport. Horizontal axis is discharge in m^3/s; vertical axis is total head in m.",
+  "boundsDescription": "3D centrifugal-pump teaching assembly with motor, volute/impeller region, suction/discharge piping, gauges, operating flow tracers and base. Analytical pump/system curves remain 2D overlay data.",
   "parameters": {
     "shutoffHead": {
       "unit": "m",
@@ -50,5 +50,21 @@
       "default": 9.81
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs-host-scene",
+  "threePeerVersion": "0.185.1",
+  "presentation": {
+    "focusCompatible": true,
+    "recommendedCamera": [
+      7,
+      4,
+      7
+    ],
+    "cameraTarget": [
+      0,
+      0.8,
+      0
+    ],
+    "visualScaleNote": "Pump geometry is a recognizable educational assembly, not a manufacturer-specific dimensional model."
+  }
 }

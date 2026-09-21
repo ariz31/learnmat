@@ -17,15 +17,22 @@
     "Interpret Darcy-Weisbach head loss and friction-factor regime without confusing dissipative loss with elevation head."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/hydraulics-and-hydrology/geo-pipe-flow/demo/index.html",
   "readme": "assets/hydraulics-and-hydrology/geo-pipe-flow/README.md",
-  "previewImage": "assets/hydraulics-and-hydrology/geo-pipe-flow/previews/preview.svg",
+  "previewImage": null,
   "reviewFile": "assets/hydraulics-and-hydrology/geo-pipe-flow/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
@@ -36,7 +43,7 @@
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Equations and representative reference calculations were reviewed from source. Interactive browser and assistive-technology review remain pending."
+    "notes": "Rebuilt as a host-scene Three.js educational component. Engineering model retained; rendered surveying-grade visual comparison remains pending independent browser review."
   },
   "source": {
     "type": "original",

@@ -1,9 +1,7 @@
-# Tank / reservoir storage
+# Tank/reservoir storage — surveying-grade 3D rebuild
 
-Constant-area storage component using the integral form of a simple continuity balance.
+The constant-area mass-balance model remains the numerical authority. The primary visualization is now a real Three.js storage tank with transparent cylindrical wall, animated water body, inlet/outlet piping, overflow branch, and deterministic flow tracers.
 
-For an unconstrained tank, `A dh/dt = Qin − Qout`, so `h(t) = h0 + (Qin − Qout)t/A` for constant flows. The component then enforces the physical bounds `0 ≤ h ≤ hmax`.
+The demo uses a four-step sequence—balance, storage response, physical limit, conservation check—with camera staging, OrbitControls, responsive metrics, play/pause/reset and focus/fullscreen mode. Demo time is intentionally accelerated 120×; the HUD/model still reports real simulation seconds and SI flow/level values.
 
-At the upper bound, positive net inflow becomes overflow. At the lower bound, requested outlet flow that cannot be supplied is reported as an outlet shortfall; actual outlet flow is reduced accordingly. This keeps the reported storage state physically bounded and makes the boundary condition explicit.
-
-Inputs use SI units. `update(t)` samples absolute time directly, so backward seeks are deterministic and do not accumulate numerical integration error.
+The tank shell is illustrative rather than a plan-area drawing. Its water fill fraction follows the modeled level/maxLevel, while exact tank area, stored volume and level always come from `src/model.mjs`.

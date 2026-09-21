@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "2-D slope profile defined by height and horizontal run. Stability model is a unit-area planar infinite-slope slice with soil thickness z measured normal to the slope surface.",
+  "boundsDescription": "3D extruded slope wedge with planar representative slice parallel to the surface, downslope and normal force cues, and pore-pressure markers. Geometry preserves the H:run slope angle while overall display size is normalized.",
   "parameters": {
     "height": {
       "unit": "m",
@@ -50,5 +50,21 @@
       "default": 0.2
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs-host-scene",
+  "threePeerVersion": "0.185.1",
+  "presentation": {
+    "focusCompatible": true,
+    "recommendedCamera": [
+      8,
+      5.2,
+      8
+    ],
+    "cameraTarget": [
+      0,
+      1,
+      0
+    ],
+    "visualScaleNote": "Overall terrain size and vector lengths are normalized for presentation; slope angle and analytical stresses/FS come from the model."
+  }
 }

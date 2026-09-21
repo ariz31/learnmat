@@ -1,15 +1,7 @@
-# Layered soil profile and effective stress
+# Layered soil + effective stress — surveying-grade 3D rebuild
 
-This asset evaluates one-dimensional vertical geostatic stress through three layers.
+The existing one-dimensional geostatic/effective-stress model remains authoritative. The renderer is now a real Three.js cutaway soil prism with three spatial strata, a translucent water-table plane, query probe/ring, and separate total/pore/effective stress vectors.
 
-For each layer interval above the water table, it uses the stated natural/bulk unit weight. For each interval below the water table, it uses the stated saturated unit weight. Total vertical stress is the sum of `γ Δz` contributions.
+Layer thicknesses determine the 3D vertical proportions. Vector lengths are normalized solely so all stress components remain visible; their exact values come from the model and HUD. The demo leads students from strata and water table through total stress integration to Terzaghi effective stress, with camera staging, OrbitControls, responsive metrics and focus/fullscreen mode.
 
-Hydrostatic pore-water pressure is
-
-`u = γw max(0, z − zWT)`
-
-and effective vertical stress is
-
-`σ′v = σv − u`.
-
-The model deliberately omits capillary suction, surcharge, lateral earth pressure, consolidation history, and excess pore pressure. Unit weights are user-provided learning inputs, not material defaults for design.
+The scene does not imply lateral stress, settlement, consolidation, capillary suction, or a constitutive soil model.

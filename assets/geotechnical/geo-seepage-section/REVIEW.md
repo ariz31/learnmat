@@ -1,14 +1,9 @@
-# Review — geo-seepage-section
+# Review — geo-seepage-section 3D replacement
 
-Reference case: L=12 m, thickness=4 m, width=1 m, k=2×10⁻⁵ m/s, h1=8 m, h2=3 m.
+The existing signed Darcy-flow model is unchanged. The renderer consumes its head drop, gradient, flux and discharge direction. Swapping heads reverses the tracer direction; equal heads suppress flow visualization.
 
-- Δh = 5 m.
-- i = 5/12 = 0.4166667.
-- Darcy flux q = ki = 8.33333×10⁻⁶ m/s.
-- Area A = 4 m².
-- Discharge Q = qA = 3.33333×10⁻⁵ m³/s.
-- Linear midpoint total head = (8+3)/2 = 5.5 m.
+The primary scene is now genuine Three.js geometry with soil volume, water reservoirs, boundary walls, head line, spatial tracks, direction cue, depth/occlusion, lighting/shadow-compatible materials, camera staging and focus mode. The documentation and in-demo scope statement explicitly prevent the tracks from being interpreted as a computed 2-D flow net.
 
-Reversing the boundary heads reverses the signed gradient and discharge. Equal heads yield exactly zero flow. The visual states that this is a 1-D section and does not depict a solved 2-D flow net.
+Head elevations and tracer speed are normalized/exaggerated for visibility only.
 
-Runtime source review found finite input guards, positive geometry/k requirements, isolated state, and idempotent disposal. Live browser/accessibility review remains pending.
+No WebGL browser was available in this connector execution, so rendered surveying-reference visual parity and accessibility remain pending.

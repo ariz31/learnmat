@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Normalized transverse section; bed slope is an input to the Manning comparison but is not geometrically exaggerated in the cross-section.",
+  "boundsDescription": "3D open concrete channel with water prism, channel walls, measuring staff, animated surface/subsurface tracers, flow arrow, and display-scaled bed-slope cue. Cross-section width/depth use the analytical inputs; longitudinal scene length is pedagogical.",
   "parameters": {
     "width": {
       "unit": "m",
@@ -44,5 +44,21 @@
       "default": 9.81
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs-host-scene",
+  "threePeerVersion": "0.185.1",
+  "presentation": {
+    "focusCompatible": true,
+    "recommendedCamera": [
+      7,
+      4.8,
+      7
+    ],
+    "cameraTarget": [
+      0,
+      0.55,
+      0
+    ],
+    "visualScaleNote": "Longitudinal length and bed-slope cue are presentation-scaled; width/depth and all hydraulic results remain authoritative SI values."
+  }
 }
