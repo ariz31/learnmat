@@ -43,6 +43,15 @@ Follow docs/EDUCATIONAL-DESIGN.md for every task. The asset must teach a meaning
 concept, relationship, observation, or procedure rather than merely render a
 technically impressive object.
 
+**3D is the default visual implementation for spatial work.** Build real spatial
+geometry and a coherent 3D scene, using the surveying examples as the preferred
+visual direction for camera perspective, depth, contextual environment, object
+placement, and animated action. Do not submit a flat SVG/Canvas2D or faux-isometric
+primary scene merely because it is quicker. 2D equations, plots, labels, dimensions,
+sections, and tables may supplement the 3D scene. If this specific asset is better
+as a 2D-primary teaching object, document the concrete educational reason in
+README.md, REVIEW.md, and the spatial3d evidence check.
+
 When the subject has a real ordered procedure, calculation, experiment, analysis,
 or construction/field sequence, make the educational demo expose the meaningful
 steps as completely as practical: objective and known data, conventions, governing
@@ -87,7 +96,7 @@ is unnecessary instead of adding artificial movement.
 7. When self-review is complete, replace the per-task evidence template with actual
    results. Generate its current content fingerprint using
    `python scripts/agent_workflow.py fingerprint --agent buildings --task TASK_ID`.
-   Set evidence readiness accurately and use `ready` only with all required evidence, including pedagogy and animation/presentation evidence.
+   Set evidence readiness accurately and use `ready` only with all required evidence, including pedagogy, animation/presentation, and spatial3d evidence.
    `ready` runs validation, checks ownership, and queues the asset for independent
    review. Keep asset status candidate or in-review; you cannot self-approve it.
 8. After the retry limit or an unresolved dependency/capability gap, run `block`
