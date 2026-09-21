@@ -1,0 +1,45 @@
+{
+  "agent": "surveying",
+  "tasks": [
+    {
+      "id": "sur-walking-person",
+      "category": "surveying",
+      "objective": "Reusable animated person with path, speed, and gait controls"
+    },
+    {
+      "id": "sur-staff-holder",
+      "category": "surveying",
+      "objective": "Animated person holding a vertical leveling staff"
+    },
+    {
+      "id": "sur-tripod-level",
+      "category": "surveying",
+      "objective": "Tripod and level with explicit sight axis and instrument height"
+    },
+    {
+      "id": "sur-tape-team",
+      "category": "surveying",
+      "objective": "Two-person tape handling with sag/straight-line conventions"
+    },
+    {
+      "id": "sur-prism-pole",
+      "category": "surveying",
+      "objective": "Prism pole carrier with pole verticality and target height"
+    },
+    {
+      "id": "sur-ranging-rod",
+      "category": "surveying",
+      "objective": "Ranging rod placement and line-of-sight alignment"
+    },
+    {
+      "id": "sur-instrument-setup",
+      "category": "surveying",
+      "objective": "Instrument centering and leveling sequence"
+    },
+    {
+      "id": "sur-field-crew",
+      "category": "surveying",
+      "objective": "Small crew composition with independent person instances"
+    }
+  ]
+}

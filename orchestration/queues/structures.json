@@ -1,0 +1,45 @@
+{
+  "agent": "structures",
+  "tasks": [
+    {
+      "id": "str-support-reactions",
+      "category": "structural-analysis",
+      "objective": "Pin, roller, and fixed-support symbols with reaction directions"
+    },
+    {
+      "id": "str-beam-deflection",
+      "category": "structural-analysis",
+      "objective": "Simply supported beam response with linked load, shear, moment, and deflection"
+    },
+    {
+      "id": "str-truss-load-path",
+      "category": "structural-analysis",
+      "objective": "Planar truss member-force and load-path illustration"
+    },
+    {
+      "id": "str-frame-sway",
+      "category": "structural-analysis",
+      "objective": "Portal-frame lateral sway with stated boundary conditions"
+    },
+    {
+      "id": "str-reinforcement-cage",
+      "category": "reinforced-concrete",
+      "objective": "Parametric reinforcement cage with cover and spacing"
+    },
+    {
+      "id": "str-steel-connection",
+      "category": "steel-and-timber",
+      "objective": "Exploded bolted steel connection with labeled parts"
+    },
+    {
+      "id": "str-column-buckling",
+      "category": "structural-analysis",
+      "objective": "Euler buckling mode with effective-length assumptions"
+    },
+    {
+      "id": "str-bridge-bearing",
+      "category": "structural-analysis",
+      "objective": "Bridge bearing translation and rotation constraints"
+    }
+  ]
+}

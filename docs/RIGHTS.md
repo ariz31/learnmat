@@ -4,10 +4,10 @@ The goal is public, freely usable learning assets with clear terms. Public sourc
 visibility does not establish permission to redistribute every embedded image,
 font, model, dataset, or dependency.
 
-This package does not choose a blanket repository license on the owner's behalf.
-Before publication, the owner must select an appropriate license for original
-work and confirm rights to contributed materials. This is a release decision,
-not a blocker for preparing the documentation or reviewing the examples.
+The repository has an MIT [LICENSE](../LICENSE) for repository work. Preserve its
+notice in distributions. This does not automatically establish ownership or clear
+third-party models, textures, fonts, or datasets. Record exceptions and dependency
+licenses per asset; do not relicense imported work through a metadata edit.
 
 Each asset records a rights status, license expression when known, a license text
 path, attribution, and source provenance. Supplied examples currently use

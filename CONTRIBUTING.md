@@ -46,3 +46,10 @@ new result under the same label. Use templates/IMPROVEMENT.md for issue reports.
 Draft or intake work can be contributed before all review gates pass. It must stay
 clearly marked candidate. Only reviewed, rights-cleared assets enter the public
 reuse catalog. See docs/ASSET-CONTRACT.md for the exact release gates.
+
+## Five-agent contributions
+
+New parallel contributors use the [orchestration guide](docs/AGENT-ORCHESTRATION.md).
+Do not edit the shared catalog in worker branches. New assets are discovered from
+assets/<category>/<reserved-id>/asset.json; catalog/catalog.json remains the
+legacy intake index. The integrator generates .build/catalog.json on demand.

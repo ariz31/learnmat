@@ -57,3 +57,12 @@ For an asset-image request, use a real repository preview with its asset version
 or render a screenshot through an available browser. If neither is available,
 state that limitation. A generated illustration is not a screenshot of the asset.
 Follow instructions/SHOW-ASSET.md for the full workflow.
+
+## Parallel asset production
+
+For the five domain agents, follow docs/AGENT-ORCHESTRATION.md and the matching
+prompt in instructions/agents/. Ownership is fixed in orchestration/owners.json
+and queues reserve all writable IDs. Workers may change only their assigned
+asset/task paths; shared files and catalog/catalog.json are integrator-owned.
+Run check_agent_scope.py against the immutable workspace base before handoff.
+No worker may self-approve, merge, publish, or reset retry budgets.

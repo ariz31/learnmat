@@ -1,0 +1,45 @@
+{
+  "agent": "buildings",
+  "tasks": [
+    {
+      "id": "bld-building-envelope",
+      "category": "buildings",
+      "objective": "Parametric building shell with floors, openings, and cutaway"
+    },
+    {
+      "id": "bld-floor-assembly",
+      "category": "buildings",
+      "objective": "Exploded floor assembly with layer dimensions"
+    },
+    {
+      "id": "bld-staircase",
+      "category": "buildings",
+      "objective": "Parametric staircase geometry with rise and run labels"
+    },
+    {
+      "id": "bld-roof-system",
+      "category": "buildings",
+      "objective": "Roof assembly and drainage-direction visualization"
+    },
+    {
+      "id": "bld-construction-sequence",
+      "category": "construction",
+      "objective": "Deterministic building assembly sequence"
+    },
+    {
+      "id": "bld-excavation-site",
+      "category": "construction",
+      "objective": "Construction site and excavation staging geometry"
+    },
+    {
+      "id": "bld-plumbing-layout",
+      "category": "building-systems",
+      "objective": "Spatial plumbing fixture and routing layout"
+    },
+    {
+      "id": "bld-egress-layout",
+      "category": "building-systems",
+      "objective": "Building circulation and illustrative egress paths"
+    }
+  ]
+}

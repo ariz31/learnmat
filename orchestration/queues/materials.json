@@ -1,0 +1,45 @@
+{
+  "agent": "materials",
+  "tasks": [
+    {
+      "id": "mat-concrete-specimen",
+      "category": "construction-materials",
+      "objective": "Concrete specimen geometry with illustrative material appearance"
+    },
+    {
+      "id": "mat-steel-sections",
+      "category": "construction-materials",
+      "objective": "Parametric rolled-section shape specimens"
+    },
+    {
+      "id": "mat-timber-grain",
+      "category": "construction-materials",
+      "objective": "Timber specimen with directional grain and orientation"
+    },
+    {
+      "id": "mat-masonry-units",
+      "category": "construction-materials",
+      "objective": "Masonry units with dimensioned voids and bond demonstration"
+    },
+    {
+      "id": "mat-aggregate-grading",
+      "category": "construction-materials",
+      "objective": "Aggregate specimens and grading visualization"
+    },
+    {
+      "id": "mat-asphalt-layers",
+      "category": "construction-materials",
+      "objective": "Asphalt material specimen and layered sample"
+    },
+    {
+      "id": "mat-rebar-profiles",
+      "category": "construction-materials",
+      "objective": "Reinforcing bar specimens with nominal diameter labels"
+    },
+    {
+      "id": "mat-material-property-cards",
+      "category": "construction-materials",
+      "objective": "Structured property-card renderer with units and provenance"
+    }
+  ]
+}

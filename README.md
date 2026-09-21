@@ -9,11 +9,12 @@ reuse instructions. Single-HTML learning materials are a primary target.
 
 ## What this package contains
 
-This is a documentation-first repository starter prepared from the supplied brief.
-It includes five supplied surveying presentations, extracted without altering their
-HTML bytes, and machine-readable metadata. It is not an audit of the live LearnMat
-repository. No existing repository contents, production domain, deployment, or
-connector permissions have been inspected or changed.
+This repository contains documentation, five original surveying HTML examples,
+and a five-agent contribution scaffold. Each agent has reserved category paths,
+an eight-task queue, a bounded repair loop, and an isolated Git worktree. Start with
+[the five prompts](instructions/agents/README.md) and
+[the orchestration guide](docs/AGENT-ORCHESTRATION.md).
+The public asset gallery and Vercel deployment remain future work.
 
 The samples are **intake candidates**, not verified reusable components. They have
 not passed browser, accessibility, engineering, or licensing review. Two declare

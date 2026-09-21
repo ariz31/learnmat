@@ -33,6 +33,23 @@ def read_json(path):
     return json.loads(path.read_text(encoding='utf-8'))
 
 
+def collect_records():
+    """Keep the legacy intake index stable; discover new per-asset manifests."""
+    catalog = read_json(local_file('catalog/catalog.json'))
+    require(catalog.get('schemaVersion') == '1.0.0', 'Unsupported catalog version')
+    legacy = catalog.get('assets')
+    require(isinstance(legacy, list), 'Invalid catalog assets')
+    records = list(legacy)
+    indexed = {x['metadata'] for x in records}
+    for path in sorted((ROOT / 'assets').rglob('asset.json')):
+        rel = path.relative_to(ROOT).as_posix()
+        require(len(path.relative_to(ROOT).parts) == 4, f'Invalid asset layout: {rel}')
+        require(rel not in indexed, f'New assets must not edit the shared legacy index: {rel}')
+        record = read_json(local_file(rel))
+        records.append({'id': record['id'], 'metadata': rel})
+    return records
+
+
 def check(value, schema, location):
     allowed = {'$schema', 'title', 'type', 'const', 'enum', 'pattern', 'minLength',
                'properties', 'required', 'additionalProperties', 'items',
@@ -75,9 +92,7 @@ def check(value, schema, location):
 
 def main():
     schema = read_json(local_file('schemas/asset.schema.json'))
-    catalog = read_json(local_file('catalog/catalog.json'))
-    require(catalog.get('schemaVersion') == '1.0.0', 'Unsupported catalog version')
-    records = catalog.get('assets')
+    records = collect_records()
     require(isinstance(records, list) and records, 'Empty or invalid catalog')
     seen = set()
     assets = []
@@ -122,6 +137,7 @@ def main():
                 f'{item["path"]}: metadata provenance mismatch')
     print(f'PASS: {len(assets)} metadata records; {len(paths)} unchanged source files.')
     print('Structural validation only; no engineering, browser, or rights approval.')
+    return assets
 
 
 if __name__ == '__main__':
