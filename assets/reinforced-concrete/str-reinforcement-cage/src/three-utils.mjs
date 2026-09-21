@@ -2,7 +2,8 @@ export const THREE_PEER_VERSION='0.185.1';
 
 export function requireThreeRuntime(context){
   if(!context || !(context.container instanceof Element)) throw new TypeError('context.container must be a DOM Element');
-  if(!context.THREE) throw new Error('Three.js 0.185.1 must be provided as context.THREE by the host');\n  if(String(context.THREE.REVISION)!=='185') throw new Error('Incompatible Three.js runtime: expected 0.185.1 / REVISION 185');
+  if(!context.THREE) throw new Error('Three.js 0.185.1 must be provided as context.THREE by the host');
+  if(String(context.THREE.REVISION)!=='185') throw new Error('Incompatible Three.js runtime: expected 0.185.1 / REVISION 185');
   if(!context.scene || context.scene.isScene!==true) throw new Error('A host-owned THREE.Scene must be provided as context.scene');
   return {THREE:context.THREE,scene:context.scene};
 }
