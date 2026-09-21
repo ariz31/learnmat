@@ -1,0 +1,29 @@
+{
+  "reviewType": "self-review",
+  "assetFingerprint": null,
+  "checks": {
+    "engineering": {
+      "status": "not-reviewed",
+      "details": "Independent default-thickness arithmetic is documented in checks/geometry.md; release engineering review remains independent and pending."
+    },
+    "functionality": {
+      "status": "not-reviewed",
+      "details": "Source implements deterministic parameter replacement, reset, resize, snapshot, and idempotent disposal; live browser observation remains pending."
+    },
+    "accessibility": {
+      "status": "not-reviewed",
+      "details": "Native labels, SVG accessible text, text summary, and static reduced-motion behavior were source-reviewed only."
+    },
+    "visual": {
+      "status": "not-reviewed",
+      "details": "Static deterministic reference SVG included; it is explicitly not claimed as a browser screenshot."
+    },
+    "reuse": {
+      "status": "passed",
+      "details": "Dependency-free instance-scoped runtime component with no cross-asset imports or third-party embedded content."
+    }
+  },
+  "unresolvedBlockers": [
+    "Independent live-browser, screenshot, accessibility, and engineering review remain required before ready/approval."
+  ]
+}
