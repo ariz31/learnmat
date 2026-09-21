@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Masonry units and bond — LearnMat</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#0f172a;background:#eef2f6}*{box-sizing:border-box}body{margin:0}
+main{width:min(1120px,calc(100% - 28px));margin:auto;padding:28px 0 48px}h1{margin:0 0 7px;font-size:clamp(1.5rem,3vw,2.2rem)}header p{margin:0 0 18px;color:#475569;max-width:80ch;line-height:1.55}
+.layout{display:grid;grid-template-columns:minmax(250px,315px) minmax(0,1fr);gap:18px;align-items:start}.controls{background:#fff;border:1px solid #d7dde5;border-radius:18px;padding:16px}
+label{display:grid;gap:6px;margin-bottom:12px;font-size:13px;font-weight:700;color:#334155}select,input{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:9px 10px;font:inherit}
+.check{display:flex;align-items:center;gap:9px}.check input{width:18px;height:18px}.note,#status{font-size:12px;line-height:1.5;color:#64748b}.note{border-top:1px solid #e2e8f0;padding-top:12px}
+button{width:100%;border:0;border-radius:11px;padding:10px;background:#0f172a;color:#fff;font:inherit;font-weight:750}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}@media(max-width:780px){.layout{grid-template-columns:1fr}.controls{order:2}}
+</style>
+</head>
+<body><main>
+<header><h1>Masonry unit geometry and bond</h1><p>Explore a generic hollow masonry unit and a schematic running-bond arrangement. Dimensions and voids are illustrative geometry only; they do not identify a standard unit, structural capacity, fire rating, mortar specification, or code-compliant wall detail.</p></header>
+<div class="layout">
+<form class="controls" onsubmit="return false" aria-label="Masonry controls">
+<label>View<select id="view"><option value="unit">Unit geometry</option><option value="running-bond">Running bond</option></select></label>
+<label>Length (mm)<input id="length" type="number" min="200" max="600" step="10" value="400"></label>
+<label>Height (mm)<input id="height" type="number" min="80" max="300" step="10" value="200"></label>
+<label>Depth (mm)<input id="depth" type="number" min="80" max="300" step="10" value="150"></label>
+<label>Void count<select id="void-count"><option>1</option><option selected>2</option><option>3</option></select></label>
+<label>Void length (mm)<input id="void-length" type="number" min="30" max="240" step="5" value="120"></label>
+<label>Void depth (mm)<input id="void-depth" type="number" min="30" max="200" step="5" value="90"></label>
+<label>Mortar joint shown (mm)<input id="joint" type="number" min="0" max="30" step="1" value="10"></label>
+<label class="check"><input id="dimensions" type="checkbox" checked> Show dimensions</label>
+<button id="reset" type="button">Reset unit</button><p id="status" role="status" aria-live="polite"></p>
+<p class="note">The model treats voids as rectangular prisms extending through the full unit height. Face shells, webs, tapers, ribs, reinforcement, mortar behavior, and code checks are outside scope.</p>
+</form><div id="asset-root"></div></div>
+</main>
+<script type="module">
+import {createAsset} from '../src/asset.mjs';
+const q=s=>document.querySelector(s),root=q('#asset-root'),status=q('#status');
+const asset=createAsset({container:root,seed:20260922,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
+function params(){return{
+  view:q('#view').value,lengthM:+q('#length').value/1000,heightM:+q('#height').value/1000,depthM:+q('#depth').value/1000,
+  voidCount:+q('#void-count').value,voidLengthM:+q('#void-length').value/1000,voidDepthM:+q('#void-depth').value/1000,
+  mortarJointM:+q('#joint').value/1000,showDimensions:q('#dimensions').checked
+};}
+function updateStatus(){const g=asset.snapshot().state.geometry;status.textContent='Gross volume: '+(g.grossVolumeM3*1000).toFixed(2)+' L · idealized solid volume: '+(g.netSolidVolumeM3*1000).toFixed(2)+' L';}
+q('.controls').addEventListener('input',()=>{try{asset.setParameters(params());updateStatus();}catch(e){status.textContent=e.message;}});
+q('#reset').addEventListener('click',()=>{asset.reset();q('#view').value='unit';q('#length').value=400;q('#height').value=200;q('#depth').value=150;q('#void-count').value=2;q('#void-length').value=120;q('#void-depth').value=90;q('#joint').value=10;q('#dimensions').checked=true;updateStatus();});
+const ro=new ResizeObserver(es=>{const r=es[0]?.contentRect;if(r?.width>0&&r?.height>0)asset.resize(r.width,r.height,devicePixelRatio||1);});ro.observe(root);
+addEventListener('beforeunload',()=>{ro.disconnect();asset.dispose();},{once:true});updateStatus();
+</script></body></html>

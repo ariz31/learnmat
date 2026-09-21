@@ -1,0 +1,73 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/construction-materials/mat-masonry-units/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Unit dimensions are geometric extents. Top view uses length horizontally and depth vertically; running-bond view is schematic.",
+  "parameters": {
+    "lengthM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.2,
+      "max": 0.6,
+      "default": 0.4
+    },
+    "heightM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.08,
+      "max": 0.3,
+      "default": 0.2
+    },
+    "depthM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.08,
+      "max": 0.3,
+      "default": 0.15
+    },
+    "voidLengthM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.03,
+      "max": 0.24,
+      "default": 0.12
+    },
+    "voidDepthM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.03,
+      "max": 0.2,
+      "default": 0.09
+    },
+    "voidCount": {
+      "type": "integer",
+      "min": 1,
+      "max": 3,
+      "default": 2
+    },
+    "mortarJointM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0,
+      "max": 0.03,
+      "default": 0.01,
+      "meaning": "schematic bond spacing only"
+    },
+    "view": {
+      "type": "enum",
+      "values": [
+        "unit",
+        "running-bond"
+      ],
+      "default": "unit"
+    },
+    "showDimensions": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "assetDependencies": []
+}
