@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "sur-ranging-rod",
+  "version": "0.1.0",
+  "title": "Ranging Rod Alignment",
+  "description": "Reusable ranging-rod placement component showing line-of-sight alignment and cross-track error in plan.",
+  "category": "surveying",
+  "topics": ["ranging", "line-of-sight", "distance-measurement", "fieldwork"],
+  "learningObjectives": [
+    "Identify whether an intermediate ranging rod lies on a straight survey line.",
+    "Interpret cross-track offset relative to a configurable alignment tolerance."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "in-review",
+  "entrypoint": "assets/surveying/sur-ranging-rod/demo/index.html",
+  "readme": "assets/surveying/sur-ranging-rod/README.md",
+  "previewImage": "assets/surveying/sur-ranging-rod/previews/default.svg",
+  "reviewFile": "assets/surveying/sur-ranging-rod/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Plan-line and cross-track alignment invariants reviewed from source; browser and assistive-technology checks remain."
+  },
+  "source": {"type":"original","reference":"Reserved surveying queue task sur-ranging-rod.","sha256":null}
+}
