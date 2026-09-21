@@ -5,10 +5,9 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Tape endpoints are separated along +X by horizontalSpan at equal supportHeight above y=0. In sag mode, the tape follows a symmetric catenary under self-weight.",
+  "boundsDescription": "Tape endpoints are separated along +X by horizontalSpan at an equal schematic hand height of 1.2 m above y=0. In sag mode, the tape follows a symmetric catenary under self-weight.",
   "parameters": {
     "horizontalSpan": {"type":"number","unit":"m","min":2,"max":50,"default":20},
-    "supportHeight": {"type":"number","unit":"m","min":0.5,"max":2,"default":1.2},
     "massPerLength": {"type":"number","unit":"kg/m","min":0.005,"max":0.1,"default":0.02},
     "horizontalTension": {"type":"number","unit":"N","min":20,"max":300,"default":60},
     "sagEnabled": {"type":"boolean","default":true}
