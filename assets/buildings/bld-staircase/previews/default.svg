@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Parametric staircase default reference</title>
+  <desc id="desc">Straight stair profile with seventeen risers, sixteen goings, and dimension labels.</desc>
+  <rect width="1200" height="760" fill="#f4f7fa"/>
+  <text x="70" y="72" font-family="system-ui,sans-serif" fill="#172033" font-size="30" font-weight="750">Parametric Staircase Geometry</text>
+  <text x="70" y="110" font-family="system-ui,sans-serif" fill="#58677a" font-size="20">Default reference · 17 risers · 16 goings · 1.20 m width</text>
+
+  <path d="M120 560 L120 539.4 L153.1 539.4 L153.1 518.8 L186.3 518.8 L186.3 498.2 L219.4 498.2 L219.4 477.6 L252.5 477.6 L252.5 457.1 L285.6 457.1 L285.6 436.5 L318.8 436.5 L318.8 415.9 L351.9 415.9 L351.9 395.3 L385 395.3 L385 374.7 L418.1 374.7 L418.1 354.1 L451.3 354.1 L451.3 333.5 L484.4 333.5 L484.4 312.9 L517.5 312.9 L517.5 292.4 L550.6 292.4 L550.6 271.8 L583.8 271.8 L583.8 251.2 L616.9 251.2 L616.9 230.6 L650 230.6 L650 210 L650 560 Z" fill="#dde5ec" stroke="#34475d" stroke-width="2"/>
+
+  <line x1="120" y1="560" x2="650" y2="210" stroke="#8a6470" stroke-width="2" stroke-dasharray="10 7"/>
+  <text x="390" y="365" font-family="system-ui,sans-serif" fill="#59697a" font-size="18" text-anchor="middle">33.8° geometric pitch</text>
+
+  <g stroke="#526476" stroke-width="2">
+    <line x1="90" y1="560" x2="90" y2="539.4"/>
+    <line x1="84" y1="560" x2="96" y2="560"/>
+    <line x1="84" y1="539.4" x2="96" y2="539.4"/>
+    <line x1="120" y1="604" x2="153.1" y2="604"/>
+    <line x1="120" y1="598" x2="120" y2="610"/>
+    <line x1="153.1" y1="598" x2="153.1" y2="610"/>
+  </g>
+
+  <g font-family="system-ui,sans-serif" fill="#27394b" font-size="18" font-weight="650">
+    <text x="78" y="553" text-anchor="end">rise 176.5 mm</text>
+    <text x="136.5" y="632" text-anchor="middle">going 280 mm</text>
+    <text x="700" y="390">3.00 m total rise</text>
+    <text x="385" y="685" text-anchor="middle">4.48 m flight run</text>
+  </g>
+
+  <line x1="680" y1="560" x2="680" y2="210" stroke="#526476" stroke-width="2" stroke-dasharray="6 5"/>
+  <line x1="120" y1="660" x2="650" y2="660" stroke="#526476" stroke-width="2" stroke-dasharray="6 5"/>
+
+  <rect x="805" y="360" width="130" height="180" rx="6" fill="#f7fafc" stroke="#60758a" stroke-width="2"/>
+  <text x="870" y="335" font-family="system-ui,sans-serif" fill="#59697a" font-size="18" text-anchor="middle">Plan width</text>
+  <text x="785" y="455" font-family="system-ui,sans-serif" fill="#27394b" font-size="18" font-weight="650" text-anchor="end">1.20 m</text>
+  <line x1="780" y1="360" x2="780" y2="540" stroke="#526476" stroke-width="2"/>
+
+  <text x="70" y="720" font-family="system-ui,sans-serif" fill="#59697a" font-size="18">Geometry only — verify applicable jurisdiction-specific requirements separately.</text>
+</svg>

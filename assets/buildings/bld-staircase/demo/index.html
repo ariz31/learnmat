@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LearnMat · Parametric Staircase</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,sans-serif;color:#172033;background:#f5f7fa}
+    *{box-sizing:border-box}
+    body{margin:0;padding:20px}
+    main{max-width:1160px;margin:auto;display:grid;grid-template-columns:minmax(240px,310px) minmax(0,1fr);gap:16px;align-items:start}
+    form{background:#fff;border:1px solid #d7deea;border-radius:14px;padding:16px;display:grid;gap:12px}
+    h1{font-size:1.2rem;margin:0 0 4px}
+    .note{font-size:.84rem;color:#58677a;margin:0}
+    label{display:grid;gap:5px;font-size:.84rem;font-weight:650}
+    input{width:100%;padding:8px;border:1px solid #aeb9c7;border-radius:8px;font:inherit}
+    button{padding:9px 12px;border:1px solid #8291a4;border-radius:9px;background:#fff;font:inherit;font-weight:650;cursor:pointer}
+    #error{min-height:1.3em;color:#a33;font-size:.82rem}
+    @media(max-width:760px){body{padding:10px}main{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main>
+    <form id="controls">
+      <div>
+        <h1>Parametric staircase</h1>
+        <p class="note">Geometry only. Check the applicable code separately for permitted dimensions.</p>
+      </div>
+      <label>Total rise (m)<input name="totalRise" type="number" min="0.6" max="6" step="0.05" value="3"></label>
+      <label>Number of risers<input name="risers" type="number" min="3" max="30" step="1" value="17"></label>
+      <label>Going (mm)<input name="going" type="number" min="200" max="450" step="5" value="280"></label>
+      <label>Stair width (m)<input name="width" type="number" min="0.75" max="2.5" step="0.05" value="1.2"></label>
+      <button type="button" id="reset">Reset defaults</button>
+      <div id="error" role="status" aria-live="polite"></div>
+    </form>
+    <div id="asset"></div>
+  </main>
+
+  <script type="module">
+    import { createAsset } from "../src/asset.mjs";
+
+    const form = document.querySelector("#controls");
+    const error = document.querySelector("#error");
+    const asset = createAsset({
+      container: document.querySelector("#asset"),
+      reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches
+    });
+
+    function values() {
+      const data = new FormData(form);
+      return {
+        totalRise: Number(data.get("totalRise")),
+        risers: Number(data.get("risers")),
+        going: Number(data.get("going")) / 1000,
+        width: Number(data.get("width"))
+      };
+    }
+
+    form.addEventListener("input", () => {
+      try {
+        asset.setParameters(values());
+        error.textContent = "";
+      } catch (reason) {
+        error.textContent = reason instanceof Error ? reason.message : String(reason);
+      }
+    });
+
+    document.querySelector("#reset").addEventListener("click", () => {
+      form.reset();
+      asset.reset();
+      error.textContent = "";
+    });
+
+    addEventListener("beforeunload", () => asset.dispose(), { once: true });
+  </script>
+</body>
+</html>

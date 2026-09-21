@@ -1,0 +1,37 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/buildings/bld-staircase/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Straight-flight geometry spans x=0 to (risers-1)*going, y=0 to totalRise, and z=-width to 0. The upper floor is treated as the terminal walking surface, so there are risers-1 horizontal goings.",
+  "parameters": {
+    "totalRise": {
+      "unit": "m",
+      "min": 0.6,
+      "max": 6,
+      "default": 3
+    },
+    "risers": {
+      "unit": "count",
+      "min": 3,
+      "max": 30,
+      "default": 17,
+      "integer": true
+    },
+    "going": {
+      "unit": "m",
+      "min": 0.2,
+      "max": 0.45,
+      "default": 0.28
+    },
+    "width": {
+      "unit": "m",
+      "min": 0.75,
+      "max": 2.5,
+      "default": 1.2
+    }
+  },
+  "assetDependencies": []
+}
