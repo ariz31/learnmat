@@ -5,7 +5,11 @@ metadata, and model source. Identify whether the user needs offline, CDN-depende
 or hosted delivery. Check rights and review state. A candidate can be a development
 reference, but must not be presented as an approved public asset.
 
-Keep the engineering model separate from lesson copy and UI. Preserve the asset's
+Keep the engineering model separate from lesson copy and UI. For spatial subjects,
+preserve or build a real 3D primary scene rather than flattening the lesson into
+SVG/Canvas2D for convenience. Use the surveying examples as visual direction for
+camera, depth, environmental context, and animated action. Exact 2D analytical
+overlays remain encouraged. A 2D-primary result needs a clear educational reason. Preserve the asset's
 units, conventions, assumptions, and limits. If the lesson represents a real
 calculation or procedure, teach the meaningful sequence instead of showing only the
 final answer: data, conventions, governing relationship, intermediate reasoning,
