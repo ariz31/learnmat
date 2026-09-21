@@ -1,0 +1,42 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/hydraulics-and-hydrology/geo-tank-reservoir/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Normalized vertical tank elevation from level 0 to maxLevel; horizontal tank area is represented numerically rather than to geometric scale.",
+  "parameters": {
+    "tankArea": {
+      "unit": "m^2",
+      "min": 0.001,
+      "max": 1000000,
+      "default": 12
+    },
+    "initialLevel": {
+      "unit": "m",
+      "min": 0,
+      "max": 1000,
+      "default": 2
+    },
+    "maxLevel": {
+      "unit": "m",
+      "min": 0.001,
+      "max": 1000,
+      "default": 5
+    },
+    "inflow": {
+      "unit": "m^3/s",
+      "min": 0,
+      "max": 100000,
+      "default": 0.08
+    },
+    "outflowDemand": {
+      "unit": "m^3/s",
+      "min": 0,
+      "max": 100000,
+      "default": 0.05
+    }
+  },
+  "assetDependencies": []
+}
