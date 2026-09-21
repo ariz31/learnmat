@@ -1,0 +1,29 @@
+{
+  "reviewType": "self-review",
+  "assetFingerprint": null,
+  "checks": {
+    "engineering": {
+      "status": "passed",
+      "details": "Bolt-group length, centered edge distances, spacing-to-diameter constraint, and invalid-fit rejection checked. No capacity claims."
+    },
+    "functionality": {
+      "status": "not-reviewed",
+      "details": "Source runtime inspected; browser unavailable."
+    },
+    "accessibility": {
+      "status": "not-reviewed",
+      "details": "Labeled controls and text equivalent included; AT unavailable."
+    },
+    "visual": {
+      "status": "not-reviewed",
+      "details": "Source-authored preview included; no browser screenshot."
+    },
+    "reuse": {
+      "status": "passed",
+      "details": "Dependency-free runtime-v1 component; assembly separation explicitly distinguished from deformation."
+    }
+  },
+  "unresolvedBlockers": [
+    "Independent browser, screenshot, engineering, and accessibility review remain required."
+  ]
+}

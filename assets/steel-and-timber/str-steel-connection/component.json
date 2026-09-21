@@ -1,0 +1,61 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/steel-and-timber/str-steel-connection/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Connection geometry is represented in an elevation/assembly coordinate system. Plate width and height are physical dimensions; exploded separation is display/assembly translation and does not represent deformation.",
+  "parameters": {
+    "plateWidthM": {
+      "unit": "m",
+      "min": 0.08,
+      "max": 0.4,
+      "default": 0.14
+    },
+    "plateHeightM": {
+      "unit": "m",
+      "min": 0.15,
+      "max": 0.8,
+      "default": 0.34
+    },
+    "plateThicknessM": {
+      "unit": "m",
+      "min": 0.006,
+      "max": 0.03,
+      "default": 0.012
+    },
+    "boltDiameterM": {
+      "unit": "m",
+      "min": 0.012,
+      "max": 0.036,
+      "default": 0.02
+    },
+    "boltCount": {
+      "unit": "count",
+      "min": 2,
+      "max": 8,
+      "default": 4,
+      "integer": true
+    },
+    "boltSpacingM": {
+      "unit": "m",
+      "min": 0.04,
+      "max": 0.15,
+      "default": 0.075
+    },
+    "minimumEdgeDistanceM": {
+      "unit": "m",
+      "min": 0.02,
+      "max": 0.1,
+      "default": 0.045
+    },
+    "explodeM": {
+      "unit": "m",
+      "min": 0,
+      "max": 0.3,
+      "default": 0.08
+    }
+  },
+  "assetDependencies": []
+}

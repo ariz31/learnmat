@@ -1,0 +1,36 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/structural-analysis/str-frame-sway/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Physical frame joints are A=(0,0), B=(bayWidthM,0), C=(0,storyHeightM), D=(bayWidthM,storyHeightM). Prescribed sway translates C and D by deltaX=driftRatio*storyHeightM while fixed bases remain unmoved.",
+  "parameters": {
+    "bayWidthM": {
+      "unit": "m",
+      "min": 2,
+      "max": 20,
+      "default": 6
+    },
+    "storyHeightM": {
+      "unit": "m",
+      "min": 2,
+      "max": 10,
+      "default": 3.5
+    },
+    "driftRatio": {
+      "unit": "ratio",
+      "min": -0.05,
+      "max": 0.05,
+      "default": 0.015
+    },
+    "exaggeration": {
+      "unit": "display-scale",
+      "min": 1,
+      "max": 8,
+      "default": 3
+    }
+  },
+  "assetDependencies": []
+}
