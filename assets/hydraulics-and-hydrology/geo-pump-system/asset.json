@@ -17,15 +17,22 @@
     "Distinguish shutoff head, static head, friction/system losses, and hydraulic versus shaft power."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/hydraulics-and-hydrology/geo-pump-system/demo/index.html",
   "readme": "assets/hydraulics-and-hydrology/geo-pump-system/README.md",
-  "previewImage": "assets/hydraulics-and-hydrology/geo-pump-system/previews/preview.svg",
+  "previewImage": null,
   "reviewFile": "assets/hydraulics-and-hydrology/geo-pump-system/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
@@ -36,7 +43,7 @@
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Analytical curve intersection and power calculation reviewed from source; live browser/accessibility review pending."
+    "notes": "Rebuilt as a spatial centrifugal pump/system Three.js scene with analytical operating-point overlay; independent rendered comparison pending."
   },
   "source": {
     "type": "original",
