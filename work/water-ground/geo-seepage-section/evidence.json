@@ -4,26 +4,38 @@
   "checks": {
     "engineering": {
       "status": "passed",
-      "details": "Darcy gradient, specific discharge, section discharge, midpoint head, equal-head limit, and reversed-boundary sign behavior were independently checked for the stated homogeneous 1-D assumptions."
+      "details": "Existing signed fixed-head Darcy model retained unchanged; direction and metrics are consumed by the renderer."
+    },
+    "pedagogy": {
+      "status": "passed",
+      "details": "Four steps teach boundary heads, signed gradient, Darcy law and limiting/equal-head behavior while explicitly excluding 2-D flow-net claims."
     },
     "functionality": {
       "status": "passed",
-      "details": "Source review confirms explicit fixed-head boundaries, signed flow direction, valid geometry/conductivity guards, deterministic state, and idempotent cleanup."
+      "details": "Source covers validated parameter changes, direction reversal, deterministic update, reset/snapshot/resize and cleanup."
+    },
+    "animation": {
+      "status": "passed",
+      "details": "Representative straight tracks animate deterministically in the computed signed direction and disappear at zero gradient."
+    },
+    "spatial3d": {
+      "status": "not-reviewed",
+      "details": "Real Three.js soil prism, reservoirs, boundaries and flow tracks implemented; rendered comparison unavailable."
     },
     "accessibility": {
       "status": "not-reviewed",
-      "details": "Source includes semantic SVG descriptions and labelled native demo controls, but no assistive-technology browser session was available."
+      "details": "Keyboard controls, text scope statements, metrics and reduced-motion-aware camera behavior implemented; AT check pending."
     },
     "visual": {
       "status": "not-reviewed",
-      "details": "A deterministic repository preview is included; no live browser capture was available in this connector-only session."
+      "details": "Surveying-style scene framing, responsive HUD, camera staging and focus mode implemented in source; no rendered pass claimed."
     },
     "reuse": {
       "status": "passed",
-      "details": "Dependency-free runtime-v1 ES module with per-instance DOM/state, finite input validation, deterministic absolute-time behavior, snapshot support, and idempotent disposal."
+      "details": "Host scene/time ownership retained with exact Three.js peer and owned GPU resource disposal."
     }
   },
   "unresolvedBlockers": [
-    "Live browser and assistive-technology execution remain pending; retain candidate status until independent review."
+    "Independent WebGL render and surveying-reference visual comparison remain required."
   ]
 }
