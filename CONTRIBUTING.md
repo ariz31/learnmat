@@ -21,6 +21,19 @@ Use templates/asset-metadata.json and templates/ASSET-README.md as starting poin
 8. Open a focused change with evidence and known limitations. Do not run GitHub
    Actions. Merge and deployment depend on the authorized repository workflow.
 
+## Testing policy
+
+Keep LearnMat intentionally light on automated tests. Do not create unit,
+integration, or E2E suites as routine scaffolding, coverage work, or a default
+response to each change. Prefer the catalog validator, independent numerical
+spot-checks, targeted browser/manual inspection, and build/runtime verification.
+
+Add an automated test only when a change protects genuinely critical behavior
+and a simpler check would not give adequate confidence. Examples include high-risk
+engineering calculations, data integrity, security boundaries, or a severe
+regression likely to recur. Keep such tests narrowly scoped and document why they
+are necessary. Do not add broad test infrastructure merely to support one check.
+
 ## Corrections and provenance
 
 Keep the original asset ID stable. Record derivation and revisions. A mathematical

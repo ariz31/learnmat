@@ -25,9 +25,14 @@ Do not apply a code-specific requirement without naming its edition and scope.
 
 Check initial state, full sequence, pause/resume, reset during animation, repeated
 input, empty/invalid input, zero/extreme permitted values, resize, and resource
-cleanup. Deterministic examples need fixed seeds or recorded inputs. Check a
-representative numerical result independently; add regression tests when fixing
-a meaningful computational or lifecycle defect.
+cleanup. Deterministic examples need fixed inputs or recorded states when
+reproducibility matters. Check representative numerical results independently.
+
+Do not add unit, integration, or E2E tests by default. Prefer structural validation,
+manual/browser review, deterministic examples, and independent engineering
+calculations. Introduce the smallest targeted automated test only when a critical
+calculation, data-integrity boundary, security behavior, or severe recurring
+regression cannot be verified adequately through those lighter methods.
 
 ## Visual and accessible delivery
 
@@ -36,13 +41,13 @@ meaning. Keep panels clear of geometry and prevent clipped controls. Provide
 keyboard access, visible focus, labeled buttons, and a text explanation of the
 result. Color alone must not distinguish observations. Reduced-motion mode should
 provide an understandable static or stepped state; pause and reset must remain
-available. Test at desktop, tablet, and narrow-phone widths, including landscape.
+available. Check desktop, tablet, and narrow-phone widths, including landscape.
 
 ## Runtime and failure behavior
 
-Record browser, viewport, device limitations, and dependency state. Test missing
+Record browser, viewport, device limitations, and dependency state. Verify missing
 network dependencies, unsupported graphics, context loss when relevant, and
-multiple mounts when components claim to support them. Avoid loading every
+multiple mounts only when components claim to support them. Avoid loading every
 interactive scene in catalog cards. Measure meaningful load/runtime costs on an
 identified device; do not publish fabricated universal FPS scores.
 
