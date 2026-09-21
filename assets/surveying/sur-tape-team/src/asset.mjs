@@ -1,7 +1,7 @@
 const SVG_NS='http://www.w3.org/2000/svg';
 const G=9.80665;
-const DEFAULTS=Object.freeze({horizontalSpan:20,supportHeight:1.2,massPerLength:0.02,horizontalTension:60,sagEnabled:true});
-const LIMITS=Object.freeze({horizontalSpan:[2,50],supportHeight:[0.5,2],massPerLength:[0.005,0.1],horizontalTension:[20,300]});
+const DEFAULTS=Object.freeze({horizontalSpan:20,massPerLength:0.02,horizontalTension:60,sagEnabled:true});
+const LIMITS=Object.freeze({horizontalSpan:[2,50],massPerLength:[0.005,0.1],horizontalTension:[20,300]});
 
 function node(name,attrs={}){const el=document.createElementNS(SVG_NS,name);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));return el}
 function validateNumber(name,value){const [min,max]=LIMITS[name];if(!Number.isFinite(value)||value<min||value>max)throw new RangeError(name+' must be finite and between '+min+' and '+max+'.')}
@@ -58,7 +58,7 @@ export function createAsset(context={}){
   function geometry(){return catenaryState(params)}
   function render(){
     const x0=130,x1=670,spanPx=x1-x0;
-    const supportY=230;
+    const supportY=279;
     leftPerson.setAttribute('transform','translate('+(x0-45)+' 345)');
     rightPerson.setAttribute('transform','translate('+(x1+45)+' 345)');
     straight.setAttribute('x1',x0);straight.setAttribute('x2',x1);straight.setAttribute('y1',supportY);straight.setAttribute('y2',supportY);
@@ -72,18 +72,18 @@ export function createAsset(context={}){
         const x=L*i/40;
         const y=a*Math.cosh((x-L/2)/a)-a*Math.cosh(L/(2*a));
         const px=x0+spanPx*(x/L);
-        const visualScale=Math.min(900,260/Math.max(state.sag,0.001));
+        const visualScale=Math.min(360,60/Math.max(state.sag,0.001));
         const py=supportY-y*visualScale;
         points.push((i===0?'M ':'L ')+px.toFixed(2)+' '+py.toFixed(2));
       }
       tape.setAttribute('d',points.join(' '));
     }
     heading.textContent=(params.sagEnabled?'Catenary tape':'Straight tape')+' · span '+params.horizontalSpan.toFixed(2)+' m';
-    metrics.textContent='sag '+state.sag.toFixed(4)+' m · tape curve length '+state.curveLength.toFixed(4)+' m · excess '+state.lengthExcess.toFixed(4)+' m';
+    metrics.textContent='sag '+state.sag.toFixed(4)+' m · tape curve length '+state.curveLength.toFixed(4)+' m · excess '+state.lengthExcess.toFixed(4)+' m'+(params.sagEnabled?' · vertical display magnified':'');
   }
   function snapshot(){
     ensure();const state=geometry();
-    return {id:'sur-tape-team',timeSeconds:Math.max(0,timeSeconds),parameters:{...params},result:{...state,weightPerLength:params.massPerLength*G},pose:{leftEndpoint:{x:0,y:params.supportHeight,z:0},rightEndpoint:{x:params.horizontalSpan,y:params.supportHeight,z:0}}};
+    return {id:'sur-tape-team',timeSeconds:Math.max(0,timeSeconds),parameters:{...params},result:{...state,weightPerLength:params.massPerLength*G},pose:{leftEndpoint:{x:0,y:1.2,z:0},rightEndpoint:{x:params.horizontalSpan,y:1.2,z:0}}};
   }
   render();
   return {
