@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Preview of an idealized dimensioned steel I-section">
+  <rect width="1200" height="675" fill="#eef2f6"/>
+  <rect x="78" y="70" width="1044" height="535" rx="28" fill="#fff" stroke="#d7dde5"/>
+  <text x="126" y="137" font-family="system-ui,sans-serif" font-size="34" font-weight="700" fill="#0f172a">Parametric steel section specimens</text>
+  <text x="126" y="175" font-family="system-ui,sans-serif" font-size="18" fill="#64748b">Default state · idealized I-section · generic dimensions</text>
+  <g transform="translate(290 205)">
+    <rect x="0" y="0" width="300" height="24" fill="#64748b" stroke="#1e293b" stroke-width="3"/>
+    <rect x="142" y="24" width="16" height="252" fill="#64748b" stroke="#1e293b" stroke-width="3"/>
+    <rect x="0" y="276" width="300" height="24" fill="#64748b" stroke="#1e293b" stroke-width="3"/>
+    <g stroke="#334155" stroke-width="2" fill="none">
+      <line x1="0" y1="-38" x2="300" y2="-38"/><line x1="0" y1="-48" x2="0" y2="-28"/><line x1="300" y1="-48" x2="300" y2="-28"/>
+      <line x1="350" y1="0" x2="350" y2="300"/><line x1="340" y1="0" x2="360" y2="0"/><line x1="340" y1="300" x2="360" y2="300"/>
+    </g>
+    <text x="150" y="-56" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="650" fill="#0f172a">150 mm flange width</text>
+    <text x="378" y="150" transform="rotate(90 378 150)" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="650" fill="#0f172a">300 mm depth</text>
+  </g>
+  <g transform="translate(768 246)">
+    <text x="0" y="0" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#334155">Geometry only</text>
+    <text x="0" y="38" font-family="system-ui,sans-serif" font-size="17" fill="#475569">Web thickness: 8 mm</text>
+    <text x="0" y="69" font-family="system-ui,sans-serif" font-size="17" fill="#475569">Flange thickness: 12 mm</text>
+    <text x="0" y="100" font-family="system-ui,sans-serif" font-size="17" fill="#475569">Area: 5,808 mm²</text>
+    <text x="0" y="152" font-family="system-ui,sans-serif" font-size="15" fill="#64748b">No fillets, flange taper, grade,</text>
+    <text x="0" y="177" font-family="system-ui,sans-serif" font-size="15" fill="#64748b">standard designation, or capacity claim.</text>
+  </g>
+  <text x="126" y="558" font-family="system-ui,sans-serif" font-size="15" fill="#64748b">Static reference preview of the default state; browser execution remains a separate review gate.</text>
+</svg>

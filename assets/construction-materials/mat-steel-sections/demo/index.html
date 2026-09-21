@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Parametric steel section specimens — LearnMat</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#0f172a;background:#eef2f6}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh}
+    main{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:28px 0 48px}
+    header{margin-bottom:18px}
+    h1{margin:0 0 7px;font-size:clamp(1.5rem,3vw,2.25rem);letter-spacing:-.03em}
+    header p{margin:0;color:#475569;max-width:78ch;line-height:1.55}
+    .layout{display:grid;grid-template-columns:minmax(250px,315px) minmax(0,1fr);gap:18px;align-items:start}
+    .controls{background:#fff;border:1px solid #d7dde5;border-radius:18px;padding:16px;box-shadow:0 10px 25px rgba(15,23,42,.06)}
+    label{display:grid;gap:6px;margin-bottom:12px;font-size:13px;font-weight:700;color:#334155}
+    select,input[type=number]{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:9px 10px;background:#fff;color:#0f172a;font:inherit}
+    .check{display:flex;align-items:center;gap:9px}
+    .check input{width:18px;height:18px}
+    button{width:100%;border:0;border-radius:11px;padding:10px 12px;background:#0f172a;color:#fff;font:inherit;font-weight:750;cursor:pointer}
+    button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
+    fieldset{border:0;padding:0;margin:0}
+    #status{font-size:13px;line-height:1.5;color:#475569;margin:13px 2px 0}
+    .note{margin-top:13px;padding-top:13px;border-top:1px solid #e2e8f0;color:#64748b;font-size:12px;line-height:1.5}
+    @media(max-width:780px){main{padding-top:18px}.layout{grid-template-columns:1fr}.controls{order:2}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Parametric steel section specimens</h1>
+    <p>Explore idealized I-section, channel, and angle cross-section geometry. The dimensions are generic and do not represent a named standard section, manufacturer catalogue, structural capacity, material grade, or rolling tolerance.</p>
+  </header>
+  <div class="layout">
+    <form class="controls" onsubmit="return false" aria-label="Steel section controls">
+      <label>Shape
+        <select id="shape">
+          <option value="i-section">I-section</option>
+          <option value="channel">Channel</option>
+          <option value="angle">Angle</option>
+        </select>
+      </label>
+
+      <fieldset id="rolled-fields">
+        <label>Overall depth (mm)
+          <input id="depth" type="number" min="80" max="600" step="5" value="300">
+        </label>
+        <label>Flange width (mm)
+          <input id="flange-width" type="number" min="50" max="300" step="5" value="150">
+        </label>
+        <label>Web thickness (mm)
+          <input id="web-thickness" type="number" min="3" max="30" step="1" value="8">
+        </label>
+        <label>Flange thickness (mm)
+          <input id="flange-thickness" type="number" min="4" max="40" step="1" value="12">
+        </label>
+      </fieldset>
+
+      <fieldset id="angle-fields" hidden>
+        <label>Horizontal leg (mm)
+          <input id="leg-x" type="number" min="40" max="300" step="5" value="100">
+        </label>
+        <label>Vertical leg (mm)
+          <input id="leg-y" type="number" min="40" max="300" step="5" value="100">
+        </label>
+        <label>Thickness (mm)
+          <input id="thickness" type="number" min="3" max="30" step="1" value="10">
+        </label>
+      </fieldset>
+
+      <label class="check"><input id="dimensions" type="checkbox" checked> Show nominal dimensions</label>
+      <button id="reset" type="button">Reset section</button>
+      <p id="status" role="status" aria-live="polite"></p>
+      <p class="note">The component computes geometric cross-sectional area only. It does not provide section-table properties, design resistance, code checks, or material strength.</p>
+    </form>
+    <div id="asset-root"></div>
+  </div>
+</main>
+<script type="module">
+  import { createAsset } from '../src/asset.mjs';
+
+  const q = (selector) => document.querySelector(selector);
+  const root = q('#asset-root');
+  const status = q('#status');
+  const shape = q('#shape');
+  const rolledFields = q('#rolled-fields');
+  const angleFields = q('#angle-fields');
+
+  const asset = createAsset({
+    container: root,
+    seed: 20260922,
+    reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+  });
+
+  function setVisibility() {
+    const angle = shape.value === 'angle';
+    rolledFields.hidden = angle;
+    angleFields.hidden = !angle;
+  }
+
+  function parametersFromControls() {
+    return {
+      shape: shape.value,
+      depthM: Number(q('#depth').value) / 1000,
+      flangeWidthM: Number(q('#flange-width').value) / 1000,
+      webThicknessM: Number(q('#web-thickness').value) / 1000,
+      flangeThicknessM: Number(q('#flange-thickness').value) / 1000,
+      legXM: Number(q('#leg-x').value) / 1000,
+      legYM: Number(q('#leg-y').value) / 1000,
+      thicknessM: Number(q('#thickness').value) / 1000,
+      showDimensions: q('#dimensions').checked,
+    };
+  }
+
+  function updateStatus() {
+    const snapshot = asset.snapshot();
+    status.textContent = 'Cross-sectional area: ' +
+      Math.round(snapshot.state.geometry.areaM2 * 1000000) + ' mm²';
+  }
+
+  function apply() {
+    try {
+      asset.setParameters(parametersFromControls());
+      setVisibility();
+      updateStatus();
+    } catch (error) {
+      status.textContent = error.message;
+    }
+  }
+
+  q('.controls').addEventListener('input', apply);
+  q('#reset').addEventListener('click', () => {
+    asset.reset();
+    shape.value = 'i-section';
+    q('#depth').value = '300';
+    q('#flange-width').value = '150';
+    q('#web-thickness').value = '8';
+    q('#flange-thickness').value = '12';
+    q('#leg-x').value = '100';
+    q('#leg-y').value = '100';
+    q('#thickness').value = '10';
+    q('#dimensions').checked = true;
+    setVisibility();
+    updateStatus();
+  });
+
+  const observer = new ResizeObserver((entries) => {
+    const rect = entries[0]?.contentRect;
+    if (rect && rect.width > 0 && rect.height > 0) {
+      asset.resize(rect.width, rect.height, devicePixelRatio || 1);
+    }
+  });
+  observer.observe(root);
+
+  addEventListener('beforeunload', () => {
+    observer.disconnect();
+    asset.dispose();
+  }, { once: true });
+
+  setVisibility();
+  updateStatus();
+</script>
+</body>
+</html>
