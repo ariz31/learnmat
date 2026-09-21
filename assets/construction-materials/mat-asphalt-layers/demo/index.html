@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Asphalt layered sample — LearnMat</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#0f172a;background:#eef2f6}*{box-sizing:border-box}body{margin:0}main{width:min(1120px,calc(100% - 28px));margin:auto;padding:28px 0 48px}
+h1{margin:0 0 7px;font-size:clamp(1.5rem,3vw,2.2rem)}header p{margin:0 0 18px;color:#475569;max-width:82ch;line-height:1.55}.layout{display:grid;grid-template-columns:minmax(250px,315px) minmax(0,1fr);gap:18px;align-items:start}
+.controls,.lesson{background:#fff;border:1px solid #d7dde5;border-radius:18px;padding:16px}label{display:grid;gap:6px;margin-bottom:11px;font-size:13px;font-weight:700;color:#334155}select,input{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:9px 10px;font:inherit}.check{display:flex;align-items:center;gap:9px}.check input{width:18px;height:18px}
+button{border:0;border-radius:11px;padding:10px;background:#0f172a;color:#fff;font:inherit;font-weight:750;cursor:pointer}#reset{width:100%}button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}.formula{margin:11px 0;padding:10px;background:#f8fafc;border-radius:12px;font:600 12px/1.5 ui-monospace,monospace;color:#334155}.note,#status{font-size:12px;line-height:1.5;color:#64748b}.note{border-top:1px solid #e2e8f0;padding-top:12px}
+.stagebar{display:flex;justify-content:flex-end;margin-bottom:8px}.stagebar button{padding:8px 11px;font-size:12px}.lesson{margin-top:12px;padding:12px 14px}.lesson summary{cursor:pointer;font-weight:750;color:#334155}.lesson ol{padding-left:22px;color:#475569;font-size:13px;line-height:1.55}.lesson table{width:100%;border-collapse:collapse;font-size:12px}.lesson th,.lesson td{padding:5px;border-bottom:1px solid #e2e8f0;text-align:right}.lesson th:first-child,.lesson td:first-child{text-align:left}
+main.focus-mode{position:fixed;inset:0;z-index:9999;width:auto;max-width:none;padding:12px;background:#eef2f6;overflow:auto}main.focus-mode header,main.focus-mode .controls,main.focus-mode .lesson{display:none}main.focus-mode .layout{display:block}main.focus-mode #asset-root{min-height:calc(100vh - 70px);display:grid;align-items:center}
+@media(max-width:780px){.layout{grid-template-columns:1fr}.controls{order:2}.lesson{order:3}}
+</style></head><body><main id="page">
+<header><h1>Asphalt material specimen and layered sample</h1><p>Inspect a generic three-layer asphalt sample as a slab or cylindrical core. The thicknesses are user-controlled geometry for learning; they are not a pavement-design recommendation, standard lift schedule, mix designation, or construction acceptance criterion.</p></header>
+<div class="layout">
+<form class="controls" onsubmit="return false" aria-label="Asphalt sample controls">
+<label>View<select id="view"><option value="layered-slab">Layered slab</option><option value="core">Core specimen</option></select></label>
+<label>Layer A — top (mm)<input id="top" type="number" min="10" max="150" step="5" value="40"></label>
+<label>Layer B — middle (mm)<input id="middle" type="number" min="10" max="200" step="5" value="60"></label>
+<label>Layer C — bottom (mm)<input id="bottom" type="number" min="10" max="250" step="5" value="80"></label>
+<label>Slab sample length (mm)<input id="length" type="number" min="100" max="1000" step="10" value="400"></label>
+<label>Slab sample width (mm)<input id="width" type="number" min="100" max="1000" step="10" value="300"></label>
+<label>Core diameter (mm)<input id="diameter" type="number" min="50" max="200" step="5" value="100"></label>
+<label class="check"><input id="texture" type="checkbox" checked> Show illustrative texture</label><label class="check"><input id="dimensions" type="checkbox" checked> Show dimensions</label>
+<div class="formula">T = t₁ + t₂ + t₃<br>Vᵢ = plan area × tᵢ</div>
+<button id="reset" type="button">Reset sample</button><p id="status" role="status" aria-live="polite"></p>
+<p class="note">No density, air voids, binder content, gradation, temperature, compaction, stiffness, rutting, fatigue, or code/design property is implied.</p></form>
+<div class="stage"><div class="stagebar"><button id="focus" type="button" aria-pressed="false">Focus visual</button></div><div id="asset-root"></div></div>
+<details class="lesson"><summary>Show calculation steps and layer volumes</summary><ol>
+<li><strong>Objective:</strong> relate individual lift thicknesses to total specimen thickness and layer volume.</li>
+<li><strong>Known data:</strong> three layer thicknesses plus slab plan dimensions or core diameter.</li>
+<li><strong>Governing relationships:</strong> total thickness is the sum of the three layers; layer volume equals cross-sectional/plan area times layer thickness.</li>
+<li><strong>Intermediate work:</strong> inspect each layer thickness fraction and geometric volume in the table.</li>
+<li><strong>Check:</strong> layer thicknesses must sum exactly to total thickness, and layer volumes must sum to the displayed sample volume.</li>
+<li><strong>Conclusion:</strong> changing geometry changes proportions and volume only; it does not establish a valid pavement section or material performance.</li></ol>
+<table><thead><tr><th>Layer</th><th>Thickness (mm)</th><th>% total</th><th>Volume (L)</th></tr></thead><tbody id="rows"></tbody></table></details>
+</div></main>
+<script type="module">
+import{createAsset}from'../src/asset.mjs';const q=s=>document.querySelector(s),root=q('#asset-root'),status=q('#status'),page=q('#page'),focus=q('#focus'),rows=q('#rows');
+const asset=createAsset({container:root,seed:20260922,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
+function params(){return{view:q('#view').value,topThicknessM:+q('#top').value/1000,middleThicknessM:+q('#middle').value/1000,bottomThicknessM:+q('#bottom').value/1000,sampleLengthM:+q('#length').value/1000,sampleWidthM:+q('#width').value/1000,coreDiameterM:+q('#diameter').value/1000,showTexture:q('#texture').checked,showDimensions:q('#dimensions').checked};}
+function stat(){const s=asset.snapshot(),g=s.state.geometry,volumes=s.parameters.view==='layered-slab'?g.slab.layerVolumesM3:g.core.layerVolumesM3,total=s.parameters.view==='layered-slab'?g.slab.totalVolumeM3:g.core.totalVolumeM3;status.textContent='Check: '+(g.thicknessesM.reduce((a,b)=>a+b,0)*1000).toFixed(0)+' mm layer sum = '+(g.totalThicknessM*1000).toFixed(0)+' mm total · volume sum '+(volumes.reduce((a,b)=>a+b,0)*1000).toFixed(2)+' L = '+(total*1000).toFixed(2)+' L';rows.replaceChildren();['A — top','B — middle','C — bottom'].forEach((name,i)=>{const tr=document.createElement('tr');for(const v of [name,(g.thicknessesM[i]*1000).toFixed(0),(g.thicknessFractions[i]*100).toFixed(1),(volumes[i]*1000).toFixed(2)]){const td=document.createElement('td');td.textContent=v;tr.append(td);}rows.append(tr);});}
+q('.controls').addEventListener('input',()=>{try{asset.setParameters(params());stat();}catch(e){status.textContent=e.message;}});
+q('#reset').addEventListener('click',()=>{asset.reset();q('#view').value='layered-slab';q('#top').value=40;q('#middle').value=60;q('#bottom').value=80;q('#length').value=400;q('#width').value=300;q('#diameter').value=100;q('#texture').checked=true;q('#dimensions').checked=true;stat();});
+focus.addEventListener('click',()=>{const active=!page.classList.contains('focus-mode');page.classList.toggle('focus-mode',active);focus.textContent=active?'Exit focus':'Focus visual';focus.setAttribute('aria-pressed',String(active));});addEventListener('keydown',e=>{if(e.key==='Escape'&&page.classList.contains('focus-mode'))focus.click();});
+const ro=new ResizeObserver(es=>{const r=es[0]?.contentRect;if(r?.width>0&&r?.height>0)asset.resize(r.width,r.height,devicePixelRatio||1);});ro.observe(root);addEventListener('beforeunload',()=>{ro.disconnect();asset.dispose();},{once:true});stat();
+</script></body></html>

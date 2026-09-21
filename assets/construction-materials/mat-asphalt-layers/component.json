@@ -1,0 +1,70 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/construction-materials/mat-asphalt-layers/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Layer thickness is vertical (+Y). Slab plan dimensions define geometric sample area; core view uses a circular plan area.",
+  "parameters": {
+    "topThicknessM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.01,
+      "max": 0.15,
+      "default": 0.04
+    },
+    "middleThicknessM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.01,
+      "max": 0.2,
+      "default": 0.06
+    },
+    "bottomThicknessM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.01,
+      "max": 0.25,
+      "default": 0.08
+    },
+    "sampleLengthM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.1,
+      "max": 1,
+      "default": 0.4
+    },
+    "sampleWidthM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.1,
+      "max": 1,
+      "default": 0.3
+    },
+    "coreDiameterM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.05,
+      "max": 0.2,
+      "default": 0.1
+    },
+    "view": {
+      "type": "enum",
+      "values": [
+        "layered-slab",
+        "core"
+      ],
+      "default": "layered-slab"
+    },
+    "showTexture": {
+      "type": "boolean",
+      "default": true
+    },
+    "showDimensions": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "assetDependencies": []
+}
