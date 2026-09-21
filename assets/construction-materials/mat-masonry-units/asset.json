@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "mat-masonry-units",
+  "version": "0.1.0",
+  "title": "Masonry units with dimensioned voids and bond",
+  "description": "Generic hollow masonry unit geometry with dimensioned rectangular through-voids and a schematic running-bond demonstration.",
+  "category": "construction-materials",
+  "topics": [
+    "masonry",
+    "hollow-masonry-unit",
+    "void-geometry",
+    "running-bond"
+  ],
+  "learningObjectives": [
+    "Relate generic masonry-unit dimensions and through-void geometry to gross and idealized solid volume.",
+    "Recognize running-bond offset without treating the schematic as a complete code-compliant wall detail."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/construction-materials/mat-masonry-units/demo/index.html",
+  "readme": "assets/construction-materials/mat-masonry-units/README.md",
+  "previewImage": "assets/construction-materials/mat-masonry-units/previews/default.svg",
+  "reviewFile": "assets/construction-materials/mat-masonry-units/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no manufacturer geometry, product data, or third-party media embedded."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Focused source/formula review completed; browser and assistive-technology execution are intentionally not claimed."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat contribution for reserved materials task mat-masonry-units.",
+    "sha256": null
+  }
+}
