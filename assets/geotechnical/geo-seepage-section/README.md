@@ -1,15 +1,7 @@
-# 1-D seepage with fixed-head boundaries
+# Fixed-head seepage — surveying-grade 3D rebuild
 
-This component models steady one-dimensional Darcy flow through a homogeneous soil section.
+The homogeneous 1-D Darcy model remains the engineering authority. The primary renderer is now a real Three.js section: a spatial soil prism between upstream/downstream fixed-head reservoirs, boundary walls, a display-normalized total-head line, directional arrow and animated representative flow tracks.
 
-With positive x from upstream to downstream:
+The straight tracks are intentionally **not** presented as a 2-D flow net. Their direction follows the sign of the model discharge; their speed is display-scaled. Exact head drop, gradient, Darcy flux, area and discharge remain analytical HUD values.
 
-- Head drop: `Δh = h1 − h2`
-- Signed hydraulic gradient: `i = Δh/L`
-- Darcy flux: `q = k i`
-- Cross-sectional area: `A = thickness × width`
-- Signed discharge: `Q = q A`
-
-A negative result means flow is opposite the nominal upstream-to-downstream x direction. Equal heads produce zero gradient and zero discharge.
-
-The linear total-head line follows directly from the 1-D constant-k assumptions. It is explicitly **not** a two-dimensional flow net and does not solve anisotropy, layered media, uplift distribution under structures, or free-surface seepage.
+The demo provides a four-step boundary→gradient→Darcy→limit sequence, camera presets, OrbitControls, responsive overlays, pause/reset and focus/fullscreen presentation.
