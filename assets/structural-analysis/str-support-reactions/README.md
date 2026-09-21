@@ -4,42 +4,35 @@ Status: candidate.
 
 ## Learning objective
 
-Compare the idealized planar constraints of pin, roller, and fixed supports and identify the reaction components each support may develop.
+Compare the idealized planar restraints of pin, roller, and fixed supports and identify their admissible reaction components in a spatial structural scene.
 
 ## Model and assumptions
 
-This asset is a **constraint diagram**, not a solved equilibrium problem. Reaction arrows show admissible positive reaction components associated with restrained degrees of freedom; they do not claim the actual sign or magnitude for a particular loading case.
+The component remains a constraint diagram rather than a solved equilibrium problem. A pin restrains x and y translation, a horizontal roller restrains y translation, and a fixed support restrains x/y translation plus rotation about z. Reaction arrows show admissible positive components only.
 
-Planar degrees of freedom are translation in x, translation in y, and rotation about z.
+The analytical model is kept in `src/model.mjs`. The premium 3D renderer in `src/asset.mjs` consumes that model and does not change its equations, sign conventions, or SI outputs.
 
-| Support | Restrained DOF | Possible reactions |
-| --- | --- | --- |
-| Pin | x, y | Rx, Ry |
-| Roller on horizontal surface | y | Ry |
-| Fixed | x, y, rz | Rx, Ry, Mz |
+## 3D presentation
 
-The roller shown assumes a horizontal bearing surface. A roller on an inclined surface would restrain translation normal to that surface instead.
+Version 0.2.0 replaces the former flat SVG-primary presentation with a real Three.js scene. The reusable component requires a host-provided **Three.js 0.185.1** namespace and host-owned `THREE.Scene`, consistent with the LearnMat runtime contract. The demo pins the same version through an import map and provides the perspective camera, OrbitControls, antialiased WebGL renderer, lighting, shadows, focus mode, and responsive resize behavior.
 
-## Usage
+Use `demo/index.html` for the full editorial 3D presentation or import `src/asset.mjs` into any host that supplies the declared Three.js peer and a scene.
 
-Entrypoint: `demo/index.html`. Reusable module: `src/asset.mjs`.
+Network access is required by the demonstration page because it loads the pinned Three.js peer from jsDelivr. The reusable component itself never creates a renderer, camera, requestAnimationFrame loop, or an undeclared library instance.
 
-The component implements runtime v1 with `setParameters`, `update`, `reset`, `resize`, `snapshot`, and idempotent `dispose`. It has no network or third-party runtime dependency.
+## Scope boundary
 
-Parameters:
-- `supportType`: `pin`, `roller`, or `fixed`.
-- `showReactionDirections`: toggles symbolic positive reaction components.
-
-`update(timeSeconds)` accepts finite nonnegative time but the diagram is static and time-independent.
+No load case is solved. Arrow direction does not assert the actual sign or magnitude of a reaction.
 
 ## Reuse and rights
 
-Original repository contribution. MIT license applies through the repository root `LICENSE`. No external images, fonts, models, or libraries are embedded.
+Original LearnMat contribution under the repository MIT license. No external 3D models, textures, images, fonts, or datasets are embedded. Three.js is an external runtime peer and is declared explicitly in metadata.
 
 ## Review evidence
 
-See `REVIEW.md`. The checked-in SVG preview is source-authored and representative; a browser screenshot and assistive-technology pass remain unavailable in this agent session.
+The checked-in preview is a representative authored preview, not a fabricated browser screenshot. Independent live-browser rendering, responsive-layout, and assistive-technology checks remain required before public approval.
 
 ## Change history
 
-- 0.1.0 — Initial reusable support-restraint component.
+- 0.2.0 — Rebuilt as a premium, surveying-style Three.js presentation while retaining the analytical model.
+- 0.1.0 — Initial candidate component.

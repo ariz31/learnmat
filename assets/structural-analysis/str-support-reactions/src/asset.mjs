@@ -1,121 +1,31 @@
-import { DEFAULT_SUPPORT_PARAMETERS, describeSupport, validateSupportParameters } from './model.mjs';
+import {DEFAULT_SUPPORT_PARAMETERS,describeSupport,validateSupportParameters} from './model.mjs';
+import {requireThreeRuntime,premiumMaterials,makeBoxBetween,makeCylinderBetween,makeArrow,makeLabelSprite,makeMomentArc,clearGroup,disposeGroup} from './three-utils.mjs';
 
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-function svgEl(name, attrs = {}, text = '') {
-  const node = document.createElementNS(SVG_NS, name);
-  for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, String(value));
-  if (text) node.textContent = text;
-  return node;
-}
-
-export function createAsset(context) {
-  if (!context || !(context.container instanceof Element)) throw new TypeError('context.container must be a DOM Element');
-  let disposed = false;
-  let timeSeconds = 0;
-  let parameters = { ...DEFAULT_SUPPORT_PARAMETERS };
-  let viewport = { width: 640, height: 360, pixelRatio: 1 };
-
-  const host = document.createElement('div');
-  const shadow = host.attachShadow({ mode: 'open' });
-  const style = document.createElement('style');
-  style.textContent = ':host{display:block}.wrap{font:14px/1.35 system-ui,sans-serif;color:#111827;background:#fff;border:1px solid #d1d5db;border-radius:12px;padding:12px}svg{display:block;width:100%;height:auto;max-height:420px}.note{margin:.6rem 0 0}';
-  const wrap = document.createElement('div');
-  wrap.className = 'wrap';
-  const svg = svgEl('svg', { viewBox: '0 0 640 320', role: 'img', 'aria-label': 'Structural support reaction diagram' });
-  const note = document.createElement('p');
-  note.className = 'note';
-  shadow.append(style, wrap);
-  wrap.append(svg, note);
-  context.container.append(host);
-
-  function line(x1, y1, x2, y2, width = 3) {
-    svg.append(svgEl('line', { x1, y1, x2, y2, stroke: 'currentColor', 'stroke-width': width, 'stroke-linecap': 'round' }));
+export function createAsset(context){
+ const {THREE,scene}=requireThreeRuntime(context);let disposed=false,parameters={...DEFAULT_SUPPORT_PARAMETERS},timeSeconds=0,viewport={width:1,height:1,pixelRatio:1};
+ const root=new THREE.Group();root.name='str-support-reactions';scene.add(root);
+ function rebuild(){
+  clearGroup(root);const s=describeSupport(parameters),m=premiumMaterials(THREE);
+  const beam=new THREE.Mesh(new THREE.BoxGeometry(5,.34,.52),m.steel);beam.position.set(0,1.35,0);beam.castShadow=beam.receiveShadow=true;root.add(beam);
+  const cap=new THREE.Mesh(new THREE.BoxGeometry(1.15,.14,.92),m.dark);cap.position.set(0,1.1,0);cap.castShadow=true;root.add(cap);
+  if(s.supportType==='pin'){
+    const body=new THREE.Mesh(new THREE.ConeGeometry(.58,.78,4,1,false,Math.PI/4),m.concrete);body.position.set(0,.66,0);body.castShadow=true;root.add(body);
+    const hinge=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,.95,28),m.teal);hinge.rotation.x=Math.PI/2;hinge.position.set(0,1.08,0);hinge.castShadow=true;root.add(hinge);
+  }else if(s.supportType==='roller'){
+    const block=new THREE.Mesh(new THREE.BoxGeometry(1.05,.32,.82),m.concrete);block.position.set(0,.82,0);block.castShadow=true;root.add(block);
+    for(const x of[-.32,0,.32]){const r=new THREE.Mesh(new THREE.CylinderGeometry(.13,.13,.78,24),m.teal);r.rotation.x=Math.PI/2;r.position.set(x,.51,0);r.castShadow=true;root.add(r);}
+    const plate=new THREE.Mesh(new THREE.BoxGeometry(1.4,.12,1.05),m.dark);plate.position.set(0,.31,0);plate.receiveShadow=true;root.add(plate);
+  }else{
+    const wall=new THREE.Mesh(new THREE.BoxGeometry(.5,1.35,1.4),m.concrete);wall.position.set(0,.63,0);wall.castShadow=wall.receiveShadow=true;root.add(wall);
+    for(const z of[-.52,-.26,0,.26,.52]){const rib=new THREE.Mesh(new THREE.BoxGeometry(.72,.055,.055),m.dark);rib.rotation.z=-.42;rib.position.set(.18,.63,z);root.add(rib);}
   }
-  function text(x, y, value, anchor = 'middle', size = 16, weight = 500) {
-    svg.append(svgEl('text', { x, y, 'text-anchor': anchor, 'font-size': size, 'font-family': 'system-ui,sans-serif', 'font-weight': weight, fill: 'currentColor' }, value));
-  }
-  function arrow(x1, y1, x2, y2, label) {
-    line(x1, y1, x2, y2, 3);
-    const angle = Math.atan2(y2 - y1, x2 - x1);
-    const s = 10;
-    const points = [
-      [x2, y2],
-      [x2 - s * Math.cos(angle - Math.PI / 6), y2 - s * Math.sin(angle - Math.PI / 6)],
-      [x2 - s * Math.cos(angle + Math.PI / 6), y2 - s * Math.sin(angle + Math.PI / 6)]
-    ];
-    svg.append(svgEl('polygon', { points: points.map(p => p.join(',')).join(' '), fill: 'currentColor' }));
-    text(x2 + (x2 === x1 ? 18 : 0), y2 + (y2 === y1 ? -12 : 0), label, 'middle', 15, 700);
-  }
-  function drawSupport(type) {
-    line(190, 125, 450, 125, 8);
-    if (type === 'pin' || type === 'roller') {
-      svg.append(svgEl('polygon', { points: '320,125 275,205 365,205', fill: 'none', stroke: 'currentColor', 'stroke-width': 4 }));
-      if (type === 'roller') {
-        for (const cx of [292, 320, 348]) svg.append(svgEl('circle', { cx, cy: 217, r: 9, fill: 'none', stroke: 'currentColor', 'stroke-width': 3 }));
-        line(260, 230, 380, 230, 3);
-      } else {
-        line(260, 205, 380, 205, 3);
-      }
-    } else {
-      line(320, 92, 320, 230, 12);
-      for (let y = 98; y <= 226; y += 18) line(320, y, 344, y - 14, 2);
-    }
-  }
-  function drawMomentArrow() {
-    svg.append(svgEl('path', { d: 'M 380 205 A 62 62 0 0 0 374 111', fill: 'none', stroke: 'currentColor', 'stroke-width': 3, 'stroke-linecap': 'round' }));
-    svg.append(svgEl('polygon', { points: '374,111 362,119 378,126', fill: 'currentColor' }));
-    text(412, 151, 'Mz', 'middle', 15, 700);
-  }
-  function draw() {
-    svg.replaceChildren();
-    const state = describeSupport(parameters);
-    text(320, 34, state.label, 'middle', 23, 750);
-    text(320, 60, 'Possible reaction components for restrained planar DOF', 'middle', 14, 500);
-    drawSupport(state.supportType);
-    if (state.showReactionDirections) {
-      if (state.possibleReactions.includes('Rx')) arrow(320, 125, 420, 125, 'Rx');
-      if (state.possibleReactions.includes('Ry')) arrow(320, 125, 320, 54, 'Ry');
-      if (state.possibleReactions.includes('Mz')) drawMomentArrow();
-    }
-    text(320, 279, 'Restrained DOF: ' + state.restrainedDofs.join(', '), 'middle', 16, 650);
-    note.textContent = 'Arrows indicate admissible positive reaction components, not solved force signs or magnitudes.';
-    svg.setAttribute('aria-label', state.label + '. Restrained degrees of freedom: ' + state.restrainedDofs.join(', ') + '. Possible reactions: ' + state.possibleReactions.join(', ') + '.');
-  }
-
-  draw();
-
-  return {
-    setParameters(next = {}) {
-      if (disposed) throw new Error('Asset is disposed');
-      parameters = validateSupportParameters(next, parameters);
-      draw();
-    },
-    update(nextTimeSeconds) {
-      if (disposed) throw new Error('Asset is disposed');
-      if (!Number.isFinite(nextTimeSeconds) || nextTimeSeconds < 0) throw new RangeError('timeSeconds must be finite and nonnegative');
-      timeSeconds = nextTimeSeconds;
-    },
-    reset() {
-      if (disposed) throw new Error('Asset is disposed');
-      parameters = { ...DEFAULT_SUPPORT_PARAMETERS };
-      timeSeconds = 0;
-      draw();
-    },
-    resize(width, height, pixelRatio = 1) {
-      if (disposed) throw new Error('Asset is disposed');
-      for (const value of [width, height, pixelRatio]) if (!Number.isFinite(value) || value <= 0) throw new RangeError('resize values must be finite and positive');
-      viewport = { width, height, pixelRatio };
-      host.style.width = width + 'px';
-      host.style.maxWidth = '100%';
-    },
-    snapshot() {
-      return { ...describeSupport(parameters), timeSeconds, viewport: { ...viewport } };
-    },
-    dispose() {
-      if (disposed) return;
-      disposed = true;
-      host.remove();
-    }
-  };
+  const point=new THREE.Vector3(0,1.42,.42);
+  if(s.showReactionDirections&&s.possibleReactions.includes('Rx')){root.add(makeArrow(THREE,point,new THREE.Vector3(1.45,1.42,.42),0x007d80));const l=makeLabelSprite(THREE,'Rx');l.position.set(1.35,1.72,.42);root.add(l);}
+  if(s.showReactionDirections&&s.possibleReactions.includes('Ry')){root.add(makeArrow(THREE,point,new THREE.Vector3(0,2.85,.42),0x007d80));const l=makeLabelSprite(THREE,'Ry');l.position.set(.55,2.65,.42);root.add(l);}
+  if(s.showReactionDirections&&s.possibleReactions.includes('Mz')){const a=makeMomentArc(THREE,new THREE.Vector3(0,1.45,.5),.78,0xc26a30);root.add(a);const l=makeLabelSprite(THREE,'Mz',{color:'#8a451f'});l.position.set(-1,2.1,.52);root.add(l);}
+  const title=makeLabelSprite(THREE,s.label,{scale:.82});title.position.set(0,3.35,0);root.add(title);
+  const dof=makeLabelSprite(THREE,'Restrained: '+s.restrainedDofs.join(', '),{scale:.72});dof.position.set(0,-.05,0);root.add(dof);
+ }
+ rebuild();
+ return{setParameters(next={}){if(disposed)throw new Error('Asset is disposed');parameters=validateSupportParameters(next,parameters);rebuild();},update(t){if(disposed)throw new Error('Asset is disposed');if(!Number.isFinite(t)||t<0)throw new RangeError('timeSeconds must be finite and nonnegative');timeSeconds=t;},reset(){if(disposed)throw new Error('Asset is disposed');parameters={...DEFAULT_SUPPORT_PARAMETERS};timeSeconds=0;rebuild();},resize(w,h,p=1){if(disposed)throw new Error('Asset is disposed');if(![w,h,p].every(v=>Number.isFinite(v)&&v>0))throw new RangeError('resize values must be finite and positive');viewport={width:w,height:h,pixelRatio:p};},snapshot(){return{...describeSupport(parameters),timeSeconds,viewport:{...viewport},rendering:'Three.js 0.185.1 host scene'};},dispose(){if(disposed)return;disposed=true;disposeGroup(root,scene);}};
 }

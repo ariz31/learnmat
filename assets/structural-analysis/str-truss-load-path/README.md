@@ -4,50 +4,35 @@ Status: candidate.
 
 ## Learning objective
 
-Trace a centered vertical joint load through a simple symmetric triangular truss and distinguish compression in the two inclined members from tension in the bottom chord.
+Trace a centered vertical joint load through the two compression diagonals and the bottom tension tie of an ideal determinate triangular truss.
 
 ## Model and assumptions
 
-Physical joints:
-- A = (0, 0), pin support
-- B = (L/2, h), loaded apex
-- C = (L, 0), horizontal-surface roller
+The analytical topology remains an ideal pin-jointed planar truss with a pin at A, a horizontal roller at C, and a vertical apex joint load. Positive axial force is tension; AB/BC are compression and AC is tension for the default downward load.
 
-Members are AB, BC, and AC. The structure is treated as an ideal pin-jointed planar truss with loads applied only at joints, negligible member self-weight, symmetric geometry, and no support settlement.
+The analytical model is kept in `src/model.mjs`. The premium 3D renderer in `src/asset.mjs` consumes that model and does not change its equations, sign conventions, or SI outputs.
 
-For downward apex load (P):
+## 3D presentation
 
-- (R_{Ay}=R_{Cy}=P/2)
-- (R_{Ax}=0)
-- (	heta=atan2(h,L/2))
-- inclined-member compression magnitude (C=P/(2 sin	heta))
-- bottom-chord tension (T=P/(2 tan	heta))
+Version 0.2.0 replaces the former flat SVG-primary presentation with a real Three.js scene. The reusable component requires a host-provided **Three.js 0.185.1** namespace and host-owned `THREE.Scene`, consistent with the LearnMat runtime contract. The demo pins the same version through an import map and provides the perspective camera, OrbitControls, antialiased WebGL renderer, lighting, shadows, focus mode, and responsive resize behavior.
 
-The runtime snapshot uses the structural-analysis sign convention **positive axial force = tension**, so AB and BC are (-C) and AC is (+T).
+The 3D scene gives members real depth, joint hardware, support geometry and spatial vectors while preserving the planar analytical coordinates in the snapshot.
 
-Default example: (L=8 m), (h=3 m), (P=40 kN). Then (	heta≈36.87°), vertical reactions are 20 kN each, AB=BC≈33.333 kN compression, and AC≈26.667 kN tension.
+Network access is required by the demonstration page because it loads the pinned Three.js peer from jsDelivr. The reusable component itself never creates a renderer, camera, requestAnimationFrame loop, or an undeclared library instance.
 
-This is a pedagogical determinate truss case, not a general truss solver or design-code check.
+## Scope boundary
 
-## Usage
-
-Entrypoint: `demo/index.html`. Reusable module: `src/asset.mjs`.
-
-SI parameters:
-- `spanM`: 2–30 m
-- `riseM`: 0.5–15 m
-- `loadN`: 0–1,000,000 N
-
-The component implements runtime v1. `snapshot()` returns physical joint coordinates, reactions, member axial forces, and the diagonal angle. `update(timeSeconds)` is deterministic and time-independent.
+This is a pedagogical determinate truss case, not a spatial-truss solver, member design check, buckling check, or code-compliance result.
 
 ## Reuse and rights
 
-Original repository contribution under the root MIT license. No third-party runtime dependency or external visual asset is used.
+Original LearnMat contribution under the repository MIT license. No external 3D models, textures, images, fonts, or datasets are embedded. Three.js is an external runtime peer and is declared explicitly in metadata.
 
 ## Review evidence
 
-See `REVIEW.md`. The preview is source-authored from the default analytical case; live browser screenshot and assistive-technology execution remain for independent review.
+The checked-in preview is a representative authored preview, not a fabricated browser screenshot. Independent live-browser rendering, responsive-layout, and assistive-technology checks remain required before public approval.
 
 ## Change history
 
-- 0.1.0 — Initial symmetric triangular-truss load-path component.
+- 0.2.0 — Rebuilt as a premium, surveying-style Three.js presentation while retaining the analytical model.
+- 0.1.0 — Initial candidate component.

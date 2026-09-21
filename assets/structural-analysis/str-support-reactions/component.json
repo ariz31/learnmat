@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Diagram-space component; support glyph is centered in its responsive SVG viewport and carries no physical length scale.",
+  "boundsDescription": "A 5 m demonstration beam is centered about the origin with the selected ideal support beneath it. Reaction arrows are display vectors and carry no solved magnitude.",
   "parameters": {
     "supportType": {
       "type": "enum",
@@ -21,5 +21,11 @@
       "default": true
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs",
+  "threePeerVersion": "0.185.1",
+  "hostCapabilities": [
+    "THREE",
+    "scene"
+  ]
 }

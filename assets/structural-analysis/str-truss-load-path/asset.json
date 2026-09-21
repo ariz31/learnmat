@@ -1,44 +1,52 @@
 {
   "schemaVersion": "1.0.0",
   "id": "str-truss-load-path",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Triangular truss load path",
-  "description": "Reusable SVG component showing reactions and axial member forces for a symmetric three-member triangular truss with a vertical apex load.",
+  "description": "Premium Three.js load-path study for a symmetric three-member triangular truss with spatial member-force encoding.",
   "category": "structural-analysis",
   "topics": [
     "truss-analysis",
     "load-path",
     "method-of-joints",
-    "axial-force"
+    "axial-force",
+    "3d-visualization"
   ],
   "learningObjectives": [
-    "Trace a vertical apex load through a symmetric triangular truss into support reactions and distinguish tension from compression."
+    "Trace a vertical apex load through a symmetric triangular truss into reactions and distinguish compression from tension using spatial member geometry and numerical labels."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/structural-analysis/str-truss-load-path/demo/index.html",
   "readme": "assets/structural-analysis/str-truss-load-path/README.md",
   "previewImage": "assets/structural-analysis/str-truss-load-path/previews/preview.svg",
   "reviewFile": "assets/structural-analysis/str-truss-load-path/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+    "attribution": "Original LearnMat repository contribution. Runtime uses the declared Three.js 0.185.1 peer; no third-party models, textures, fonts, or datasets are embedded."
   },
   "verification": {
     "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Candidate includes documented analytical self-checks and reproducible check notes. Independent engineering, live browser, screenshot, and accessibility review remain required before approval."
+    "notes": "0.2.0 replaces the flat renderer with a host-rendered Three.js scene while preserving the analytical model. Independent engineering, live-browser, screenshot, and accessibility review remain required before approval."
   },
   "source": {
     "type": "original",
-    "reference": "LearnMat structures queue task str-truss-load-path.",
+    "reference": "Premium 3D rebuild of reserved structures task str-truss-load-path; analytical model retained from the original repository contribution.",
     "sha256": null
   }
 }
