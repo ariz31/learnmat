@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "mat-timber-grain",
+  "version": "0.1.0",
+  "title": "Timber specimen grain orientation",
+  "description": "Reusable timber coupon geometry with deterministic stylized surface grain direction and explicit orientation relative to the specimen longitudinal axis.",
+  "category": "construction-materials",
+  "topics": [
+    "timber",
+    "grain-direction",
+    "material-orientation",
+    "specimen-geometry",
+    "wood"
+  ],
+  "learningObjectives": [
+    "Relate a stylized timber surface-grain direction to the specimen longitudinal axis using an explicit angle.",
+    "Distinguish specimen geometry and visual grain orientation from species, grade, anatomy, and engineering material properties."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/construction-materials/mat-timber-grain/demo/index.html",
+  "readme": "assets/construction-materials/mat-timber-grain/README.md",
+  "previewImage": "assets/construction-materials/mat-timber-grain/previews/default.svg",
+  "reviewFile": "assets/construction-materials/mat-timber-grain/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party timber texture, species dataset, or grading table embedded."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Focused source/geometry/orientation review completed. Browser and assistive-technology execution are intentionally not claimed; see REVIEW.md."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat contribution for reserved materials task mat-timber-grain.",
+    "sha256": null
+  }
+}

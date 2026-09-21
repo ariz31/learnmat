@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Timber grain orientation — LearnMat</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#0f172a;background:#eef2f6}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh}
+    main{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:28px 0 48px}
+    header{margin-bottom:18px}
+    h1{margin:0 0 7px;font-size:clamp(1.5rem,3vw,2.25rem);letter-spacing:-.03em}
+    header p{margin:0;color:#475569;max-width:78ch;line-height:1.55}
+    .layout{display:grid;grid-template-columns:minmax(250px,315px) minmax(0,1fr);gap:18px;align-items:start}
+    .controls{background:#fff;border:1px solid #d7dde5;border-radius:18px;padding:16px;box-shadow:0 10px 25px rgba(15,23,42,.06)}
+    label{display:grid;gap:6px;margin-bottom:12px;font-size:13px;font-weight:700;color:#334155}
+    select,input[type=number]{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:9px 10px;background:#fff;color:#0f172a;font:inherit}
+    .check{display:flex;align-items:center;gap:9px}
+    .check input{width:18px;height:18px}
+    button{width:100%;border:0;border-radius:11px;padding:10px 12px;background:#0f172a;color:#fff;font:inherit;font-weight:750;cursor:pointer}
+    button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
+    #status{font-size:13px;line-height:1.5;color:#475569;margin:13px 2px 0}
+    .note{margin-top:13px;padding-top:13px;border-top:1px solid #e2e8f0;color:#64748b;font-size:12px;line-height:1.5}
+    @media(max-width:780px){main{padding-top:18px}.layout{grid-template-columns:1fr}.controls{order:2}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Timber specimen grain orientation</h1>
+    <p>Visualize a timber coupon with a surface grain-direction indicator relative to the specimen longitudinal axis. The grain marks are illustrative and do not identify species, anatomical L/R/T directions, defect grade, strength, moisture condition, or code classification.</p>
+  </header>
+  <div class="layout">
+    <form class="controls" onsubmit="return false" aria-label="Timber specimen controls">
+      <label>Length (mm)
+        <input id="length" type="number" min="100" max="1200" step="10" value="300">
+      </label>
+      <label>Width (mm)
+        <input id="width" type="number" min="25" max="300" step="5" value="75">
+      </label>
+      <label>Thickness (mm)
+        <input id="thickness" type="number" min="5" max="100" step="5" value="25">
+      </label>
+      <label>Surface grain angle (degrees)
+        <input id="grain-angle" type="number" min="-45" max="45" step="1" value="8">
+      </label>
+      <label>Illustrative grain density
+        <select id="grain-density">
+          <option value="none">None</option>
+          <option value="light">Light</option>
+          <option value="medium" selected>Medium</option>
+          <option value="dense">Dense</option>
+        </select>
+      </label>
+      <label class="check"><input id="dimensions" type="checkbox" checked> Show dimensions</label>
+      <label class="check"><input id="orientation" type="checkbox" checked> Show orientation arrows</label>
+      <button id="reset" type="button">Reset specimen</button>
+      <p id="status" role="status" aria-live="polite"></p>
+      <p class="note">The API receives grain angle in radians. The demo accepts degrees only for convenience and converts them before calling the component.</p>
+    </form>
+    <div id="asset-root"></div>
+  </div>
+</main>
+<script type="module">
+  import { createAsset } from '../src/asset.mjs';
+
+  const q = (selector) => document.querySelector(selector);
+  const root = q('#asset-root');
+  const status = q('#status');
+
+  const asset = createAsset({
+    container: root,
+    seed: 20260922,
+    reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+  });
+
+  function parametersFromControls() {
+    return {
+      lengthM: Number(q('#length').value) / 1000,
+      widthM: Number(q('#width').value) / 1000,
+      thicknessM: Number(q('#thickness').value) / 1000,
+      grainAngleRad: Number(q('#grain-angle').value) * Math.PI / 180,
+      grainDensity: q('#grain-density').value,
+      showDimensions: q('#dimensions').checked,
+      showOrientation: q('#orientation').checked,
+    };
+  }
+
+  function updateStatus() {
+    const snapshot = asset.snapshot();
+    const specimen = snapshot.state.specimen;
+    status.textContent = 'Geometric volume: ' +
+      (specimen.volumeM3 * 1000000).toFixed(1) + ' cm³ · grain angle: ' +
+      (specimen.grainAngleRad * 180 / Math.PI).toFixed(1) + '°';
+  }
+
+  function apply() {
+    try {
+      asset.setParameters(parametersFromControls());
+      updateStatus();
+    } catch (error) {
+      status.textContent = error.message;
+    }
+  }
+
+  q('.controls').addEventListener('input', apply);
+  q('#reset').addEventListener('click', () => {
+    asset.reset();
+    q('#length').value = '300';
+    q('#width').value = '75';
+    q('#thickness').value = '25';
+    q('#grain-angle').value = '8';
+    q('#grain-density').value = 'medium';
+    q('#dimensions').checked = true;
+    q('#orientation').checked = true;
+    updateStatus();
+  });
+
+  const observer = new ResizeObserver((entries) => {
+    const rect = entries[0]?.contentRect;
+    if (rect && rect.width > 0 && rect.height > 0) {
+      asset.resize(rect.width, rect.height, devicePixelRatio || 1);
+    }
+  });
+  observer.observe(root);
+
+  addEventListener('beforeunload', () => {
+    observer.disconnect();
+    asset.dispose();
+  }, { once: true });
+
+  updateStatus();
+</script>
+</body>
+</html>
