@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "profile-leveling",
+  "version": "0.1.0",
+  "title": "Profile Leveling and Longitudinal Profile",
+  "description": "Explore chainage, ground elevations, and longitudinal profiles.",
+  "category": "surveying",
+  "topics": [
+    "profile-leveling",
+    "longitudinal-profile"
+  ],
+  "learningObjectives": [
+    "Explore chainage, ground elevations, and longitudinal profiles."
+  ],
+  "kind": "presentation",
+  "renderer": "threejs",
+  "status": "candidate",
+  "entrypoint": "examples/surveying/profile-leveling/index.html",
+  "readme": "examples/surveying/profile-leveling/README.md",
+  "previewImage": null,
+  "reviewFile": null,
+  "derivedFrom": null,
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    },
+    {
+      "name": "three/addons",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/",
+      "embedded": false
+    }
+  ],
+  "rights": {
+    "status": "needs-confirmation",
+    "licenseExpression": null,
+    "licenseFile": null,
+    "attribution": "User-supplied example; upstream authorship and reuse terms require confirmation."
+  },
+  "verification": {
+    "engineeringReview": "not-reviewed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Original source extracted without changes. Metadata and byte integrity checked; runtime and engineering behavior not verified."
+  },
+  "source": {
+    "type": "user-supplied",
+    "reference": "Pasted text(20260921-161408).txt, HTML document 4",
+    "sha256": "95b929984215e28ca4a0d89a41113a8f118de79b23c8f86aedced1ab5fcfb107"
+  }
+}
