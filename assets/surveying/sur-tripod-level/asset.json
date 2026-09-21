@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "sur-tripod-level",
+  "version": "0.1.0",
+  "title": "Surveying Tripod and Level",
+  "description": "Reusable tripod-and-level component with explicit instrument height, sight-axis elevation, and surveying azimuth.",
+  "category": "surveying",
+  "topics": ["differential-leveling", "surveying-instrument", "line-of-sight"],
+  "learningObjectives": [
+    "Identify instrument height and line of sight for a leveled surveying instrument.",
+    "Interpret surveying azimuth as clockwise from north and convert it to the LearnMat coordinate basis."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "in-review",
+  "entrypoint": "assets/surveying/sur-tripod-level/demo/index.html",
+  "readme": "assets/surveying/sur-tripod-level/README.md",
+  "previewImage": "assets/surveying/sur-tripod-level/previews/default.svg",
+  "reviewFile": "assets/surveying/sur-tripod-level/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Instrument-height and azimuth-vector invariants reviewed from source; browser and assistive-technology checks remain."
+  },
+  "source": {"type":"original","reference":"Reserved surveying queue task sur-tripod-level.","sha256":null}
+}
