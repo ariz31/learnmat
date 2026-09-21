@@ -19,7 +19,7 @@ const ground=new THREE.Mesh(new THREE.PlaneGeometry(80,36),new THREE.MeshStandar
 const grid=new THREE.GridHelper(40,40,0x6a7669,0x9da695);grid.position.y=.008;scene.add(grid);
 const asset=createAsset({THREE,scene,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
 let playing=true,elapsed=0,last=performance.now();
-const L=document.querySelector('#L'),V=document.querySelector('#V'),F=document.querySelector('#F');
+const L=document.querySelector('#L'),V=document.querySelector('#V'),F=document.querySelector('#F'),oL=document.querySelector('#oL'),oV=document.querySelector('#oV'),oF=document.querySelector('#oF'),distance=document.querySelector('#distance'),play=document.querySelector('#play'),reset=document.querySelector('#reset'),focus=document.querySelector('#focus');
 function apply(){asset.setParameters({pathLength:+L.value,speed:+V.value,stepFrequency:+F.value});oL.value=(+L.value).toFixed(1)+' m';oV.value=(+V.value).toFixed(1)+' m/s';oF.value=(+F.value).toFixed(1)+' Hz';}
 [L,V,F].forEach(x=>x.addEventListener('input',apply));apply();
 play.onclick=()=>{playing=!playing;play.textContent=playing?'Pause':'Play';last=performance.now()};reset.onclick=()=>{elapsed=0;asset.update(0)};focus.onclick=()=>stage.classList.toggle('focus');
