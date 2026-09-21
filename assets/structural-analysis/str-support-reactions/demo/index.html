@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Support reactions and restraints</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;margin:0;background:#f6f7f9;color:#111827}main{max-width:900px;margin:auto;padding:24px}.controls{display:flex;gap:16px;flex-wrap:wrap;align-items:end;margin-bottom:16px}label{display:grid;gap:6px;font-weight:650}select,input{font:inherit;padding:8px}.check{display:flex;align-items:center;gap:8px}#asset-root{min-height:340px}
+</style>
+</head>
+<body>
+<main>
+<h1>Support reactions and restraints</h1>
+<p>Compare idealized planar support constraints. Reaction arrows are symbolic possible components, not solved force signs or magnitudes.</p>
+<div class="controls">
+<label>Support type
+<select id="support">
+<option value="pin">Pin</option>
+<option value="roller">Roller</option>
+<option value="fixed">Fixed</option>
+</select>
+</label>
+<label class="check"><input id="reactions" type="checkbox" checked> Show reaction directions</label>
+<button id="reset" type="button">Reset</button>
+</div>
+<div id="asset-root"></div>
+<pre id="snapshot" aria-live="polite"></pre>
+</main>
+<script type="module">
+import { createAsset } from '../src/asset.mjs';
+const root=document.querySelector('#asset-root');
+const asset=createAsset({container:root,seed:1,reducedMotion:true});
+const support=document.querySelector('#support');
+const reactions=document.querySelector('#reactions');
+const snapshot=document.querySelector('#snapshot');
+function sync(){asset.setParameters({supportType:support.value,showReactionDirections:reactions.checked});snapshot.textContent=JSON.stringify(asset.snapshot(),null,2);}
+support.addEventListener('change',sync);
+reactions.addEventListener('change',sync);
+document.querySelector('#reset').addEventListener('click',()=>{asset.reset();support.value='pin';reactions.checked=true;sync();});
+asset.resize(Math.min(760,root.clientWidth||760),360,window.devicePixelRatio||1);
+sync();
+</script>
+</body>
+</html>
