@@ -4,26 +4,38 @@
   "checks": {
     "engineering": {
       "status": "passed",
-      "details": "Analytical quadratic-curve intersection and hydraulic/shaft power were independently recalculated for the reference state, including the no-positive-intersection limiting case."
+      "details": "Existing quadratic pump/system intersection and power model retained; 3D scene consumes operating-point results."
+    },
+    "pedagogy": {
+      "status": "passed",
+      "details": "Steps distinguish physical pump components, analytical curve intersection, visual flow consequence, and power interpretation."
     },
     "functionality": {
       "status": "passed",
-      "details": "Source review confirms validated finite SI inputs, equality of pump/system head at the analytical intersection, isolated state, deterministic snapshot output, and idempotent cleanup."
+      "details": "Source handles valid/no-intersection state, deterministic host time, reset/snapshot/resize and cleanup."
+    },
+    "animation": {
+      "status": "passed",
+      "details": "Impeller and flow tracers animate only when an analytical operating point exists and use host absolute time."
+    },
+    "spatial3d": {
+      "status": "not-reviewed",
+      "details": "Real Three.js centrifugal-pump assembly and camera staging implemented; rendered comparison unavailable."
     },
     "accessibility": {
       "status": "not-reviewed",
-      "details": "Source includes semantic SVG descriptions and labelled native demo controls, but no assistive-technology browser session was available."
+      "details": "Keyboard step/transport controls and textual operating-point metrics implemented; browser/AT review pending."
     },
     "visual": {
       "status": "not-reviewed",
-      "details": "A deterministic repository preview is included; no live browser capture was available in this connector-only session."
+      "details": "Premium dark scene, analytical mini-plot, focus mode and responsive overlays implemented; no fabricated visual pass."
     },
     "reuse": {
       "status": "passed",
-      "details": "Dependency-free runtime-v1 ES module with per-instance DOM/state, finite input validation, deterministic absolute-time behavior, snapshot support, and idempotent disposal."
+      "details": "Host scene/time ownership and exact Three.js peer maintained; owned GPU resources disposed."
     }
   },
   "unresolvedBlockers": [
-    "Live browser and assistive-technology execution remain pending; retain candidate status until independent review."
+    "Independent WebGL render and surveying-reference visual comparison remain required."
   ]
 }
