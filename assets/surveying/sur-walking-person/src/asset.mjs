@@ -1,162 +1,86 @@
-const SVG_NS = 'http://www.w3.org/2000/svg';
+const DEFAULTS=Object.freeze({pathLength:10,speed:1.2,stepFrequency:1.7,personHeight:1.75});
+const LIMITS=Object.freeze({pathLength:[0.5,50],speed:[0,2.5],stepFrequency:[0.5,3],personHeight:[1.4,2.1]});
 
-const DEFAULTS = Object.freeze({ pathLength: 10, speed: 1.2, stepFrequency: 1.7, personHeight: 1.75 });
-const LIMITS = Object.freeze({
-  pathLength: [0.5, 50],
-  speed: [0, 2.5],
-  stepFrequency: [0.5, 3],
-  personHeight: [1.4, 2.1]
-});
+function normalize(next){
+  const p={...DEFAULTS,...next};
+  for(const [k,[min,max]] of Object.entries(LIMITS)){
+    if(!Number.isFinite(p[k])||p[k]<min||p[k]>max) throw new RangeError(k+' must be finite and between '+min+' and '+max+'.');
+  }
+  return p;
+}
+function mat(T,color,rough=.72,metal=.05){return new T.MeshStandardMaterial({color,roughness:rough,metalness:metal});}
+function cylinder(T,r,len,material){
+  const mesh=new T.Mesh(new T.CylinderGeometry(r,r,len,16),material);
+  mesh.position.y=-len/2;
+  mesh.castShadow=true; mesh.receiveShadow=true;
+  return mesh;
+}
+function makeHuman(T){
+  const root=new T.Group(), skin=mat(T,0xc98f67,.82), fabric=mat(T,0x33414a,.88), trouser=mat(T,0xb89a72,.9), vest=mat(T,0xd8ef39,.75), boot=mat(T,0x2b2927,.92), hardhat=mat(T,0xf2f4f3,.55);
+  const pelvis=new T.Group(); pelvis.position.y=.92; root.add(pelvis);
+  const hips=new T.Mesh(new T.BoxGeometry(.34,.18,.24),trouser); hips.castShadow=true; pelvis.add(hips);
+  const torso=new T.Mesh(new T.BoxGeometry(.48,.62,.28),fabric); torso.position.y=.38; torso.castShadow=true; pelvis.add(torso);
+  const vestMesh=new T.Mesh(new T.BoxGeometry(.51,.42,.30),vest); vestMesh.position.y=.39; vestMesh.castShadow=true; pelvis.add(vestMesh);
+  const neck=new T.Mesh(new T.CylinderGeometry(.075,.075,.12,12),skin); neck.position.y=.75; pelvis.add(neck);
+  const head=new T.Mesh(new T.SphereGeometry(.15,20,16),skin); head.position.y=.91; head.castShadow=true; pelvis.add(head);
+  const brim=new T.Mesh(new T.CylinderGeometry(.19,.19,.035,24),hardhat); brim.position.y=1.055; pelvis.add(brim);
+  const dome=new T.Mesh(new T.SphereGeometry(.165,20,12,0,Math.PI*2,0,Math.PI/2),hardhat); dome.position.y=1.055; pelvis.add(dome);
 
-function svgNode(name, attributes = {}) {
-  const el = document.createElementNS(SVG_NS, name);
-  for (const [key, value] of Object.entries(attributes)) el.setAttribute(key, String(value));
-  return el;
+  function limb(x,y,z,len,r,material){
+    const joint=new T.Group(); joint.position.set(x,y,z); joint.add(cylinder(T,r,len,material)); pelvis.add(joint); return joint;
+  }
+  const leftLeg=limb(-.12,-.02,0,.82,.075,trouser), rightLeg=limb(.12,-.02,0,.82,.075,trouser);
+  const leftArm=limb(-.31,.64,0,.60,.055,skin), rightArm=limb(.31,.64,0,.60,.055,skin);
+  const leftBoot=new T.Mesh(new T.BoxGeometry(.15,.10,.29),boot); leftBoot.position.set(-.12,.06,.08); root.add(leftBoot);
+  const rightBoot=leftBoot.clone(); rightBoot.position.x=.12; root.add(rightBoot);
+  root.userData={pelvis,leftLeg,rightLeg,leftArm,rightArm,leftBoot,rightBoot};
+  return root;
+}
+function disposeObject(obj){
+  obj.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material){const a=Array.isArray(n.material)?n.material:[n.material];a.forEach(m=>m.dispose());}});
 }
 
-function validate(name, value) {
-  const [min, max] = LIMITS[name];
-  if (!Number.isFinite(value) || value < min || value > max) {
-    throw new RangeError(name + ' must be finite and between ' + min + ' and ' + max + '.');
+export function createAsset(context={}){
+  const T=context.THREE, scene=context.scene;
+  if(!T||!scene) throw new TypeError('sur-walking-person requires context.THREE and context.scene.');
+  let disposed=false,timeSeconds=0,params=normalize({});
+  const group=new T.Group(); group.name='sur-walking-person'; scene.add(group);
+  const person=makeHuman(T); group.add(person);
+  const pathMaterial=mat(T,0x0f7d80,.7,.05);
+  const path=new T.Mesh(new T.BoxGeometry(1,.025,.045),pathMaterial); path.position.y=.018; path.receiveShadow=true; group.add(path);
+  const startMarker=new T.Mesh(new T.CylinderGeometry(.07,.09,.22,18),mat(T,0x173042)); startMarker.position.y=.11; group.add(startMarker);
+  const endMarker=startMarker.clone(); group.add(endMarker);
+
+  function stateAt(t){
+    const safe=Math.max(0,t), moving=params.speed>0, arrival=moving?params.pathLength/params.speed:Infinity;
+    const active=moving?Math.min(safe,arrival):0;
+    const distance=moving?Math.min(params.pathLength,params.speed*safe):0;
+    return {safe,arrival,distance,phase:2*Math.PI*params.stepFrequency*active};
   }
-}
-
-function normalize(next) {
-  const merged = { ...DEFAULTS, ...next };
-  for (const key of Object.keys(LIMITS)) validate(key, merged[key]);
-  return merged;
-}
-
-export function createAsset(context = {}) {
-  const container = context.container;
-  if (!container || typeof container.appendChild !== 'function') {
-    throw new TypeError('createAsset requires a DOM container.');
+  function render(){
+    const s=stateAt(timeSeconds), scale=params.personHeight/1.75, walking=params.speed>0&&s.distance<params.pathLength&&!context.reducedMotion;
+    group.scale.setScalar(scale);
+    person.position.x=s.distance/scale;
+    const swing=walking?Math.sin(s.phase)*.55:0;
+    const u=person.userData;
+    u.leftLeg.rotation.z=swing; u.rightLeg.rotation.z=-swing;
+    u.leftArm.rotation.z=-swing*.82; u.rightArm.rotation.z=swing*.82;
+    u.pelvis.position.y=.92+(walking?Math.abs(Math.sin(s.phase))*0.018:0);
+    path.scale.x=Math.max(.001,params.pathLength/scale); path.position.x=(params.pathLength/2)/scale;
+    startMarker.position.x=0; endMarker.position.x=params.pathLength/scale;
   }
-
-  let disposed = false;
-  let timeSeconds = 0;
-  let params = normalize({});
-  const reducedMotion = Boolean(context.reducedMotion);
-
-  const root = document.createElement('div');
-  root.setAttribute('data-learnmat-asset', 'sur-walking-person');
-  root.style.width = '100%';
-  root.style.maxWidth = '760px';
-  root.style.fontFamily = 'system-ui, sans-serif';
-  root.style.color = 'CanvasText';
-
-  const svg = svgNode('svg', {
-    viewBox: '0 0 720 400',
-    role: 'img',
-    'aria-label': 'Animated surveying field person walking along a measured straight path'
-  });
-  svg.style.width = '100%';
-  svg.style.height = 'auto';
-  svg.style.display = 'block';
-
-  const ground = svgNode('line', { x1: 70, y1: 320, x2: 650, y2: 320, stroke: 'currentColor', 'stroke-width': 3 });
-  const start = svgNode('line', { x1: 80, y1: 300, x2: 80, y2: 335, stroke: 'currentColor', 'stroke-width': 2 });
-  const end = svgNode('line', { x1: 640, y1: 300, x2: 640, y2: 335, stroke: 'currentColor', 'stroke-width': 2 });
-  const pathLabel = svgNode('text', { x: 360, y: 355, 'text-anchor': 'middle', 'font-size': 18, fill: 'currentColor' });
-  const statusLabel = svgNode('text', { x: 360, y: 45, 'text-anchor': 'middle', 'font-size': 18, fill: 'currentColor' });
-
-  const person = svgNode('g');
-  const head = svgNode('circle', { cx: 0, cy: -142, r: 16, fill: 'none', stroke: 'currentColor', 'stroke-width': 5 });
-  const torso = svgNode('line', { x1: 0, y1: -124, x2: 0, y2: -66, stroke: 'currentColor', 'stroke-width': 7, 'stroke-linecap': 'round' });
-  const armA = svgNode('line', { x1: 0, y1: -112, x2: -28, y2: -72, stroke: 'currentColor', 'stroke-width': 6, 'stroke-linecap': 'round' });
-  const armB = svgNode('line', { x1: 0, y1: -112, x2: 28, y2: -72, stroke: 'currentColor', 'stroke-width': 6, 'stroke-linecap': 'round' });
-  const legA = svgNode('line', { x1: 0, y1: -66, x2: -18, y2: 0, stroke: 'currentColor', 'stroke-width': 7, 'stroke-linecap': 'round' });
-  const legB = svgNode('line', { x1: 0, y1: -66, x2: 18, y2: 0, stroke: 'currentColor', 'stroke-width': 7, 'stroke-linecap': 'round' });
-  person.append(head, torso, armA, armB, legA, legB);
-  svg.append(ground, start, end, pathLabel, statusLabel, person);
-  root.appendChild(svg);
-  container.appendChild(root);
-
-  function ensureActive() {
-    if (disposed) throw new Error('Asset has been disposed.');
+  function snapshot(){
+    if(disposed) throw new Error('Asset has been disposed.');
+    const s=stateAt(timeSeconds);
+    return {id:'sur-walking-person',timeSeconds:s.safe,parameters:{...params},result:{distanceTravelled:s.distance,arrivalTime:Number.isFinite(s.arrival)?s.arrival:null,pathFraction:s.distance/params.pathLength},pose:{x:s.distance,y:0,z:0,gaitPhaseRadians:s.phase}};
   }
-
-  function stateAt(t) {
-    const safeTime = Math.max(0, t);
-    const moving = params.speed > 0;
-    const arrivalTime = moving ? params.pathLength / params.speed : Infinity;
-    const activeTime = moving ? Math.min(safeTime, arrivalTime) : 0;
-    const distance = moving ? Math.min(params.pathLength, params.speed * safeTime) : 0;
-    const phase = 2 * Math.PI * params.stepFrequency * activeTime;
-    return { safeTime, arrivalTime, distance, phase };
-  }
-
-  function render() {
-    const state = stateAt(timeSeconds);
-    const normalized = state.distance / params.pathLength;
-    const x = 80 + normalized * 560;
-    const scale = params.personHeight / 1.75;
-    const walking = params.speed > 0 && state.distance < params.pathLength;
-    const swing = reducedMotion || !walking ? 0 : Math.sin(state.phase) * 24;
-    const bob = reducedMotion || !walking ? 0 : -Math.abs(Math.sin(state.phase)) * 3;
-    person.setAttribute('transform', 'translate(' + x.toFixed(3) + ' ' + (320 + bob).toFixed(3) + ') scale(' + scale.toFixed(5) + ')');
-    armA.setAttribute('transform', 'rotate(' + (-swing).toFixed(3) + ' 0 -112)');
-    armB.setAttribute('transform', 'rotate(' + swing.toFixed(3) + ' 0 -112)');
-    legA.setAttribute('transform', 'rotate(' + swing.toFixed(3) + ' 0 -66)');
-    legB.setAttribute('transform', 'rotate(' + (-swing).toFixed(3) + ' 0 -66)');
-    pathLabel.textContent = 'Path: ' + params.pathLength.toFixed(2) + ' m';
-    statusLabel.textContent = 'Distance ' + state.distance.toFixed(2) + ' m · speed ' + params.speed.toFixed(2) + ' m/s';
-  }
-
-  function snapshot() {
-    ensureActive();
-    const state = stateAt(timeSeconds);
-    return {
-      id: 'sur-walking-person',
-      timeSeconds: state.safeTime,
-      parameters: { ...params },
-      result: {
-        distanceTravelled: state.distance,
-        arrivalTime: Number.isFinite(state.arrivalTime) ? state.arrivalTime : null,
-        pathFraction: state.distance / params.pathLength
-      },
-      pose: { x: state.distance, y: 0, z: 0, gaitPhaseRadians: state.phase }
-    };
-  }
-
   render();
-
   return {
-    setParameters(next = {}) {
-      ensureActive();
-      params = normalize({ ...params, ...next });
-      render();
-      return snapshot();
-    },
-    update(nextTimeSeconds) {
-      ensureActive();
-      if (!Number.isFinite(nextTimeSeconds)) throw new TypeError('timeSeconds must be finite.');
-      timeSeconds = Math.max(0, nextTimeSeconds);
-      render();
-      return snapshot();
-    },
-    reset() {
-      ensureActive();
-      params = normalize({});
-      timeSeconds = 0;
-      render();
-      return snapshot();
-    },
-    resize(width, height, pixelRatio = 1) {
-      ensureActive();
-      if (![width, height, pixelRatio].every(Number.isFinite) || width <= 0 || height <= 0 || pixelRatio <= 0) {
-        throw new RangeError('resize requires positive finite width, height, and pixelRatio.');
-      }
-      root.style.width = width + 'px';
-      root.style.maxWidth = '100%';
-      root.style.aspectRatio = width + ' / ' + height;
-      return snapshot();
-    },
+    setParameters(next={}){if(disposed)throw new Error('Asset has been disposed.');params=normalize({...params,...next});render();return snapshot();},
+    update(t){if(disposed)throw new Error('Asset has been disposed.');if(!Number.isFinite(t))throw new TypeError('timeSeconds must be finite.');timeSeconds=Math.max(0,t);render();return snapshot();},
+    reset(){if(disposed)throw new Error('Asset has been disposed.');params=normalize({});timeSeconds=0;render();return snapshot();},
+    resize(width,height,pixelRatio=1){if(disposed)throw new Error('Asset has been disposed.');if(![width,height,pixelRatio].every(Number.isFinite)||width<=0||height<=0||pixelRatio<=0)throw new RangeError('resize requires positive finite values.');return snapshot();},
     snapshot,
-    dispose() {
-      if (disposed) return;
-      disposed = true;
-      root.remove();
-    }
+    dispose(){if(disposed)return;disposed=true;scene.remove(group);disposeObject(group);}
   };
 }
