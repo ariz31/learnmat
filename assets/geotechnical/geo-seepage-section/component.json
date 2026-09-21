@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Homogeneous 1-D seepage path of length L with constant cross-sectional area thickness × out-of-plane width. Graphic is schematic and is not a solved 2-D flow net.",
+  "boundsDescription": "3D homogeneous soil prism between two fixed-head boundary reservoirs. Straight animated tracks depict only the solved 1-D Darcy direction, not a 2-D flow net. Head posts/connecting line are display-normalized.",
   "parameters": {
     "length": {
       "unit": "m",
@@ -44,5 +44,21 @@
       "default": 3
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs-host-scene",
+  "threePeerVersion": "0.185.1",
+  "presentation": {
+    "focusCompatible": true,
+    "recommendedCamera": [
+      8,
+      4.8,
+      8
+    ],
+    "cameraTarget": [
+      0,
+      0.4,
+      0
+    ],
+    "visualScaleNote": "Head elevations and tracer speed are normalized/exaggerated for visibility; i, q and Q remain exact model outputs."
+  }
 }
