@@ -35,5 +35,5 @@ export function createAsset(context={}){
  reset(){if(disposed)throw new Error('Asset has been disposed.');p=normalize({});time=0;render();return snap()},
  resize(w,h,pr=1){if(disposed)throw new Error('Asset has been disposed.');if(![w,h,pr].every(Number.isFinite)||w<=0||h<=0||pr<=0)throw new RangeError('resize requires positive finite values.');return snap()},
  snapshot:snap,dispose(){if(disposed)return;disposed=true;scene.remove(root);dispose(root);straight.geometry.dispose();straight.material.dispose()}
- }};
+ };
 }
