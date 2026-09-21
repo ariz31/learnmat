@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Physical model uses joints A=(0,0), B=(spanM/2,riseM), C=(spanM,0) in metres. SVG drawing is responsively scaled without altering analytical geometry.",
+  "boundsDescription": "Physical joints are A=(-spanM/2,0,0), B=(0,riseM,0), C=(spanM/2,0,0). Cylindrical 3D members preserve the planar analytical topology.",
   "parameters": {
     "spanM": {
       "type": "number",
@@ -29,5 +29,11 @@
       "max": 1000000
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs",
+  "threePeerVersion": "0.185.1",
+  "hostCapabilities": [
+    "THREE",
+    "scene"
+  ]
 }

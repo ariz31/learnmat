@@ -1,46 +1,38 @@
 # Asset review
 
-- Asset ID and version: str-beam-deflection 0.1.0
-- Source commit or source hash: branch contribution; final PR commit is authoritative
-- Reviewer and review date: structures self-review, 2026-09-22
-- Environment/browser/device/viewport: source review only; browser execution unavailable
-- Dependencies available: none required
+- Asset ID and version: str-beam-deflection 0.2.0
+- Reviewer and review date: structures redesign self-review, 2026-09-22
+- Environment/browser/device/viewport: source review only; independent runtime capture still required
+- Dependencies: Three.js 0.185.1 declared as a non-embedded peer
 
 ## Engineering
 
-- Model, units, assumptions, and references: simply supported prismatic beam with centered point load; SI units; linear-elastic Euler-Bernoulli small-deflection model.
-- Independent calculation with inputs, expected result, actual result, tolerance: L=6 m, P=20,000 N, E=200 GPa, I=8e-5 m4. Expected RA=RB=10,000 N, Mmax=30,000 N m, |vmax|=0.005625 m. Source formulas produce those exact closed-form values apart from floating-point roundoff.
-- Boundary/invalid-input checks: all parameters require finite values inside declared bounds; load may be zero and then reactions, shear, moment, and deflection all become zero.
-- Diagram and numerical agreement: the drawing samples the same response function used by snapshot() and labels physical extrema separately from normalized visual scaling.
-- Gate: passed
+The centered-point-load closed forms are unchanged from 0.1.0. Default L=6 m, P=20 kN, E=200 GPa, I=8e-5 m⁴ gives 10 kN reactions, 30 kN·m maximum moment and 5.625 mm maximum downward deflection. Display exaggeration affects only geometry.
+
+The 0.2.0 visual rebuild does not replace or loosen the independent analytical checks in `checks/analytical.md`.
+- Gate: not-reviewed independently
 
 ## Browser and functionality
 
-- Start, sequence, pause/resume, reset, repeated actions: implementation inspected; browser not executed.
-- Resize, mobile/touch, dependency failures: responsive SVG viewBox and width resizing implemented; no external dependency.
-- Resource cleanup and multiple-instance behavior where applicable: state is instance-local in a shadow root; dispose is idempotent.
+- Real Three.js scene is host-rendered; component does not create its own renderer/camera/animation loop.
+- Demo pins Three.js 0.185.1 and OrbitControls, enables antialiasing, shadows, camera reset, focus mode, parameter reset, and ResizeObserver resizing.
+- Live browser execution and WebGL context-loss behavior remain to be independently observed.
 - Gate: not-reviewed
 
 ## Accessibility
 
-- Keyboard, focus, labels, contrast, text equivalents: demo uses labeled native numeric controls; SVG includes role/aria-label and a visible numerical summary.
-- Reduced-motion behavior: static analytical diagrams; no motion required.
+- Parameter controls use native labeled inputs/selects.
+- The 3D viewport has an accessible name; numerical meaning is duplicated in text metrics so color/3D geometry is not the only carrier.
+- Focus mode has an explicit exit path.
+- Screen-reader and keyboard traversal remain to be independently observed.
 - Gate: not-reviewed
 
 ## Rights
 
-- Original source and permission/license evidence: original repository contribution under root MIT license.
-- Embedded/third-party content and notices: none.
-- Gate: cleared
-
-## Visual evidence
-
-- Actual preview file: previews/preview.svg
-- Source version, inputs, animation state, viewport, capture procedure: default analytical case rendered as a source-authored SVG preview; not a browser screenshot.
+- No third-party visual assets are embedded.
+- Three.js is a declared runtime peer.
+- Gate: cleared for original repository content; dependency licensing remains external.
 
 ## Decision
 
-- Defects and severity: no engineering defect identified in source review.
-- Unavailable checks: live browser, narrow-phone layout, screen-reader output.
-- Release eligible: no; browser/accessibility gates are incomplete.
-- Follow-up work: execute runtime-v1 behavior in browser, capture a real runtime screenshot, and complete independent accessibility review.
+Candidate only. The redesign materially raises visual fidelity but does not self-approve engineering, browser, or accessibility release gates.

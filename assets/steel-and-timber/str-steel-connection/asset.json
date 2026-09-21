@@ -1,44 +1,52 @@
 {
   "schemaVersion": "1.0.0",
   "id": "str-steel-connection",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Exploded bolted steel shear connection",
-  "description": "Reusable SVG assembly component showing a support face, shear plate, beam web, and vertical bolt group with explicit geometric fit checks.",
+  "description": "Premium Three.js exploded steel shear-connection assembly with I-sections, shear plate, bolts, washers, nuts and geometric fit checks.",
   "category": "steel-and-timber",
   "topics": [
     "steel-connection",
     "bolted-connection",
     "shear-tab",
-    "connection-geometry"
+    "connection-geometry",
+    "3d-visualization"
   ],
   "learningObjectives": [
-    "Identify the parts and geometric relationships of a simple bolted shear-plate connection without conflating assembly geometry with connection strength design."
+    "Identify the parts and geometric relationships of a bolted shear-plate connection in an exploded 3D assembly without conflating geometry with strength design."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/steel-and-timber/str-steel-connection/demo/index.html",
   "readme": "assets/steel-and-timber/str-steel-connection/README.md",
   "previewImage": "assets/steel-and-timber/str-steel-connection/previews/default.svg",
   "reviewFile": "assets/steel-and-timber/str-steel-connection/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+    "attribution": "Original LearnMat repository contribution. Runtime uses the declared Three.js 0.185.1 peer; no third-party models, textures, fonts, or datasets are embedded."
   },
   "verification": {
     "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Candidate includes deterministic bolt-group geometry checks and explicitly excludes strength/code verification. Independent engineering, browser, screenshot, and accessibility review remain required."
+    "notes": "0.2.0 replaces the flat renderer with a host-rendered Three.js scene while preserving the analytical/detailing model. Independent engineering, live-browser, screenshot, and accessibility review remain required before approval."
   },
   "source": {
     "type": "original",
-    "reference": "Reserved structures-agent task str-steel-connection; original dependency-free SVG/DOM implementation.",
+    "reference": "Premium 3D rebuild of reserved structures task str-steel-connection; model logic retained from the original repository contribution.",
     "sha256": null
   }
 }

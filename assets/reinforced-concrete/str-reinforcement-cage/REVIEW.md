@@ -1,32 +1,34 @@
 # Asset review
 
-- Asset ID and version: str-reinforcement-cage 0.1.0
-- Reviewer and review date: structures self-review, 2026-09-22
-- Environment/browser/device/viewport: source review only; browser execution unavailable
+- Asset ID and version: str-reinforcement-cage 0.2.0
+- Reviewer and review date: structures redesign self-review, 2026-09-22
+- Environment/browser/device/viewport: source review only; independent runtime capture remains required
+- Dependencies: Three.js 0.185.1 declared as a non-embedded peer
 
 ## Engineering
 
-- Cover convention and centerline offsets are explicit.
-- Default 3×3 perimeter layout resolves to 8 unique longitudinal bars.
-- Default end-covered tie zone gives 15 intervals at 194 mm actual spacing, not exceeding 200 mm requested maximum.
-- Cross-parameter invalid geometry is rejected.
+The cover convention and cage-generation math are unchanged. Default geometry still yields 8 unique longitudinal bars and 15 tie intervals over the end-covered length, with 194 mm actual spacing not exceeding the requested 200 mm maximum.
 - Gate: not-reviewed independently
 
 ## Browser and functionality
 
-- Runtime-v1 source inspected; live browser unavailable.
+- Component adds only owned Three.js objects to the host scene; renderer/camera/clock stay host-owned.
+- Demo provides OrbitControls, camera reset, model reset, focus mode, antialiased rendering, shadows, and ResizeObserver behavior.
+- Live WebGL execution and context-loss behavior remain to be observed.
 - Gate: not-reviewed
 
 ## Accessibility
 
-- Native labeled controls and SVG/text equivalent included.
+- Native controls are labeled and live numerical meaning is duplicated outside the canvas.
+- Focus mode has an explicit exit control.
+- Screen-reader/keyboard execution remains to be observed.
 - Gate: not-reviewed
 
 ## Rights
 
-- Original contribution; no third-party content.
-- Gate: cleared
+- No third-party visual assets are embedded; Three.js is a declared external runtime peer.
+- Gate: cleared for repository-authored content.
 
 ## Decision
 
-Candidate only. This asset deliberately makes no design-code compliance claim. Independent engineering/browser/accessibility review remains required.
+Candidate only. Premium visual fidelity does not substitute for independent engineering, browser, or accessibility approval.

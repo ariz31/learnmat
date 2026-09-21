@@ -4,34 +4,35 @@ Status: candidate.
 
 ## Learning objective
 
-Relate story drift ratio to top translation and visualize the corresponding sway geometry of a single-bay portal frame.
+Relate story drift ratio to true top translation and compare undeformed and explicitly exaggerated sway geometry in three dimensions.
 
 ## Model and assumptions
 
-The component is intentionally a **kinematic visualization**, not a structural stiffness solver.
+The retained model is kinematic: fixed bases, a rigid horizontal top beam, and equal prescribed translation of the two top joints. True `deltaX = driftRatio × storyHeightM`. The exaggeration parameter affects presentation only.
 
-- Bases A and B are fixed against translation/rotation.
-- The top beam is treated as rigid for the prescribed sway shape and remains horizontal.
-- Both top joints translate by `deltaX = driftRatio × storyHeightM`.
-- No member stiffness, load, reaction, moment, P-delta effect, code drift limit, or strength check is inferred.
-- Rendering may exaggerate the displacement; physical snapshot coordinates always retain the true prescribed translation.
+The engineering/detailing model stays in `src/model.mjs`; the 0.2.0 Three.js layer consumes those outputs and does not replace them.
 
-Default: story height 3.5 m and drift ratio 0.015 give a true lateral translation of 0.0525 m = 52.5 mm.
+## 3D presentation
 
-## Usage
+Version 0.2.0 uses a real host-rendered Three.js scene with perspective, orbit/pan/zoom, antialiasing, soft shadows, publication-style controls, focus mode, and responsive resize behavior. The reusable component requires host-provided **Three.js 0.185.1** and a host-owned scene. The demo pins that peer through an import map and owns the camera, renderer, animation loop, lighting, and OrbitControls.
 
-Use `demo/index.html` or import `src/asset.mjs`. Parameters are `bayWidthM`, `storyHeightM`, `driftRatio`, and display-only `exaggeration`.
+The 3D scene uses translucent undeformed members, solid deformed HSS-like members, base plates/anchors, a lateral vector and labels for true versus displayed translation.
 
-The runtime implements parameter validation, deterministic update sampling, reset, resize, serializable snapshot, and idempotent disposal.
+The demonstration page requires network access for the declared Three.js peer. No renderer, camera, hidden requestAnimationFrame loop, or undeclared library instance is created inside the reusable component.
+
+## Scope boundary
+
+No stiffness, forces, moments, P–Δ effects, connection flexibility or code drift limit is solved.
 
 ## Reuse and rights
 
-Original repository contribution under the root MIT license. No external runtime dependencies or third-party assets.
+Original LearnMat contribution under the repository MIT license. No external 3D models, images, textures, fonts, or datasets are embedded. Three.js is a declared external peer.
 
 ## Review evidence
 
-See `REVIEW.md` and `checks/analytical.md`. Live browser screenshot and assistive-technology execution remain for independent review.
+The preview is authored representative evidence, not a fabricated runtime screenshot. Independent live-browser, responsive-layout, WebGL, and assistive-technology review remains required.
 
 ## Change history
 
-- 0.1.0 — Initial prescribed-drift portal-frame sway component.
+- 0.2.0 — Premium surveying-style Three.js rebuild.
+- 0.1.0 — Initial candidate component.

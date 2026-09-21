@@ -1,44 +1,52 @@
 {
   "schemaVersion": "1.0.0",
   "id": "str-frame-sway",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Portal frame lateral sway",
-  "description": "Reusable SVG component showing the undeformed and prescribed laterally swayed geometry of a single-bay fixed-base portal frame.",
+  "description": "Premium Three.js portal-frame study comparing undeformed and prescribed laterally swayed geometry with explicit display exaggeration.",
   "category": "structural-analysis",
   "topics": [
     "portal-frame",
     "lateral-drift",
     "frame-sway",
-    "boundary-conditions"
+    "boundary-conditions",
+    "3d-visualization"
   ],
   "learningObjectives": [
-    "Relate a prescribed story drift ratio to lateral top displacement and visualize the corresponding kinematic sway of a fixed-base portal frame."
+    "Relate prescribed story drift ratio to true top displacement while spatially comparing undeformed and exaggerated sway geometry."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/structural-analysis/str-frame-sway/demo/index.html",
   "readme": "assets/structural-analysis/str-frame-sway/README.md",
   "previewImage": "assets/structural-analysis/str-frame-sway/previews/default.svg",
   "reviewFile": "assets/structural-analysis/str-frame-sway/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+    "attribution": "Original LearnMat repository contribution. Runtime uses the declared Three.js 0.185.1 peer; no third-party models, textures, fonts, or datasets are embedded."
   },
   "verification": {
     "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Candidate includes explicit kinematic assumptions and reproducible geometry checks. Independent engineering, browser, screenshot, and accessibility review remain required before approval."
+    "notes": "0.2.0 replaces the flat renderer with a host-rendered Three.js scene while preserving the analytical/detailing model. Independent engineering, live-browser, screenshot, and accessibility review remain required before approval."
   },
   "source": {
     "type": "original",
-    "reference": "Reserved structures-agent task str-frame-sway; original dependency-free SVG/DOM implementation.",
+    "reference": "Premium 3D rebuild of reserved structures task str-frame-sway; model logic retained from the original repository contribution.",
     "sha256": null
   }
 }

@@ -4,35 +4,35 @@ Status: candidate.
 
 ## Learning objective
 
-Show how section size, clear cover, tie diameter, longitudinal-bar diameter, perimeter bar counts, and requested maximum tie spacing determine a rectangular RC cage.
+Inspect a rectangular RC column cage in three dimensions and understand how cover, bar diameters, perimeter counts and maximum requested tie spacing define the geometry.
 
 ## Model and assumptions
 
-Clear cover is defined explicitly as the distance from the concrete face to the **outer surface of the transverse tie**.
+The retained geometry convention measures clear cover from the concrete face to the **outer surface of the transverse tie**. Tie and longitudinal-bar centerline insets, unique perimeter bars, and actual tie spacing are calculated exactly as documented in `checks/analytical.md`.
 
-- Tie centerline inset = clear cover + tie diameter / 2.
-- Longitudinal-bar centerline inset = clear cover + tie diameter + longitudinal-bar diameter / 2.
-- Top/bottom faces each contain `barsAlongWidth` bars including corners.
-- Side faces each contain `barsAlongDepth` bars including corners; corner duplicates are removed.
-- End tie centerlines use the same tie centerline inset from the member ends.
-- The number of tie intervals is `ceil(available cage height / maxTieSpacingM)`, so calculated actual spacing is never greater than the requested maximum.
+The engineering/detailing model stays in `src/model.mjs`; the 0.2.0 Three.js layer consumes those outputs and does not replace them.
 
-The model is for **detailing geometry only**. It does not determine whether the layout complies with ACI, NSCP, Eurocode, or any other design code; it does not evaluate reinforcement ratio, confinement, seismic detailing, development length, lap splices, or strength.
+## 3D presentation
 
-## Usage
+Version 0.2.0 uses a real host-rendered Three.js scene with perspective, orbit/pan/zoom, antialiasing, soft shadows, publication-style controls, focus mode, and responsive resize behavior. The reusable component requires host-provided **Three.js 0.185.1** and a host-owned scene. The demo pins that peer through an import map and owns the camera, renderer, animation loop, lighting, and OrbitControls.
 
-Use `demo/index.html` or import `src/asset.mjs`. All API dimensions use metres.
+The scene renders a transparent concrete shell with edge lines, physical-diameter longitudinal bars and rectangular tie loops, plus spatial cover and spacing callouts.
 
-Invalid cross-parameter geometry—such as cover plus diameters leaving no interior cage—is rejected before state mutation.
+The demonstration page requires network access for the declared Three.js peer. No renderer, camera, hidden requestAnimationFrame loop, or undeclared library instance is created inside the reusable component.
+
+## Scope boundary
+
+Detailing geometry only. Minimum reinforcement, confinement, development/lap length, seismic detailing, constructability and any ACI/NSCP/Eurocode compliance check remain out of scope.
 
 ## Reuse and rights
 
-Original repository contribution under the root MIT license. No external dependencies or third-party assets.
+Original LearnMat contribution under the repository MIT license. No external 3D models, images, textures, fonts, or datasets are embedded. Three.js is a declared external peer.
 
 ## Review evidence
 
-See `REVIEW.md` and `checks/analytical.md`. Live browser screenshot and assistive-technology execution remain for independent review.
+The preview is authored representative evidence, not a fabricated runtime screenshot. Independent live-browser, responsive-layout, WebGL, and assistive-technology review remains required.
 
 ## Change history
 
-- 0.1.0 — Initial reinforcement-cage detailing geometry.
+- 0.2.0 — Premium surveying-style Three.js rebuild.
+- 0.1.0 — Initial candidate component.

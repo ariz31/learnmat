@@ -1,34 +1,17 @@
-import{DEFAULT_CAGE_PARAMETERS,solveReinforcementCage,validateCageParameters}from'./model.mjs';
-const NS='http://www.w3.org/2000/svg';function e(n,a={},t=''){const x=document.createElementNS(NS,n);for(const[k,v]of Object.entries(a))x.setAttribute(k,String(v));if(t)x.textContent=t;return x;}
+import {DEFAULT_CAGE_PARAMETERS,solveReinforcementCage,validateCageParameters} from './model.mjs';
+import {requireThreeRuntime,premiumMaterials,makeCylinderBetween,makeArrow,makeLabelSprite,clearGroup,disposeGroup} from './three-utils.mjs';
 export function createAsset(context){
- if(!context||!(context.container instanceof Element))throw new TypeError('context.container must be a DOM Element');
- let disposed=false,p={...DEFAULT_CAGE_PARAMETERS},timeSeconds=0,viewport={width:820,height:500,pixelRatio:1};
- const host=document.createElement('div'),shadow=host.attachShadow({mode:'open'}),style=document.createElement('style'),card=document.createElement('div'),svg=e('svg',{viewBox:'0 0 820 500',role:'img'}),note=document.createElement('p');
- style.textContent=':host{display:block}.card{font:13px/1.4 system-ui,sans-serif;color:#111827;background:#fff;border:1px solid #d1d5db;border-radius:12px;padding:10px}svg{display:block;width:100%;height:auto}.note{margin:.5rem 0 0}';card.className='card';note.className='note';shadow.append(style,card);card.append(svg,note);context.container.append(host);
- const line=(x1,y1,x2,y2,a={})=>svg.append(e('line',{x1,y1,x2,y2,stroke:'currentColor','stroke-width':2.5,...a}));const text=(x,y,t,a='middle',s=12,w=500)=>svg.append(e('text',{x,y,'text-anchor':a,'font-size':s,'font-family':'system-ui,sans-serif','font-weight':w,fill:'currentColor'},t));
- function draw(){
-  svg.replaceChildren();const s=solveReinforcementCage(p);text(410,28,'Parametric reinforcement cage','middle',21,750);
-  const sx=290/Math.max(p.widthM,p.depthM),ox=70,oy=105;
-  svg.append(e('rect',{x:ox,y:oy,width:p.widthM*sx,height:p.depthM*sx,fill:'none',stroke:'currentColor','stroke-width':3}));
-  const tr=s.tieRectangleM;svg.append(e('rect',{x:ox+tr.xMin*sx,y:oy+tr.zMin*sx,width:(tr.xMax-tr.xMin)*sx,height:(tr.zMax-tr.zMin)*sx,fill:'none',stroke:'currentColor','stroke-width':3,'stroke-dasharray':'8 5'}));
-  for(const b of s.longitudinalBars)svg.append(e('circle',{cx:ox+b.x*sx,cy:oy+b.z*sx,r:Math.max(3,p.longitudinalBarDiameterM*sx/2),fill:'currentColor'}));
-  text(ox+p.widthM*sx/2,oy+p.depthM*sx+28,'Section','middle',14,700);
-  text(ox+p.widthM*sx/2,oy+p.depthM*sx+48,'cover = '+(p.clearCoverM*1000).toFixed(0)+' mm · bars = '+s.longitudinalBarCount,'middle',11,600);
-  const ex=505,ey=90,ew=190,eh=330,scaleY=eh/p.heightM;
-  svg.append(e('rect',{x:ex,y:ey,width:ew,height:eh,fill:'none',stroke:'currentColor','stroke-width':3}));
-  const xLeft=ex+36,xRight=ex+ew-36;line(xLeft,ey+12,xLeft,ey+eh-12,{'stroke-width':6});line(xRight,ey+12,xRight,ey+eh-12,{'stroke-width':6});
-  for(const yM of s.tieElevationsM){const y=ey+eh-yM*scaleY;line(ex+18,y,ex+ew-18,y,{'stroke-width':2});}
-  text(ex+ew/2,ey+eh+28,'Elevation','middle',14,700);
-  text(ex+ew/2,ey+eh+48,'ties = '+s.tieCount+' · actual spacing = '+(s.actualTieSpacingM*1000).toFixed(1)+' mm','middle',11,600);
-  note.textContent='Geometry convention: clear cover is measured to the outside of the transverse tie. This asset does not evaluate minimum reinforcement, confinement, lap splices, seismic detailing, or any design-code requirement.';
-  svg.setAttribute('aria-label','Rectangular reinforcement cage '+(p.widthM*1000).toFixed(0)+' by '+(p.depthM*1000).toFixed(0)+' millimetres with '+s.longitudinalBarCount+' longitudinal bars, '+(p.clearCoverM*1000).toFixed(0)+' millimetres clear cover to outside of ties, and actual tie spacing '+(s.actualTieSpacingM*1000).toFixed(1)+' millimetres.');
+ const {THREE,scene}=requireThreeRuntime(context);let disposed=false,parameters={...DEFAULT_CAGE_PARAMETERS},timeSeconds=0,viewport={width:1,height:1,pixelRatio:1};
+ const root=new THREE.Group();root.name='str-reinforcement-cage';root.position.y=-.66;scene.add(root);
+ function rebuild(){
+  clearGroup(root);const s=solveReinforcementCage(parameters),m=premiumMaterials(THREE),p=parameters,w=p.widthM,d=p.depthM,h=p.heightM;
+  const shell=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m.glass);shell.position.set(0,h/2,0);shell.castShadow=false;shell.receiveShadow=true;root.add(shell);
+  const edges=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(w,h,d)),new THREE.LineBasicMaterial({color:0x7d908b,transparent:true,opacity:.42}));edges.position.set(0,h/2,0);root.add(edges);
+  for(const b of s.longitudinalBars){const x=b.x-w/2,z=b.z-d/2;root.add(makeCylinderBetween(THREE,new THREE.Vector3(x,.02,z),new THREE.Vector3(x,h-.02,z),p.longitudinalBarDiameterM/2,m.rebar,18));}
+  const tr=s.tieRectangleM,x1=tr.xMin-w/2,x2=tr.xMax-w/2,z1=tr.zMin-d/2,z2=tr.zMax-d/2,r=p.tieDiameterM/2;
+  for(const y of s.tieElevationsM){root.add(makeCylinderBetween(THREE,new THREE.Vector3(x1,y,z1),new THREE.Vector3(x2,y,z1),r,m.rebar,14),makeCylinderBetween(THREE,new THREE.Vector3(x2,y,z1),new THREE.Vector3(x2,y,z2),r,m.rebar,14),makeCylinderBetween(THREE,new THREE.Vector3(x2,y,z2),new THREE.Vector3(x1,y,z2),r,m.rebar,14),makeCylinderBetween(THREE,new THREE.Vector3(x1,y,z2),new THREE.Vector3(x1,y,z1),r,m.rebar,14));}
+  const coverY=Math.min(h*.7,1.2);root.add(makeArrow(THREE,new THREE.Vector3(-w/2-.28,coverY,d/2+.08),new THREE.Vector3(-w/2,coverY,d/2+.08),0x007d80));const cl=makeLabelSprite(THREE,'cover '+(p.clearCoverM*1000).toFixed(0)+' mm',{scale:.52});cl.position.set(-w/2-.75,coverY+.25,d/2+.08);root.add(cl);
+  const top=makeLabelSprite(THREE,s.longitudinalBarCount+' longitudinal bars',{scale:.58});top.position.set(0,h+.35,0);root.add(top);const tie=makeLabelSprite(THREE,'tie spacing '+(s.actualTieSpacingM*1000).toFixed(1)+' mm',{color:'#8a451f',scale:.55});tie.position.set(w*.9,h*.42,d*.7);root.add(tie);
  }
- draw();return{
-  setParameters(next={}){if(disposed)throw new Error('Asset is disposed');p=validateCageParameters(next,p);draw();},
-  update(t){if(disposed)throw new Error('Asset is disposed');if(!Number.isFinite(t)||t<0)throw new RangeError('timeSeconds must be finite and nonnegative');timeSeconds=t;},
-  reset(){if(disposed)throw new Error('Asset is disposed');p={...DEFAULT_CAGE_PARAMETERS};timeSeconds=0;draw();},
-  resize(width,height,pixelRatio=1){if(disposed)throw new Error('Asset is disposed');for(const v of[width,height,pixelRatio])if(!Number.isFinite(v)||v<=0)throw new RangeError('resize values must be finite and positive');viewport={width,height,pixelRatio};host.style.width=width+'px';host.style.maxWidth='100%';},
-  snapshot(){return{...solveReinforcementCage(p),timeSeconds,viewport:{...viewport}};},
-  dispose(){if(disposed)return;disposed=true;host.remove();}
- };
+ rebuild();return{setParameters(next={}){if(disposed)throw new Error('Asset is disposed');parameters=validateCageParameters(next,parameters);rebuild();},update(t){if(disposed)throw new Error('Asset is disposed');if(!Number.isFinite(t)||t<0)throw new RangeError('timeSeconds must be finite and nonnegative');timeSeconds=t;},reset(){if(disposed)throw new Error('Asset is disposed');parameters={...DEFAULT_CAGE_PARAMETERS};timeSeconds=0;rebuild();},resize(w,h,p=1){if(disposed)throw new Error('Asset is disposed');if(![w,h,p].every(v=>Number.isFinite(v)&&v>0))throw new RangeError('resize values must be finite and positive');viewport={width:w,height:h,pixelRatio:p};},snapshot(){return{...solveReinforcementCage(parameters),timeSeconds,viewport:{...viewport},rendering:'Three.js 0.185.1 host scene'};},dispose(){if(disposed)return;disposed=true;disposeGroup(root,scene);}};
 }

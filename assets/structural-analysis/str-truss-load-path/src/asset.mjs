@@ -1,120 +1,26 @@
-import { DEFAULT_TRUSS_PARAMETERS, solveTriangularTruss, validateTrussParameters } from './model.mjs';
+import {DEFAULT_TRUSS_PARAMETERS,solveTriangularTruss,validateTrussParameters} from './model.mjs';
+import {requireThreeRuntime,premiumMaterials,makeCylinderBetween,makeArrow,makeLabelSprite,clearGroup,disposeGroup} from './three-utils.mjs';
 
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-function svgEl(name, attrs = {}, text = '') {
-  const node=document.createElementNS(SVG_NS,name);
-  for (const [key,value] of Object.entries(attrs)) node.setAttribute(key,String(value));
-  if (text) node.textContent=text;
-  return node;
-}
-
-export function createAsset(context) {
-  if (!context || !(context.container instanceof Element)) throw new TypeError('context.container must be a DOM Element');
-  let disposed=false;
-  let parameters={...DEFAULT_TRUSS_PARAMETERS};
-  let timeSeconds=0;
-  let viewport={width:760,height:420,pixelRatio:1};
-
-  const host=document.createElement('div');
-  const shadow=host.attachShadow({mode:'open'});
-  const style=document.createElement('style');
-  style.textContent=':host{display:block}.card{font:13px/1.35 system-ui,sans-serif;color:#111827;background:#fff;border:1px solid #d1d5db;border-radius:12px;padding:10px}svg{display:block;width:100%;height:auto}.summary{margin:.5rem 0 0}';
-  const card=document.createElement('div');
-  card.className='card';
-  const svg=svgEl('svg',{viewBox:'0 0 760 420',role:'img','aria-label':'Symmetric triangular truss load path'});
-  const summary=document.createElement('p');
-  summary.className='summary';
-  shadow.append(style,card);
-  card.append(svg,summary);
-  context.container.append(host);
-
-  function line(x1,y1,x2,y2,attrs={}) {
-    svg.append(svgEl('line',{x1,y1,x2,y2,stroke:'currentColor','stroke-width':3,'stroke-linecap':'round',...attrs}));
-  }
-  function text(x,y,value,anchor='middle',size=13,weight=500) {
-    svg.append(svgEl('text',{x,y,'text-anchor':anchor,'font-size':size,'font-family':'system-ui,sans-serif','font-weight':weight,fill:'currentColor'},value));
-  }
-  function arrow(x,y1,y2,label) {
-    line(x,y1,x,y2,{'stroke-width':3});
-    const down=y2>y1;
-    const tip=y2;
-    svg.append(svgEl('polygon',{points:(x-8)+','+(tip+(down?-13:13))+' '+(x+8)+','+(tip+(down?-13:13))+' '+x+','+tip,fill:'currentColor'}));
-    text(x+14,(y1+y2)/2,label,'start',12,700);
-  }
-  function draw() {
-    svg.replaceChildren();
-    const s=solveTriangularTruss(parameters);
-    const left=95,right=665,baseY=315;
-    const scaleX=(right-left)/parameters.spanM;
-    const scaleY=205/parameters.riseM;
-    const map=pt=>[left+pt.x*scaleX,baseY-pt.y*scaleY];
-    const A=map(s.geometryM.A),B=map(s.geometryM.B),C=map(s.geometryM.C);
-
-    text(380,30,'Triangular truss load path','middle',21,750);
-    line(A[0],A[1],B[0],B[1],{'stroke-width':7});
-    line(B[0],B[1],C[0],C[1],{'stroke-width':7});
-    line(A[0],A[1],C[0],C[1],{'stroke-width':7,'stroke-dasharray':'14 7'});
-    for (const [name,pt] of [['A',A],['B',B],['C',C]]) {
-      svg.append(svgEl('circle',{cx:pt[0],cy:pt[1],r:8,fill:'#fff',stroke:'currentColor','stroke-width':3}));
-      text(pt[0],pt[1]-14,name,'middle',13,750);
-    }
-
-    svg.append(svgEl('polygon',{points:A[0]+','+(A[1]+5)+' '+(A[0]-20)+','+(A[1]+42)+' '+(A[0]+20)+','+(A[1]+42),fill:'none',stroke:'currentColor','stroke-width':2.5}));
-    svg.append(svgEl('polygon',{points:C[0]+','+(C[1]+5)+' '+(C[0]-20)+','+(C[1]+38)+' '+(C[0]+20)+','+(C[1]+38),fill:'none',stroke:'currentColor','stroke-width':2.5}));
-    svg.append(svgEl('circle',{cx:C[0]-10,cy:C[1]+48,r:6,fill:'none',stroke:'currentColor','stroke-width':2}));
-    svg.append(svgEl('circle',{cx:C[0]+10,cy:C[1]+48,r:6,fill:'none',stroke:'currentColor','stroke-width':2}));
-
-    arrow(B[0],48,B[1]-10,'P '+(parameters.loadN/1000).toFixed(2)+' kN');
-    if (parameters.loadN>0) {
-      arrow(A[0],A[1]+86,A[1]+10,'RA '+(s.reactionsN.Ay/1000).toFixed(2)+' kN');
-      arrow(C[0],C[1]+86,C[1]+10,'RC '+(s.reactionsN.Cy/1000).toFixed(2)+' kN');
-    }
-
-    const diag=Math.abs(s.memberForcesN.AB)/1000;
-    const chord=Math.abs(s.memberForcesN.AC)/1000;
-    text((A[0]+B[0])/2-18,(A[1]+B[1])/2-8,'AB '+diag.toFixed(2)+' kN C','middle',12,700);
-    text((B[0]+C[0])/2+18,(B[1]+C[1])/2-8,'BC '+diag.toFixed(2)+' kN C','middle',12,700);
-    text((A[0]+C[0])/2,baseY+28,'AC '+chord.toFixed(2)+' kN T','middle',12,700);
-    text(380,397,'Solid diagonals = compression (C); dashed bottom chord = tension (T). Labels carry the meaning, not line style alone.','middle',11,550);
-
-    summary.textContent='θ = '+(s.thetaRad*180/Math.PI).toFixed(2)+'° · RAy = RCy = '+(s.reactionsN.Ay/1000).toFixed(3)+' kN · diagonals = '+diag.toFixed(3)+' kN compression · bottom chord = '+chord.toFixed(3)+' kN tension.';
-    svg.setAttribute('aria-label','Symmetric triangular truss with apex load '+(parameters.loadN/1000).toFixed(2)+' kilonewtons. Vertical reactions '+(s.reactionsN.Ay/1000).toFixed(2)+' kilonewtons each. Diagonal members '+diag.toFixed(2)+' kilonewtons compression. Bottom chord '+chord.toFixed(2)+' kilonewtons tension.');
-  }
-
-  draw();
-
-  return {
-    setParameters(next={}) {
-      if (disposed) throw new Error('Asset is disposed');
-      parameters=validateTrussParameters(next,parameters);
-      draw();
-    },
-    update(nextTimeSeconds) {
-      if (disposed) throw new Error('Asset is disposed');
-      if (!Number.isFinite(nextTimeSeconds) || nextTimeSeconds<0) throw new RangeError('timeSeconds must be finite and nonnegative');
-      timeSeconds=nextTimeSeconds;
-    },
-    reset() {
-      if (disposed) throw new Error('Asset is disposed');
-      parameters={...DEFAULT_TRUSS_PARAMETERS};
-      timeSeconds=0;
-      draw();
-    },
-    resize(width,height,pixelRatio=1) {
-      if (disposed) throw new Error('Asset is disposed');
-      for (const value of [width,height,pixelRatio]) if (!Number.isFinite(value) || value<=0) throw new RangeError('resize values must be finite and positive');
-      viewport={width,height,pixelRatio};
-      host.style.width=width+'px';
-      host.style.maxWidth='100%';
-    },
-    snapshot() {
-      return {...solveTriangularTruss(parameters),timeSeconds,viewport:{...viewport}};
-    },
-    dispose() {
-      if (disposed) return;
-      disposed=true;
-      host.remove();
-    }
-  };
+export function createAsset(context){
+ const {THREE,scene}=requireThreeRuntime(context);let disposed=false,parameters={...DEFAULT_TRUSS_PARAMETERS},timeSeconds=0,viewport={width:1,height:1,pixelRatio:1};
+ const root=new THREE.Group();root.name='str-truss-load-path';scene.add(root);
+ function supportPin(m,x){const g=new THREE.Group();const b=new THREE.Mesh(new THREE.ConeGeometry(.34,.42,4,1,false,Math.PI/4),m.concrete);b.position.set(x,-.24,0);b.castShadow=true;g.add(b);const h=new THREE.Mesh(new THREE.CylinderGeometry(.085,.085,.52,20),m.teal);h.rotation.x=Math.PI/2;h.position.set(x,0,0);g.add(h);return g;}
+ function supportRoller(m,x){const g=new THREE.Group();const b=new THREE.Mesh(new THREE.BoxGeometry(.58,.16,.46),m.concrete);b.position.set(x,-.19,0);g.add(b);for(const dx of[-.16,.16]){const r=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.42,18),m.teal);r.rotation.x=Math.PI/2;r.position.set(x+dx,-.34,0);g.add(r);}return g;}
+ function rebuild(){
+  clearGroup(root);const s=solveTriangularTruss(parameters),m=premiumMaterials(THREE),half=parameters.spanM/2;
+  const pts={A:new THREE.Vector3(-half,0,0),B:new THREE.Vector3(0,parameters.riseM,0),C:new THREE.Vector3(half,0,0)};
+  const forceMat=f=>Math.abs(f)<1e-9?m.steel:(f>0?m.teal:m.amber);
+  root.add(makeCylinderBetween(THREE,pts.A,pts.B,.105,forceMat(s.memberForcesN.AB),24));
+  root.add(makeCylinderBetween(THREE,pts.B,pts.C,.105,forceMat(s.memberForcesN.BC),24));
+  root.add(makeCylinderBetween(THREE,pts.A,pts.C,.105,forceMat(s.memberForcesN.AC),24));
+  root.add(supportPin(m,-half),supportRoller(m,half));
+  for(const [name,p] of Object.entries(pts)){const joint=new THREE.Mesh(new THREE.SphereGeometry(.16,24,16),m.dark);joint.position.copy(p);joint.castShadow=true;root.add(joint);const lab=makeLabelSprite(THREE,name,{scale:.42});lab.position.copy(p).add(new THREE.Vector3(0,.38,.22));root.add(lab);}
+  if(parameters.loadN>0){root.add(makeArrow(THREE,new THREE.Vector3(0,parameters.riseM+1.5,.18),new THREE.Vector3(0,parameters.riseM+.18,.18),0xb54a4a));root.add(makeArrow(THREE,new THREE.Vector3(-half,-.05,.22),new THREE.Vector3(-half,1.0,.22),0x007d80));root.add(makeArrow(THREE,new THREE.Vector3(half,-.05,.22),new THREE.Vector3(half,1.0,.22),0x007d80));}
+  const ab=(Math.abs(s.memberForcesN.AB)/1000).toFixed(2)+' kN C',ac=(Math.abs(s.memberForcesN.AC)/1000).toFixed(2)+' kN T';
+  const l1=makeLabelSprite(THREE,'AB · '+ab,{color:'#8a451f',scale:.55});l1.position.copy(pts.A).lerp(pts.B,.5).add(new THREE.Vector3(-.25,.3,.24));root.add(l1);
+  const l2=makeLabelSprite(THREE,'BC · '+ab,{color:'#8a451f',scale:.55});l2.position.copy(pts.B).lerp(pts.C,.5).add(new THREE.Vector3(.25,.3,.24));root.add(l2);
+  const l3=makeLabelSprite(THREE,'AC · '+ac,{color:'#007d80',scale:.55});l3.position.copy(pts.A).lerp(pts.C,.5).add(new THREE.Vector3(0,-.48,.24));root.add(l3);
+ }
+ rebuild();
+ return{setParameters(next={}){if(disposed)throw new Error('Asset is disposed');parameters=validateTrussParameters(next,parameters);rebuild();},update(t){if(disposed)throw new Error('Asset is disposed');if(!Number.isFinite(t)||t<0)throw new RangeError('timeSeconds must be finite and nonnegative');timeSeconds=t;},reset(){if(disposed)throw new Error('Asset is disposed');parameters={...DEFAULT_TRUSS_PARAMETERS};timeSeconds=0;rebuild();},resize(w,h,p=1){if(disposed)throw new Error('Asset is disposed');if(![w,h,p].every(v=>Number.isFinite(v)&&v>0))throw new RangeError('resize values must be finite and positive');viewport={width:w,height:h,pixelRatio:p};},snapshot(){return{...solveTriangularTruss(parameters),timeSeconds,viewport:{...viewport},rendering:'Three.js 0.185.1 host scene'};},dispose(){if(disposed)return;disposed=true;disposeGroup(root,scene);}};
 }

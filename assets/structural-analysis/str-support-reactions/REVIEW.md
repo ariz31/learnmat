@@ -1,46 +1,38 @@
 # Asset review
 
-- Asset ID and version: str-support-reactions 0.1.0
-- Source commit or source hash: branch contribution; final PR commit is authoritative
-- Reviewer and review date: structures self-review, 2026-09-22
-- Environment/browser/device/viewport: source review only; browser execution unavailable
-- Dependencies available: none required
+- Asset ID and version: str-support-reactions 0.2.0
+- Reviewer and review date: structures redesign self-review, 2026-09-22
+- Environment/browser/device/viewport: source review only; independent runtime capture still required
+- Dependencies: Three.js 0.185.1 declared as a non-embedded peer
 
 ## Engineering
 
-- Model, units, assumptions, and references: planar ideal supports; x/y translation and rz rotation. Roller assumes horizontal bearing surface.
-- Independent calculation with inputs, expected result, actual result, tolerance: topological invariant only. Expected restrained DOF counts are pin=2, roller=1, fixed=3; source mapping matches exactly.
-- Boundary/invalid-input checks: unknown support types are rejected before state mutation.
-- Diagram and numerical agreement: reaction labels are generated from the same support mapping returned by snapshot().
-- Gate: passed
+Constraint topology is unchanged from 0.1.0: pin → x/y; horizontal roller → y; fixed → x/y/rz. The 3D hardware is illustrative geometry and the vectors remain explicitly non-solved reaction components.
+
+The 0.2.0 visual rebuild does not replace or loosen the independent analytical checks in `checks/analytical.md`.
+- Gate: not-reviewed independently
 
 ## Browser and functionality
 
-- Start, sequence, pause/resume, reset, repeated actions: implementation inspected; not executed in a browser.
-- Resize, mobile/touch, dependency failures: responsive SVG viewBox implemented; no external dependency.
-- Resource cleanup and multiple-instance behavior where applicable: component owns a shadow-root host; dispose removes the host and is idempotent.
+- Real Three.js scene is host-rendered; component does not create its own renderer/camera/animation loop.
+- Demo pins Three.js 0.185.1 and OrbitControls, enables antialiasing, shadows, camera reset, focus mode, parameter reset, and ResizeObserver resizing.
+- Live browser execution and WebGL context-loss behavior remain to be independently observed.
 - Gate: not-reviewed
 
 ## Accessibility
 
-- Keyboard, focus, labels, contrast, text equivalents: demo controls are native labeled controls; SVG has role and aria-label; visible text equivalent is included.
-- Reduced-motion behavior: asset is static.
+- Parameter controls use native labeled inputs/selects.
+- The 3D viewport has an accessible name; numerical meaning is duplicated in text metrics so color/3D geometry is not the only carrier.
+- Focus mode has an explicit exit path.
+- Screen-reader and keyboard traversal remain to be independently observed.
 - Gate: not-reviewed
 
 ## Rights
 
-- Original source and permission/license evidence: original repository contribution under root MIT license.
-- Embedded/third-party content and notices: none.
-- Gate: cleared
-
-## Visual evidence
-
-- Actual preview file: previews/preview.svg
-- Source version, inputs, animation state, viewport, capture procedure: source-authored representative preview; not a browser screenshot.
+- No third-party visual assets are embedded.
+- Three.js is a declared runtime peer.
+- Gate: cleared for original repository content; dependency licensing remains external.
 
 ## Decision
 
-- Defects and severity: no engineering defect identified in source review.
-- Unavailable checks: live browser rendering, narrow viewport, assistive technology.
-- Release eligible: no; candidate remains non-public until independent browser/accessibility review.
-- Follow-up work: execute demo in a browser, capture runtime screenshot, and complete accessibility gate.
+Candidate only. The redesign materially raises visual fidelity but does not self-approve engineering, browser, or accessibility release gates.

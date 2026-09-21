@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Analytical beam spans x=0 to x=spanM at y=0. Diagram rendering is normalized to the responsive SVG viewport; displayed deflection is visually exaggerated and labeled.",
+  "boundsDescription": "Physical beam spans x=-spanM/2 to +spanM/2 at nominal y=1 m in the 3D study scene. The rendered deflection is automatically exaggerated and labeled; SI snapshot values are not scaled.",
   "parameters": {
     "spanM": {
       "type": "number",
@@ -36,5 +36,11 @@
       "max": 1
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs",
+  "threePeerVersion": "0.185.1",
+  "hostCapabilities": [
+    "THREE",
+    "scene"
+  ]
 }

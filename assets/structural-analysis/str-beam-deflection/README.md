@@ -4,56 +4,35 @@ Status: candidate.
 
 ## Learning objective
 
-Connect the centered point load to support reactions, the shear-force diagram, the sagging bending-moment diagram, and the linear-elastic deflected shape.
+Connect a centered point load to support reactions, shear, bending moment, and linear-elastic deflection in one coordinated 3D structural study.
 
 ## Model and assumptions
 
-The model is deliberately bounded to one case:
+The retained model is a prismatic simply supported Euler–Bernoulli beam with one downward centered point load, constant E and I, small deflection, and positive sagging bending moment. Closed-form reactions, moment and deflection remain exactly those documented in `checks/analytical.md`.
 
-- simply supported prismatic beam;
-- span (L);
-- one downward point load (P) at midspan;
-- constant (E) and (I);
-- small-deflection, linear-elastic Euler-Bernoulli behavior;
-- vertical reactions only for the shown vertical loading;
-- positive sagging bending moment;
-- deflection returned as negative y (downward).
+The analytical model is kept in `src/model.mjs`. The premium 3D renderer in `src/asset.mjs` consumes that model and does not change its equations, sign conventions, or SI outputs.
 
-Closed-form checks:
+## 3D presentation
 
-- (R_A = R_B = P/2)
-- (V=+P/2) for (0<x<L/2), and (V=-P/2) for (L/2<x<L)
-- (M(x)=Px/2) on the left half and (M(x)=P(L-x)/2) on the right half
-- (M_{max}=PL/4)
-- with (a=min(x,L-x)), (v(x)=-P a(3L^2-4a^2)/(48EI))
-- (v_{max}=-PL^3/(48EI)) at midspan
+Version 0.2.0 replaces the former flat SVG-primary presentation with a real Three.js scene. The reusable component requires a host-provided **Three.js 0.185.1** namespace and host-owned `THREE.Scene`, consistent with the LearnMat runtime contract. The demo pins the same version through an import map and provides the perspective camera, OrbitControls, antialiased WebGL renderer, lighting, shadows, focus mode, and responsive resize behavior.
 
-At the point-load location the shear diagram is discontinuous. `responseAt(L/2)` reports shear as zero only as a display convention for the jump; the left and right limits are ±P/2.
+The 3D beam uses a translucent undeformed reference, a display-exaggerated segmented deformed member, spatial load/reaction vectors, and shear/moment traces beneath the member. The right rail reports physical SI values.
 
-The deflected shape is **visually exaggerated** to make curvature legible. Numerical labels and snapshots retain physical SI values.
+Network access is required by the demonstration page because it loads the pinned Three.js peer from jsDelivr. The reusable component itself never creates a renderer, camera, requestAnimationFrame loop, or an undeclared library instance.
 
-Default example: (L=6 m), (P=20 kN), (E=200 GPa), (I=8×10^{-5} m^4). This gives reactions 10 kN each, maximum moment 30 kN·m, and maximum downward deflection 5.625 mm.
+## Scope boundary
 
-## Usage
-
-Entrypoint: `demo/index.html`. Reusable module: `src/asset.mjs`.
-
-API parameters are SI:
-- `spanM`: 2–20 m
-- `loadN`: 0–1,000,000 N
-- `elasticModulusPa`: 1–300 GPa in Pa
-- `inertiaM4`: (10^{-8})–1 m⁴
-
-The demo converts convenient kN/GPa entries to SI before calling the component. `update(timeSeconds)` is deterministic and time-independent. `snapshot()` returns reactions, extrema, and representative samples.
+This is one bounded analytical case, not a general beam finite-element solver or a design-code check. The displayed deflection geometry is exaggerated automatically and the factor is reported.
 
 ## Reuse and rights
 
-Original repository contribution under the root MIT license. No external runtime dependency or third-party asset is used.
+Original LearnMat contribution under the repository MIT license. No external 3D models, textures, images, fonts, or datasets are embedded. Three.js is an external runtime peer and is declared explicitly in metadata.
 
 ## Review evidence
 
-See `REVIEW.md`. The checked-in SVG is a representative source-authored preview; browser screenshot, mobile rendering, and assistive-technology execution remain for independent review.
+The checked-in preview is a representative authored preview, not a fabricated browser screenshot. Independent live-browser rendering, responsive-layout, and assistive-technology checks remain required before public approval.
 
 ## Change history
 
-- 0.1.0 — Initial centered-point-load beam response component.
+- 0.2.0 — Rebuilt as a premium, surveying-style Three.js presentation while retaining the analytical model.
+- 0.1.0 — Initial candidate component.

@@ -5,7 +5,7 @@
   "lengthUnit": "m",
   "timeUnit": "s",
   "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Concrete prism spans x=0..widthM, y=0..heightM, z=0..depthM. Clear cover is measured from concrete face to the outer surface of the transverse tie. Longitudinal-bar centerlines are inset by cover + tieDiameter + barDiameter/2.",
+  "boundsDescription": "Concrete prism uses physical widthM×heightM×depthM. Clear cover is face-to-outer-tie surface; longitudinal bars and ties use physical diameters and model-computed centerlines.",
   "parameters": {
     "widthM": {
       "unit": "m",
@@ -64,5 +64,11 @@
       "default": 0.2
     }
   },
-  "assetDependencies": []
+  "assetDependencies": [],
+  "renderer": "threejs",
+  "threePeerVersion": "0.185.1",
+  "hostCapabilities": [
+    "THREE",
+    "scene"
+  ]
 }
