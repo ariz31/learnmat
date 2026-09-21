@@ -4,4 +4,4 @@ The constant-area mass-balance model remains the numerical authority. The primar
 
 The demo uses a four-step sequence—balance, storage response, physical limit, conservation check—with camera staging, OrbitControls, responsive metrics, play/pause/reset and focus/fullscreen mode. Demo time is intentionally accelerated 120×; the HUD/model still reports real simulation seconds and SI flow/level values.
 
-Plan radius and vertical tank proportions are display-clamped for presentation. Volume and level always come from `src/model.mjs`.
+The tank shell is illustrative rather than a plan-area drawing. Its water fill fraction follows the modeled level/maxLevel, while exact tank area, stored volume and level always come from `src/model.mjs`.
