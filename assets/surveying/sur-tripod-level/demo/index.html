@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Surveying Tripod and Level</title>
+<style>body{font-family:system-ui,sans-serif;margin:0;padding:1rem;line-height:1.45;background:Canvas;color:CanvasText}main{max-width:920px;margin:auto}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.8rem}label{display:grid;gap:.25rem}#stage{margin-top:1rem;border:1px solid color-mix(in srgb,CanvasText 25%,transparent);border-radius:.75rem;padding:.5rem}</style></head>
+<body><main><h1>Surveying Tripod and Level</h1><p>Instrument height is measured from the station ground point to the optical-axis origin. Azimuth is clockwise from north.</p>
+<div class="controls">
+<label>Instrument height (m)<input id="height" type="range" min="1" max="2.2" step=".05" value="1.5"><output id="heightOut">1.50</output></label>
+<label>Leg spread (m)<input id="spread" type="range" min=".4" max="1.2" step=".05" value=".8"><output id="spreadOut">0.80</output></label>
+<label>Azimuth (°)<input id="az" type="range" min="-180" max="180" step="1" value="0"><output id="azOut">0</output></label>
+<label>Sight elevation (°)<input id="el" type="range" min="-5" max="5" step=".1" value="0"><output id="elOut">0.0</output></label>
+</div><div id="stage"></div><p id="status" role="status"></p>
+<script type="module">
+import { createAsset } from '../src/asset.mjs';
+const asset=createAsset({container:document.querySelector('#stage')});
+const h=document.querySelector('#height'),s=document.querySelector('#spread'),a=document.querySelector('#az'),e=document.querySelector('#el'),status=document.querySelector('#status');
+function apply(){const snap=asset.setParameters({instrumentHeight:Number(h.value),legSpread:Number(s.value),sightAzimuthRad:Number(a.value)*Math.PI/180,sightElevationRad:Number(e.value)*Math.PI/180});document.querySelector('#heightOut').value=Number(h.value).toFixed(2);document.querySelector('#spreadOut').value=Number(s.value).toFixed(2);document.querySelector('#azOut').value=a.value;document.querySelector('#elOut').value=Number(e.value).toFixed(1);const v=snap.result.sightDirection;status.textContent='Sight vector = ('+v.x.toFixed(3)+', '+v.y.toFixed(3)+', '+v.z.toFixed(3)+')';}
+[h,s,a,e].forEach(el=>el.addEventListener('input',apply));apply();
+</script></main></body></html>
