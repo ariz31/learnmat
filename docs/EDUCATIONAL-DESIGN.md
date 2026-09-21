@@ -22,6 +22,40 @@ A static reference component may teach through labels, comparison, sectioning,
 annotations, state changes, or inspection. Do not force artificial procedural
 steps onto a concept that is not procedural.
 
+## 3D-first visual standard
+
+LearnMat prioritizes real 3D educational presentation. For new or substantially
+reworked assets, begin from the assumption that the learner should see the object,
+field procedure, system, experiment, structure, material, building, terrain, fluid,
+or mechanism in a coherent 3D scene.
+
+Use the current surveying examples as a preferred visual direction: recognizable
+spatial equipment/objects, perspective camera, depth cues, contextual ground or
+environment, purposeful camera framing, and animated actions that occur in space.
+Those examples are references for visual ambition and scene composition only; their
+candidate status does not establish engineering correctness, accessibility, rights,
+or approval.
+
+A primary visual is considered meaningfully 3D when it uses actual spatial geometry
+and depth relationships, not merely a flat SVG with gradients, a 2.5D/isometric
+drawing, or a perspective-styled card. Prefer real 3D meshes/geometry, a perspective
+or intentionally chosen orthographic camera, lighting/material cues where useful,
+and navigable or staged viewpoints when they improve understanding.
+
+Use 2D as the primary visual only when one of these is documented in the review:
+- the learning object is inherently planar or symbolic and depth adds no information;
+- a graph, equation, diagram, or section must be read exactly in 2D;
+- 3D would materially reduce engineering clarity, accessibility, or performance;
+- the asset is a supporting overlay/component intended to be composed into a 3D lesson.
+
+Even in a 3D-first asset, use 2D overlays freely for equations, plots, measurements,
+labels, tables, vectors, section cuts, and step guidance. The 3D scene teaches the
+spatial/physical system; the 2D layer communicates exact analytical information.
+
+Do not downgrade a requested or spatially meaningful asset to SVG/Canvas2D solely
+because it is faster to implement. If real 3D is practical and educationally useful,
+it is the default.
+
 ## Step-by-step procedure when one exists
 
 If an asset represents a calculation, field procedure, analysis sequence,
@@ -107,9 +141,10 @@ Where animation is useful, prefer:
 - responsive, touch-friendly presentation on desktop, tablet, and narrow mobile;
 - a useful reduced-motion mode that still preserves the instructional sequence.
 
-Use 3D only when depth, spatial relationships, occlusion, assembly, or motion make
-it educationally superior to a clear 2D/SVG representation. High quality means
-clear, accurate, purposeful, smooth, legible, and stable—not merely visually busy.
+For spatial subjects, 3D is the default rather than an optional enhancement. Use
+camera movement sparingly and purposefully; the learner should not fight the camera
+to understand the lesson. High quality means clear, accurate, purposeful, smooth,
+legible, spatially coherent, and stable—not merely visually busy.
 
 ## Focus/maximize presentation mode
 
@@ -158,6 +193,8 @@ must cover all of the following:
   applicable, agreement between motion and the model, focus/maximize behavior,
   exit/state restoration, and reduced-motion behavior;
 - **accessibility** — keyboard/focus/labels, text equivalents, and reduced motion;
+- **spatial3d** — real 3D geometry/scene quality, depth/camera/material coherence,
+  and justification for any 2D-primary exception;
 - **visual** — legibility, hierarchy, responsive layout, and actual captured evidence;
 - **reuse** — documented inputs/outputs, dependencies, limits, rights, and cleanup.
 
