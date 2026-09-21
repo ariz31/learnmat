@@ -17,15 +17,22 @@
     "Recognize how physical storage limits convert excess inflow to overflow or unmet outlet demand at an empty tank."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/hydraulics-and-hydrology/geo-tank-reservoir/demo/index.html",
   "readme": "assets/hydraulics-and-hydrology/geo-tank-reservoir/README.md",
-  "previewImage": "assets/hydraulics-and-hydrology/geo-tank-reservoir/previews/preview.svg",
+  "previewImage": null,
   "reviewFile": "assets/hydraulics-and-hydrology/geo-tank-reservoir/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
@@ -36,7 +43,7 @@
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Equations and representative reference calculations were reviewed from source. Interactive browser and assistive-technology review remain pending."
+    "notes": "Rebuilt as a real Three.js reservoir/tank storage scene; mass-balance model retained. Rendered visual comparison pending."
   },
   "source": {
     "type": "original",
