@@ -6,8 +6,11 @@ Make high-quality civil-engineering learning assets discoverable and reusable in
 presentations, teaching websites, simulations, and single-HTML lessons. Preserve
 enough engineering context for reuse to remain correct.
 
-The product is educational-first: assets should help a learner understand,
-observe, compute, compare, or perform something meaningful. When a real procedure
+The product is educational-first and 3D-first: assets should help a learner understand,
+observe, compute, compare, or perform something meaningful. Spatial subjects should
+default to real 3D scenes with the visual ambition of the surveying examples rather
+than generic flat diagrams. 2D remains a supporting analytical layer or a documented
+exception when it is educationally superior. When a real procedure
 exists, show the meaningful steps and intermediate reasoning as completely as
 practical. Keep visible instructional text minimal through progressive disclosure,
 and let instructors maximize/focus the animation or interactive scene without the
@@ -29,6 +32,8 @@ step panels when presenting.
 - Search titles, learning objectives, and tags; clear filters and support empty states.
 - View a thumbnail, concise description, assumptions, dependency requirements, and rights.
 - Open an isolated interactive preview with loading and failure feedback.
+- Prefer real 3D spatial scenes for new engineering visuals, with deliberate camera,
+  depth, geometry, context, and purposeful animation.
 - Step through meaningful instructional stages when the subject has a real procedure.
 - Reveal derivations, tables, or longer explanations only when requested or relevant
   to the active step.

@@ -33,7 +33,11 @@ restricted preview environment described in HOSTING.md. Gallery search and cards
 must work without creating every scene or loading every 3D library.
 
 Reusable components should separate the engineering model, renderer, and lesson
-UI. Educational state belongs above the model: active step, concise instructional
+UI. For spatial assets, the renderer layer should be designed 3D-first. Real 3D
+geometry is the preferred primary representation; exact 2D analytical overlays
+(labels, equations, plots, dimensions, sections, tables) may be composed above or
+beside it. A 2D-primary renderer is an explicit educational exception, not the
+default fallback. Educational state belongs above the model: active step, concise instructional
 labels, optional derivation/details, and learner controls should all consume the
 same authoritative calculations and geometry.
 

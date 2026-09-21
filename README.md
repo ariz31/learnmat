@@ -7,8 +7,12 @@ reuse, and improve engineering visuals. The long-term product is a public asset
 catalog hosted on Vercel, with category browsing, previews, downloads, and clear
 reuse instructions. Single-HTML learning materials are a primary target.
 
-LearnMat is **educational-first**. Curated assets should teach a meaningful concept
-or procedure, not merely display attractive engineering graphics. Where a real
+LearnMat is **educational-first and 3D-first**. Curated assets should teach a meaningful
+concept or procedure, not merely display attractive engineering graphics. Real 3D
+geometry and spatial animation are the preferred primary presentation for new assets,
+using the surveying examples as a visual direction when practical. Flat 2D primary
+visuals are exceptions that require an educational reason; 2D labels, plots,
+equations, and overlays remain useful companions to the 3D scene. Where a real
 procedure exists, show the meaningful reasoning and computation steps as completely
 as practical. Keep the default interface visually light through concise labels and
 progressive disclosure. Interactive/animated assets should also support a

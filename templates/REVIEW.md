@@ -24,6 +24,16 @@
 - Default text hierarchy/progressive disclosure:
 - Gate: not-reviewed / passed / failed
 
+## Spatial 3D
+
+- Primary renderer and whether it is genuinely 3D:
+- Geometry/depth/camera/environment quality:
+- Scale, occlusion, clipping, intersections, z-fighting, and spatial coherence:
+- Comparison with surveying-reference visual ambition where applicable:
+- Supporting 2D overlays/plots/equations:
+- If 2D-primary, concrete educational justification:
+- Gate: not-reviewed / passed / failed
+
 ## Animation and presentation
 
 - Educational purpose of animation:
