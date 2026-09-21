@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FW05 — Differential Leveling</title>
+
+  <style>
+    :root{
+      --bg:#eef3f8; --panel:#ffffff; --panel-2:#f8fbfe; --line:#d7e1ea; --text:#173042;
+      --muted:#607789; --accent:#1282e4; --green:#12966a; --amber:#b97700; --red:#c44545;
+      --cyan:#0aa3c2; --shadow:0 18px 42px rgba(16,42,67,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:linear-gradient(180deg,#f8fbfe 0%,#eef3f8 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    button,select{font:inherit} button{cursor:pointer}
+    h1,h2,h3,p{margin:0}
+    .app{position:relative;width:100%;height:100%}
+
+    .deck{position:absolute;inset:0;z-index:20;display:grid;grid-template-rows:1fr auto;background:linear-gradient(180deg,#f9fbfe 0%,#eef3f8 100%);transition:opacity .22s ease,visibility .22s ease}
+    .deck.hidden{opacity:0;visibility:hidden;pointer-events:none}
+    .slides{position:relative;min-height:0}
+    .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transform:translateX(18px);transition:.22s ease;padding:clamp(20px,5vw,66px);display:grid;place-items:center;overflow-y:auto}
+    .slide.active{opacity:1;visibility:visible;transform:none}
+    .slide-inner{width:min(1180px,100%);display:grid;gap:22px}
+    .eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.74rem;font-weight:850}
+    .hero h1{font-size:clamp(2.35rem,6.1vw,5.7rem);line-height:.94;letter-spacing:-.055em;max-width:980px}
+    .lead{max-width:930px;color:var(--muted);font-size:clamp(1rem,1.55vw,1.18rem);line-height:1.56}
+    .cards-2,.cards-3{display:grid;gap:14px}
+    .cards-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .cards-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .card,.formula{border:1px solid var(--line);background:var(--panel);border-radius:18px;box-shadow:var(--shadow)}
+    .card{padding:18px}
+    .card .n{color:var(--accent);text-transform:uppercase;letter-spacing:.10em;font-size:.67rem;font-weight:850}
+    .card h3{margin-top:7px;font-size:1.06rem}
+    .card p{margin-top:7px;color:var(--muted);line-height:1.48;font-size:.88rem}
+    .formula{padding:18px;background:linear-gradient(180deg,#ffffff 0%,#f6fbff 100%)}
+    .formula strong{display:block;font-size:clamp(1.65rem,4vw,3.3rem);letter-spacing:-.035em}
+    .formula span{display:block;margin-top:5px;color:var(--muted);font-size:.84rem;line-height:1.45}
+    .deck-nav{min-height:62px;display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;padding:10px 16px;border-top:1px solid var(--line);background:rgba(255,255,255,.94)}
+    .deck-nav .right{justify-self:end;display:flex;gap:8px}
+    .deck-nav .center{color:var(--muted);font-size:.74rem}
+    .dots{display:flex;gap:6px}.dot{width:7px;height:7px;border-radius:50%;background:#cad7e2}.dot.active{background:var(--accent)}
+
+    .simulation{position:absolute;inset:0;padding:8px}
+    .stage{position:relative;width:100%;height:100%;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#dff0ff 0%,#e8f5ff 18%,#edf4f8 19%,#edf4f8 100%);box-shadow:var(--shadow)}
+    #threeHost{position:absolute;inset:0}
+    #threeHost canvas{display:block;width:100%;height:100%}
+
+    .toolbar,.info-card,.action-card,.record,.toast{border:1px solid var(--line);background:rgba(255,255,255,.97);box-shadow:var(--shadow)}
+    .toolbar{position:absolute;z-index:10;top:10px;right:10px;display:flex;gap:6px;flex-wrap:wrap;padding:6px;border-radius:12px;max-width:calc(100% - 20px)}
+    .info-card{position:absolute;z-index:10;top:10px;left:10px;padding:10px 12px;border-radius:14px;width:min(360px,calc(100% - 20px))}
+    .kicker{color:var(--accent);text-transform:uppercase;letter-spacing:.11em;font-size:.58rem;font-weight:850}
+    .info-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:2px}
+    .info-title strong{font-size:1rem}
+    .info-title span{color:var(--muted);font-size:.72rem}
+    .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+    .chip{display:flex;gap:6px;align-items:center;padding:6px 8px;border-radius:999px;border:1px solid var(--line);background:var(--panel-2);font-size:.67rem}
+    .chip b{font-variant-numeric:tabular-nums}
+    .chip label{color:var(--muted)}
+
+    .action-card{position:absolute;z-index:10;left:10px;bottom:10px;width:min(510px,calc(100% - 20px));padding:12px;border-radius:16px}
+    .action-card h2{margin-top:4px;font-size:1rem;letter-spacing:-.02em}
+    .action-card p{margin-top:6px;color:var(--muted);font-size:.77rem;line-height:1.45}
+    .action-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px}
+    .progress-mini{color:var(--muted);font-size:.68rem}
+
+    .record{position:absolute;z-index:10;right:10px;bottom:10px;width:min(760px,calc(100% - 20px));max-height:68%;overflow:auto;padding:10px;border-radius:16px;display:none}
+    .record.show{display:block}
+    .record-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .record-head h3{font-size:.9rem}
+    .record-head span{color:var(--muted);font-size:.67rem}
+    .table-wrap{overflow:auto;margin-top:8px;border:1px solid var(--line);border-radius:10px}
+    table{width:100%;border-collapse:collapse;font-size:.70rem;background:#fff;table-layout:fixed;min-width:720px}
+    col.setup{width:72px} col.point{width:76px} col.sight{width:64px} col.read{width:78px} col.hi{width:86px} col.elev{width:92px} col.corr{width:86px} col.adj{width:96px} col.status{width:90px}
+    th,td{padding:7px 6px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:left;vertical-align:middle}
+    th{position:sticky;top:0;background:#f7fbfe;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-size:.53rem;z-index:1}
+    td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+    tr.latest{background:#f0f8ff}
+    .pill{display:inline-flex;padding:2px 6px;border-radius:999px;font-size:.52rem;font-weight:700}
+    .raw{background:#edf7ff;color:#1e72b2}.ok{background:#eefbf4;color:#12835d}.warn{background:#fff7e7;color:#9a6400}
+    .calc{margin-top:8px;padding:9px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg,#ffffff 0%,#f7fbfe 100%)}
+    .calc strong{display:block;font-size:.91rem;font-variant-numeric:tabular-nums}
+    .calc span{display:block;color:var(--muted);margin-top:4px;font-size:.64rem;line-height:1.4}
+    .sheet{display:none;margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:10px;background:linear-gradient(180deg,#ffffff 0%,#f8fbfe 100%)}
+    .sheet.show{display:block}
+    .sheet-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:8px}
+    .sheet-head strong{display:block;font-size:.8rem}
+    .sheet-head span{display:block;margin-top:2px;color:var(--muted);font-size:.60rem;line-height:1.35}
+    .sheet-meta{font-size:.58rem;color:var(--muted);text-align:right}
+    .sheet svg{display:block;width:100%;height:310px;border:1px solid var(--line);border-radius:10px;background:#fbfdff}
+    .notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}
+    .note{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}
+    .note b{display:block;font-size:.60rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
+    .note span{display:block;margin-top:3px;color:var(--muted);font-size:.60rem;line-height:1.35}
+
+    .btn{min-height:34px;border:1px solid var(--line);background:#fff;color:var(--text);border-radius:10px;padding:6px 10px;font-size:.72rem;font-weight:750}
+    .btn:hover{background:#f8fbfe}
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+    .btn.success{background:var(--green);border-color:var(--green);color:#fff}
+    .btn:disabled{opacity:.45;cursor:not-allowed}
+
+    .toast{position:absolute;z-index:20;left:50%;top:12px;transform:translate(-50%,-10px);opacity:0;pointer-events:none;border-radius:999px;padding:8px 12px;font-size:.72rem;transition:.17s ease}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+
+    @media(max-width:980px){
+      .cards-2,.cards-3,.notes{grid-template-columns:1fr}
+      .slide{align-items:start}
+      .record{left:10px;right:10px;width:auto;max-height:48%}
+      .action-card{width:min(560px,calc(100% - 20px))}
+      .toolbar{left:10px;right:10px;max-width:none;top:auto;bottom:10px;justify-content:flex-end}
+      .action-card{bottom:58px}
+    }
+    @media(max-width:620px){
+      .slide{padding:18px 14px 80px}
+      .hero h1{font-size:clamp(2rem,12vw,4rem)}
+      .deck-nav{grid-template-columns:1fr auto}
+      .deck-nav .center{display:none}
+      .simulation{padding:4px}
+      .stage{border-radius:12px}
+      .info-card{width:calc(100% - 12px);left:6px;top:6px;padding:9px 10px}
+      .toolbar{left:6px;right:6px;bottom:6px;padding:5px}
+      .action-card{left:6px;right:6px;bottom:54px;width:auto;padding:10px}
+      .record{left:6px;right:6px;bottom:54px;max-height:52%;padding:8px}
+      .btn{min-height:30px;font-size:.67rem;padding:5px 7px}
+    }
+  
+/* Publication figure system */
+:root{--bg:#f4f3ed;--panel:#fffefa;--panel-2:#f4f5f0;--line:#dadfd9;--text:#233d42;--muted:#65787a;--accent:#007d80;--green:#007d80;--shadow:0 12px 36px #203b4310}
+html,body{background:var(--bg)}
+.simulation{padding:0}.stage{border:0;border-radius:0;background:#f4f3ed;box-shadow:none}
+.figure-head{position:absolute;left:34px;right:34px;top:25px;display:flex;justify-content:space-between;align-items:center;z-index:2;pointer-events:none}.figure-head h1{font-family:Georgia,serif;font-weight:400;font-size:34px;letter-spacing:-1px;margin-top:7px}.figure-head h1 span{font:13px ui-sans-serif,system-ui;letter-spacing:0;display:block;color:var(--muted);margin-top:7px}.eyebrow{font-size:10px;letter-spacing:.18em}.edition{font-size:10px;letter-spacing:.13em;color:var(--muted);display:flex;align-items:center;gap:18px}.edition b{font:52px Georgia,serif;color:#adbbb5}
+#threeHost{top:168px;bottom:232px;left:24px;right:325px;touch-action:none;cursor:grab;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}#threeHost:active{cursor:grabbing}#threeHost canvas{width:100%;height:100%;display:block}
+.toolbar{top:126px;left:28px;right:325px;max-width:none;padding:0;box-shadow:none;border:0;background:transparent;gap:5px}.btn{font-size:11px;border-radius:5px;min-height:32px;padding:6px 12px;font-weight:600}.btn:hover{border-color:#8da4a2;background:#edf1eb}.btn.primary:hover{background:#00676a;color:white}.btn[aria-pressed=true]{background:#e0ebe4;border-color:#8cab9f}.btn:focus-visible,select:focus-visible,#threeHost:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.scene-tag{position:absolute;left:36px;top:184px;z-index:2;font-size:11px;pointer-events:none}.scene-tag b{margin-right:10px;color:var(--accent)}.scene-tag span{display:block;color:var(--muted);font-size:10px;margin:7px 0 0 21px}.legend{position:absolute;left:38px;bottom:246px;display:flex;gap:18px;font-size:10px;z-index:2;pointer-events:none}.legend span{display:flex;align-items:center;gap:6px}.legend i{display:inline-block;width:18px;height:2px}.view-hint{position:absolute;left:38px;bottom:212px;font-size:10px;color:var(--muted)}
+.info-card{top:126px;left:auto;right:26px;width:270px;background:transparent;box-shadow:none;border:0;border-top:2px solid #233d42;border-radius:0;padding:15px 0}.info-title{margin-top:7px;display:block}.info-title strong{font:22px Georgia,serif}.info-title span{display:block;margin-top:5px}.chips{gap:0;margin-top:14px;display:grid;grid-template-columns:1fr 1fr}.chip{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:9px 0;background:transparent;font-size:11px;display:block}.chip label{display:block;font-size:9px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.09em}.chip b{font-size:13px;font-weight:500}.chip:last-child{grid-column:span 2;display:flex;align-items:baseline;gap:12px}
+.readout{position:absolute;right:26px;top:358px;width:270px}.readout canvas{display:block;width:220px;height:161px;margin:8px auto}.readout strong{display:block;text-align:center;font-size:19px;font-variant-numeric:tabular-nums;font-weight:500}.readout p{font-size:10px;line-height:1.6;color:var(--muted);text-align:center;margin:7px 4px}.model-note{position:absolute;right:26px;bottom:82px;width:270px;font-size:10px;line-height:1.6;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}.model-note b{display:block;color:var(--text);margin-bottom:3px}
+.action-card{left:38px;bottom:77px;width:calc(100% - 390px);border:0;border-radius:0;padding:0;background:transparent;box-shadow:none}.action-card h2{font-family:Georgia,serif;font-weight:400;font-size:23px;margin-top:7px}.action-card p{font-size:12px;max-width:720px;line-height:1.6}.action-row{margin-top:12px}.kicker{font-size:9px;letter-spacing:.14em}.progress-mini{font-size:10px}.transport{position:absolute;bottom:0;left:0;right:0;height:61px;padding:12px 28px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;background:#fffefa}.transport label{font-size:10px;color:var(--muted);white-space:nowrap}.transport select{background:none;border:0;color:var(--text);font-size:11px}.timeline{display:flex;gap:5px;margin:0 20px;flex:1}.timeline button{height:5px;flex:1;border:0;background:#dce3db;padding:0;border-radius:2px;cursor:default}.timeline button.done{background:#007d80}.timeline button.current{background:#9cae9c}
+.record{top:175px;bottom:72px;right:20px;width:min(890px,calc(100% - 40px));max-height:none;z-index:15;background:#fffefafc;border-radius:8px;padding:20px;backdrop-filter:blur(16px);box-shadow:0 22px 100px #12323c40}.record-head{padding-right:40px}.close-record{position:absolute;right:15px;top:15px;font-size:19px}.record table{font-size:11px}.record th{font-size:9px}.record th,.record td{padding:11px 7px}.record .calc strong{font-size:16px}.record .calc span{font-size:11px}.sheet-head strong{font-size:13px}.sheet-head span,.sheet-meta,.note span{font-size:10px}.note b{font-size:9px}.sheet svg{height:auto;aspect-ratio:900/320}.toast{top:85px;font-size:11px;background:#fffefa;border-radius:5px}.deck{background:#f4f3ed}.hero h1{font-family:Georgia,serif;font-weight:400}.card,.formula{border-radius:6px;box-shadow:none}.deck-nav{background:#fffefa}.formula strong{font-size:clamp(1.3rem,3vw,2.5rem)}
+
+/* Minimal animation mode: the right-side information stack can collapse while controls remain available. */
+.info-card,.readout,.model-note{transition:opacity .2s ease,transform .2s ease,visibility .2s ease}
+#threeHost,.toolbar,.action-card{transition:right .22s ease,width .22s ease}
+.stage.minimal-mode .info-card,.stage.minimal-mode .readout,.stage.minimal-mode .model-note{opacity:0;visibility:hidden;pointer-events:none;transform:translateX(18px)}
+.stage.minimal-mode #threeHost{right:24px}
+.stage.minimal-mode .toolbar{right:28px}
+.stage.minimal-mode .action-card{width:calc(100% - 76px)}
+.stage.minimal-mode #minimalBtn{background:#e0ebe4;border-color:#8cab9f}
+@media(max-width:900px){
+  .stage.minimal-mode #threeHost{right:12px}
+  .stage.minimal-mode .toolbar{right:20px}
+  .stage.minimal-mode .action-card{left:24px;right:24px;width:auto}
+}
+
+@media(max-height:820px) and (min-width:901px){.readout{top:338px}.readout canvas{width:176px;height:129px;margin:3px auto}.model-note{font-size:9px;line-height:1.4;bottom:76px}.readout strong{font-size:16px}}
+@media(max-width:900px){html,body{height:auto;min-height:100%;overflow:auto}.app{height:1210px}.simulation{position:relative;height:1210px}.figure-head{left:20px;right:20px;top:20px}.figure-head h1{font-size:29px}.edition{display:none}.toolbar{top:124px;left:20px;right:20px;bottom:auto;justify-content:flex-start}.toolbar .btn{font-size:10px;padding:5px 8px}.scene-tag{top:181px;left:24px}#threeHost{top:165px;bottom:auto;height:380px;left:12px;right:12px}.legend{top:520px;bottom:auto;left:24px;gap:13px}.view-hint{top:554px;bottom:auto;left:24px;font-size:9px}.info-card{top:590px;left:24px;right:auto;width:calc(50% - 38px)}.info-title strong{font-size:18px}.readout{top:590px;right:20px;width:calc(50% - 36px)}.readout canvas{width:100%;max-width:210px;height:auto}.readout strong{font-size:16px}.model-note{display:block;top:1007px;bottom:auto;left:24px;right:24px;width:auto;font-size:10px}.action-card{top:835px;bottom:auto;left:24px;right:24px;width:auto}.action-card h2{font-size:20px}.action-card p{font-size:11px}.transport{height:61px; padding:12px 16px;gap:7px}.timeline{margin:0 2px}.transport .btn{padding:5px 8px;font-size:10px}.transport label{display:none}.record{position:fixed;top:100px;left:12px;right:12px;bottom:20px;width:auto;max-height:none}.deck{position:fixed}.deck-nav .center{display:none}.notes{grid-template-columns:1fr}.toast{position:fixed;top:15px;max-width:90%;border-radius:5px}}
+@media(max-height:700px) and (min-width:901px){html,body{overflow:auto}.app{height:780px}.stage{min-height:780px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{html,body{overflow:visible;height:auto}.deck,.toolbar,.transport,.action-card,.toast{display:none!important}.record{display:block;position:relative;top:auto;bottom:auto;right:auto;left:auto;width:100%;max-height:none;box-shadow:none;break-before:page}.simulation,.app,.stage{position:relative;height:auto;overflow:visible}.stage{padding-top:800px}.record .close-record{display:none}.figure-head{top:20px}#threeHost{top:170px;bottom:auto;height:420px}.legend{top:565px;bottom:auto}.model-note{top:635px;bottom:auto}.view-hint{display:none}}
+
+</style>
+</head>
+<body>
+<main class="app">
+  <section class="deck hidden" id="deck" aria-label="Theory slides">
+    <div class="slides">
+      <section class="slide active">
+        <div class="slide-inner hero">
+          <div class="eyebrow">FW05 · Fundamentals of Surveying Fieldwork</div>
+          <h1>Differential Leveling</h1>
+          <p class="lead">Transfer elevation from a known benchmark to a second benchmark by a sequence of backsights and foresights taken with an automatic level and a levelling staff.</p>
+          <div class="cards-3">
+            <div class="card"><div class="n">Field Use Case</div><h3>Establish vertical control</h3><p>Differential leveling is used when elevations must be carried accurately across terrain to set grades, drainage lines, pavements, and construction reference points.</p></div>
+            <div class="card"><div class="n">Equipment</div><h3>Automatic level + staff</h3><p>The instrument provides a horizontal line of sight while a graduated staff supplies the reading from which height of instrument and point elevation are computed.</p></div>
+            <div class="card"><div class="n">Outputs</div><h3>Reduced levels and checks</h3><p>The field book shows BS and FS readings, reduced levels of turning points, arithmetic check, and if both end benchmarks are known, the closure error and adjustment.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide-inner">
+          <div class="eyebrow">Concept</div>
+          <h2 style="font-size:clamp(2rem,4vw,4rem);letter-spacing:-.04em;">Carry elevation through temporary points.</h2>
+          <p class="lead">A backsight on a known point establishes the height of instrument. A foresight on a turning point transfers elevation forward. The instrument is then moved, the turning point becomes the new reference, and the process repeats until the closing benchmark is reached.</p>
+          <div class="cards-3">
+            <div class="card"><div class="n">1 · Known control</div><h3>Start from BM-A</h3><p>Use the known elevation of the first benchmark as the starting reduced level.</p></div>
+            <div class="card"><div class="n">2 · Transfer</div><h3>Use turning points</h3><p>Stable turning points temporarily hold the transferred elevation while the instrument is moved ahead.</p></div>
+            <div class="card"><div class="n">3 · Close</div><h3>Check at BM-B</h3><p>Compare the computed elevation of the closing benchmark with its known value to evaluate closure.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide-inner">
+          <div class="eyebrow">Required formulas</div>
+          <div class="cards-2">
+            <div class="formula"><strong>HI = RL + BS</strong><span>Height of instrument equals the reduced level of the known point plus the backsight reading.</span></div>
+            <div class="formula"><strong>RL = HI − FS</strong><span>Reduced level of the forward point equals height of instrument minus the foresight reading.</span></div>
+            <div class="formula"><strong>ΣBS − ΣFS = RL<sub>last</sub> − RL<sub>first</sub></strong><span>Arithmetic check for the differential leveling run.</span></div>
+            <div class="formula"><strong>e = RL<sub>computed</sub> − RL<sub>known</sub></strong><span>Closure error at the final benchmark. If accepted, distribute the correction along the run.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide-inner">
+          <div class="eyebrow">Field procedure</div>
+          <h2 style="font-size:clamp(2rem,4vw,4rem);letter-spacing:-.04em;">Observe in the correct order.</h2>
+          <div class="cards-3">
+            <div class="card"><div class="n">1 · Setup</div><h3>Level the instrument</h3><p>Position the automatic level where both the backsight point and the foresight point are visible and balance the line of sight.</p></div>
+            <div class="card"><div class="n">2 · Backsight</div><h3>Establish HI</h3><p>Read the staff on the known point or previous turning point, then compute the height of instrument.</p></div>
+            <div class="card"><div class="n">3 · Foresight</div><h3>Transfer RL</h3><p>Read the staff on the turning point or closing benchmark, then reduce its level before moving the instrument again.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide-inner">
+          <div class="eyebrow">Reduction and checks</div>
+          <h2 style="font-size:clamp(2rem,4vw,4rem);letter-spacing:-.04em;">Field book, arithmetic check, and adjustment.</h2>
+          <div class="cards-2">
+            <div class="card"><div class="n">Arithmetic check</div><h3>Verify the run</h3><p>After the last foresight, check that the difference of summed backsights and foresights equals the difference between final and initial reduced levels.</p></div>
+            <div class="card"><div class="n">Closure</div><h3>Compare against known BM-B</h3><p>If the closing benchmark is known, compute the misclosure, judge whether it is acceptable, and distribute the correction uniformly by setup or proportionally by distance.</p></div>
+            <div class="card"><div class="n">Tabulation</div><h3>Preserve every sight</h3><p>The table keeps the sequential field record: setup, point, sight type, reading, HI, raw reduced level, correction, and adjusted reduced level.</p></div>
+            <div class="card"><div class="n">Final visual</div><h3>2D run sketch</h3><p>The completed simulation reveals a clean differential leveling drawing showing benchmarks, turning points, sight lines, and adjusted elevations.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide-inner">
+          <div class="eyebrow">6 / 6 · Simulation</div>
+          <h2 style="font-size:clamp(2rem,4vw,4rem);letter-spacing:-.04em;">Realistic differential leveling run.</h2>
+          <p class="lead">The simulation uses an automatic level, levelling staff, and three setups: BM-A → TP1 → TP2 → BM-B. Explore an orthographic 3D model with equal horizontal and vertical scales, balanced 10 m sights, and a magnified staff-reading inset.</p>
+        </div>
+      </section>
+    </div>
+
+    <footer class="deck-nav">
+      <div><div class="dots" id="dots"></div></div>
+      <div class="center" id="slideCounter">1 / 6</div>
+      <div class="right">
+        <button class="btn" type="button" id="deckPrev">← Previous</button>
+        <button class="btn primary" type="button" id="deckNext">Next →</button>
+      </div>
+    </footer>
+  </section>
+
+  <section class="simulation">
+    <div class="stage">
+      <header class="figure-head"><div><div class="eyebrow">FW05 / FIELD METHODS</div><h1>Differential leveling<span>Transfer a known elevation.</span></h1></div><div class="edition">INTERACTIVE PLATE <b>01</b></div></header>
+      <div class="scene-tag"><b>A</b> Spatial model <span>Orthographic · metres · vertical scale 1:1</span></div>
+      <div class="legend"><span><i style="background:#007d80"></i>Backsight</span><span><i style="background:#c26a30"></i>Foresight</span><span><i style="background:#8c9aa0"></i>Recorded sight</span></div>
+      <div class="view-hint">Drag to orbit · Shift/right-drag to pan · two-finger pan/pinch · scroll to zoom · M toggles minimal mode</div>
+      <div class="readout"><div class="kicker">B / Staff detail</div><canvas id="scopeCanvas" width="600" height="440" aria-label="Magnified metric staff and reading crosshair"></canvas><strong id="scopeValue">Ready for observation</strong><p id="scopeNote">The horizontal crosshair intersects the vertical staff at HI − RL.</p></div>
+      <div class="model-note"><b>Model assumptions</b> Ideal horizontal line of sight; vertical 3 m staff; local plane datum. The run has an added cumulative 3.000 m fall from BM-A to BM-B, distributed linearly through the turning points so setup clearances and staff intersections remain physically consistent. Terrain is interpolated from raw levels. BM-B’s +2 mm misclosure is an observation discrepancy, not ground motion. No refraction, curvature or instrument error is simulated. Travel is time-compressed.</div>
+      <div class="transport"><button class="btn" id="backBtn" title="Previous action">← Back</button><button class="btn primary" id="playBtn">▶ Play run</button><label>Speed <select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label><div class="timeline" id="timeline" aria-label="Run progress"></div><button class="btn" id="exportBtn">Export figure ↓</button></div>
+      <div id="threeHost" tabindex="0" role="img" aria-label="Interactive 3D differential leveling model. Drag to orbit; Shift-drag or right-drag to pan; use two fingers to pan and pinch; scroll or plus/minus to zoom. Shift plus arrow keys also pans. Press M for minimalist mode."></div>
+
+      <div class="info-card">
+        <div class="kicker">Differential leveling run</div>
+        <div class="info-title"><strong id="infoTitle">Ready to begin</strong><span id="infoSub">BM-A to BM-B</span></div>
+        <div class="chips">
+          <div class="chip"><label>Setup</label><b id="chipSetup">—</b></div>
+          <div class="chip"><label>Sight</label><b id="chipSight">—</b></div>
+          <div class="chip"><label>Reading</label><b id="chipReading">—</b></div>
+          <div class="chip"><label>HI</label><b id="chipHI">—</b></div>
+          <div class="chip"><label>Status</label><b id="chipStatus">Waiting</b></div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button class="btn" type="button" id="infoBtn">Info</button>
+        <button class="btn" type="button" id="minimalBtn" aria-pressed="false" title="Hide the right-side information panels and expand the 3D view">Minimal mode</button>
+        <button class="btn" type="button" id="toggleTable">Show Table</button>
+        <button class="btn" type="button" id="viewOverview">Overview</button>
+        <button class="btn" type="button" id="viewLevel">Setup detail</button>
+        <button class="btn" type="button" id="viewTop">Plan</button>
+        <button class="btn" type="button" id="profileView">Profile</button><button class="btn" type="button" id="resetBtn">Reset</button>
+      </div>
+
+      <section class="action-card">
+        <div class="kicker" id="actionKicker">Simulation guide</div>
+        <h2 id="actionTitle">Start the differential leveling run.</h2>
+        <p id="actionDesc">Click Next to set up the automatic level at the first instrument station between BM-A and TP1.</p>
+        <div class="action-row">
+          <div class="progress-mini" id="progressMini">0 / 11 actions completed</div>
+          <button class="btn primary" type="button" id="nextBtn">Next →</button>
+        </div>
+      </section>
+
+      <aside class="record" id="recordPanel">
+        <div class="record-head"><button class="btn close-record" id="closeRecord" aria-label="Close field book">×</button>
+          <div>
+            <h3>Differential leveling field book</h3>
+            <span id="recordSummary">0 / 6 sights recorded</span>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <colgroup>
+              <col class="setup"/><col class="point"/><col class="sight"/><col class="read"/><col class="hi"/><col class="elev"/><col class="corr"/><col class="adj"/><col class="status"/>
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Setup</th>
+                <th>Point</th>
+                <th>Sight</th>
+                <th class="num">Reading</th>
+                <th class="num">HI</th>
+                <th class="num">Raw RL</th>
+                <th class="num">Correction</th>
+                <th class="num">Adj. RL</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="bookBody">
+              <tr><td colspan="9" style="color:var(--muted)">No sights recorded yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="calc"><strong id="formula">HI = RL + BS</strong><span id="formulaNote">Begin by observing a backsight on BM-A to establish the first height of instrument.</span></div>
+        <div class="sheet" id="sheet">
+          <div class="sheet-head">
+            <div>
+              <strong>Final Differential Leveling Sketch</strong>
+              <span>Run from BM-A to BM-B with three instrument setups and adjusted reduced levels after closure correction.</span>
+            </div>
+            <button class="btn" id="exportProfile">Export SVG ↓</button><div class="sheet-meta">Method: Height of Instrument<br/>Adjustment: Equal per setup</div>
+          </div>
+          <svg viewBox="0 0 900 320" role="img" aria-label="Differential leveling sketch" id="sheetSvg">
+            <g id="sheetGrid"></g>
+            <g id="sheetMarks"></g>
+            <g id="sheetText"></g>
+            <polyline id="sheetGround" fill="#007d8010" stroke="#007d80" stroke-width="1.2" points=""></polyline>
+            <g id="sheetLines"></g>
+          </svg>
+          <div class="notes">
+            <div class="note"><b>Arithmetic check</b><span id="noteCheck">—</span></div>
+            <div class="note"><b>Closure</b><span id="noteClosure">—</span></div>
+            <div class="note"><b>Adjustment</b><span id="noteAdjust">—</span></div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="toast" id="toast"></div>
+    </div>
+  </section>
+</main>
+
+<script type="module">
+
+
+
+const $ = id => document.getElementById(id);
+const RL_BASE = 95.0;
+const VERTICAL_SCALE = 1;
+const sceneYFromElevation = elev => (elev - RL_BASE) * VERTICAL_SCALE;
+const sceneReadingHeight = reading => reading * VERTICAL_SCALE;
+
+const introSlides = [...document.querySelectorAll('.slide')];
+let introIndex = 0;
+introSlides.forEach(() => {
+  const d = document.createElement('span');
+  d.className = 'dot';
+  $('dots').appendChild(d);
+});
+function renderIntro(){
+  introSlides.forEach((s,i)=>s.classList.toggle('active', i===introIndex));
+  [...$('dots').children].forEach((d,i)=>d.classList.toggle('active', i===introIndex));
+  $('slideCounter').textContent = `${introIndex+1} / ${introSlides.length}`;
+  $('deckPrev').disabled = introIndex===0;
+  $('deckNext').textContent = introIndex===introSlides.length-1 ? 'Start Simulation →' : 'Next →';
+}
+$('deckPrev').onclick = ()=>{ if(introIndex>0){ introIndex--; renderIntro(); } };
+$('deckNext').onclick = ()=>{ if(introIndex<introSlides.length-1){ introIndex++; renderIntro(); } else { $('deck').classList.add('hidden'); } };
+$('infoBtn').onclick = ()=>{ introIndex=0; renderIntro(); $('deck').classList.remove('hidden'); };
+renderIntro();
+
+const stageEl = document.querySelector('.stage');
+const sidePanels = [...document.querySelectorAll('.info-card,.readout,.model-note')];
+function setMinimalMode(on){
+  stageEl.classList.toggle('minimal-mode', on);
+  $('minimalBtn').setAttribute('aria-pressed', String(on));
+  $('minimalBtn').textContent = on ? 'Show side info' : 'Minimal mode';
+  $('minimalBtn').title = on ? 'Restore the right-side information panels' : 'Hide the right-side information panels and expand the 3D view';
+  sidePanels.forEach(el=>el.setAttribute('aria-hidden', on ? 'true' : 'false'));
+  requestAnimationFrame(()=>{ if(typeof resize==='function') resize(); });
+  setTimeout(()=>{ if(typeof resize==='function') resize(); },240);
+}
+function toggleMinimalMode(){ setMinimalMode(!stageEl.classList.contains('minimal-mode')); }
+$('minimalBtn').onclick = toggleMinimalMode;
+
+function toast(msg){
+  const n = $('toast');
+  n.textContent = msg;
+  n.classList.add('show');
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(()=>n.classList.remove('show'), 1700);
+}
+
+const points = {
+  BMA:{key:'BMA', label:'BM-A', x:-28, elev:100.000, adj:100.000, type:'BM'},
+  TP1:{key:'TP1', label:'TP1',  x:-8,  elev:98.470,  adj:98.4693333333, type:'TP'},
+  TP2:{key:'TP2', label:'TP2',  x:12,  elev:96.829,  adj:96.8276666667, type:'TP'},
+  BMB:{key:'BMB', label:'BM-B', x:32,  elev:96.872,  adj:96.8700000000, type:'BM', known:96.870}
+};
+const setups = {
+  I01:{key:'I01', label:'I-01', x:-18, hi:100.925},
+  I02:{key:'I02', label:'I-02', x:2,   hi:99.205},
+  I03:{key:'I03', label:'I-03', x:22,  hi:97.993}
+};
+const observations = [
+  {setup:'I01', point:'BMA', pointLabel:'BM-A', sight:'BS', reading:0.925, hi:100.925, rawRL:100.000, corr:0, adjRL:100.000},
+  {setup:'I01', point:'TP1', pointLabel:'TP1', sight:'FS', reading:2.455, hi:100.925, rawRL:98.470,  corr:-0.000667, adjRL:98.4693333333},
+  {setup:'I02', point:'TP1', pointLabel:'TP1', sight:'BS', reading:0.735, hi:99.205, rawRL:98.470,  corr:-0.000667, adjRL:98.4693333333},
+  {setup:'I02', point:'TP2', pointLabel:'TP2', sight:'FS', reading:2.376, hi:99.205, rawRL:96.829,  corr:-0.001333, adjRL:96.8276666667},
+  {setup:'I03', point:'TP2', pointLabel:'TP2', sight:'BS', reading:1.164, hi:97.993, rawRL:96.829,  corr:-0.001333, adjRL:96.8276666667},
+  {setup:'I03', point:'BMB', pointLabel:'BM-B', sight:'FS', reading:1.121, hi:97.993, rawRL:96.872,  corr:-0.002000, adjRL:96.8700000000}
+];
+const sumBS = observations.filter(o=>o.sight==='BS').reduce((a,o)=>a+o.reading,0);
+const sumFS = observations.filter(o=>o.sight==='FS').reduce((a,o)=>a+o.reading,0);
+const firstRL = points.BMA.elev;
+const lastRL = points.BMB.elev;
+const knownClose = points.BMB.known;
+const misclosure = lastRL - knownClose; // +0.002
+
+const steps = [
+  {kind:'setup', setup:'I01', title:'Occupy Setup I-01', desc:'Set the automatic level approximately midway between BM-A and TP1. Level the bubble and prepare for the first backsight.'},
+  {kind:'observe', obs:0, title:'Take a backsight on BM-A', desc:'Observe a staff reading of 0.925 m on BM-A. Since BM-A = 100.000 m, the first height of instrument is HI₁ = 100.925 m.'},
+  {kind:'observe', obs:1, title:'Take a foresight on TP1', desc:'Read 2.455 m on TP1. Reduce the level of TP1 using RL = HI₁ − FS = 98.470 m.'},
+  {kind:'move', setup:'I02', title:'Move ahead to Setup I-02', desc:'Shift the instrument forward so TP1 and TP2 are both visible. TP1 will become the new reference point.'},
+  {kind:'observe', obs:2, title:'Take a backsight on TP1', desc:'Observe 0.735 m on TP1 to establish the second height of instrument. HI₂ = 98.470 + 0.735 = 99.205 m.'},
+  {kind:'observe', obs:3, title:'Take a foresight on TP2', desc:'Read 2.376 m on TP2. Reduce TP2 to RL = 99.205 − 2.376 = 96.829 m.'},
+  {kind:'move', setup:'I03', title:'Move ahead to Setup I-03', desc:'Occupy the third instrument station where TP2 and BM-B are visible and prepare to close the run.'},
+  {kind:'observe', obs:4, title:'Take a backsight on TP2', desc:'Observe 1.164 m on TP2. The third height of instrument is HI₃ = 96.829 + 1.164 = 97.993 m.'},
+  {kind:'observe', obs:5, title:'Take a foresight on BM-B', desc:'Observe 1.121 m on the closing benchmark. The computed elevation of BM-B is 97.993 − 1.121 = 96.872 m.'},
+  {kind:'compute', title:'Run the arithmetic check and closure', desc:'Check that ΣBS − ΣFS equals RL_last − RL_first. Then compare computed BM-B to the known BM-B value to determine the misclosure.'},
+  {kind:'adjust', title:'Illustrate a closure adjustment', desc:'For illustration only, the misclosure is distributed equally over the three setups: −0.000667 m, −0.001333 m, and −0.002000 m cumulatively to TP1, TP2, and BM-B.'}
+];
+
+const state = {
+  step: 0,
+  busy:false,
+  currentSetup:null,
+  recorded:[],
+  tableVisible:false,
+  lastRecordedObs:null
+};
+
+function format3(v){ return `${Number(v).toFixed(3)} m`; }
+function format4(v){ return `${v>=0?'+':''}${Number(v).toFixed(4)} m`; }
+
+function renderUI(){
+  const completed = Math.min(state.step, steps.length);
+  $('progressMini').textContent = `${completed} / ${steps.length} actions completed`;
+  $('recordSummary').textContent = `${state.recorded.length} / ${observations.length} sights recorded`;
+  $('toggleTable').textContent = state.tableVisible ? 'Hide Table' : 'Show Table';
+  $('recordPanel').classList.toggle('show', state.tableVisible);
+
+  if(state.step >= steps.length){
+    $('actionKicker').textContent = 'Simulation complete';
+    $('actionTitle').textContent = 'Differential leveling run finished.';
+    $('actionDesc').textContent = 'Review the completed field book and the final 2D leveling sketch. Use Reset to replay the run.';
+    $('nextBtn').disabled = true;
+    $('nextBtn').textContent = 'Complete';
+  }else{
+    const s = steps[state.step];
+    $('actionKicker').textContent = `Action ${state.step+1} of ${steps.length}`;
+    $('actionTitle').textContent = s.title;
+    $('actionDesc').textContent = s.desc;
+    $('nextBtn').disabled = state.busy;
+    $('nextBtn').textContent = state.busy ? 'Working…' : (s.kind==='compute' ? 'Check Closure' : s.kind==='adjust' ? 'Show Adjustment' : s.kind==='move' ? 'Move Setup' : s.kind==='setup' ? 'Set Up' : 'Next →');
+  }
+
+  $('sheet').classList.toggle('show', state.step >= steps.length);
+  renderBook();
+}
+
+function renderBook(){
+  const body = $('bookBody');
+  if(!state.recorded.length){
+    body.innerHTML = `<tr><td colspan="9" style="color:var(--muted)">No sights recorded yet.</td></tr>`;
+  } else {
+    body.innerHTML = state.recorded.map(idx=>{
+      const o = observations[idx];
+      const latest = idx===state.lastRecordedObs ? 'latest' : '';
+      const adjShown = state.step >= steps.length;
+      return `<tr class="${latest}">
+        <td>${setups[o.setup].label}</td>
+        <td>${o.pointLabel}</td>
+        <td>${o.sight}</td>
+        <td class="num">${o.reading.toFixed(3)}</td>
+        <td class="num">${o.hi.toFixed(3)}</td>
+        <td class="num">${o.rawRL.toFixed(3)}</td>
+        <td class="num">${adjShown ? (o.corr===0?'0.0000':o.corr.toFixed(4)) : '—'}</td>
+        <td class="num">${adjShown ? o.adjRL.toFixed(3) : '—'}</td>
+        <td>${adjShown ? '<span class="pill ok">adjusted</span>' : '<span class="pill raw">raw</span>'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  if(state.step < 1){
+    $('formula').innerHTML = 'HI = RL + BS';
+    $('formulaNote').textContent = 'Begin by observing a backsight on BM-A to establish the first height of instrument.';
+  } else if (state.step < 9) {
+    const last = state.lastRecordedObs!=null ? observations[state.lastRecordedObs] : null;
+    if(last){
+      if(last.sight==='BS'){
+        $('formula').innerHTML = `HI = ${last.rawRL.toFixed(3)} + ${last.reading.toFixed(3)} = ${last.hi.toFixed(3)} m`;
+        $('formulaNote').textContent = `${last.pointLabel} provides the reference elevation for setup ${setups[last.setup].label}.`;
+      }else{
+        $('formula').innerHTML = `RL = ${last.hi.toFixed(3)} − ${last.reading.toFixed(3)} = ${last.rawRL.toFixed(3)} m`;
+        $('formulaNote').textContent = `${last.pointLabel} now carries the transferred elevation forward to the next setup.`;
+      }
+    }else{
+      $('formula').textContent = 'HI = RL + BS';
+      $('formulaNote').textContent = 'Take the backsight to establish this setup’s height of instrument.';
+    }
+  } else if(state.step===9){
+    $('formula').innerHTML = `ΣBS − ΣFS = ${sumBS.toFixed(3)} − ${sumFS.toFixed(3)} = ${(sumBS-sumFS).toFixed(3)} m`;
+    $('formulaNote').textContent = `Arithmetic check: RL_last − RL_first = ${lastRL.toFixed(3)} − ${firstRL.toFixed(3)} = ${(lastRL-firstRL).toFixed(3)} m.`;
+  } else if(state.step===10){
+    $('formula').innerHTML = `e = ${lastRL.toFixed(3)} − ${knownClose.toFixed(3)} = ${misclosure>=0?'+':''}${misclosure.toFixed(3)} m`;
+    $('formulaNote').textContent = `Illustrative adjustment; acceptance tolerance not supplied. Equal correction over 3 setups: ${(-misclosure/3).toFixed(6)} m per setup cumulatively.`;
+  } else {
+    $('formula').innerHTML = `Adjusted BM-B = ${points.BMB.adj.toFixed(3)} m`;
+    $('formulaNote').textContent = `Raw and adjusted reduced levels are now complete, and the final sketch summarizes the run.`;
+  }
+}
+
+// Self-contained orthographic 3D renderer. World coordinates are metres.
+// A common local datum offset is used for both instrument and staff; metre geometry remains 1:1.
+const host=$('threeHost'), canvas=document.createElement('canvas'); host.appendChild(canvas);
+const ctx=canvas.getContext('2d');
+const palette={bs:'#007d80',fs:'#c26a30',ink:'#233d42',muted:'#65787a'};
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sim={setup:'I01',rodX:points.BMA.x,rodY:sceneYFromElevation(points.BMA.elev),rodPoint:'BMA',direction:-1,angle:Math.PI,instrumentOpacity:1,rodOpacity:1,active:null,sightProgress:0,moving:false,playing:false,paused:false,speed:1,epoch:0,view:'overview'};
+const SCENE_CENTER_Y=(sceneYFromElevation(Math.min(...Object.values(points).map(p=>p.elev)))+sceneYFromElevation(Math.max(...Object.values(setups).map(s=>s.hi))))/2;
+const TERRAIN_BOTTOM=sceneYFromElevation(Math.min(...Object.values(points).map(p=>p.elev)))-1.1;
+const cam={yaw:-0.22,pitch:0.46,zoom:1,cx:2,cy:SCENE_CENTER_Y,panX:0,panY:0};
+let width=800,height=450,scale=14,dirty=true,raf=0;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const mix=(a,b,t)=>a+(b-a)*t;
+const ease=t=>t*t*(3-2*t);
+function resize(){const r=host.getBoundingClientRect();width=r.width;height=r.height;const dpr=Math.min(devicePixelRatio||1,2.5);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);invalidate();}
+new ResizeObserver(resize).observe(host);
+function project(x,y,z=0){const X=x-cam.cx,Y=y-cam.cy;const u=X*Math.cos(cam.yaw)-z*Math.sin(cam.yaw), d=X*Math.sin(cam.yaw)+z*Math.cos(cam.yaw);return {x:width/2+u*scale+cam.panX,y:height*.53+(-d*Math.sin(cam.pitch)-Y*Math.cos(cam.pitch))*scale+cam.panY,d:d*Math.cos(cam.pitch)-Y*Math.sin(cam.pitch)};}
+function groundY(x,z=0){const ps=Object.values(points);let v=sceneYFromElevation(ps[0].elev);for(let i=0;i<ps.length-1;i++){const a=ps[i],b=ps[i+1];if(x>=a.x&&x<=b.x){v=sceneYFromElevation(mix(a.elev,b.elev,ease((x-a.x)/(b.x-a.x))));break;}if(x>b.x)v=sceneYFromElevation(b.elev);}return v-.08-Math.abs(z)*.025+Math.sin(x*.31)*.06*Math.min(1,Math.abs(z)/3);}
+let faces=[];
+function face(v,color,stroke=null,alpha=1){const q=v.map(p=>project(...p));faces.push({q,color,stroke,alpha,d:q.reduce((s,p)=>s+p.d,0)/q.length});}
+function shade(hex,f){const n=parseInt(hex.slice(1),16);return `rgb(${Math.round(((n>>16)&255)*f)},${Math.round(((n>>8)&255)*f)},${Math.round((n&255)*f)})`;}
+function box(x,y,z,w,h,d,color,angle=0,alpha=1){let v=[];for(const [a,b,c] of [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]]){const u=a*w/2,t=c*d/2;v.push([x+u*Math.cos(angle)+t*Math.sin(angle),y+b*h/2,z-u*Math.sin(angle)+t*Math.cos(angle)]);}[[0,1,2,3],[4,7,6,5],[0,4,5,1],[3,2,6,7],[0,3,7,4],[1,5,6,2]].forEach((f,i)=>face(f.map(j=>v[j]),shade(color,[.82,.9,.67,1,.76,.94][i]),null,alpha));}
+function cylinder(a,b,r,color,alpha=1,n=10){const d=b.map((x,i)=>x-a[i]),len=Math.hypot(...d),u=d.map(x=>x/len);const ref=Math.abs(u[1])>.9?[1,0,0]:[0,1,0];let v=[u[1]*ref[2]-u[2]*ref[1],u[2]*ref[0]-u[0]*ref[2],u[0]*ref[1]-u[1]*ref[0]];let l=Math.hypot(...v);v=v.map(x=>x/l);const w=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]];let aa=[],bb=[];for(let i=0;i<n;i++){let t=i/n*Math.PI*2,off=v.map((x,j)=>r*(x*Math.cos(t)+w[j]*Math.sin(t)));aa.push(a.map((x,j)=>x+off[j]));bb.push(b.map((x,j)=>x+off[j]));}for(let i=0;i<n;i++)face([aa[i],aa[(i+1)%n],bb[(i+1)%n],bb[i]],shade(color,.75+.22*Math.sin(i/n*Math.PI*2+.8)),null,alpha);face(bb,color,null,alpha);face(aa,shade(color,.7),null,alpha);}
+function line3(a,b,color,widthPx=1,dash=[],alpha=1){const p=project(...a),q=project(...b);ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.lineWidth=widthPx;ctx.setLineDash(dash);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();ctx.restore();}
+function label(text,x,y,color=palette.ink,size=11,align='center',bg=false){ctx.save();ctx.font=`${size}px system-ui, sans-serif`;ctx.textAlign=align;ctx.textBaseline='middle';if(bg){let w=ctx.measureText(text).width;ctx.fillStyle='#fffefaee';ctx.fillRect(x-w/2-6,y-9,w+12,18);}ctx.fillStyle=color;ctx.fillText(text,x,y);ctx.restore();}
+function terrain(){const min=-34,max=38,depth=7;for(let x=min;x<max;x+=2){for(let z=-depth;z<depth;z+=2){const a=[x,groundY(x,z),z],b=[x+2,groundY(x+2,z),z],c=[x+2,groundY(x+2,z+2),z+2],d=[x,groundY(x,z+2),z+2];const f=.96+.025*Math.sin(x*.7+z*.9);face([a,b,c],shade('#d6ddc7',f));face([a,c,d],shade('#d6ddc7',f+.018));}for(const z of [-depth,depth])face([[x,groundY(x,z),z],[x+2,groundY(x+2,z),z],[x+2,TERRAIN_BOTTOM,z],[x,TERRAIN_BOTTOM,z]],z<0?'#c3c3af':'#b8bfae');}for(const x of [min,max]){const v=[];for(let z=-depth;z<=depth;z+=2)v.push([x,groundY(x,z),z]);v.push([x,TERRAIN_BOTTOM,depth],[x,TERRAIN_BOTTOM,-depth]);face(v,'#b4bcad');}}
+function instrument(){const s=setups[sim.setup],x=s.x,y=sceneYFromElevation(s.hi),a=sim.instrumentOpacity;const ground=groundY(x);const angle=sim.angle;
+for(let i=0;i<3;i++){let t=i*Math.PI*2/3+.4,fx=x+Math.cos(t)*.64,fz=Math.sin(t)*.64;let top=[x+Math.cos(t)*.12,y-.22,Math.sin(t)*.12],foot=[fx,groundY(fx,fz)+.015,fz];cylinder(top,foot,.034,'#bb8850',a);let mid=top.map((v,j)=>mix(v,foot[j],.55));cylinder(mid,foot,.018,'#43545a',a);box(fx,foot[1],fz,.11,.025,.15,'#364951',0,a);}
+cylinder([x,y-.29,0],[x,y-.21,0],.19,'#465a5c',a);cylinder([x,y-.21,0],[x,y-.11,0],.125,'#bac4c0',a);box(x,y-.065,0,.36,.17,.23,'#d8e0d7',angle,a);
+const end=t=>[x+Math.cos(angle)*t,y,-Math.sin(angle)*t];cylinder(end(-.23),end(.32),.092,'#d9e3db',a,14);cylinder(end(.23),end(.38),.10,'#394d52',a,14);cylinder(end(.381),end(.385),.074,'#1a505d',a,14);cylinder(end(-.32),end(-.23),.049,'#263f44',a);cylinder([x,y-.02,-.12],[x,y-.02,-.18],.045,'#42575b',a);}
+function staff(){const x=sim.rodX,y=sim.rodY,a=sim.rodOpacity;const angle=sim.direction<0?Math.PI/2:-Math.PI/2;box(x,y+1.5,0,.14,3,.045,'#fffdf2',angle,a);for(let cm=0;cm<300;cm++){const h=cm*.01,major=cm%10===0,middle=cm%5===0;const color=Math.floor(cm/100)%2===0?'#ae483c':'#223a3e';const w=major?.14:middle?.10:.048;const local=-.07+w/2, zz=-.024;const tick=(u,v)=>[x+u*Math.cos(angle)+zz*Math.sin(angle),y+h+v,-u*Math.sin(angle)+zz*Math.cos(angle)];face([tick(-.07,0),tick(-.07+w,0),tick(-.07+w,.003),tick(-.07,.003)],color,null,a);}box(x,y+.012,0,.145,.024,.05,'#3d4c4d',angle,a);}
+function drawScene(){ctx.setTransform(canvas.width/width,0,0,canvas.height/height,0,0);ctx.clearRect(0,0,width,height);ctx.fillStyle='#f4f3ed';ctx.fillRect(0,0,width,height);scale=Math.min(width/79,height/22)*cam.zoom;
+// soft contact shadow beneath the terrain block
+ctx.save();const sh=project(2,TERRAIN_BOTTOM-.15,0);ctx.translate(sh.x,sh.y+12);ctx.scale(1,.18);const g=ctx.createRadialGradient(0,0,10,0,0,Math.min(width*.43,540));g.addColorStop(0,'#65766326');g.addColorStop(1,'#65766300');ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,Math.min(width*.43,540),0,Math.PI*2);ctx.fill();ctx.restore();
+faces=[];terrain();Object.values(points).forEach(p=>{let y=sceneYFromElevation(p.elev);cylinder([p.x,y-.14,0],[p.x,y-.018,0],p.type==='BM'?.28:.18,p.type==='BM'?'#899895':'#647776');cylinder([p.x,y-.018,0],[p.x,y,0],.12,p.type==='BM'?'#b8a26b':'#c7b271');});instrument();staff();
+// Larger depth values are farther away from this camera.
+faces.sort((a,b)=>b.d-a.d);for(const f of faces){ctx.globalAlpha=f.alpha;ctx.beginPath();f.q.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fillStyle=f.color;ctx.fill();}ctx.globalAlpha=1;
+// Reference grid follows the surface; it is not a horizontal sight plane.
+for(let x=-28;x<=32;x+=10){for(let z=-7;z<7;z+=.5)line3([x,groundY(x,z)+.005,z],[x,groundY(x,z+.5)+.005,z+.5],'#8c9c8844',.6);}
+for(const z of [-7,0,7]){for(let x=-34;x<38;x++)line3([x,groundY(x,z)+.008,z],[x+1,groundY(x+1,z)+.008,z],'#899a8366',.65,z===0?[3,3]:[]);}
+state.recorded.forEach(i=>{const o=observations[i],s=setups[o.setup];const sightY=sceneYFromElevation(s.hi);if(sim.active!==i)line3([s.x,sightY,0],[points[o.point].x,sightY,0],'#7b9296',1,[3,4],.50);});
+if(sim.active!==null){const o=observations[sim.active],s=setups[o.setup],p=points[o.point],color=o.sight==='BS'?palette.bs:palette.fs,sightY=sceneYFromElevation(s.hi),pointY=sceneYFromElevation(p.elev);const origin=s.x+sim.direction*.385,end=mix(origin,p.x,sim.sightProgress);line3([origin,sightY,0],[end,sightY,0],color,1.8);const q=project(p.x,sightY,0);ctx.strokeStyle=color;ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(q.x,q.y,4,0,Math.PI*2);ctx.stroke();const mid=project((s.x+p.x)/2,sightY,0);label(`${o.sight} ${o.reading.toFixed(3)} m`,mid.x,mid.y-16,color,11,'center',true);if(sim.view!=='top'){
+line3([p.x,pointY,0],[p.x,sightY,0],color,2);
+}const h=project(s.x,sightY,0);label(`HI ${s.hi.toFixed(3)} m`,h.x,h.y-35,palette.ink,10,'center',true);}
+Object.values(points).forEach(p=>{const q=project(p.x,sceneYFromElevation(p.elev),0);const base=project(p.x,groundY(p.x,-7),-7);ctx.strokeStyle='#70857b';ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(q.x,q.y+5);ctx.lineTo(base.x,base.y+28);ctx.stroke();label(p.label,base.x,base.y+40,palette.ink,12);label(`${p.elev.toFixed(3)} m`,base.x,base.y+57,palette.muted,10);});
+Object.values(setups).forEach(s=>{const p=project(s.x,groundY(s.x,3.5),3.5);label(s.label,p.x,p.y+8,s.key===sim.setup?palette.ink:'#84918a',10);});
+// A 10 m world-space scale, projected with the same camera.
+const a=project(-5,0,0),b=project(5,0,0),bar=Math.hypot(b.x-a.x,b.y-a.y);if(bar<width*.45){ctx.strokeStyle='#42585b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(width-24-bar,height-32);ctx.lineTo(width-24,height-32);ctx.moveTo(width-24-bar,height-36);ctx.lineTo(width-24-bar,height-28);ctx.moveTo(width-24,height-36);ctx.lineTo(width-24,height-28);ctx.stroke();label('10 m · along run',width-24-bar/2,height-17,palette.muted,9);}
+label('BM-A → TP1 → TP2 → BM-B',width-20,24,palette.muted,10,'right');
+}
+function invalidate(){dirty=true;if(!raf)raf=requestAnimationFrame(()=>{raf=0;if(dirty){dirty=false;drawScene();}});}
+function setView(kind){sim.view=kind;cam.panX=cam.panY=0;cam.cx=2;cam.cy=SCENE_CENTER_Y;cam.zoom=1;
+if(kind==='top'){cam.yaw=0;cam.pitch=Math.PI/2;}else if(kind==='profile'){cam.yaw=0;cam.pitch=.04;}else if(kind==='level'){cam.yaw=-.24;cam.pitch=.3;cam.cx=setups[sim.setup].x;cam.cy=sceneYFromElevation(setups[sim.setup].hi)-.6;cam.zoom=2.3;}else{cam.yaw=-.22;cam.pitch=.46;}
+for(const [id,k] of [['viewOverview','overview'],['viewLevel','level'],['viewTop','top'],['profileView','profile']])$(id).setAttribute('aria-pressed',String(kind===k));invalidate();}
+$('viewOverview').onclick=()=>setView('overview');$('viewLevel').onclick=()=>setView('level');$('viewTop').onclick=()=>setView('top');$('profileView').onclick=()=>setView('profile');
+// Pointer orbit, pan, wheel, and two-finger pan/pinch. No external runtime required.
+const pointers=new Map();let drag=null,gesture=null;
+const midpoint=(a,b)=>({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
+host.addEventListener('contextmenu',e=>e.preventDefault());
+host.addEventListener('pointerdown',e=>{
+  host.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  drag={x:e.clientX,y:e.clientY,mode:(e.shiftKey||e.button===1||e.button===2)?'pan':'orbit'};
+  if(pointers.size===2){const p=[...pointers.values()],m=midpoint(p[0],p[1]);gesture={distance:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),midX:m.x,midY:m.y};}
+});
+host.addEventListener('pointermove',e=>{
+  if(!pointers.has(e.pointerId))return;
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pointers.size===2){
+    const p=[...pointers.values()],d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),m=midpoint(p[0],p[1]);
+    if(gesture){cam.zoom=clamp(cam.zoom*d/gesture.distance,.6,7);cam.panX+=m.x-gesture.midX;cam.panY+=m.y-gesture.midY;}
+    gesture={distance:d,midX:m.x,midY:m.y};drag=null;
+  }else{
+    gesture=null;
+    if(!drag)drag={x:e.clientX,y:e.clientY,mode:e.shiftKey?'pan':'orbit'};
+    const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+    const panNow=drag.mode==='pan'||e.shiftKey||(e.buttons&2)!==0||(e.buttons&4)!==0;
+    if(panNow){cam.panX+=dx;cam.panY+=dy;}else{cam.yaw+=dx*.006;cam.pitch=clamp(cam.pitch+dy*.005,.03,Math.PI/2);}
+    drag={x:e.clientX,y:e.clientY,mode:panNow?'pan':'orbit'};
+  }
+  invalidate();
+});
+for(const event of ['pointerup','pointercancel'])host.addEventListener(event,e=>{
+  pointers.delete(e.pointerId);gesture=null;
+  const remaining=[...pointers.values()][0];
+  drag=remaining?{x:remaining.x,y:remaining.y,mode:'orbit'}:null;
+});
+host.addEventListener('wheel',e=>{e.preventDefault();cam.zoom=clamp(cam.zoom*Math.exp(-e.deltaY*.001),.6,7);invalidate();},{passive:false});
+host.addEventListener('keydown',e=>{
+  if(e.key.toLowerCase()==='m'){e.preventDefault();toggleMinimalMode();return;}
+  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-','='].includes(e.key)){
+    e.preventDefault();
+    if(e.shiftKey&&e.key.startsWith('Arrow')){const step=28;if(e.key==='ArrowLeft')cam.panX-=step;if(e.key==='ArrowRight')cam.panX+=step;if(e.key==='ArrowUp')cam.panY-=step;if(e.key==='ArrowDown')cam.panY+=step;}
+    else{if(e.key==='ArrowLeft')cam.yaw-=.08;if(e.key==='ArrowRight')cam.yaw+=.08;if(e.key==='ArrowUp')cam.pitch=clamp(cam.pitch+.06,.03,Math.PI/2);if(e.key==='ArrowDown')cam.pitch=clamp(cam.pitch-.06,.03,Math.PI/2);}
+    if(e.key==='+'||e.key==='=')cam.zoom=clamp(cam.zoom*1.1,.6,7);if(e.key==='-')cam.zoom=clamp(cam.zoom/1.1,.6,7);invalidate();
+  }
+});
+function drawScope(index=null){const c=$('scopeCanvas'),g=c.getContext('2d'),W=c.width,H=c.height;g.clearRect(0,0,W,H);const cx=W/2,cy=H/2,r=190;g.save();g.beginPath();g.arc(cx,cy,r,0,Math.PI*2);g.clip();g.fillStyle='#e4e9db';g.fillRect(0,0,W,H);const grd=g.createLinearGradient(0,0,0,H);grd.addColorStop(0,'#f4f5ec');grd.addColorStop(1,'#cdd7c3');g.fillStyle=grd;g.fillRect(0,0,W,H);
+if(index===null){g.fillStyle='#70827b';g.font='22px system-ui';g.textAlign='center';g.fillText('Awaiting a sight',cx,cy-18);}else{const o=observations[index],pxPerM=1700,staffW=150,left=cx-staffW/2;g.fillStyle='#fffdf3';g.fillRect(left,0,staffW,H);g.strokeStyle='#acb9ac';g.lineWidth=1;g.strokeRect(left,0,staffW,H);for(let cm=Math.floor((o.reading-.15)*100);cm<=Math.ceil((o.reading+.15)*100);cm++){if(cm<0||cm>300)continue;const y=cy-(cm/100-o.reading)*pxPerM;g.fillStyle=Math.floor(cm/100)%2===0?'#aa4438':'#263d3e';g.fillRect(left,y,cm%10===0?92:cm%5===0?70:42,4);if(cm%10===0){g.font='bold 27px system-ui';g.textAlign='right';g.fillText((cm/100).toFixed(1),left+staffW-8,y-8);}}}
+g.strokeStyle='#243a3e';g.lineWidth=1.3;g.beginPath();g.moveTo(cx-r,cy);g.lineTo(cx+r,cy);g.moveTo(cx,cy-r);g.lineTo(cx,cy-28);g.moveTo(cx,cy+28);g.lineTo(cx,cy+r);g.stroke();g.restore();g.strokeStyle='#becbbf';g.lineWidth=4;g.beginPath();g.arc(cx,cy,r+2,0,Math.PI*2);g.stroke();g.strokeStyle='#3d5553';g.lineWidth=2;g.beginPath();g.arc(cx,cy,r+10,0,Math.PI*2);g.stroke();
+if(index!==null){const o=observations[index];$('scopeValue').textContent=`${o.sight} ${o.reading.toFixed(3)} m`;$('scopeValue').style.color=o.sight==='BS'?palette.bs:palette.fs;$('scopeNote').textContent=`${o.pointLabel} · 10 m sight · 10 mm graduations; millimetres interpolated. Schematic magnification.`;}else{$('scopeValue').textContent='Ready for observation';$('scopeValue').style.color=palette.ink;$('scopeNote').textContent='Magnified upright staff. Read at the central horizontal crosshair.';}}
+function updateInfo(setup,sight,reading,hi,status){$('chipSetup').textContent=setup;$('chipSight').textContent=sight;$('chipReading').textContent=reading;$('chipHI').textContent=hi;$('chipStatus').textContent=status;$('infoTitle').textContent=sight==='—'?'Establish the sight':sight;$('infoSub').textContent=setup==='—'?'BM-A to BM-B':`${setup} · ${status}`;}
+const originalRenderUI=renderUI;
+renderUI=function(){originalRenderUI();$('backBtn').disabled=state.step===0&&!state.busy;$('nextBtn').disabled=state.busy||state.step>=steps.length;$('playBtn').textContent=sim.paused?'▶ Resume':sim.playing?'Ⅱ Pause':'▶ Play run';$('playBtn').disabled=state.step>=steps.length&&!state.busy;$('timeline').innerHTML=steps.map((s,i)=>`<button tabindex="-1" aria-label="${i+1}. ${s.title}" title="${s.title}" class="${i<state.step?'done':i===state.step?'current':''}"></button>`).join('');};
+function cancel(){sim.epoch++;sim.playing=false;sim.paused=false;state.busy=false;}
+function animate(duration,update,token=sim.epoch){return new Promise(resolve=>{let elapsed=0,last=performance.now();function frame(now){if(token!==sim.epoch){resolve(false);return;}const dt=Math.min(now-last,50);last=now;if(!sim.paused){elapsed+=dt*sim.speed;const t=reducedMotion?1:Math.min(1,elapsed/duration);update(ease(t),t);invalidate();if(t===1){resolve(true);return;}}requestAnimationFrame(frame);}requestAnimationFrame(frame);});}
+async function runStep(){if(state.busy||state.step>=steps.length)return;const token=sim.epoch,s=steps[state.step];state.busy=true;sim.active=null;sim.sightProgress=0;renderUI();
+if(s.kind==='setup'||s.kind==='move'){
+updateInfo(setups[s.setup].label,'—','—','—','Relocating');
+// Staff stays on the previous turning point while the instrument is relocated.
+if(!await animate(450,e=>{sim.instrumentOpacity=1-e;},token))return;
+sim.setup=s.setup;sim.direction=-1;sim.angle=Math.PI;state.currentSetup=s.setup;
+if(sim.view==='level')setView('level');
+if(!await animate(650,e=>{sim.instrumentOpacity=e;},token))return;
+updateInfo(setups[s.setup].label,'—','—','—','Ready for BS');
+}else if(s.kind==='observe'){
+const o=observations[s.obs],p=points[o.point],startX=sim.rodX,startY=sim.rodY,startAngle=sim.angle;
+if(Math.abs(startX-p.x)>.001){sim.moving=true;const targetDir=p.x<setups[o.setup].x?-1:1;sim.direction=targetDir;
+if(!await animate(1500,(e,t)=>{sim.angle=mix(startAngle,targetDir<0?Math.PI:0,e);sim.rodX=mix(startX,p.x,e);sim.rodY=mix(startY,sceneYFromElevation(p.elev),e)+Math.sin(t*Math.PI)*.25;},token))return;}
+sim.rodX=p.x;sim.rodY=sceneYFromElevation(p.elev);sim.rodPoint=o.point;sim.moving=false;sim.direction=p.x<setups[o.setup].x?-1:1;
+updateInfo(setups[o.setup].label,`${o.sight} · ${o.pointLabel}`,format3(o.reading),o.sight==='BS'?'—':format3(o.hi),'Sighting');
+sim.angle=sim.direction<0?Math.PI:0;sim.active=s.obs;drawScope(s.obs);
+if(!await animate(900,e=>{sim.sightProgress=e;},token))return;
+state.recorded.push(s.obs);state.lastRecordedObs=s.obs;updateInfo(setups[o.setup].label,`${o.sight} · ${o.pointLabel}`,format3(o.reading),format3(o.hi),'Recorded');
+}else if(s.kind==='compute'){
+setView('overview');updateInfo('I-03','Closure check',`${misclosure>=0?'+':''}${misclosure.toFixed(3)} m`,format3(setups.I03.hi),'Tolerance unspecified');
+if(!await animate(700,()=>{},token))return;state.tableVisible=true;
+}else if(s.kind==='adjust'){
+state.tableVisible=true;buildSheet();updateInfo('I-03','Adjusted run',`${(-misclosure)>=0?'+':''}${(-misclosure).toFixed(3)} m`,format3(setups.I03.hi),'Illustrative adjustment');
+if(!await animate(500,()=>{},token))return;
+}
+if(token!==sim.epoch)return;state.step++;state.busy=false;renderUI();invalidate();if(state.step===steps.length){sim.playing=false;buildSheet();renderUI();}else if(sim.playing){if(await animate(1600,()=>{},token)){if(sim.playing)runStep();}}
+}
+function restoreStep(n){cancel();state.step=n;state.recorded=[];state.lastRecordedObs=null;state.currentSetup=null;sim.setup='I01';sim.rodPoint='BMA';sim.active=null;sim.direction=-1;sim.sightProgress=1;sim.instrumentOpacity=1;sim.rodOpacity=1;for(const s of steps.slice(0,n)){if(s.setup){sim.setup=s.setup;state.currentSetup=s.setup;sim.active=null;}if(s.kind==='observe'){const o=observations[s.obs];state.recorded.push(s.obs);state.lastRecordedObs=s.obs;sim.rodPoint=o.point;sim.direction=points[o.point].x<setups[o.setup].x?-1:1;sim.active=s.obs;}}
+sim.angle=sim.direction<0?Math.PI:0;sim.rodX=points[sim.rodPoint].x;sim.rodY=sceneYFromElevation(points[sim.rodPoint].elev);state.tableVisible=n>=10;const o=state.lastRecordedObs===null?null:observations[state.lastRecordedObs];if(o&&sim.active!==null)updateInfo(setups[o.setup].label,`${o.sight} · ${o.pointLabel}`,format3(o.reading),format3(o.hi),'Recorded');else updateInfo(n?setups[sim.setup].label:'—','—','—','—',n?'Ready for BS':'Waiting');drawScope(state.lastRecordedObs);renderUI();invalidate();}
+$('nextBtn').onclick=()=>{sim.playing=false;sim.paused=false;runStep();};$('resetBtn').onclick=()=>{restoreStep(0);setView('overview');};$('backBtn').onclick=()=>restoreStep(Math.max(0,state.step-1));
+$('playBtn').onclick=()=>{if(sim.playing){sim.paused=!sim.paused;renderUI();return;}sim.playing=true;sim.paused=false;renderUI();if(!state.busy)runStep();};$('speed').onchange=e=>{sim.speed=+e.target.value;};
+$('toggleTable').onclick=()=>{state.tableVisible=!state.tableVisible;renderUI();};$('closeRecord').onclick=()=>{state.tableVisible=false;renderUI();};
+$('exportProfile').onclick=()=>{buildSheet();const svg=$('sheetSvg').cloneNode(true);svg.setAttribute('xmlns','http://www.w3.org/2000/svg');svg.setAttribute('width','1800');svg.setAttribute('height','640');const a=document.createElement('a'),b=new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml'});a.href=URL.createObjectURL(b);a.download='FW05-leveling-profile.svg';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
+// Accessible figure export: 3200 px wide, with caption and exact camera state.
+$('exportBtn').onclick=()=>{drawScene();const out=document.createElement('canvas'),W=3200,ratio=W/width,sceneH=height*ratio;out.width=W;out.height=sceneH+370;const g=out.getContext('2d');g.fillStyle='#f4f3ed';g.fillRect(0,0,W,out.height);g.fillStyle=palette.bs;g.font='24px system-ui';g.fillText('FW05 / DIFFERENTIAL LEVELING',70,65);g.fillStyle=palette.ink;g.font='54px Georgia';g.fillText('Transfer a known elevation',70,135);
+// Render directly at export resolution rather than upscaling a screen capture.
+const oldW=canvas.width,oldH=canvas.height;canvas.width=W;canvas.height=sceneH;drawScene();g.drawImage(canvas,0,180,W,sceneH);canvas.width=oldW;canvas.height=oldH;invalidate();g.font='25px system-ui';g.fillStyle=palette.ink;g.fillText('Orthographic 3D · equal metre scales · 10 m backsights and foresights · elevations in m',70,sceneH+235);g.fillStyle=palette.muted;g.font='22px system-ui';g.fillText('Ideal horizontal sights and vertical staff. Terrain is interpolated; sight lines are illustrative, not light beams.',70,sceneH+282);g.fillText(`Action ${state.step}/11 · raw BM-B ${points.BMB.elev.toFixed(3)} m · known BM-B ${knownClose.toFixed(3)} m · ${misclosure>=0?'+':''}${misclosure.toFixed(3)} m misclosure · tolerance not supplied`,70,sceneH+327);out.toBlob(b=>{if(!b)return;const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='FW05-differential-leveling.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);},'image/png');};
+function buildSheet(){const W=900,H=320,L=65,R=28,T=38,B=250,allElev=[...Object.values(points).map(p=>p.elev),...Object.values(setups).map(s=>s.hi)],minY=Math.floor((Math.min(...allElev)-.35)*2)/2,maxY=Math.ceil((Math.max(...allElev)+.35)*2)/2,sx=x=>L+(x+30)/64*(W-L-R),sy=y=>T+(maxY-y)/(maxY-minY)*(B-T);let grid='',marks='',text='',lines='';
+for(let y=minY;y<=maxY+.001;y+=.5){grid+=`<line x1="${L}" y1="${sy(y)}" x2="${W-R}" y2="${sy(y)}" stroke="#dfe5dc"/>`;text+=`<text x="${L-8}" y="${sy(y)+4}" text-anchor="end" font-size="10" fill="#65787a">${y.toFixed(1)}</text>`;}
+text+='<text x="18" y="17" font-size="11" fill="#65787a">RL / HI (m)</text><text x="870" y="17" text-anchor="end" font-size="11" fill="#65787a">Profile · vertical scale exaggerated · raw sight geometry</text>';
+const ps=Object.values(points);$('sheetGround').setAttribute('points',`${L},${B} ${ps.map(p=>`${sx(p.x)},${sy(p.elev)}`).join(' ')} ${W-R},${B}`);
+for(const p of ps){const x=sx(p.x),y=sy(p.elev);marks+=`<circle cx="${x}" cy="${y}" r="4" fill="#007d80"/><line x1="${x}" x2="${x}" y1="${y}" y2="${B}" stroke="#9faea2" stroke-dasharray="3 3"/>`;text+=`<text x="${x}" y="${B+18}" text-anchor="middle" fill="#233d42" font-size="11" font-weight="bold">${p.label}</text><text x="${x}" y="${B+33}" text-anchor="middle" fill="#65787a" font-size="10">Adj. ${p.adj.toFixed(3)} m</text>`;}
+for(let i=0;i<3;i++){const s=Object.values(setups)[i],a=ps[i],b=ps[i+1],y=sy(s.hi),x=sx(s.x);for(const [p,col,j] of [[a,'#007d80',2*i],[b,'#c26a30',2*i+1]]){lines+=`<line x1="${x}" y1="${y}" x2="${sx(p.x)}" y2="${y}" stroke="${col}" stroke-width="1.5"/><line x1="${sx(p.x)}" y1="${sy(p.elev)}" x2="${sx(p.x)}" y2="${y}" stroke="${col}"/>`;text+=`<text x="${(x+sx(p.x))/2}" y="${y-7}" text-anchor="middle" fill="${col}" font-size="10">${observations[j].sight} ${observations[j].reading.toFixed(3)}</text>`;}marks+=`<path d="M ${x-7} ${y+24} L ${x} ${y+3} L ${x+7} ${y+24}" fill="none" stroke="#435a58"/>`;text+=`<text x="${x}" y="${y+37}" text-anchor="middle" fill="#233d42" font-size="10">${s.label} · HI ${s.hi.toFixed(3)}</text>`;}
+$('sheetGrid').innerHTML=grid;$('sheetMarks').innerHTML=marks;$('sheetText').innerHTML=text;$('sheetLines').innerHTML=lines;
+$('noteCheck').textContent=`ΣBS − ΣFS = ${sumBS.toFixed(3)} − ${sumFS.toFixed(3)} = ${(sumBS-sumFS).toFixed(3)} m. Arithmetic agrees with the raw elevation difference.`;
+$('noteClosure').textContent=`Raw BM-B ${points.BMB.elev.toFixed(3)} m − known ${knownClose.toFixed(3)} m = ${misclosure>=0?'+':''}${misclosure.toFixed(3)} m. No survey-order tolerance was supplied; acceptance is not asserted.`;
+$('noteAdjust').textContent='Illustrative equal-setup adjustment: cumulative −0.667, −1.333, −2.000 mm. Raw geometry stays fixed; only reduced elevations are adjusted.';
+}
+// Expose read-only diagnostic snapshots for reproducible geometry checks.
+window.levelingSnapshot=()=>({step:state.step,recorded:[...state.recorded],busy:state.busy,paused:sim.paused,setup:sim.setup,rod:[sim.rodX,sim.rodY,0],observations:observations.map(o=>({sight:o.sight,point:o.point,reading:o.reading,staffIntersection:points[o.point].elev+o.reading,hi:o.hi,horizontalDistance:Math.abs(setups[o.setup].x-points[o.point].x)})),sumBS,sumFS,misclosure});
+$('actionDesc').setAttribute('aria-live','polite');$('infoTitle').setAttribute('aria-live','polite');
+drawScope();resize();setView('overview');renderUI();
+
+</script>
+</body>
+</html>
