@@ -4,26 +4,38 @@
   "checks": {
     "engineering": {
       "status": "passed",
-      "details": "Continuity, Reynolds number, laminar friction factor, Swamee-Jain explicit turbulent approximation, and Darcy-Weisbach loss were cross-checked against the documented reference case and zero-flow/reverse-flow invariants."
+      "details": "Authoritative continuity/Reynolds/Darcy-Weisbach model is unchanged and renderer consumes its outputs without duplicate hydraulic calculations."
+    },
+    "pedagogy": {
+      "status": "passed",
+      "details": "Four-step lesson connects continuity, Reynolds regime, friction factor/head loss, and reversal interpretation with a corresponding spatial consequence."
     },
     "functionality": {
       "status": "passed",
-      "details": "Source review confirms deterministic absolute-time update, validated finite SI inputs, no independent animation loop, isolated instance state, and idempotent DOM disposal."
+      "details": "Source review covers host-scene construction, parameter mutation, deterministic update(time), reset, snapshot, resize validation, and idempotent disposal."
+    },
+    "animation": {
+      "status": "passed",
+      "details": "Flow tracers and arrow direction are deterministic from absolute host time; animation is purposeful and explicitly display-scaled."
+    },
+    "spatial3d": {
+      "status": "not-reviewed",
+      "details": "Real Three.js scene source is implemented with recognizable pipe geometry, depth, lighting hooks, camera presets and spatial head-loss cues; rendered comparison could not be observed in this connector-only run."
     },
     "accessibility": {
       "status": "not-reviewed",
-      "details": "Semantic SVG labels and keyboard-accessible demo controls are present in source; no assistive-technology browser session was available."
+      "details": "Demo preserves keyboard buttons, step text, metrics and reduced-motion behavior; browser/assistive-technology execution remains pending."
     },
     "visual": {
       "status": "not-reviewed",
-      "details": "Repository preview SVG was inspected as source; no live browser capture was available."
+      "details": "Surveying-style composition, focus mode, responsive overlays and camera presets are implemented in source; no fabricated rendered pass is claimed."
     },
     "reuse": {
       "status": "passed",
-      "details": "Dependency-free ES module follows runtime v1, scopes DOM/CSS to the instance root, uses deterministic absolute time, and disposes owned DOM idempotently."
+      "details": "Runtime-v1 host scene/time ownership is preserved; exact Three.js peer version is declared; owned GPU resources are disposed."
     }
   },
   "unresolvedBlockers": [
-    "Interactive browser/assistive-technology execution was unavailable in the connector-only environment; retain candidate status until that review is completed."
+    "Independent browser/WebGL rendering and surveying-reference visual comparison are still required before readiness/public approval."
   ]
 }
