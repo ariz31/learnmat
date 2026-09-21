@@ -1,36 +1,21 @@
-# Surveying Tape Team
+# 3D Surveying Tape Team
 
-Status: in-review component.
+Status: in-review. Version 0.2.0 replaces the flat SVG field scene with a true 3D field setup.
 
 ## Learning objective
+See two operators hold a tape at equal support elevation while comparing the straight horizontal span to the actual sagging tape length.
 
-Show two-person tape handling while separating the horizontal endpoint span from the longer curved tape length produced by sag.
+## Model
+For equal-height endpoints, `w = massPerLength·g`, `a = H/w`, sag `f = a[cosh(L/(2a))-1]`, and catenary length `S = 2a sinh(L/(2a))`. Straight mode gives f=0 and S=L.
 
-## Model and assumptions
+## 3D implementation
+Two articulated procedural surveyors stand at the actual endpoints. A physical-scale Three.js tube follows the sampled catenary in world coordinates; a dashed straight reference remains visible. Stakes and a tape reel provide field context. No visual sag exaggeration is required in the 3D rebuild.
 
-- SI units; +X is along the measured line, +Y is up.
-- Both tape endpoints are shown at an equal schematic hand elevation of 1.2 m. Absolute support elevation does not affect the equal-height catenary sag calculation.
-- Straight mode is the reference chord of length `horizontalSpan`.
-- Sag mode uses a symmetric catenary under tape self-weight:
-  - weight per unit length: `w = massPerLength × g`
-  - catenary parameter: `a = horizontalTension / w`
-  - sag: `f = a[cosh(L/(2a)) - 1]`
-  - curved tape length: `S = 2a sinh(L/(2a))`
-- The model assumes uniform tape mass and constant horizontal tension; elastic stretch, temperature, slope, support-height difference, and wind are outside this component.
-- The displayed sag is visually magnified when necessary so small field sag remains legible. Numeric outputs retain physical SI values.
+The demo supplies perspective/orbit interaction, shadows, field ground, responsive focus mode, and live exact sag/curve-length values.
 
-## Usage
-
-Import `src/asset.mjs` and call `createAsset(context)`. The reusable component has no autonomous animation loop. Use `setParameters`, absolute-time `update`, `reset`, `resize`, `snapshot`, and idempotent `dispose`.
-
-## Reuse and rights
-
-Original repository contribution under MIT. No third-party models, textures, fonts, or runtime libraries are embedded.
-
-## Review evidence
-
-See `REVIEW.md`. The SVG preview is deterministic source-authored evidence, not a claimed browser screenshot.
+## Rights
+Original procedural geometry only; no generated images or downloaded models.
 
 ## Change history
-
-- 0.1.0 — Initial two-person tape-handling and catenary-sag component.
+- 0.2.0 — True Three.js crew scene and physical-scale catenary tube.
+- 0.1.0 — SVG schematic.
