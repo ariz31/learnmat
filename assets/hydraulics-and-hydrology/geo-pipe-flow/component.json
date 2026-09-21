@@ -1,0 +1,48 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/hydraulics-and-hydrology/geo-pipe-flow/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Display-only horizontal pipe spans x = 0 to L conceptually; SVG geometry is normalized and not a survey-scale model.",
+  "parameters": {
+    "length": {
+      "unit": "m",
+      "min": 0.1,
+      "max": 10000,
+      "default": 30
+    },
+    "diameter": {
+      "unit": "m",
+      "min": 0.005,
+      "max": 10,
+      "default": 0.3
+    },
+    "roughness": {
+      "unit": "m",
+      "min": 0,
+      "max": 0.1,
+      "default": 0.00015
+    },
+    "flowRate": {
+      "unit": "m^3/s",
+      "min": -20,
+      "max": 20,
+      "default": 0.08
+    },
+    "kinematicViscosity": {
+      "unit": "m^2/s",
+      "min": 1e-8,
+      "max": 0.01,
+      "default": 0.000001004
+    },
+    "gravity": {
+      "unit": "m/s^2",
+      "min": 0.1,
+      "max": 30,
+      "default": 9.81
+    }
+  },
+  "assetDependencies": []
+}
