@@ -1,0 +1,74 @@
+{
+  "contractVersion": "1.0.0",
+  "implemented": true,
+  "module": "assets/construction-materials/mat-steel-sections/src/asset.mjs",
+  "lengthUnit": "m",
+  "timeUnit": "s",
+  "coordinates": "right-handed-y-up-north-minus-z",
+  "boundsDescription": "Cross-section is drawn in the X-Y plane as idealized sharp-corner geometry. Maximum accepted envelope is 0.30 m wide by 0.60 m high.",
+  "parameters": {
+    "shape": {
+      "type": "enum",
+      "values": [
+        "i-section",
+        "channel",
+        "angle"
+      ],
+      "default": "i-section"
+    },
+    "depthM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.08,
+      "max": 0.6,
+      "default": 0.3
+    },
+    "flangeWidthM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.05,
+      "max": 0.3,
+      "default": 0.15
+    },
+    "webThicknessM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.003,
+      "max": 0.03,
+      "default": 0.008
+    },
+    "flangeThicknessM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.004,
+      "max": 0.04,
+      "default": 0.012
+    },
+    "legXM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.04,
+      "max": 0.3,
+      "default": 0.1
+    },
+    "legYM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.04,
+      "max": 0.3,
+      "default": 0.1
+    },
+    "thicknessM": {
+      "type": "number",
+      "unit": "m",
+      "min": 0.003,
+      "max": 0.03,
+      "default": 0.01
+    },
+    "showDimensions": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "assetDependencies": []
+}

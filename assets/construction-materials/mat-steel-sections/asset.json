@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "mat-steel-sections",
+  "version": "0.1.0",
+  "title": "Parametric steel section specimens",
+  "description": "Reusable idealized I-section, channel, and angle geometry with explicit nominal dimensions and cross-sectional area.",
+  "category": "construction-materials",
+  "topics": [
+    "steel-sections",
+    "cross-section-geometry",
+    "rolled-shapes",
+    "i-section",
+    "channel",
+    "angle"
+  ],
+  "learningObjectives": [
+    "Recognize common idealized steel section forms from explicit nominal dimensions.",
+    "Relate idealized section dimensions to geometric cross-sectional area without inferring structural capacity or standard designation."
+  ],
+  "kind": "component",
+  "renderer": "svg",
+  "status": "candidate",
+  "entrypoint": "assets/construction-materials/mat-steel-sections/demo/index.html",
+  "readme": "assets/construction-materials/mat-steel-sections/README.md",
+  "previewImage": "assets/construction-materials/mat-steel-sections/previews/default.svg",
+  "reviewFile": "assets/construction-materials/mat-steel-sections/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": false,
+  "dependencies": [],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat repository contribution; no third-party section table or manufacturer geometry embedded."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Focused source/formula review completed. Browser and assistive-technology execution are intentionally not claimed; see REVIEW.md."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Original LearnMat contribution for reserved materials task mat-steel-sections.",
+    "sha256": null
+  }
+}
