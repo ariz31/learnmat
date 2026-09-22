@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "mat-concrete-specimen",
   "version": "0.2.0",
-  "title": "Concrete specimen geometry — 3D",
+  "title": "Concrete Specimen Geometry",
   "description": "Procedural 3D concrete cylinder/cube specimen with deterministic illustrative aggregate cues and geometry-driven volume/area.",
   "category": "construction-materials",
   "topics": [
