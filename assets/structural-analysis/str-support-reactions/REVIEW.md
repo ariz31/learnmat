@@ -62,3 +62,7 @@ The annotation remediation does not alter the analytical model. Each leader anch
 ## Decision
 
 Candidate only. The annotation remediation materially improves legibility and visual organization but does not self-approve engineering, browser, or accessibility release gates.
+
+## Camera framing update — 2026-09-22
+
+The demo now uses model-only bounds for explicit Overview/Camera fitting and preserves the chosen view during ordinary parameter changes. Geometry-only checks and remaining live visual review gates are recorded in [the framing review](../../../docs/VISUALIZATION-FRAMING-REVIEW.md). This update does not change engineering or rights status.

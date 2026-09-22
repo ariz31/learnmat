@@ -7,3 +7,7 @@ The primary visualization is now true Three.js geometry: soil mass, footing, col
 The scene deliberately does not solve no-tension redistribution or any capacity/settlement check.
 
 Rendered surveying-reference comparison and accessibility remain pending because no browser/WebGL session was available in this connector execution.
+
+## Camera framing update — 2026-09-22
+
+The demo now uses model-only bounds for explicit Overview/Camera fitting and preserves the chosen view during ordinary parameter changes. Geometry-only checks and remaining live visual review gates are recorded in [the framing review](../../../docs/VISUALIZATION-FRAMING-REVIEW.md). This update does not change engineering or rights status.

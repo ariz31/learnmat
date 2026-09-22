@@ -7,3 +7,7 @@ The primary scene is now genuine Three.js geometry with soil volume, water reser
 Head elevations and tracer speed are normalized/exaggerated for visibility only.
 
 No WebGL browser was available in this connector execution, so rendered surveying-reference visual parity and accessibility remain pending.
+
+## Camera framing update — 2026-09-22
+
+The demo now uses model-only bounds for explicit Overview/Camera fitting and preserves the chosen view during ordinary parameter changes. Geometry-only checks and remaining live visual review gates are recorded in [the framing review](../../../docs/VISUALIZATION-FRAMING-REVIEW.md). This update does not change engineering or rights status.

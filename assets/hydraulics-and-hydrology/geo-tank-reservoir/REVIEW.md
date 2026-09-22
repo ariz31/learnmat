@@ -7,3 +7,7 @@ The former flat representation is replaced by recognizable storage geometry with
 Runtime v1 ownership is preserved: host supplies Three.js, scene, camera/renderer/time loop; the component contributes an owned group and disposes its resources.
 
 No browser/WebGL render was available through this connector execution, so rendered surveying-reference comparison and accessibility remain pending.
+
+## Camera framing update — 2026-09-22
+
+The demo now uses model-only bounds for explicit Overview/Camera fitting and preserves the chosen view during ordinary parameter changes. Geometry-only checks and remaining live visual review gates are recorded in [the framing review](../../../docs/VISUALIZATION-FRAMING-REVIEW.md). This update does not change engineering or rights status.
