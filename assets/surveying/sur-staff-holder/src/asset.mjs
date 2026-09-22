@@ -21,11 +21,12 @@ function human(T){
 }
 function staff(T){
  const g=new T.Group(),shaft=mesh(T,new T.BoxGeometry(.055,1,.038),m(T,0xf2f2ee,.6,.1));shaft.position.y=.5;g.add(shaft);
- for(let i=0;i<20;i++){const major=i%5===0,w=major?.078:.058;const band=mesh(T,new T.BoxGeometry(w,.024,.048),m(T,major?0xd63b32:0x22292d,.62));band.position.set((w-.055)/2,(i+.5)/20,.006);g.add(band);}
- const rail=m(T,0xb5bdbe,.32,.68);for(const x of[-.045,.045]){const r=mesh(T,new T.BoxGeometry(.018,1.0,.048),rail);r.position.set(x,.5,-.006);g.add(r);}
+ const bands=[];for(let i=0;i<50;i++){const major=i%5===0,w=major?.082:.060;const band=mesh(T,new T.BoxGeometry(w,.022,.048),m(T,major?0xd63b32:0x22292d,.62));band.position.set((w-.055)/2,(i+.5)*.1,.006);g.add(band);bands.push(band)}
+ const railMat=m(T,0xb5bdbe,.32,.68),rails=[];for(const x of[-.045,.045]){const r=mesh(T,new T.BoxGeometry(.018,1.0,.048),railMat);r.position.set(x,.5,-.006);g.add(r);rails.push(r)}
  const shoe=mesh(T,new T.BoxGeometry(.105,.035,.075),m(T,0x353a3b,.58,.35));shoe.position.y=.018;g.add(shoe);
- const cap=mesh(T,new T.BoxGeometry(.075,.04,.055),m(T,0x171b1c,.6));cap.position.y=1.01;g.add(cap);return g;
+ const cap=mesh(T,new T.BoxGeometry(.075,.04,.055),m(T,0x171b1c,.6));cap.position.y=1.01;g.add(cap);g.userData={shaft,bands,rails,cap};return g;
 }
+function setStaffHeight(g,height){const {shaft,bands,rails,cap}=g.userData;shaft.scale.y=height;shaft.position.y=height/2;rails.forEach(r=>{r.scale.y=height;r.position.y=height/2});bands.forEach((b,i)=>{b.position.y=(i+.5)*.1;b.visible=b.position.y<height-.015});cap.position.y=height+.02;}
 function dispose(o){o.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material)(Array.isArray(n.material)?n.material:[n.material]).forEach(x=>x.dispose())});}
 export function createAsset(context={}){
  const T=context.THREE,scene=context.scene;if(!T||!scene)throw new TypeError('sur-staff-holder requires context.THREE and context.scene.');
@@ -35,7 +36,7 @@ export function createAsset(context={}){
  const reading=mesh(T,new T.TorusGeometry(.065,.008,10,24),m(T,0xe65b3e,.55));reading.rotation.x=Math.PI/2;pole.add(reading);
  const plumbMat=new T.LineBasicMaterial({color:0x3d7a77,transparent:true,opacity:.55});const plumbGeo=new T.BufferGeometry().setFromPoints([new T.Vector3(0,0,0),new T.Vector3(0,5.2,0)]);const plumb=new T.Line(plumbGeo,plumbMat);root.add(plumb);
  function geometry(){return {topOffsetX:p.staffHeight*Math.sin(p.staffTiltRad),topVerticalProjection:p.staffHeight*Math.cos(p.staffTiltRad),verticalityErrorRad:p.staffTiltRad,verticalityErrorDeg:p.staffTiltRad*180/Math.PI};}
- function render(){pole.scale.set(1,p.staffHeight,1);pole.rotation.z=-p.staffTiltRad;reading.position.y=p.readingHeight/p.staffHeight;person.scale.setScalar(p.personHeight/1.7);if(!context.reducedMotion)person.position.y=Math.sin(time*1.4)*.004;else person.position.y=0;}
+ function render(){setStaffHeight(pole,p.staffHeight);pole.rotation.z=-p.staffTiltRad;reading.position.y=p.readingHeight;person.scale.setScalar(p.personHeight/1.7);if(!context.reducedMotion)person.position.y=Math.sin(time*1.4)*.004;else person.position.y=0;}
  function snap(){if(disposed)throw new Error('Asset has been disposed.');const g=geometry();return{id:'sur-staff-holder',timeSeconds:Math.max(0,time),parameters:{...p},result:g,pose:{staffBase:{x:0,y:0,z:0},staffTop:{x:g.topOffsetX,y:g.topVerticalProjection,z:0}}};}
  render();return{
  setParameters(next={}){if(disposed)throw new Error('Asset has been disposed.');p=normalize({...p,...next});render();return snap();},
