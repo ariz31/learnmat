@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "mat-aggregate-grading",
   "version": "0.2.0",
-  "title": "Aggregate grading — 3D",
+  "title": "Aggregate Grading",
   "description": "3D aggregate tray and sieve stack paired with authoritative retained-fraction/mass grading calculations.",
   "category": "construction-materials",
   "topics": [
