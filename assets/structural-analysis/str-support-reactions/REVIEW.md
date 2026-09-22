@@ -1,6 +1,6 @@
 # Asset review
 
-- Asset ID and version: str-support-reactions 0.3.1
+- Asset ID and version: str-support-reactions 0.3.2
 - Reviewer and review date: annotation remediation self-review, 2026-09-22
 - Environment/browser/device/viewport: source review; Vercel/browser observation required before promotion
 - Dependencies: Three.js 0.185.1 declared as a non-embedded peer
@@ -32,6 +32,10 @@ The annotation remediation does not alter the analytical model. Each leader anch
 - The Options trigger remains inside the 3D viewport in Focus view so the learner can still reset the camera/model or exit focus.
 - Clicking outside the menu or pressing Escape closes it.
 - The live response/readout remains visible independently from editable parameters.
+- Options now exposes independent Information and Labels visibility states.
+- Hiding Information removes the surrounding title/readout/caption/footer and expands the viewport without hiding the in-scene Options trigger.
+- Hiding Labels suppresses only the leader/callout overlay; the 3D reactions/support remain visible.
+- The Focus View action has an explicit accent background after menu-specific button rules, preventing white-on-white text.
 
 ## Browser and functionality
 
