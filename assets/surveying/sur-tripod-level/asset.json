@@ -1,14 +1,52 @@
 {
-  "schemaVersion":"1.0.0","id":"sur-tripod-level","version":"0.2.0",
-  "title":"3D Surveying Tripod and Level",
-  "description":"Detailed procedural 3D tripod and level with explicit instrument height, spatial sight axis, surveying azimuth, and sight elevation.",
-  "category":"surveying","topics":["differential-leveling","surveying-instrument","line-of-sight","3d"],
-  "learningObjectives":["Identify the optical-axis height and major components of a mounted level.","Interpret surveying azimuth clockwise from north and sight elevation in the LearnMat 3D coordinate basis."],
-  "kind":"component","renderer":"threejs","status":"in-review",
-  "entrypoint":"assets/surveying/sur-tripod-level/demo/index.html","readme":"assets/surveying/sur-tripod-level/README.md",
-  "previewImage":null,"reviewFile":"assets/surveying/sur-tripod-level/REVIEW.md","derivedFrom":null,"networkRequired":true,
-  "dependencies":[{"name":"three","version":"0.185.1","url":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","embedded":false}],
-  "rights":{"status":"cleared","licenseExpression":"MIT","licenseFile":"LICENSE","attribution":"Original LearnMat procedural geometry; no third-party models or textures."},
-  "verification":{"engineeringReview":"passed","browserReview":"not-reviewed","accessibilityReview":"not-reviewed","notes":"Rebuilt as real Three.js instrument geometry. Sight-vector convention source-reviewed; live rendered/browser/accessibility evidence remains pending."},
-  "source":{"type":"original","reference":"Reserved surveying queue task sur-tripod-level; 3D remediation of merged PR #8.","sha256":null}
+  "schemaVersion": "1.0.0",
+  "id": "sur-tripod-level",
+  "version": "0.2.0",
+  "title": "Surveying Tripod and Level",
+  "description": "Detailed procedural 3D tripod and level with explicit instrument height, spatial sight axis, surveying azimuth, and sight elevation.",
+  "category": "surveying",
+  "topics": [
+    "differential-leveling",
+    "surveying-instrument",
+    "line-of-sight",
+    "3d"
+  ],
+  "learningObjectives": [
+    "Identify the optical-axis height and major components of a mounted level.",
+    "Interpret surveying azimuth clockwise from north and sight elevation in the LearnMat 3D coordinate basis."
+  ],
+  "kind": "component",
+  "renderer": "threejs",
+  "status": "in-review",
+  "entrypoint": "assets/surveying/sur-tripod-level/demo/index.html",
+  "readme": "assets/surveying/sur-tripod-level/README.md",
+  "previewImage": null,
+  "reviewFile": "assets/surveying/sur-tripod-level/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat procedural geometry; no third-party models or textures."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Rebuilt as real Three.js instrument geometry. Sight-vector convention source-reviewed; live rendered/browser/accessibility evidence remains pending."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Reserved surveying queue task sur-tripod-level; 3D remediation of merged PR #8.",
+    "sha256": null
+  }
 }
