@@ -1,15 +1,16 @@
 {
   "schemaVersion": "1.0.0",
   "id": "str-support-reactions",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "title": "Support reactions and restraints",
-  "description": "Premium Three.js component comparing pin, roller, and fixed support restraints with spatial reaction vectors.",
+  "description": "Three.js component comparing pin, roller, and fixed support restraints with spatial reaction vectors and ordered collision-managed leader annotations.",
   "category": "structural-analysis",
   "topics": [
     "support-reactions",
     "boundary-conditions",
     "degrees-of-freedom",
-    "3d-visualization"
+    "3d-visualization",
+    "leader-annotations"
   ],
   "learningObjectives": [
     "Distinguish restrained degrees of freedom and admissible reaction components for common planar structural supports using a spatial model."
@@ -41,11 +42,11 @@
     "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "0.2.0 replaces the flat renderer with a host-rendered Three.js scene while preserving the analytical model. Independent engineering, live-browser, screenshot, and accessibility review remain required before approval."
+    "notes": "0.3.0 adds ordered screen-space leader annotations driven by semantic 3D anchors while preserving the analytical support model. Independent engineering, live-browser, and accessibility review remain required before approval."
   },
   "source": {
     "type": "original",
-    "reference": "Premium 3D rebuild of reserved structures task str-support-reactions; analytical model retained from the original repository contribution.",
+    "reference": "Leader-annotation remediation of the Three.js support reactions asset; analytical model retained from the original repository contribution.",
     "sha256": null
   }
 }
