@@ -7,13 +7,18 @@ function mesh(T,g,m){const x=new T.Mesh(g,m);x.castShadow=true;x.receiveShadow=t
 function rod(T,striped=true){
  const g=new T.Group(),shaft=mesh(T,new T.CylinderGeometry(.03,.03,1,16),mat(T,0xe9ece9,.55,.15));shaft.position.y=.5;g.add(shaft);
  if(striped)for(let i=0;i<10;i++){const b=mesh(T,new T.CylinderGeometry(.033,.033,.075,16),mat(T,i%2?0xf0f1ed:0xd74238,.62));b.position.y=.07+i*.095;g.add(b)}
- const tip=mesh(T,new T.ConeGeometry(.045,.16,14),mat(T,0x24292b,.7,.15));tip.position.y=-.08;g.add(tip);const cap=mesh(T,new T.CylinderGeometry(.045,.045,.05,16),mat(T,0x24292b,.55,.2));cap.position.y=1.025;g.add(cap);return g
+ const tickMat=mat(T,0x202628,.55,.12);for(let i=1;i<20;i++){const major=i%5===0,w=major?.105:.078;const tick=mesh(T,new T.BoxGeometry(w,.008,.018),tickMat);tick.position.set((w-.06)/2,i/20,.039);g.add(tick)}
+ const collar=mesh(T,new T.CylinderGeometry(.041,.041,.03,24),mat(T,0x929a9c,.32,.65));collar.position.y=.51;g.add(collar);
+ const tip=mesh(T,new T.ConeGeometry(.045,.16,18),mat(T,0x24292b,.7,.15));tip.position.y=-.08;g.add(tip);const cap=mesh(T,new T.CylinderGeometry(.045,.045,.05,20),mat(T,0x24292b,.55,.2));cap.position.y=1.025;g.add(cap);return g
 }
 function observer(T){
  const g=new T.Group(),skin=mat(T,0xc98e67,.84),cloth=mat(T,0x39444b,.9),vest=mat(T,0xd9ef3c,.72),pants=mat(T,0x9a8062,.93),hat=mat(T,0xf2f3ef,.55);
  const torso=mesh(T,new T.BoxGeometry(.46,.60,.27),cloth);torso.position.y=1.25;g.add(torso);const v=mesh(T,new T.BoxGeometry(.49,.40,.29),vest);v.position.y=1.27;g.add(v);const head=mesh(T,new T.SphereGeometry(.15,18,14),skin);head.position.y=1.72;g.add(head);const brim=mesh(T,new T.CylinderGeometry(.19,.19,.035,20),hat);brim.position.y=1.875;g.add(brim);const dome=mesh(T,new T.SphereGeometry(.165,20,12,0,Math.PI*2,0,Math.PI/2),hat);dome.position.y=1.875;g.add(dome);
  function limb(x,y,len,r,mtrl,rot=0){const j=new T.Group();j.position.set(x,y,0);j.rotation.z=rot;const q=mesh(T,new T.CylinderGeometry(r,r,len,12),mtrl);q.position.y=-len/2;j.add(q);g.add(j)}
- limb(-.12,.94,.86,.07,pants,.05);limb(.12,.94,.86,.07,pants,-.05);limb(-.29,1.47,.60,.055,skin,.12);limb(.29,1.47,.60,.055,skin,-.12);g.rotation.y=Math.PI;return g
+ limb(-.12,.94,.86,.07,pants,.05);limb(.12,.94,.86,.07,pants,-.05);limb(-.29,1.47,.60,.055,skin,.12);limb(.29,1.47,.60,.055,skin,-.12);
+ const reflective=mat(T,0xf5f5e8,.38,.08);for(const y of[1.18,1.37]){const strip=mesh(T,new T.BoxGeometry(.505,.035,.302),reflective);strip.position.set(0,y,0);g.add(strip)}
+ const boot=mat(T,0x282623,.94,.02);for(const x of[-.12,.12]){const b=mesh(T,new T.BoxGeometry(.16,.105,.29),boot);b.position.set(x,.055,.055);g.add(b)}
+ g.rotation.y=Math.PI;return g
 }
 function disposeObj(o){o.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material)(Array.isArray(n.material)?n.material:[n.material]).forEach(x=>x.dispose())})}
 export function createAsset(context={}){
