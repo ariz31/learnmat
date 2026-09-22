@@ -1,43 +1,22 @@
-# Asset review
-
-- Asset ID and version: sur-ranging-rod 0.1.0
-- Source commit or source hash: to be recorded by integrator
-- Reviewer and review date: self-review, 2026-09-22
-- Environment/browser/device/viewport: source and static-preview review only; browser execution not claimed
-- Dependencies available: none
+# Asset review — sur-ranging-rod 0.2.0
 
 ## Engineering
+Observer, target and intermediate rod coordinates are unchanged from the 0.1.0 model. Default x=0.25 m with tolerance 0.05 m is outside tolerance; equality at 0.05 m is aligned.
+Gate: source/model passed.
 
-- Reference line is x=0 from observer z=0 to target z=-D.
-- Intermediate rod is at x=offset, z=-station, so perpendicular cross-track error is |offset|.
-- Default check: offset=0.25 m and tolerance=0.05 m -> error=0.25 m and aligned=false.
-- Boundary check: offset=0.05 m at tolerance=0.05 m is aligned by the stated inclusive criterion.
-- Rod station must remain strictly between observer and distant target.
-- Gate: passed
+## Spatial 3D
+Primary output is actual Three.js world geometry: observer, striped rods, line of sight, cross-track segment, tolerance corridor and station markers placed at the same coordinates returned by snapshot.
+Gate: implemented; live rendered surveying-reference comparison pending.
 
-## Browser and functionality
+## Animation / pedagogy
+“Align rod” interpolates the actual crossTrackOffset to zero; the rod, red error segment, alignment state and metric all update from one model. Camera presets support overview and near-line inspection.
+Gate: source-reviewed.
 
-- Source provides deterministic setParameters/update/reset/resize/snapshot/dispose behavior.
-- Browser interaction, responsive resize, and disposal execution were not independently run in this connector-only contribution.
-- Gate: not-reviewed
-
-## Accessibility
-
-- SVG carries role=img plus a descriptive aria-label. Demo controls are native labeled inputs with a live status result.
-- No autonomous component motion is used.
-- Gate: not-reviewed
+## Browser / accessibility
+Semantic role text, native controls and focus mode are present. Live WebGL/mobile/keyboard/AT checks remain not-reviewed.
 
 ## Rights
-
-- Original code/vector geometry; no third-party content.
-- Gate: cleared
-
-## Visual evidence
-
-- Actual preview file: previews/default.svg
-- Deterministic source-authored default state; no browser-screenshot claim.
+Original procedural geometry; only declared Three.js runtime dependency.
 
 ## Decision
-
-- No known engineering blocker within the straight-line plan model.
-- Release eligible: no; browser and accessibility gates remain open.
+Remain in-review pending live rendered/browser/accessibility evidence.

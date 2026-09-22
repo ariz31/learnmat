@@ -1,42 +1,22 @@
-# Asset review
-
-- Asset ID and version: sur-tape-team 0.1.0
-- Source commit or source hash: to be recorded by integrator
-- Reviewer and review date: self-review, 2026-09-22
-- Environment/browser/device/viewport: source and static-preview review only; browser execution not claimed
-- Dependencies available: none
+# Asset review — sur-tape-team 0.2.0
 
 ## Engineering
+The prior catenary equations are preserved. Default L=20 m, mass=0.02 kg/m, H=60 N gives sag≈0.163459 m and curve length≈20.003562 m. Straight mode remains exact.
+Gate: source/model passed.
 
-- Model: symmetric catenary with `a = H/w`, `f = a(cosh(L/2a)-1)`, and `S = 2a sinh(L/2a)`.
-- Independent default check: L=20 m, mass=0.02 kg/m, H=60 N gives w=0.196133 N/m, a≈305.914 m, sag≈0.1635 m, and curved length slightly greater than 20 m.
-- Straight mode requires sag=0, curveLength=L, and lengthExcess=0.
-- Inputs are validated before live state replacement.
-- Gate: passed
+## Spatial 3D
+Primary output is actual 3D geometry: two volumetric surveyors, hardhats/vests, stakes, reel, exact catenary tube and straight reference in world coordinates. Perspective camera, ground, lighting, shadows and orbit controls are supplied by the HTML demo.
+Gate: implemented; live rendered reference comparison pending.
 
-## Browser and functionality
+## Pedagogy
+Changing tension visibly changes the true catenary and exact numerical sag/length together. “Show lower tension” provides an immediate cause/effect comparison.
+Gate: source-reviewed.
 
-- Source provides deterministic parameter-to-geometry behavior and standard runtime methods.
-- Browser interaction, responsive resize, and disposal execution were not independently run in this connector-only contribution.
-- Gate: not-reviewed
-
-## Accessibility
-
-- SVG has role=img plus a descriptive label. Demo controls are native labeled inputs and use a status region.
-- There is no autonomous component animation.
-- Gate: not-reviewed
+## Browser / accessibility
+Semantic role text, native controls and focus mode are present. Live WebGL/mobile/keyboard/AT checks remain not-reviewed.
 
 ## Rights
-
-- Original code/vector geometry; no third-party content.
-- Gate: cleared
-
-## Visual evidence
-
-- Actual preview file: previews/default.svg
-- Preview is source-authored and uses the default physical state; visual sag is magnified for legibility.
+Original procedural geometry and declared Three.js dependency only.
 
 ## Decision
-
-- No known engineering blocker within the stated catenary assumptions.
-- Release eligible: no; browser and accessibility gates remain open.
+Remain in-review pending rendered/browser/accessibility evidence.

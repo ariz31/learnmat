@@ -1,33 +1,24 @@
-# Leveling Staff Holder
+# 3D Leveling Staff Holder
 
-Status: in-review component.
+Status: in-review. Version 0.2.0 replaces the former SVG primary visual with procedural Three.js geometry.
 
 ## Learning objective
+Understand staff verticality, reading height, and the geometric consequence of tilt while seeing the staff handled by a recognizable field surveyor.
 
-Use a reusable surveying actor to show a leveling staff at a field point and make verticality error explicit rather than visually ambiguous.
+## Model and 3D scene
+The staff base is fixed at the surveyed point. Positive tilt leans toward +X. Top coordinates remain **x = H sin θ** and **y = H cos θ**. The reading ring is attached to the real 3D staff and moves to the selected height. The plumb reference is spatially coincident with the true vertical axis.
 
-## Model and assumptions
-
-- SI units and LearnMat right-handed coordinates: +X east/right, +Y up, north along -Z.
-- Staff base is fixed at the local origin.
-- Positive `staffTiltRad` leans the staff toward +X.
-- Staff top offset is x = H sin(θ); vertical projection is y = H cos(θ).
-- `readingHeight` is measured from the staff base along the graduated staff and cannot exceed staff height.
-- Staff height range: 2–5 m. Tilt range: ±5°. Person height: 1.4–2.1 m.
-- The person geometry and small breathing motion are illustrative; the staff geometry is authoritative.
+The person, hardhat, vest, staff, graduations, reading ring, benchmark/base, and plumb line are actual Three.js geometry. The host demo supplies perspective camera, orbit controls, shadows, ground and depth cues. The **Plumb staff** action animates the actual tilt parameter toward zero.
 
 ## Usage
+Requires host-supplied `THREE` and `scene`; the component owns no renderer or animation loop. Demo uses Three.js 0.185.1.
 
-Import `src/asset.mjs`, call `createAsset(context)`, then use `setParameters`, absolute-time `update`, `reset`, `resize`, `snapshot`, and idempotent `dispose`. No network dependency is required.
-
-## Reuse and rights
-
-Original repository contribution under the repository MIT license. No third-party models, textures, fonts, or libraries are embedded.
+## Rights
+Original procedural geometry only. No generated images or downloaded 3D models.
 
 ## Review evidence
-
-See `REVIEW.md`. The SVG preview is a deterministic source-authored default view, not a claimed browser screenshot.
+See `REVIEW.md`. Live screenshot/browser evidence remains pending rather than reusing the obsolete SVG preview.
 
 ## Change history
-
-- 0.1.0 — Initial leveling-staff holder with explicit tilt geometry.
+- 0.2.0 — Full Three.js rebuild with articulated surveyor, graduated staff, reading marker, plumb reference and animated correction.
+- 0.1.0 — SVG component.

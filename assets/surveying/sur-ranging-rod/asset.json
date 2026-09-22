@@ -1,36 +1,14 @@
 {
-  "schemaVersion": "1.0.0",
-  "id": "sur-ranging-rod",
-  "version": "0.1.0",
-  "title": "Ranging Rod Alignment",
-  "description": "Reusable ranging-rod placement component showing line-of-sight alignment and cross-track error in plan.",
-  "category": "surveying",
-  "topics": ["ranging", "line-of-sight", "distance-measurement", "fieldwork"],
-  "learningObjectives": [
-    "Identify whether an intermediate ranging rod lies on a straight survey line.",
-    "Interpret cross-track offset relative to a configurable alignment tolerance."
-  ],
-  "kind": "component",
-  "renderer": "svg",
-  "status": "in-review",
-  "entrypoint": "assets/surveying/sur-ranging-rod/demo/index.html",
-  "readme": "assets/surveying/sur-ranging-rod/README.md",
-  "previewImage": "assets/surveying/sur-ranging-rod/previews/default.svg",
-  "reviewFile": "assets/surveying/sur-ranging-rod/REVIEW.md",
-  "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
-  "rights": {
-    "status": "cleared",
-    "licenseExpression": "MIT",
-    "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
-  },
-  "verification": {
-    "engineeringReview": "passed",
-    "browserReview": "not-reviewed",
-    "accessibilityReview": "not-reviewed",
-    "notes": "Plan-line and cross-track alignment invariants reviewed from source; browser and assistive-technology checks remain."
-  },
-  "source": {"type":"original","reference":"Reserved surveying queue task sur-ranging-rod.","sha256":null}
+  "schemaVersion":"1.0.0","id":"sur-ranging-rod","version":"0.2.0",
+  "title":"3D Ranging Rod Alignment",
+  "description":"Spatial surveying scene with observer, intermediate ranging rod, distant target, line of sight, station distance, and cross-track error.",
+  "category":"surveying","topics":["ranging","line-of-sight","distance-measurement","fieldwork","3d"],
+  "learningObjectives":["Identify whether an intermediate ranging rod lies on the straight observer-target line.","Interpret cross-track error and alignment tolerance in actual 3D field coordinates."],
+  "kind":"component","renderer":"threejs","status":"in-review",
+  "entrypoint":"assets/surveying/sur-ranging-rod/demo/index.html","readme":"assets/surveying/sur-ranging-rod/README.md",
+  "previewImage":null,"reviewFile":"assets/surveying/sur-ranging-rod/REVIEW.md","derivedFrom":null,"networkRequired":true,
+  "dependencies":[{"name":"three","version":"0.185.1","url":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","embedded":false}],
+  "rights":{"status":"cleared","licenseExpression":"MIT","licenseFile":"LICENSE","attribution":"Original LearnMat procedural geometry; no third-party models or textures."},
+  "verification":{"engineeringReview":"passed","browserReview":"not-reviewed","accessibilityReview":"not-reviewed","notes":"Reference-line/cross-track model preserved in real Three.js geometry; live rendered/browser/accessibility evidence remains pending."},
+  "source":{"type":"original","reference":"Reserved surveying queue task sur-ranging-rod; 3D remediation of merged PR #15.","sha256":null}
 }

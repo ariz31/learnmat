@@ -1,38 +1,28 @@
-<!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Surveying Walking Person</title>
-<style>body{font-family:system-ui,sans-serif;margin:0;padding:1rem;line-height:1.45;background:Canvas;color:CanvasText}main{max-width:900px;margin:auto}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem}label{display:grid;gap:.25rem}button{padding:.6rem .9rem}#stage{margin-top:1rem;border:1px solid color-mix(in srgb,CanvasText 25%,transparent);border-radius:.75rem;padding:.5rem}</style>
-</head><body><main>
-<h1>Surveying Walking Person</h1>
-<p>Host-controlled demo. Distance is <strong>speed × elapsed time</strong>, clamped at the path endpoint.</p>
-<div class="controls">
-<label>Path length (m)<input id="path" type="range" min=".5" max="50" step=".5" value="10"><output id="pathOut">10</output></label>
-<label>Speed (m/s)<input id="speed" type="range" min="0" max="2.5" step=".1" value="1.2"><output id="speedOut">1.2</output></label>
-<label>Gait frequency (Hz)<input id="gait" type="range" min=".5" max="3" step=".1" value="1.7"><output id="gaitOut">1.7</output></label>
-</div>
-<p><button id="play" type="button">Pause</button> <button id="reset" type="button">Reset</button></p>
-<div id="stage"></div><p id="status" role="status"></p>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Surveying Walking Person · 3D</title>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"}}</script>
+<style>
+:root{--ink:#18333d;--muted:#6b7c80;--line:#d6ded9;--paper:#fffefa;--teal:#087f80}*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#eef1ec;color:var(--ink);font:14px Inter,system-ui,sans-serif}.stage{position:relative;width:100%;height:100%}#view{position:absolute;inset:0;touch-action:none}.head{position:absolute;z-index:4;left:28px;top:24px;pointer-events:none}.head small{letter-spacing:.16em;color:var(--teal);font-weight:800}.head h1{margin:7px 0 0;font:400 34px Georgia,serif}.panel{position:absolute;z-index:5;right:24px;top:24px;width:280px;background:#fffefae8;border:1px solid var(--line);border-radius:12px;padding:14px;backdrop-filter:blur(14px);box-shadow:0 18px 70px #17333d1b}.panel label{display:grid;grid-template-columns:1fr auto;gap:6px;margin:10px 0;color:var(--muted);font-size:12px}.panel input{grid-column:1/3;width:100%}.row{display:flex;gap:7px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:7px 10px}.btn.primary{background:var(--teal);color:white;border-color:var(--teal)}.metrics{position:absolute;z-index:4;left:28px;bottom:26px;background:#fffefae0;border-top:2px solid var(--ink);padding:10px 0;width:min(620px,calc(100% - 360px));backdrop-filter:blur(8px)}.metrics b{font-size:18px}.metrics span{color:var(--muted);margin-left:14px}.focus .head,.focus .panel .detail{display:none}.focus .panel{top:auto;bottom:18px;right:18px;width:auto}.focus .metrics{left:18px;bottom:18px;width:auto;padding:10px 14px;border:1px solid var(--line);border-radius:9px}@media(max-width:720px){.head{left:16px;top:14px}.head h1{font-size:25px}.panel{left:12px;right:12px;top:auto;bottom:12px;width:auto}.metrics{left:16px;right:16px;bottom:190px;width:auto}.detail{display:none}}
+</style></head><body><main class="stage" id="stage"><div id="view" role="img" aria-label="Interactive 3D surveying worker walking along a measured field path"></div>
+<header class="head"><small>SURVEYING · 3D FIELD PRIMITIVE</small><h1>Walking person</h1></header>
+<aside class="panel"><div class="detail"><label>Path length <output id="oL">10.0 m</output><input id="L" type="range" min=".5" max="50" step=".5" value="10"></label><label>Speed <output id="oV">1.2 m/s</output><input id="V" type="range" min="0" max="2.5" step=".1" value="1.2"></label><label>Gait <output id="oF">1.7 Hz</output><input id="F" type="range" min=".5" max="3" step=".1" value="1.7"></label></div><div class="row"><button class="btn primary" id="play">Pause</button><button class="btn" id="reset">Reset</button><button class="btn" id="focus">Focus</button></div></aside>
+<div class="metrics"><b id="distance">0.00 m</b><span id="note">speed × time, clamped at endpoint</span></div>
 <script type="module">
-import { createAsset } from '../src/asset.mjs';
-const stage=document.querySelector('#stage');
-const status=document.querySelector('#status');
-const playButton=document.querySelector('#play');
-const resetButton=document.querySelector('#reset');
-const pathInput=document.querySelector('#path');
-const speedInput=document.querySelector('#speed');
-const gaitInput=document.querySelector('#gait');
-const asset=createAsset({container:stage,seed:1,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
-let playing=true,origin=performance.now(),elapsed=0;
-function apply(){
-  asset.setParameters({pathLength:Number(pathInput.value),speed:Number(speedInput.value),stepFrequency:Number(gaitInput.value)});
-  document.querySelector('#pathOut').value=pathInput.value;
-  document.querySelector('#speedOut').value=speedInput.value;
-  document.querySelector('#gaitOut').value=gaitInput.value;
-}
-[pathInput,speedInput,gaitInput].forEach(el=>el.addEventListener('input',apply)); apply();
-function frame(now){if(playing){elapsed+=(now-origin)/1000;asset.update(elapsed);status.textContent='Elapsed '+elapsed.toFixed(1)+' s';}origin=now;requestAnimationFrame(frame)}
-requestAnimationFrame(frame);
-playButton.addEventListener('click',()=>{playing=!playing;playButton.textContent=playing?'Pause':'Play';origin=performance.now()});
-resetButton.addEventListener('click',()=>{elapsed=0;origin=performance.now();asset.update(0)});
+import * as THREE from 'three'; import {OrbitControls} from 'three/addons/controls/OrbitControls.js'; import {createAsset} from '../src/asset.mjs';
+const host=document.querySelector('#view'),stage=document.querySelector('#stage');
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xe9eee9);scene.fog=new THREE.Fog(0xe9eee9,18,55);
+const camera=new THREE.PerspectiveCamera(42,1,.05,120);camera.position.set(7,4.4,8.5);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;host.append(renderer.domElement);
+const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(4.3,.85,0);controls.enableDamping=true;controls.maxPolarAngle=Math.PI*.49;
+scene.add(new THREE.HemisphereLight(0xeaf4ff,0x6b675a,2.2));const sun=new THREE.DirectionalLight(0xfff2d5,3.8);sun.position.set(-6,10,7);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);scene.add(sun);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(80,36),new THREE.MeshStandardMaterial({color:0x8b9477,roughness:1}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+const grid=new THREE.GridHelper(40,40,0x6a7669,0x9da695);grid.position.y=.008;scene.add(grid);
+const asset=createAsset({THREE,scene,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
+let playing=true,elapsed=0,last=performance.now();
+const L=document.querySelector('#L'),V=document.querySelector('#V'),F=document.querySelector('#F'),oL=document.querySelector('#oL'),oV=document.querySelector('#oV'),oF=document.querySelector('#oF'),distance=document.querySelector('#distance'),play=document.querySelector('#play'),reset=document.querySelector('#reset'),focus=document.querySelector('#focus');
+function apply(){asset.setParameters({pathLength:+L.value,speed:+V.value,stepFrequency:+F.value});oL.value=(+L.value).toFixed(1)+' m';oV.value=(+V.value).toFixed(1)+' m/s';oF.value=(+F.value).toFixed(1)+' Hz';}
+[L,V,F].forEach(x=>x.addEventListener('input',apply));apply();
+play.onclick=()=>{playing=!playing;play.textContent=playing?'Pause':'Play';last=performance.now()};reset.onclick=()=>{elapsed=0;asset.update(0)};focus.onclick=()=>stage.classList.toggle('focus');
+function resize(){const w=host.clientWidth,h=host.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);asset.resize(w,h,renderer.getPixelRatio())}addEventListener('resize',resize);resize();
+function frame(now){const dt=(now-last)/1000;last=now;if(playing)elapsed+=Math.min(dt,.05);const s=asset.update(elapsed);distance.textContent=s.result.distanceTravelled.toFixed(2)+' m';controls.update();renderer.render(scene,camera);requestAnimationFrame(frame)}requestAnimationFrame(frame);
 </script></main></body></html>

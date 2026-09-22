@@ -1,40 +1,38 @@
 {
   "schemaVersion": "1.0.0",
   "id": "sur-walking-person",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Surveying Walking Person",
-  "description": "Reusable deterministic surveying-field person with straight-path, speed, height, and gait-frequency controls.",
+  "description": "Articulated 3D surveying-field person with deterministic path, speed, height, and gait controls.",
   "category": "surveying",
-  "topics": ["fieldwork", "pacing", "surveying-crew", "animation"],
+  "topics": ["fieldwork", "pacing", "surveying-crew", "animation", "3d"],
   "learningObjectives": [
     "Relate walking speed, elapsed time, and path distance in a surveying-field context.",
-    "Reuse a deterministic animated person without coupling it to a complete lesson."
+    "Observe how gait phase and stopping behavior remain tied to one deterministic motion model."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "in-review",
   "entrypoint": "assets/surveying/sur-walking-person/demo/index.html",
   "readme": "assets/surveying/sur-walking-person/README.md",
-  "previewImage": "assets/surveying/sur-walking-person/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/surveying/sur-walking-person/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {"name":"three","version":"0.185.1","url":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","embedded":false}
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party visual assets or runtime dependencies."
+    "attribution": "Original LearnMat procedural geometry; no third-party models or textures."
   },
   "verification": {
     "engineeringReview": "passed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Distance/time and endpoint invariants reviewed from source. Browser and assistive-technology checks remain for independent review."
+    "notes": "Rebuilt as real Three.js geometry. Source/model invariants reviewed; live rendered browser and assistive-technology evidence remains pending."
   },
-  "source": {
-    "type": "original",
-    "reference": "Reserved surveying queue task sur-walking-person.",
-    "sha256": null
-  }
+  "source": {"type":"original","reference":"Reserved surveying queue task sur-walking-person; 3D remediation of merged PR #8.","sha256":null}
 }

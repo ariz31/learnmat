@@ -1,84 +1,39 @@
-const SVG_NS='http://www.w3.org/2000/svg';
-const DEFAULTS=Object.freeze({targetHeight:2,poleTiltRad:0,personHeight:1.7});
-const LIMITS=Object.freeze({targetHeight:[1,3.5],poleTiltRad:[-0.1745329,0.1745329],personHeight:[1.4,2.1]});
-
-function node(name,attrs={}){const el=document.createElementNS(SVG_NS,name);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));return el}
-function validate(name,value){const [min,max]=LIMITS[name];if(!Number.isFinite(value)||value<min||value>max)throw new RangeError(name+' must be finite and between '+min+' and '+max+'.')}
-function normalize(next){const merged={...DEFAULTS,...next};for(const key of Object.keys(LIMITS))validate(key,merged[key]);return merged}
-
-export function prismGeometry(parameters={}){
-  const p=normalize(parameters);
-  return {
-    horizontalOffset:p.targetHeight*Math.sin(p.poleTiltRad),
-    verticalProjection:p.targetHeight*Math.cos(p.poleTiltRad),
-    tiltDeg:p.poleTiltRad*180/Math.PI
-  };
+const DEFAULTS=Object.freeze({targetHeight:2,poleTiltRad:0,personHeight:1.7}),LIMITS=Object.freeze({targetHeight:[1,3.5],poleTiltRad:[-0.1745329,0.1745329],personHeight:[1.4,2.1]});
+function normalize(next){const p={...DEFAULTS,...next};for(const[k,[min,max]]of Object.entries(LIMITS)){if(!Number.isFinite(p[k])||p[k]<min||p[k]>max)throw new RangeError(k+' must be finite and between '+min+' and '+max+'.')}return p}
+export function prismGeometry(parameters={}){const p=normalize(parameters);return{horizontalOffset:p.targetHeight*Math.sin(p.poleTiltRad),verticalProjection:p.targetHeight*Math.cos(p.poleTiltRad),tiltDeg:p.poleTiltRad*180/Math.PI}}
+function mat(T,c,r=.72,metal=.06,opts={}){return new T.MeshStandardMaterial({color:c,roughness:r,metalness:metal,...opts})}
+function mesh(T,g,m){const x=new T.Mesh(g,m);x.castShadow=true;x.receiveShadow=true;return x}
+function human(T){
+ const g=new T.Group(),skin=mat(T,0xc98e67,.84),cloth=mat(T,0x39444b,.9),pants=mat(T,0xaa8c67,.93),vest=mat(T,0xd9ef3c,.72),hat=mat(T,0xf4f5f2,.52);
+ const torso=mesh(T,new T.BoxGeometry(.46,.60,.27),cloth);torso.position.set(-.65,1.24,0);g.add(torso);const v=mesh(T,new T.BoxGeometry(.49,.40,.29),vest);v.position.set(-.65,1.26,0);g.add(v);
+ const head=mesh(T,new T.SphereGeometry(.15,20,16),skin);head.position.set(-.65,1.71,0);g.add(head);const brim=mesh(T,new T.CylinderGeometry(.19,.19,.035,24),hat);brim.position.set(-.65,1.865,0);g.add(brim);const dome=mesh(T,new T.SphereGeometry(.165,20,12,0,Math.PI*2,0,Math.PI/2),hat);dome.position.set(-.65,1.865,0);g.add(dome);
+ function limb(x,y,len,r,mtrl,rot=0){const j=new T.Group();j.position.set(x,y,0);j.rotation.z=rot;const q=mesh(T,new T.CylinderGeometry(r,r,len,12),mtrl);q.position.y=-len/2;j.add(q);g.add(j);return j}
+ limb(-.77,.93,.84,.07,pants,.07);limb(-.54,.93,.84,.07,pants,-.07);const arm=limb(-.39,1.46,.52,.055,skin,-.72);const fore=new T.Group();fore.position.set(0,-.49,0);fore.rotation.z=.70;const fm=mesh(T,new T.CylinderGeometry(.05,.05,.42,12),skin);fm.position.y=-.21;fore.add(fm);arm.add(fore);limb(-.90,1.46,.62,.055,skin,.18);return g
 }
-
+function disposeObj(o){o.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material)(Array.isArray(n.material)?n.material:[n.material]).forEach(x=>x.dispose())})}
 export function createAsset(context={}){
-  const container=context.container;
-  if(!container||typeof container.appendChild!=='function')throw new TypeError('createAsset requires a DOM container.');
-  let disposed=false,timeSeconds=0,params=normalize({});
-  const reducedMotion=Boolean(context.reducedMotion);
-  const root=document.createElement('div');
-  root.setAttribute('data-learnmat-asset','sur-prism-pole');
-  root.style.width='100%';root.style.maxWidth='740px';root.style.fontFamily='system-ui,sans-serif';root.style.color='CanvasText';
-
-  const svg=node('svg',{viewBox:'0 0 720 450',role:'img','aria-label':'Surveyor carrying a prism pole showing target height, plumb reference, and pole tilt'});
-  svg.style.width='100%';svg.style.height='auto';svg.style.display='block';
-  const ground=node('line',{x1:65,y1:365,x2:655,y2:365,stroke:'currentColor','stroke-width':3});
-  const plumb=node('line',{x1:430,y1:365,x2:430,y2:75,stroke:'currentColor','stroke-width':2,'stroke-dasharray':'6 5',opacity:.55});
-  const pole=node('g');
-  const shaft=node('line',{x1:0,y1:0,x2:0,y2:-240,stroke:'currentColor','stroke-width':8,'stroke-linecap':'round'});
-  const prism=node('polygon',{points:'0,-270 28,-240 0,-210 -28,-240',fill:'Canvas',stroke:'currentColor','stroke-width':5,'stroke-linejoin':'round'});
-  const prismCrossA=node('line',{x1:-18,y1:-240,x2:18,y2:-240,stroke:'currentColor','stroke-width':2});
-  const prismCrossB=node('line',{x1:0,y1:-258,x2:0,y2:-222,stroke:'currentColor','stroke-width':2});
-  pole.append(shaft,prism,prismCrossA,prismCrossB);
-
-  const person=node('g');
-  person.append(
-    node('circle',{cx:-78,cy:-150,r:16,fill:'none',stroke:'currentColor','stroke-width':5}),
-    node('line',{x1:-78,y1:-132,x2:-78,y2:-68,stroke:'currentColor','stroke-width':7,'stroke-linecap':'round'}),
-    node('line',{x1:-78,y1:-68,x2:-100,y2:0,stroke:'currentColor','stroke-width':7,'stroke-linecap':'round'}),
-    node('line',{x1:-78,y1:-68,x2:-55,y2:0,stroke:'currentColor','stroke-width':7,'stroke-linecap':'round'}),
-    node('polyline',{points:'-78,-118 -45,-98 0,-116',fill:'none',stroke:'currentColor','stroke-width':6,'stroke-linejoin':'round','stroke-linecap':'round'})
-  );
-
-  const heightLine=node('line',{stroke:'currentColor','stroke-width':2});
-  const heightText=node('text',{'font-size':16,fill:'currentColor','text-anchor':'end'});
-  const heading=node('text',{x:360,y:38,'text-anchor':'middle','font-size':18,fill:'currentColor'});
-  const metrics=node('text',{x:360,y:420,'text-anchor':'middle','font-size':16,fill:'currentColor'});
-  const baseMark=node('circle',{cx:430,cy:365,r:6,fill:'currentColor'});
-  svg.append(ground,plumb,pole,person,heightLine,heightText,baseMark,heading,metrics);
-  root.appendChild(svg);container.appendChild(root);
-
-  function ensure(){if(disposed)throw new Error('Asset has been disposed.')}
-  function geometry(){return prismGeometry(params)}
-  function render(){
-    const scale=120/2;
-    const poleScale=params.targetHeight/2;
-    const angle=params.poleTiltRad*180/Math.PI;
-    pole.setAttribute('transform','translate(430 365) rotate('+angle.toFixed(4)+') scale('+poleScale.toFixed(5)+')');
-    const breathe=reducedMotion?0:Math.sin(Math.max(0,timeSeconds)*Math.PI/2)*1.5;
-    person.setAttribute('transform','translate(430 '+(365+breathe).toFixed(3)+') scale('+(params.personHeight/1.7).toFixed(5)+')');
-    const prismY=365-params.targetHeight*scale*2;
-    heightLine.setAttribute('x1',328);heightLine.setAttribute('x2',328);heightLine.setAttribute('y1',365);heightLine.setAttribute('y2',prismY);
-    heightText.setAttribute('x',316);heightText.setAttribute('y',(365+prismY)/2);heightText.textContent=params.targetHeight.toFixed(2)+' m target height';
-    const g=geometry();
-    heading.textContent='Prism pole · tilt '+g.tiltDeg.toFixed(2)+'°';
-    metrics.textContent='horizontal target offset '+g.horizontalOffset.toFixed(3)+' m · vertical projection '+g.verticalProjection.toFixed(3)+' m';
-  }
-  function snapshot(){
-    ensure();const g=geometry();
-    return {id:'sur-prism-pole',timeSeconds:Math.max(0,timeSeconds),parameters:{...params},result:g,pose:{base:{x:0,y:0,z:0},prismCenter:{x:g.horizontalOffset,y:g.verticalProjection,z:0}}};
-  }
-  render();
-  return {
-    setParameters(next={}){ensure();params=normalize({...params,...next});render();return snapshot()},
-    update(t){ensure();if(!Number.isFinite(t))throw new TypeError('timeSeconds must be finite.');timeSeconds=Math.max(0,t);render();return snapshot()},
-    reset(){ensure();params=normalize({});timeSeconds=0;render();return snapshot()},
-    resize(width,height,pixelRatio=1){ensure();if(![width,height,pixelRatio].every(Number.isFinite)||width<=0||height<=0||pixelRatio<=0)throw new RangeError('resize requires positive finite values.');root.style.width=width+'px';root.style.maxWidth='100%';root.style.aspectRatio=width+' / '+height;return snapshot()},
-    snapshot,
-    dispose(){if(disposed)return;disposed=true;root.remove()}
-  };
+ const T=context.THREE,scene=context.scene;if(!T||!scene)throw new TypeError('sur-prism-pole requires context.THREE and context.scene.');
+ let disposed=false,time=0,p=normalize({});
+ const root=new T.Group();scene.add(root);const person=human(T);root.add(person);
+ const poleRoot=new T.Group();root.add(poleRoot);const shaftGroup=new T.Group();poleRoot.add(shaftGroup);
+ const white=mat(T,0xe7ebea,.55,.15),red=mat(T,0xd6473c,.62,.08),dark=mat(T,0x252b2d,.48,.3);
+ const shaft=mesh(T,new T.CylinderGeometry(.025,.025,1,16),white);shaft.position.y=.5;shaftGroup.add(shaft);
+ for(let i=0;i<8;i++){const band=mesh(T,new T.CylinderGeometry(.027,.027,.10,16),i%2?white:red);band.position.y=.10+i*.12;shaftGroup.add(band)}
+ const tip=mesh(T,new T.ConeGeometry(.035,.14,14),dark);tip.position.y=-.07;poleRoot.add(tip);
+ const prism=new T.Group();poleRoot.add(prism);
+ const reflector=mesh(T,new T.OctahedronGeometry(.13,1),mat(T,0xf06b3d,.22,.18,{emissive:0x44140b,emissiveIntensity:.18}));prism.add(reflector);
+ const frameMat=dark;for(const [x,y,w,h] of [[0,.19,.42,.045],[0,-.19,.42,.045],[-.19,0,.045,.42],[.19,0,.045,.42]]){const b=mesh(T,new T.BoxGeometry(w,h,.055),frameMat);b.position.set(x,y,0);prism.add(b)}
+ const targetRing=mesh(T,new T.TorusGeometry(.09,.018,10,24),mat(T,0xffa42c,.42,.12));targetRing.rotation.y=Math.PI/2;prism.add(targetRing);
+ const plumbMat=new T.LineDashedMaterial({color:0x2a7f7a,dashSize:.12,gapSize:.08,transparent:true,opacity:.55});const plumb=new T.Line(new T.BufferGeometry().setFromPoints([new T.Vector3(0,0,0),new T.Vector3(0,3.8,0)]),plumbMat);plumb.computeLineDistances();root.add(plumb);
+ const base=mesh(T,new T.CylinderGeometry(.07,.08,.025,20),mat(T,0xd9d3c3,.9));base.position.y=.0125;root.add(base);
+ function geometry(){return prismGeometry(p)}
+ function render(){shaftGroup.scale.y=p.targetHeight;prism.position.y=p.targetHeight;poleRoot.rotation.z=-p.poleTiltRad;person.scale.setScalar(p.personHeight/1.7);if(!context.reducedMotion)person.position.y=Math.sin(time*1.3)*.004;else person.position.y=0}
+ function snap(){if(disposed)throw new Error('Asset has been disposed.');const g=geometry();return{id:'sur-prism-pole',timeSeconds:Math.max(0,time),parameters:{...p},result:g,pose:{base:{x:0,y:0,z:0},prismCenter:{x:g.horizontalOffset,y:g.verticalProjection,z:0}}}}
+ render();return{
+ setParameters(next={}){if(disposed)throw new Error('Asset has been disposed.');p=normalize({...p,...next});render();return snap()},
+ update(t){if(disposed)throw new Error('Asset has been disposed.');if(!Number.isFinite(t))throw new TypeError('timeSeconds must be finite.');time=Math.max(0,t);render();return snap()},
+ reset(){if(disposed)throw new Error('Asset has been disposed.');p=normalize({});time=0;render();return snap()},
+ resize(w,h,pr=1){if(disposed)throw new Error('Asset has been disposed.');if(![w,h,pr].every(Number.isFinite)||w<=0||h<=0||pr<=0)throw new RangeError('resize requires positive finite values.');return snap()},
+ snapshot:snap,dispose(){if(disposed)return;disposed=true;scene.remove(root);disposeObj(root);plumb.geometry.dispose();plumb.material.dispose()}
+ };
 }

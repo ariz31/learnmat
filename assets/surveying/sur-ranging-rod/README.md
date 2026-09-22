@@ -1,34 +1,21 @@
-# Ranging Rod Alignment
+# 3D Ranging Rod Alignment
 
-Status: in-review component.
+Status: in-review. Version 0.2.0 replaces the plan/elevation SVG with a coherent 3D field scene.
 
 ## Learning objective
+See direct ranging as a spatial collinearity problem: observer, intermediate rod, and distant target should lie on one vertical plane/line, with the rod's cross-track offset measured perpendicular to the reference line.
 
-Show the straight observer–target survey line, an intermediate ranging rod, and the rod's perpendicular cross-track offset from that line.
+## Model
+Observer is (0,0,0), target is (0,0,-D), intermediate rod base is (x,0,-s). Therefore cross-track error is **|x|**, and alignment is true when **|x| ≤ tolerance**. Rod top is directly above its base at +Y=rodHeight.
 
-## Model and assumptions
+## 3D implementation
+The scene now contains an observer, two volumetric striped rods, pointed tips, ground/station marks, a dashed 3D line of sight, a real red cross-track segment and a translucent tolerance corridor. “Align rod” animates the actual cross-track parameter toward zero so the geometry and error metric agree at every frame.
 
-- LearnMat coordinates are used: +X east/right, +Y up, north along -Z.
-- Observer: (0, 0, 0).
-- Distant target: (0, 0, -sightDistance).
-- Intermediate rod base: (crossTrackOffset, 0, -rodStationDistance).
-- Because the reference line lies on x=0, cross-track error is `abs(crossTrackOffset)`.
-- The rod is considered aligned when `crossTrackError <= alignmentTolerance`.
-- `rodStationDistance` must be less than `sightDistance`.
-- The plan view is the authoritative alignment view. The elevation inset communicates rod verticality/height but does not alter plan alignment.
+The demo supplies field ground, perspective/orbit camera, line/overview views, shadows, focus mode and responsive controls.
 
-## Usage
-
-Import `src/asset.mjs`, call `createAsset(context)`, and use `setParameters`, absolute-time `update`, `reset`, `resize`, `snapshot`, and idempotent `dispose`. No network dependency is required.
-
-## Reuse and rights
-
-Original repository contribution under MIT. No third-party models, textures, fonts, or runtime libraries are embedded.
-
-## Review evidence
-
-See `REVIEW.md`. The checked-in SVG preview is deterministic source-authored evidence, not a browser-screenshot claim.
+## Rights
+Original procedural geometry only. No generated images or downloaded 3D models.
 
 ## Change history
-
-- 0.1.0 — Initial ranging-rod alignment component with explicit cross-track error and tolerance.
+- 0.2.0 — True Three.js direct-ranging field scene and model-driven alignment animation.
+- 0.1.0 — 2D plan/elevation SVG.
