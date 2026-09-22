@@ -68,6 +68,13 @@ export function createAsset(context = {}) {
       );
       edges.position.copy(mesh.position);
       root.add(edges);
+      const nosing = new T.Mesh(
+        new T.BoxGeometry(Math.min(0.035, p.going * 0.12), 0.024, p.width + 0.015),
+        new T.MeshStandardMaterial({ color: 0x66757d, metalness: 0.18, roughness: 0.46 })
+      );
+      nosing.position.set(index * p.going + p.going - 0.012, topY + 0.012, -p.width / 2);
+      nosing.castShadow = true;
+      root.add(nosing);
     }
 
     const landingLength = Math.max(p.going * 2.2, 0.75);
@@ -95,6 +102,15 @@ export function createAsset(context = {}) {
     startFar.z = -p.width - 0.02;
     endFar.z = -p.width - 0.02;
     root.add(cylinderBetween(T, startFar, endFar, 0.025, railMaterial.clone()));
+    const landingRailStart = new T.Vector3(model.flightRun, p.totalRise + railHeight, 0.02);
+    const landingRailEnd = new T.Vector3(model.flightRun + landingLength, p.totalRise + railHeight, 0.02);
+    const landingRailStartFar = new T.Vector3(model.flightRun, p.totalRise + railHeight, -p.width - 0.02);
+    const landingRailEndFar = new T.Vector3(model.flightRun + landingLength, p.totalRise + railHeight, -p.width - 0.02);
+    root.add(cylinderBetween(T, landingRailStart, landingRailEnd, 0.025, railMaterial.clone()));
+    root.add(cylinderBetween(T, landingRailStartFar, landingRailEndFar, 0.025, railMaterial.clone()));
+    for (const z of [0.02, -p.width - 0.02]) {
+      root.add(cylinderBetween(T,new T.Vector3(model.flightRun + landingLength, p.totalRise, z),new T.Vector3(model.flightRun + landingLength, p.totalRise + railHeight, z),0.018,railMaterial.clone()));
+    }
 
     const postEvery = Math.max(1, Math.floor(model.goings / 5));
     for (let index = 0; index <= model.goings; index += postEvery) {
