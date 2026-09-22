@@ -1,14 +1,52 @@
 {
-  "schemaVersion":"1.0.0","id":"sur-staff-holder","version":"0.2.0",
-  "title":"3D Leveling Staff Holder",
-  "description":"Articulated 3D surveyor holding a graduated leveling staff with explicit staff height, reading height, and verticality error.",
-  "category":"surveying","topics":["differential-leveling","leveling-staff","fieldwork","3d"],
-  "learningObjectives":["Visualize a leveling staff held vertically at a surveyed point.","Relate staff tilt to horizontal top offset and vertical projection in a real spatial scene."],
-  "kind":"component","renderer":"threejs","status":"in-review",
-  "entrypoint":"assets/surveying/sur-staff-holder/demo/index.html","readme":"assets/surveying/sur-staff-holder/README.md",
-  "previewImage":null,"reviewFile":"assets/surveying/sur-staff-holder/REVIEW.md","derivedFrom":null,"networkRequired":true,
-  "dependencies":[{"name":"three","version":"0.185.1","url":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","embedded":false}],
-  "rights":{"status":"cleared","licenseExpression":"MIT","licenseFile":"LICENSE","attribution":"Original LearnMat procedural geometry; no third-party models or textures."},
-  "verification":{"engineeringReview":"passed","browserReview":"not-reviewed","accessibilityReview":"not-reviewed","notes":"Rebuilt as real Three.js geometry. Tilt/projection model source-reviewed; live rendered browser/accessibility evidence remains pending."},
-  "source":{"type":"original","reference":"Reserved surveying queue task sur-staff-holder; 3D remediation of merged PR #8.","sha256":null}
+  "schemaVersion": "1.0.0",
+  "id": "sur-staff-holder",
+  "version": "0.2.0",
+  "title": "Leveling Staff Holder",
+  "description": "Articulated 3D surveyor holding a graduated leveling staff with explicit staff height, reading height, and verticality error.",
+  "category": "surveying",
+  "topics": [
+    "differential-leveling",
+    "leveling-staff",
+    "fieldwork",
+    "3d"
+  ],
+  "learningObjectives": [
+    "Visualize a leveling staff held vertically at a surveyed point.",
+    "Relate staff tilt to horizontal top offset and vertical projection in a real spatial scene."
+  ],
+  "kind": "component",
+  "renderer": "threejs",
+  "status": "in-review",
+  "entrypoint": "assets/surveying/sur-staff-holder/demo/index.html",
+  "readme": "assets/surveying/sur-staff-holder/README.md",
+  "previewImage": null,
+  "reviewFile": "assets/surveying/sur-staff-holder/REVIEW.md",
+  "derivedFrom": null,
+  "networkRequired": true,
+  "dependencies": [
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
+  ],
+  "rights": {
+    "status": "cleared",
+    "licenseExpression": "MIT",
+    "licenseFile": "LICENSE",
+    "attribution": "Original LearnMat procedural geometry; no third-party models or textures."
+  },
+  "verification": {
+    "engineeringReview": "passed",
+    "browserReview": "not-reviewed",
+    "accessibilityReview": "not-reviewed",
+    "notes": "Rebuilt as real Three.js geometry. Tilt/projection model source-reviewed; live rendered browser/accessibility evidence remains pending."
+  },
+  "source": {
+    "type": "original",
+    "reference": "Reserved surveying queue task sur-staff-holder; 3D remediation of merged PR #8.",
+    "sha256": null
+  }
 }
