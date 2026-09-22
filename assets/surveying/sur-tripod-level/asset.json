@@ -1,6 +1,6 @@
 {
   "schemaVersion":"1.0.0","id":"sur-tripod-level","version":"0.2.0",
-  "title":"3D Surveying Tripod and Level",
+  "title":"Surveying Tripod and Level",
   "description":"Detailed procedural 3D tripod and level with explicit instrument height, spatial sight axis, surveying azimuth, and sight elevation.",
   "category":"surveying","topics":["differential-leveling","surveying-instrument","line-of-sight","3d"],
   "learningObjectives":["Identify the optical-axis height and major components of a mounted level.","Interpret surveying azimuth clockwise from north and sight elevation in the LearnMat 3D coordinate basis."],

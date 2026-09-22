@@ -1,6 +1,6 @@
 {
   "schemaVersion":"1.0.0","id":"sur-tape-team","version":"0.2.0",
-  "title":"3D Surveying Tape Team",
+  "title":"Surveying Tape Team",
   "description":"Two-person 3D tape-handling field scene comparing a straight reference with the physically computed catenary.",
   "category":"surveying","topics":["taping","distance-measurement","sag","fieldwork","3d"],
   "learningObjectives":["Distinguish horizontal endpoint span from the curved length of a sagging tape.","Relate tape mass and horizontal tension to the actual 3D catenary sag."],

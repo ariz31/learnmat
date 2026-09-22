@@ -1,6 +1,6 @@
 {
   "schemaVersion":"1.0.0","id":"sur-ranging-rod","version":"0.2.0",
-  "title":"3D Ranging Rod Alignment",
+  "title":"Ranging Rod Alignment",
   "description":"Spatial surveying scene with observer, intermediate ranging rod, distant target, line of sight, station distance, and cross-track error.",
   "category":"surveying","topics":["ranging","line-of-sight","distance-measurement","fieldwork","3d"],
   "learningObjectives":["Identify whether an intermediate ranging rod lies on the straight observer-target line.","Interpret cross-track error and alignment tolerance in actual 3D field coordinates."],

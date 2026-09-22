@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "bld-building-envelope",
   "version": "0.2.0",
-  "title": "Parametric Building Envelope — 3D",
+  "title": "Parametric Building Envelope",
   "description": "Real Three.js building shell with dimensional floor plates, facade bays, true opening geometry, glazing, and a spatial cutaway.",
   "category": "buildings",
   "topics": ["building-envelope", "building-geometry", "architectural-visualization", "3d"],

@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "bld-staircase",
   "version": "0.2.0",
-  "title": "Parametric Staircase Geometry — 3D",
+  "title": "Parametric Staircase Geometry",
   "description": "Real Three.js straight-flight stair whose riser height, going count, run, width, and geometric pitch are driven by one deterministic model.",
   "category": "buildings",
   "topics": ["staircase-geometry", "rise-and-going", "building-circulation", "3d"],

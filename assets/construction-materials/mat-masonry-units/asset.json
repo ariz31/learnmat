@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "mat-masonry-units",
   "version": "0.2.0",
-  "title": "Masonry units and bond — 3D",
+  "title": "Masonry Units and Bond",
   "description": "Procedural hollow masonry units constructed from shells/webs with open through-voids and a 3D running-bond wall fragment.",
   "category": "construction-materials",
   "topics": [

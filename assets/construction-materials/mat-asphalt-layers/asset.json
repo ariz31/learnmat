@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "mat-asphalt-layers",
   "version": "0.2.0",
-  "title": "Asphalt layered sample — 3D",
+  "title": "Asphalt Layered Sample",
   "description": "Exploded real-3D layered asphalt slab/core specimen with procedural aggregate cues and authoritative thickness/volume calculations.",
   "category": "construction-materials",
   "topics": [

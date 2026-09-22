@@ -1,6 +1,6 @@
 {
   "schemaVersion":"1.0.0","id":"sur-prism-pole","version":"0.2.0",
-  "title":"3D Prism Pole Carrier",
+  "title":"Prism Pole Carrier",
   "description":"Articulated 3D surveyor with striped prism pole, volumetric reflector target, target height, and pole verticality error.",
   "category":"surveying","topics":["total-station","prism-pole","target-height","verticality","3d"],
   "learningObjectives":["Identify prism target height from ground point to reflector center.","Relate pole tilt to horizontal target offset and reduced vertical projection in 3D."],

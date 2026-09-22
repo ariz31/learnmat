@@ -1,6 +1,6 @@
 {
   "schemaVersion":"1.0.0","id":"sur-staff-holder","version":"0.2.0",
-  "title":"3D Leveling Staff Holder",
+  "title":"Leveling Staff Holder",
   "description":"Articulated 3D surveyor holding a graduated leveling staff with explicit staff height, reading height, and verticality error.",
   "category":"surveying","topics":["differential-leveling","leveling-staff","fieldwork","3d"],
   "learningObjectives":["Visualize a leveling staff held vertically at a surveyed point.","Relate staff tilt to horizontal top offset and vertical projection in a real spatial scene."],
