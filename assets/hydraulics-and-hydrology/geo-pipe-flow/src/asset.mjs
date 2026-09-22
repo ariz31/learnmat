@@ -29,10 +29,11 @@ export function createAsset(context={}){
   addMesh(new T.TubeGeometry(curve,96,.38,24,false),steel);
   addMesh(new T.TubeGeometry(curve,96,.255,20,false),water);
   for(const u of [.02,.31,.67,.97]){
-    const p=curve.getPointAt(u),tan=curve.getTangentAt(u);
-    const ring=addMesh(new T.TorusGeometry(.48,.075,10,32),dark);
-    ring.position.copy(p);
-    ring.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),tan.clone().normalize());
+    const p=curve.getPointAt(u),tan=curve.getTangentAt(u).normalize();
+    const q=new T.Quaternion().setFromUnitVectors(new T.Vector3(0,0,1),tan);
+    const ring=addMesh(new T.TorusGeometry(.48,.075,12,40),dark);ring.position.copy(p);ring.quaternion.copy(q);
+    const normal=new T.Vector3(0,1,0).applyQuaternion(q),binormal=new T.Vector3(1,0,0).applyQuaternion(q);
+    for(let i=0;i<8;i++){const a=i*Math.PI/4,bolt=addMesh(new T.CylinderGeometry(.032,.032,.12,12),dark);bolt.position.copy(p).addScaledVector(normal,Math.cos(a)*.40).addScaledVector(binormal,Math.sin(a)*.40);bolt.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),tan);}
   }
   for(const u of [.22,.76]){
     const p=curve.getPointAt(u);
@@ -40,7 +41,7 @@ export function createAsset(context={}){
     const gauge=addMesh(new T.CylinderGeometry(.24,.24,.11,32),basic({color:0xe8f2f4,metalness:.2,roughness:.38}));
     gauge.rotation.x=Math.PI/2;gauge.position.set(p.x,p.y+.88,p.z);
     const face=addMesh(new T.CylinderGeometry(.19,.19,.012,32),basic({color:0x10232c,roughness:.32}));
-    face.rotation.x=Math.PI/2;face.position.set(p.x,p.y+.88,p.z+.061);
+    face.rotation.x=Math.PI/2;face.position.set(p.x,p.y+.88,p.z+.061);const rim=addMesh(new T.TorusGeometry(.205,.018,10,32),dark);rim.position.set(p.x,p.y+.88,p.z+.071);const needle=addMesh(new T.BoxGeometry(.012,.14,.008),amber);needle.position.set(p.x,p.y+.91,p.z+.078);needle.rotation.z=-.62;
   }
   const p0=curve.getPointAt(.08),p1=curve.getPointAt(.9);
   const hScale=2.8;
