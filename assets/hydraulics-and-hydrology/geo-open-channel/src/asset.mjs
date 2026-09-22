@@ -18,9 +18,9 @@ export function createAsset(context={}){
    const floor=mesh(new T.BoxGeometry(L,.18,b+wallT*2),concrete);floor.position.y=-.09;
    const left=mesh(new T.BoxGeometry(L,wallH,wallT),concrete);left.position.set(0,wallH/2-wallT/2,-b/2-wallT/2);
    const right=mesh(new T.BoxGeometry(L,wallH,wallT),concrete);right.position.set(0,wallH/2-wallT/2,b/2+wallT/2);
-   const waterBody=mesh(new T.BoxGeometry(L-.28,y,b-.05),water);waterBody.position.y=y/2+.015;waterBody.castShadow=false;
-   const staff=mesh(new T.CylinderGeometry(.045,.045,wallH+.8,14),dark);staff.position.set(-2.4,(wallH+.8)/2,-b/2-.38);
-   for(let i=0;i<8;i++){const band=mesh(new T.CylinderGeometry(.055,.055,.045,14),i%2?cyan:amber);band.position.set(-2.4,.18+i*(wallH+.45)/8,-b/2-.38)}
+   const waterBody=mesh(new T.BoxGeometry(L-.28,y,b-.05),water);waterBody.position.y=y/2+.015;waterBody.castShadow=false;const surface=mesh(new T.BoxGeometry(L-.22,.018,b-.02),water);surface.position.y=y+.025;surface.castShadow=false;surface.material=water;for(const x of[-2.5,0,2.5]){const joint=mesh(new T.BoxGeometry(.035,.19,b+wallT*2+.03),dark);joint.position.set(x,-.075,0);joint.material.transparent=true;joint.material.opacity=.42}
+   const staff=mesh(new T.BoxGeometry(.085,wallH+.8,.035),new T.MeshStandardMaterial({color:0xf2f0e7,roughness:.68}));staff.position.set(-2.4,(wallH+.8)/2,-b/2-.38);
+   for(let i=0;i<12;i++){const major=i%3===0,w=major?.105:.072;const band=mesh(new T.BoxGeometry(w,.025,.042),i%2?cyan:amber);band.position.set(-2.4+(w-.085)/2,.12+i*(wallH+.58)/12,-b/2-.358)}
    const pgeo=new T.SphereGeometry(.055,10,8);ownedGeometries.push(pgeo);
    for(let lane=0;lane<5;lane++)for(let i=0;i<9;i++){const p=new T.Mesh(pgeo,cyan);p.castShadow=false;dynamic.add(p);particles.push({mesh:p,lane,i,b,L,y});}
    const slopeRise=clamp(parameters.bedSlope*28*L,0,.8);const pts=[new T.Vector3(-L/2,-.18,-b/2-.75),new T.Vector3(L/2,-.18-slopeRise,-b/2-.75)];
