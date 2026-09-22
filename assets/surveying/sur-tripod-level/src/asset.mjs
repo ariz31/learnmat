@@ -14,7 +14,7 @@ export function createAsset(context={}){
  const station=mesh(T,new T.CylinderGeometry(.075,.09,.025,24),material(T,0xe7e1cf,.9));station.position.y=.0125;root.add(station);
  const head=mesh(T,new T.CylinderGeometry(.18,.21,.12,28),yellow);root.add(head);
  const feet=[],legs=[],innerLegs=[],clamps=[];
- for(let i=0;i<3;i++){const leg=mesh(T,new T.CylinderGeometry(.036,.044,1,16),yellow);root.add(leg);legs.push(leg);const inner=mesh(T,new T.CylinderGeometry(.024,.028,1,16),aluminum);root.add(inner);innerLegs.push(inner);const clamp=mesh(T,new T.CylinderGeometry(.05,.05,.08,18),dark);root.add(clamp);clamps.push(clamp);const foot=mesh(T,new T.ConeGeometry(.055,.18,16),rubber);root.add(foot);feet.push(foot)}
+ for(let i=0;i<3;i++){const leg=mesh(T,new T.CylinderGeometry(.036,.044,1,16),yellow);root.add(leg);legs.push(leg);const inner=mesh(T,new T.CylinderGeometry(.024,.028,1,16),aluminum);root.add(inner);innerLegs.push(inner);const clamp=mesh(T,new T.CylinderGeometry(.05,.05,1,18),dark);root.add(clamp);clamps.push(clamp);const foot=mesh(T,new T.ConeGeometry(.055,.18,16),rubber);root.add(foot);feet.push(foot)}
  const instrument=new T.Group();root.add(instrument);
  const tribrach=mesh(T,new T.CylinderGeometry(.19,.19,.10,32),dark);tribrach.position.y=-.28;instrument.add(tribrach);
  const circle=mesh(T,new T.TorusGeometry(.18,.012,12,40),aluminum);circle.rotation.x=PI/2;circle.position.y=-.22;instrument.add(circle);
