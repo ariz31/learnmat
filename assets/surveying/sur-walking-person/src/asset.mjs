@@ -21,6 +21,7 @@ function makeHuman(T){
   const hips=new T.Mesh(new T.BoxGeometry(.34,.18,.24),trouser); hips.castShadow=true; pelvis.add(hips);
   const torso=new T.Mesh(new T.BoxGeometry(.48,.62,.28),fabric); torso.position.y=.38; torso.castShadow=true; pelvis.add(torso);
   const vestMesh=new T.Mesh(new T.BoxGeometry(.51,.42,.30),vest); vestMesh.position.y=.39; vestMesh.castShadow=true; pelvis.add(vestMesh);
+  const reflective=mat(T,0xf5f5e8,.38,.08);for(const y of[.31,.48]){const strip=new T.Mesh(new T.BoxGeometry(.525,.035,.312),reflective);strip.position.y=y;strip.castShadow=true;pelvis.add(strip);}
   const neck=new T.Mesh(new T.CylinderGeometry(.075,.075,.12,12),skin); neck.position.y=.75; pelvis.add(neck);
   const head=new T.Mesh(new T.SphereGeometry(.15,20,16),skin); head.position.y=.91; head.castShadow=true; pelvis.add(head);
   const brim=new T.Mesh(new T.CylinderGeometry(.19,.19,.035,24),hardhat); brim.position.y=1.055; pelvis.add(brim);
@@ -30,10 +31,12 @@ function makeHuman(T){
     const joint=new T.Group(); joint.position.set(x,y,z); joint.add(cylinder(T,r,len,material)); pelvis.add(joint); return joint;
   }
   const leftLeg=limb(-.12,-.02,0,.82,.075,trouser), rightLeg=limb(.12,-.02,0,.82,.075,trouser);
-  const leftArm=limb(-.31,.64,0,.60,.055,skin), rightArm=limb(.31,.64,0,.60,.055,skin);
-  const leftBoot=new T.Mesh(new T.BoxGeometry(.15,.10,.29),boot); leftBoot.position.set(-.12,.06,.08); root.add(leftBoot);
-  const rightBoot=leftBoot.clone(); rightBoot.position.x=.12; root.add(rightBoot);
-  root.userData={pelvis,leftLeg,rightLeg,leftArm,rightArm,leftBoot,rightBoot};
+  const leftArm=limb(-.31,.64,0,.43,.06,fabric), rightArm=limb(.31,.64,0,.43,.06,fabric);
+  function forearm(parent,side){const joint=new T.Group();joint.position.y=-.40;joint.rotation.z=side*.18;const arm=cylinder(T,.05,.34,skin);joint.add(arm);const hand=new T.Mesh(new T.SphereGeometry(.065,16,12),skin);hand.position.y=-.35;hand.castShadow=true;joint.add(hand);parent.add(joint);return joint;}
+  const leftFore=forearm(leftArm,-1),rightFore=forearm(rightArm,1);
+  const leftBoot=new T.Mesh(new T.BoxGeometry(.15,.10,.29),boot); leftBoot.position.set(0,-.82,.08);leftBoot.castShadow=true;leftLeg.add(leftBoot);
+  const rightBoot=leftBoot.clone();rightBoot.position.set(0,-.82,.08);rightLeg.add(rightBoot);
+  root.userData={pelvis,leftLeg,rightLeg,leftArm,rightArm,leftFore,rightFore,leftBoot,rightBoot};
   return root;
 }
 function disposeObject(obj){
@@ -65,6 +68,7 @@ export function createAsset(context={}){
     const u=person.userData;
     u.leftLeg.rotation.z=swing; u.rightLeg.rotation.z=-swing;
     u.leftArm.rotation.z=-swing*.82; u.rightArm.rotation.z=swing*.82;
+    u.leftFore.rotation.z=-.16-Math.max(0,swing)*.18;u.rightFore.rotation.z=.16+Math.max(0,-swing)*.18;
     u.pelvis.position.y=.92+(walking?Math.abs(Math.sin(s.phase))*0.018:0);
     path.scale.x=Math.max(.001,params.pathLength/scale); path.position.x=(params.pathLength/2)/scale;
     startMarker.position.x=0; endMarker.position.x=params.pathLength/scale;
