@@ -16,9 +16,9 @@ export function createAsset(context){
   clearGroup(root);const s=solveBeam(parameters),m=premiumMaterials(THREE),L=parameters.spanM,half=L/2;
   const y0=1.0,z0=0,maxV=Math.abs(s.maxDeflectionM);const vex=maxV>0?Math.min(120,Math.max(1,.78/maxV)):1;
   const ghost=new THREE.Mesh(new THREE.BoxGeometry(L,.16,.34),m.ghost);ghost.position.set(0,y0,z0);root.add(ghost);
-  const segs=40;
-  for(let i=0;i<segs;i++){const xa=-half+L*i/segs,xb=-half+L*(i+1)/segs;const ra=beamResponseAt(xa+half,parameters),rb=beamResponseAt(xb+half,parameters);const a=new THREE.Vector3(xa,y0+ra.deflectionM*vex,z0),b=new THREE.Vector3(xb,y0+rb.deflectionM*vex,z0);root.add(makeBoxBetween(THREE,a,b,.2,.38,m.steel));}
-  pinSupport(THREE,m,-half,root);rollerSupport(THREE,m,half,root);
+  const segs=80;
+  for(let i=0;i<segs;i++){const xa=-half+L*i/segs,xb=-half+L*(i+1)/segs;const ra=beamResponseAt(xa+half,parameters),rb=beamResponseAt(xb+half,parameters);const a=new THREE.Vector3(xa,y0+ra.deflectionM*vex,z0),b=new THREE.Vector3(xb,y0+rb.deflectionM*vex,z0);root.add(makeBoxBetween(THREE,a,b,.2,.38,m.steel));if(i%8===0){const seam=makeBoxBetween(THREE,a.clone().add(new THREE.Vector3(0,.103,0)),b.clone().add(new THREE.Vector3(0,.103,0)),.012,.392,m.dark);root.add(seam)}}
+  pinSupport(THREE,m,-half,root);rollerSupport(THREE,m,half,root);for(const x of[-half,half]){const bearing=new THREE.Mesh(new THREE.BoxGeometry(.72,.055,.62),m.dark);bearing.position.set(x,.60,0);bearing.castShadow=true;root.add(bearing)}
   if(parameters.loadN>0){root.add(makeArrow(THREE,new THREE.Vector3(0,2.8,.15),new THREE.Vector3(0,1.22,.15),0xb54a4a));root.add(makeArrow(THREE,new THREE.Vector3(-half,.54,.22),new THREE.Vector3(-half,1.5,.22),0x007d80));root.add(makeArrow(THREE,new THREE.Vector3(half,.54,.22),new THREE.Vector3(half,1.5,.22),0x007d80));}
   const loadLabel=makeLabelSprite(THREE,'P = '+(parameters.loadN/1000).toFixed(1)+' kN',{color:'#8d3333',scale:.72});loadLabel.position.set(0,3.05,.15);root.add(loadLabel);
   const shearPts=[],momentPts=[];const Vmax=Math.max(Math.abs(s.reactionsN.left),1),Mmax=Math.max(Math.abs(s.maxMomentNm),1);
