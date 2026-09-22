@@ -180,6 +180,14 @@ export function createAsset(context = {}) {
             material: { transparent: true, opacity: 0.48 }
           }
         );
+        const frame = Math.max(0.025, Math.min(0.055, p.openingWidth * 0.025));
+        const frameZ = wallThickness * 0.60 + glassDepth * 0.55;
+        const frameColor = 0x435963;
+        addBox(p.openingWidth, frame, glassDepth * 1.35, centerX, openingBottom + frame / 2, frameZ, frameColor, { roughness: 0.34, metalness: 0.52, edgeOpacity: 0.12 });
+        addBox(p.openingWidth, frame, glassDepth * 1.35, centerX, openingBottom + p.openingHeight - frame / 2, frameZ, frameColor, { roughness: 0.34, metalness: 0.52, edgeOpacity: 0.12 });
+        addBox(frame, p.openingHeight, glassDepth * 1.35, centerX - p.openingWidth / 2 + frame / 2, openingCenterY, frameZ, frameColor, { roughness: 0.34, metalness: 0.52, edgeOpacity: 0.12 });
+        addBox(frame, p.openingHeight, glassDepth * 1.35, centerX + p.openingWidth / 2 - frame / 2, openingCenterY, frameZ, frameColor, { roughness: 0.34, metalness: 0.52, edgeOpacity: 0.12 });
+        if (p.openingWidth > 0.9) addBox(frame * 0.82, p.openingHeight - frame * 2, glassDepth * 1.4, centerX, openingCenterY, frameZ + 0.002, frameColor, { roughness: 0.34, metalness: 0.52, edgeOpacity: 0.08 });
       }
     }
 
