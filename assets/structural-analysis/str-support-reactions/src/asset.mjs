@@ -80,6 +80,7 @@ export function createAsset(context){
     root.add(cap);
     addEdges(THREE,root,cap,0xb7d3cf,.26);
 
+    const groundPlate=new THREE.Mesh(new THREE.BoxGeometry(2.25,.08,1.8),m.concrete);groundPlate.position.set(0,.04,0);groundPlate.receiveShadow=true;root.add(groundPlate);addEdges(THREE,root,groundPlate,0xffffff,.14);
     if(s.supportType==='pin'){
       const body=new THREE.Mesh(new THREE.ConeGeometry(.58,.78,4,1,false,Math.PI/4),m.concrete);
       body.position.set(0,.66,0);
@@ -91,6 +92,7 @@ export function createAsset(context){
       hinge.position.set(0,1.08,0);
       hinge.castShadow=true;
       root.add(hinge);
+      for(const z of[-.34,.34]){const keeper=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.07,28),m.dark);keeper.rotation.x=Math.PI/2;keeper.position.set(0,1.08,z);keeper.castShadow=true;root.add(keeper);}
     }else if(s.supportType==='roller'){
       const block=new THREE.Mesh(new THREE.BoxGeometry(1.05,.32,.82),m.concrete);
       block.position.set(0,.82,0);
@@ -121,6 +123,7 @@ export function createAsset(context){
         rib.position.set(.18,.63,z);
         root.add(rib);
       }
+      for(const y of[.24,.62,1.0])for(const z of[-.48,.48]){const anchor=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,.58,18),m.bolt);anchor.rotation.z=Math.PI/2;anchor.position.set(.12,y,z);anchor.castShadow=true;root.add(anchor);}
     }
 
     const reactionPoint=new THREE.Vector3(0,1.42,.42);
