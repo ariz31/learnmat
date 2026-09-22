@@ -51,7 +51,7 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}.app,.stage
 <div class="caption"><div class="eyebrow">Educational figure</div><h2>Read restraint conditions spatially before solving equilibrium.</h2><p>Leader annotations are projected from the 3D model, ordered by anchor elevation, and automatically separated to keep the callout field readable while the camera moves.</p></div>
 <div class="transport">THREE.JS 0.185.1 · SCREEN-SPACE LEADER ANNOTATIONS · SI MODEL · CANDIDATE REVIEW STATE</div>
 </main></div>
-<script type="module">
+<script type="module">import {fitSceneToView, getFitPose} from '../../../../shared/fit-camera.mjs';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createAsset} from '../src/asset.mjs';
@@ -69,7 +69,7 @@ renderer.setPixelRatio(Math.min(devicePixelRatio||1,2.5));renderer.shadowMap.ena
 host.insertBefore(renderer.domElement,annotationLayer);
 
 const orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=true;orbit.dampingFactor=.075;orbit.enablePan=true;orbit.screenSpacePanning=true;orbit.minDistance=2;orbit.maxDistance=60;orbit.maxPolarAngle=Math.PI*.49;
-function resetCamera(){camera.position.set(6.7,4.8,7.8);orbit.target.set(.48,1.15,0);orbit.update();}resetCamera();
+function resetCamera(){fitSceneToView({THREE,scene,camera,controls:orbit,roots:assetRoots(),direction:new THREE.Vector3(1,.68,1),padding:1.32})}
 
 scene.add(new THREE.HemisphereLight(0xf7f7ef,0x66736d,1.7));
 const sun=new THREE.DirectionalLight(0xffffff,2.35);sun.position.set(8,14,10);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=18;sun.shadow.camera.bottom=-18;scene.add(sun);
@@ -77,7 +77,7 @@ const fill=new THREE.DirectionalLight(0xbfd8d3,.65);fill.position.set(-9,6,-8);s
 const ground=new THREE.Mesh(new THREE.PlaneGeometry(70,70),new THREE.MeshStandardMaterial({color:0xe1e1d8,roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-.72;ground.receiveShadow=true;scene.add(ground);
 const grid=new THREE.GridHelper(36,36,0xb6c0b8,0xd5d8d1);grid.position.y=-.705;grid.material.transparent=true;grid.material.opacity=.24;scene.add(grid);
 
-const asset=createAsset({container:host,THREE,scene,seed:1,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
+const assetSceneChildren=new Set(scene.children);const asset=createAsset({container:host,THREE,scene,seed:1,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});const assetRoots=()=>scene.children.filter(child=>!assetSceneChildren.has(child));
 let annotationNodes=[];
 
 function svgElement(name,className){
@@ -242,7 +242,7 @@ function resize(){
   layoutAnnotations();
 }
 new ResizeObserver(resize).observe(host);
-resize();sync();
+resize();sync();resetCamera();
 
 function frame(t){
   orbit.update();

@@ -36,3 +36,7 @@
 
 ## Decision
 Integrated candidate only. The replacement addresses the requested real-3D quality direction without fabricating screenshot, browser, accessibility, or approval evidence.
+
+## Camera framing update — 2026-09-22
+
+The demo now uses model-only bounds for explicit Overview/Camera fitting and preserves the chosen view during ordinary parameter changes. Geometry-only checks and remaining live visual review gates are recorded in [the framing review](../../../docs/VISUALIZATION-FRAMING-REVIEW.md). This update does not change engineering or rights status.

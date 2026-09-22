@@ -71,6 +71,7 @@ def copy_file(source: Path, destination: Path) -> None:
 def copy_site_shell() -> None:
     for name in ("index.html", "styles.css", "app.js", "favicon.svg"):
         copy_file(safe_repo_file(f"site/{name}"), DIST / name)
+    copy_file(safe_repo_file("shared/fit-camera.mjs"), DIST / "shared/fit-camera.mjs")
 
 
 def should_publish_runtime_file(relative_to_asset: Path) -> bool:

@@ -13,3 +13,7 @@ The component requires host Three.js r185 and host scene/time. It creates no ren
 
 ## Pending rendered gate
 No WebGL browser was available through this repository connector execution. Surveying-reference pixel-level comparison and assistive-technology review therefore remain pending rather than being fabricated.
+
+## Camera framing update — 2026-09-22
+
+The demo now uses model-only bounds for explicit Overview/Camera fitting and preserves the chosen view during ordinary parameter changes. Geometry-only checks and remaining live visual review gates are recorded in [the framing review](../../../docs/VISUALIZATION-FRAMING-REVIEW.md). This update does not change engineering or rights status.

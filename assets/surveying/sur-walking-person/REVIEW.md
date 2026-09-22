@@ -25,3 +25,7 @@ Procedural original geometry only; Three.js is a declared external runtime depen
 
 ## Decision
 Remain in-review until live browser, responsive, accessibility, and captured visual evidence are completed.
+
+## Camera framing update — 2026-09-22
+
+The demo now uses model-only bounds for explicit Overview/Camera fitting and preserves the chosen view during ordinary parameter changes. Geometry-only checks and remaining live visual review gates are recorded in [the framing review](../../../docs/VISUALIZATION-FRAMING-REVIEW.md). This update does not change engineering or rights status.

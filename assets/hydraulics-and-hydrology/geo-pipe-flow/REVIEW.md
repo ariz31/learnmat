@@ -17,3 +17,7 @@ The component requires host Three.js r185 and a host-owned scene. It creates an 
 ## Remaining independent gate
 
 This source replacement was implemented through the repository connector. No browser/WebGL session was available in this execution context to capture a real rendered screenshot or establish pixel-level parity with the surveying references. The asset therefore remains candidate and its spatial/visual evidence is recorded as pending rather than fabricated.
+
+## Camera framing update — 2026-09-22
+
+The demo now uses model-only bounds for explicit Overview/Camera fitting and preserves the chosen view during ordinary parameter changes. Geometry-only checks and remaining live visual review gates are recorded in [the framing review](../../../docs/VISUALIZATION-FRAMING-REVIEW.md). This update does not change engineering or rights status.

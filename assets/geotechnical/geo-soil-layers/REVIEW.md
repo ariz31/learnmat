@@ -5,3 +5,7 @@ The validated layer-integration and hydrostatic pore-pressure model remains unch
 The previous flat profile is replaced by a cutaway 3D soil block with stacked strata, water-table plane, query-depth probe, pulsing spatial marker, stress vectors, depth, occlusion, camera presets, lighting/shadows, step teaching, responsive HUD and focus mode. Stress-arrow lengths are expressly normalized and are not measurements.
 
 No browser/WebGL rendering was available via the repository connector, so surveying-reference visual parity and assistive-technology review remain pending.
+
+## Camera framing update — 2026-09-22
+
+The demo now uses model-only bounds for explicit Overview/Camera fitting and preserves the chosen view during ordinary parameter changes. Geometry-only checks and remaining live visual review gates are recorded in [the framing review](../../../docs/VISUALIZATION-FRAMING-REVIEW.md). This update does not change engineering or rights status.

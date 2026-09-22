@@ -36,3 +36,7 @@ The 0.2.0 visual rebuild does not replace or loosen the independent analytical c
 ## Decision
 
 Candidate only. The redesign materially raises visual fidelity but does not self-approve engineering, browser, or accessibility release gates.
+
+## Camera framing update — 2026-09-22
+
+The demo now uses model-only bounds for explicit Overview/Camera fitting and preserves the chosen view during ordinary parameter changes. Geometry-only checks and remaining live visual review gates are recorded in [the framing review](../../../docs/VISUALIZATION-FRAMING-REVIEW.md). This update does not change engineering or rights status.

@@ -12,6 +12,10 @@
 One HTML file is not evidence of offline operation. None of the supplied examples
 has a verified offline claim. The pace-factor and profile-leveling sources declare
 remote Three.js imports. Do not replace dependency versions opportunistically.
+Curated demo pages also import their asset source and
+`shared/fit-camera.mjs` from the repository root. Copy both paths when
+packaging a demo outside the built viewer; the component `src/asset.mjs` API
+itself does not depend on the camera helper.
 
 ## AI or developer reuse workflow
 

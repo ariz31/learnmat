@@ -21,7 +21,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 <section class="stage"><div id="threeHost"></div><div class="hud"><div class="hud-card"><b>Masonry units — 3D</b><span id="stateLabel">Interactive 3D specimen</span></div><div class="metrics" id="metrics"></div></div>
 <div class="tools"><button class="btn" id="play" type="button">Pause</button><button class="btn" id="home" type="button">Camera</button><button class="btn" id="reset" type="button">Reset</button><button class="btn primary" id="focus" type="button" aria-pressed="false">Focus</button></div>
 <div class="badge"><strong>3D inspection:</strong> drag to orbit · wheel/pinch to zoom · visual material detail is illustrative, not a measured property.</div></section></div></main>
-<script type="module">
+<script type="module">import {fitSceneToView, getFitPose} from '../../../../shared/fit-camera.mjs';
 import * as THREE from 'three';import{OrbitControls}from'three/addons/controls/OrbitControls.js';import{createAsset}from'../src/asset.mjs';
 const q=s=>document.querySelector(s),host=q('#threeHost'),app=q('#app'),metrics=q('#metrics'),playBtn=q('#play');
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;host.append(renderer.domElement);
@@ -30,16 +30,17 @@ const camera=new THREE.PerspectiveCamera(42,1,.01,20);const homePos=new THREE.Ve
 const controls3d=new OrbitControls(camera,renderer.domElement);controls3d.enableDamping=true;controls3d.dampingFactor=.065;controls3d.minDistance=.35;controls3d.maxDistance=4.8;controls3d.target.copy(homeTarget);
 scene.add(new THREE.HemisphereLight(0xbfe9ff,0x26313b,1.7));const key=new THREE.DirectionalLight(0xffffff,3.2);key.position.set(2.4,3.8,2.3);key.castShadow=true;key.shadow.mapSize.set(2048,2048);scene.add(key);const rim=new THREE.DirectionalLight(0x5edcff,1.25);rim.position.set(-2,1.5,-2.3);scene.add(rim);
 const floorMat=new THREE.MeshStandardMaterial({color:0x0b1a27,roughness:.82,metalness:.05});const floor=new THREE.Mesh(new THREE.CircleGeometry(3.5,96),floorMat);floor.rotation.x=-Math.PI/2;floor.position.y=-.012;floor.receiveShadow=true;scene.add(floor);
-const asset=createAsset({container:host,seed:20260922,reducedMotion:matchMedia('(prefers-reduced-motion:reduce)').matches,three:THREE,scene});
+const assetSceneChildren=new Set(scene.children);const asset=createAsset({container:host,seed:20260922,reducedMotion:matchMedia('(prefers-reduced-motion:reduce)').matches,three:THREE,scene});const assetRoots=()=>scene.children.filter(child=>!assetSceneChildren.has(child));
+function fit(){fitSceneToView({THREE,scene,camera,controls:controls3d,roots:assetRoots(),direction:homePos.clone().sub(homeTarget),padding:1.35})}
 function apply(){try{asset.setParameters({view:q('#view').value});refresh();}catch(error){q('#stateLabel').textContent=error.message;}}
 function refresh(){const s=asset.snapshot();const g=s.state.geometry;metrics.innerHTML='<span class="metric">Gross <strong>'+ (g.grossVolumeM3*1000).toFixed(2)+' L</strong></span><span class="metric">Solid <strong>'+ (g.netSolidVolumeM3*1000).toFixed(2)+' L</strong></span><span class="metric">Voids <strong>'+g.voidCount+'</strong></span>';q('#stateLabel').textContent=s.parameters.view==='unit'?'Open through-void specimen':'Schematic running-bond fragment';}
 q('.panel').addEventListener('input',apply);q('#reset').addEventListener('click',()=>{asset.reset();document.querySelectorAll('[data-default]').forEach(el=>{if(el.type==='checkbox')el.checked=el.dataset.default==='true';else el.value=el.dataset.default;});apply();});
-q('#home').addEventListener('click',()=>{camera.position.copy(homePos);controls3d.target.copy(homeTarget);controls3d.update();});
+q('#home').addEventListener('click',fit);
 q('#focus').addEventListener('click',()=>{const active=!app.classList.contains('focus');app.classList.toggle('focus',active);q('#focus').textContent=active?'Exit':'Focus';q('#focus').setAttribute('aria-pressed',String(active));setTimeout(resize,0);});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&app.classList.contains('focus'))q('#focus').click();});
 let playing=true,simTime=0,last=performance.now();playBtn.addEventListener('click',()=>{playing=!playing;playBtn.textContent=playing?'Pause':'Play';});
 function resize(){const r=host.getBoundingClientRect();if(r.width<2||r.height<2)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();asset.resize(r.width,r.height,renderer.getPixelRatio());}
-new ResizeObserver(resize).observe(host);resize();apply();
+new ResizeObserver(resize).observe(host);resize();apply();fit();
 function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(playing)simTime+=dt;asset.update(simTime);controls3d.update();renderer.render(scene,camera);requestAnimationFrame(frame)}requestAnimationFrame(frame);
 addEventListener('beforeunload',()=>{asset.dispose();renderer.dispose();floor.geometry.dispose();floorMat.dispose();controls3d.dispose();},{once:true});
 </script></body></html>
