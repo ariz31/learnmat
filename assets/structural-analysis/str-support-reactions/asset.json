@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
   "id": "str-support-reactions",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "title": "Support reactions and restraints",
-  "description": "Three.js component comparing pin, roller, and fixed support restraints with spatial reaction vectors and ordered collision-managed leader annotations.",
+  "description": "Three.js component comparing pin, roller, and fixed support restraints with ordered leader annotations and minimalist progressive controls.",
   "category": "structural-analysis",
   "topics": [
     "support-reactions",
@@ -42,7 +42,7 @@
     "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "0.3.0 adds ordered screen-space leader annotations driven by semantic 3D anchors while preserving the analytical support model. Independent engineering, live-browser, and accessibility review remain required before approval."
+    "notes": "0.3.1 keeps the ordered leader system while removing redundant visualization text and making parameters and scene commands default-collapsed. Independent engineering, live-browser, and accessibility review remain required before approval."
   },
   "source": {
     "type": "original",

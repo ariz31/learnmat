@@ -1,6 +1,6 @@
 # Asset review
 
-- Asset ID and version: str-support-reactions 0.3.0
+- Asset ID and version: str-support-reactions 0.3.1
 - Reviewer and review date: annotation remediation self-review, 2026-09-22
 - Environment/browser/device/viewport: source review; Vercel/browser observation required before promotion
 - Dependencies: Three.js 0.185.1 declared as a non-embedded peer
@@ -23,6 +23,15 @@ The annotation remediation does not alter the analytical model. Each leader anch
 - A collision-spacing pass and overflow correction keep labels separated inside the viewport.
 - Typography, label width, elbow spacing, and endpoint dots scale with viewport width and camera distance.
 - Reaction, moment, and neutral support annotations use distinct but restrained visual accents.
+
+## Progressive disclosure
+
+- Redundant “3D Structural visualization” text is removed.
+- Parameters are hidden by default and revealed with a native button carrying `aria-expanded` / `aria-controls`.
+- Camera reset, model reset, and Focus view are hidden by default inside the visualization’s Options menu.
+- The Options trigger remains inside the 3D viewport in Focus view so the learner can still reset the camera/model or exit focus.
+- Clicking outside the menu or pressing Escape closes it.
+- The live response/readout remains visible independently from editable parameters.
 
 ## Browser and functionality
 
