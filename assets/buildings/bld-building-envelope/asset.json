@@ -5,12 +5,7 @@
   "title": "Parametric Building Envelope",
   "description": "Real Three.js building shell with dimensional floor plates, facade bays, true opening geometry, glazing, and a spatial cutaway.",
   "category": "buildings",
-  "topics": [
-    "building-envelope",
-    "building-geometry",
-    "architectural-visualization",
-    "3d"
-  ],
+  "topics": ["building-envelope", "building-geometry", "architectural-visualization", "3d"],
   "learningObjectives": [
     "Relate building width, depth, floor count, and floor-to-floor height to the resulting 3D envelope.",
     "Inspect facade bay spacing, opening dimensions, sill height, and floor elevations as spatial geometry.",
@@ -26,12 +21,7 @@
   "derivedFrom": null,
   "networkRequired": true,
   "dependencies": [
-    {
-      "name": "three",
-      "version": "0.185.1",
-      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
-      "embedded": false
-    }
+    {"name":"three","version":"0.185.1","url":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","embedded":false}
   ],
   "rights": {
     "status": "cleared",
