@@ -100,6 +100,14 @@ export function createAsset(context = {}) {
       pipe.position.set(0, layer.explodedBottomY + layer.thickness * (0.42 + index * 0.18), model.depth * ratio);
       pipe.castShadow = true;
       root.add(pipe);
+      const clipMaterial = new T.MeshStandardMaterial({ color: 0xb7c2c7, metalness: 0.68, roughness: 0.3 });
+      for (const xr of [-0.28, 0, 0.28]) {
+        const clip = new T.Mesh(new T.TorusGeometry(0.036 + index * 0.005, 0.006, 10, 28), clipMaterial.clone());
+        clip.rotation.y = Math.PI / 2;
+        clip.position.set(model.width * xr, pipe.position.y, pipe.position.z);
+        clip.castShadow = true;
+        root.add(clip);
+      }
     });
   }
 
