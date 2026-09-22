@@ -1,243 +1,249 @@
-import { DEFAULT_PARAMETERS, buildEnvelopeModel } from "./model.mjs";
+import { DEFAULT_PARAMETERS, buildEnvelopeModel, normalizeParameters } from './model.mjs';
 
-const NS = "http://www.w3.org/2000/svg";
-
-function svgElement(name, attributes = {}) {
-  const node = document.createElementNS(NS, name);
-  for (const [key, value] of Object.entries(attributes)) {
-    node.setAttribute(key, String(value));
+function requireContext(context) {
+  if (!context?.THREE || !context?.scene) {
+    throw new TypeError('bld-building-envelope requires context.THREE and context.scene.');
   }
-  return node;
 }
 
-function polygon(points, className) {
-  return svgElement("polygon", {
-    points: points.map((point) => point.join(",")).join(" "),
-    class: className
+function disposeObject(object) {
+  object.traverse((node) => {
+    node.geometry?.dispose?.();
+    const materials = Array.isArray(node.material) ? node.material : [node.material];
+    materials.filter(Boolean).forEach((material) => material.dispose?.());
   });
 }
 
-function line(a, b, className) {
-  return svgElement("line", {
-    x1: a[0],
-    y1: a[1],
-    x2: b[0],
-    y2: b[1],
-    class: className
-  });
-}
-
-function textAt(label, point, className, anchor = "middle") {
-  const node = svgElement("text", {
-    x: point[0],
-    y: point[1],
-    class: className,
-    "text-anchor": anchor
-  });
-  node.textContent = label;
-  return node;
-}
-
-function projectFactory(model) {
-  const usableWidth = 540;
-  const usableHeight = 390;
-  const sx = usableWidth / (model.width + model.depth * 0.58);
-  const sy = usableHeight / (model.height + model.depth * 0.34);
-  const scale = Math.max(4, Math.min(sx, sy));
-  const ox = 390;
-  const oy = 465;
-  return (x, y, z) => {
-    const d = -z;
-    return [
-      ox + x * scale - d * scale * 0.52,
-      oy - y * scale - d * scale * 0.27
-    ];
-  };
-}
-
-function renderScene(svg, summary, model) {
-  svg.replaceChildren();
-  const project = projectFactory(model);
-  const p = (x, y, z) => project(x, y, z);
-  const x0 = -model.width / 2;
-  const x1 = model.width / 2;
-  const z0 = 0;
-  const z1 = -model.depth;
-  const h = model.height;
-  const cutX = x1 - model.width * model.parameters.cutaway;
-
-  const ground = polygon(
-    [p(x0 - 1.4, 0, 1.1), p(x1 + 1.4, 0, 1.1), p(x1 + 1.4, 0, z1 - 1.2), p(x0 - 1.4, 0, z1 - 1.2)],
-    "lm-ground"
-  );
-  svg.append(ground);
-
-  const roof = polygon(
-    [p(x0, h, z0), p(cutX, h, z0), p(cutX, h, z1), p(x0, h, z1)],
-    "lm-roof"
-  );
-  svg.append(roof);
-
-  const leftWall = polygon(
-    [p(x0, 0, z0), p(x0, h, z0), p(x0, h, z1), p(x0, 0, z1)],
-    "lm-side"
-  );
-  svg.append(leftWall);
-
-  const backWall = polygon(
-    [p(x0, 0, z1), p(cutX, 0, z1), p(cutX, h, z1), p(x0, h, z1)],
-    "lm-back"
-  );
-  svg.append(backWall);
-
-  for (const elevation of model.floorElevations) {
-    const slab = polygon(
-      [p(x0, elevation, z0), p(x1, elevation, z0), p(x1, elevation, z1), p(x0, elevation, z1)],
-      elevation === 0 ? "lm-slab lm-slab-base" : "lm-slab"
-    );
-    svg.append(slab);
+function clearGroup(group) {
+  while (group.children.length) {
+    const child = group.children.pop();
+    child.parent = null;
+    disposeObject(child);
   }
-
-  const front = polygon(
-    [p(x0, 0, z0), p(cutX, 0, z0), p(cutX, h, z0), p(x0, h, z0)],
-    "lm-front"
-  );
-  svg.append(front);
-
-  for (const opening of model.openings) {
-    const half = opening.width / 2;
-    const left = opening.centerX - half;
-    const right = opening.centerX + half;
-    if (right > cutX) continue;
-    const bottom = opening.bottomY;
-    const top = bottom + opening.height;
-    svg.append(polygon(
-      [p(left, bottom, z0 - 0.012), p(right, bottom, z0 - 0.012), p(right, top, z0 - 0.012), p(left, top, z0 - 0.012)],
-      "lm-opening"
-    ));
-  }
-
-  svg.append(line(p(cutX, 0, z0), p(cutX, h, z0), "lm-cut"));
-  svg.append(line(p(cutX, 0, z0), p(cutX, 0, z1), "lm-cut"));
-  svg.append(line(p(cutX, h, z0), p(cutX, h, z1), "lm-cut"));
-
-  const widthA = p(x0, -0.55, z0);
-  const widthB = p(x1, -0.55, z0);
-  svg.append(line(widthA, widthB, "lm-dimension"));
-  svg.append(textAt(model.width.toFixed(1) + " m width", [(widthA[0] + widthB[0]) / 2, widthA[1] + 20], "lm-label"));
-
-  const heightA = p(x0 - 0.7, 0, z0);
-  const heightB = p(x0 - 0.7, h, z0);
-  svg.append(line(heightA, heightB, "lm-dimension"));
-  svg.append(textAt(model.height.toFixed(1) + " m", [heightA[0] - 10, (heightA[1] + heightB[1]) / 2], "lm-label", "end"));
-
-  const depthA = p(x0 - 0.55, 0, z0);
-  const depthB = p(x0 - 0.55, 0, z1);
-  svg.append(line(depthA, depthB, "lm-dimension"));
-  svg.append(textAt(model.depth.toFixed(1) + " m depth", [(depthA[0] + depthB[0]) / 2 - 16, (depthA[1] + depthB[1]) / 2 - 8], "lm-label", "end"));
-
-  summary.textContent =
-    model.parameters.floors + " floors · " +
-    model.parameters.bays + " bays · " +
-    model.openings.length + " facade openings · cutaway " +
-    Math.round(model.parameters.cutaway * 100) + "%";
 }
 
 export function createAsset(context = {}) {
-  const container = context.container;
-  if (!container || typeof container.appendChild !== "function") {
-    throw new TypeError("createAsset requires context.container");
-  }
-
-  const root = document.createElement("section");
-  root.dataset.learnmatEnvelope = "";
-  root.setAttribute("aria-label", "Parametric building envelope");
-  root.innerHTML =
-    '<style>' +
-    '[data-learnmat-envelope]{box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;color:#172033;background:#fff;border:1px solid #d7deea;border-radius:14px;padding:12px;display:grid;gap:8px;min-width:0}' +
-    '[data-learnmat-envelope] svg{width:100%;height:auto;display:block;min-height:280px;background:linear-gradient(#f7f9fc,#eef3f8);border-radius:10px}' +
-    '[data-learnmat-envelope] .lm-ground{fill:#e7ebe4;stroke:#bdc6b7;stroke-width:1}' +
-    '[data-learnmat-envelope] .lm-front{fill:#d9e4f0;stroke:#34475d;stroke-width:1.4}' +
-    '[data-learnmat-envelope] .lm-side{fill:#c2d1e0;stroke:#34475d;stroke-width:1.4}' +
-    '[data-learnmat-envelope] .lm-back{fill:#edf3f8;stroke:#60758a;stroke-width:1}' +
-    '[data-learnmat-envelope] .lm-roof{fill:#eef2f5;stroke:#34475d;stroke-width:1.2}' +
-    '[data-learnmat-envelope] .lm-slab{fill:#f9fbfd;fill-opacity:.88;stroke:#70859a;stroke-width:1}' +
-    '[data-learnmat-envelope] .lm-slab-base{fill:#dfe6ec}' +
-    '[data-learnmat-envelope] .lm-opening{fill:#5f7895;stroke:#24384d;stroke-width:.7}' +
-    '[data-learnmat-envelope] .lm-cut{stroke:#c15454;stroke-width:2;stroke-dasharray:6 4;fill:none}' +
-    '[data-learnmat-envelope] .lm-dimension{stroke:#384a5b;stroke-width:1;stroke-dasharray:3 3}' +
-    '[data-learnmat-envelope] .lm-label{font-size:13px;fill:#27394b;font-weight:650}' +
-    '[data-learnmat-envelope] .lm-summary{margin:0;font-size:13px;line-height:1.45;color:#475569}' +
-    '@media (prefers-reduced-motion:reduce){[data-learnmat-envelope] *{scroll-behavior:auto!important}}' +
-    '</style>' +
-    '<svg viewBox="0 0 860 560" role="img" aria-label="Parametric building envelope cutaway">' +
-    '<title>Parametric building envelope cutaway</title>' +
-    '<desc>Axonometric building shell with floor slabs, facade openings, overall dimensions, and a cutaway plane.</desc>' +
-    '</svg>' +
-    '<p class="lm-summary" aria-live="polite"></p>';
-
-  const svg = root.querySelector("svg");
-  const summary = root.querySelector(".lm-summary");
-  container.appendChild(root);
-
-  let disposed = false;
-  let parameters = { ...DEFAULT_PARAMETERS };
-  let model = buildEnvelopeModel(parameters);
+  requireContext(context);
+  const T = context.THREE;
+  const scene = context.scene;
+  let parameters = normalizeParameters(DEFAULT_PARAMETERS);
   let timeSeconds = 0;
-  renderScene(svg, summary, model);
+  let viewport = {};
+  let disposed = false;
 
-  function assertLive() {
-    if (disposed) throw new Error("Building envelope asset has been disposed");
+  const root = new T.Group();
+  root.name = 'bld-building-envelope';
+  scene.add(root);
+
+  function material(color, roughness = 0.72, metalness = 0.04, extras = {}) {
+    return new T.MeshStandardMaterial({ color, roughness, metalness, ...extras });
   }
+
+  function addBox(width, height, depth, x, y, z, color, extras = {}) {
+    if (width <= 0 || height <= 0 || depth <= 0) return null;
+    const mesh = new T.Mesh(
+      new T.BoxGeometry(width, height, depth),
+      material(color, extras.roughness ?? 0.72, extras.metalness ?? 0.04, extras.material ?? {})
+    );
+    mesh.position.set(x, y, z);
+    mesh.castShadow = extras.castShadow !== false;
+    mesh.receiveShadow = true;
+    root.add(mesh);
+    if (extras.edges !== false) {
+      const edges = new T.LineSegments(
+        new T.EdgesGeometry(mesh.geometry, 12),
+        new T.LineBasicMaterial({ color: extras.edgeColor ?? 0xd9e6ee, transparent: true, opacity: extras.edgeOpacity ?? 0.28 })
+      );
+      edges.position.copy(mesh.position);
+      root.add(edges);
+    }
+    return mesh;
+  }
+
+  function rebuild() {
+    clearGroup(root);
+    const model = buildEnvelopeModel(parameters);
+    const p = model.parameters;
+    const slabThickness = Math.max(0.08, p.floorHeight * 0.025);
+    const wallThickness = Math.max(0.10, Math.min(0.22, p.depth * 0.012));
+    const glassDepth = Math.max(0.035, wallThickness * 0.28);
+
+    addBox(p.width * 1.18, 0.08, p.depth * 1.18, 0, -0.04, -p.depth / 2, 0x263746, {
+      roughness: 0.92,
+      edges: false,
+      castShadow: false
+    });
+
+    model.floorElevations.forEach((elevation) => {
+      addBox(p.width, slabThickness, p.depth, 0, elevation + slabThickness / 2, -p.depth / 2, 0xc7ccd2, {
+        roughness: 0.88,
+        edgeColor: 0xf0f5f8,
+        edgeOpacity: 0.25
+      });
+    });
+
+    const backY = model.height / 2;
+    addBox(p.width, model.height, wallThickness, 0, backY, -p.depth, 0x8c989f, {
+      roughness: 0.86,
+      edgeColor: 0xe6eef2
+    });
+
+    addBox(wallThickness, model.height, p.depth, -p.width / 2, backY, -p.depth / 2, 0x89969e, {
+      roughness: 0.86,
+      edgeColor: 0xe6eef2
+    });
+
+    const retainedDepth = Math.max(wallThickness, p.depth * (1 - p.cutaway));
+    addBox(
+      wallThickness,
+      model.height,
+      retainedDepth,
+      p.width / 2,
+      backY,
+      -p.depth + retainedDepth / 2,
+      0x89969e,
+      { roughness: 0.86, edgeColor: 0xe6eef2 }
+    );
+
+    const bayWidth = model.bayWidth;
+    for (let floor = 0; floor < p.floors; floor += 1) {
+      const floorBase = floor * p.floorHeight;
+      const openingBottom = floorBase + p.sillHeight;
+      const openingCenterY = openingBottom + p.openingHeight / 2;
+      const headHeight = p.floorHeight - p.sillHeight - p.openingHeight;
+      const pierWidth = (bayWidth - p.openingWidth) / 2;
+
+      for (let bay = 0; bay < p.bays; bay += 1) {
+        const bayLeft = -p.width / 2 + bay * bayWidth;
+        const centerX = bayLeft + bayWidth / 2;
+
+        addBox(
+          pierWidth,
+          p.floorHeight,
+          wallThickness,
+          bayLeft + pierWidth / 2,
+          floorBase + p.floorHeight / 2,
+          0,
+          0xa4adb3,
+          { roughness: 0.82, edgeOpacity: 0.18 }
+        );
+        addBox(
+          pierWidth,
+          p.floorHeight,
+          wallThickness,
+          bayLeft + bayWidth - pierWidth / 2,
+          floorBase + p.floorHeight / 2,
+          0,
+          0xa4adb3,
+          { roughness: 0.82, edgeOpacity: 0.18 }
+        );
+
+        if (p.sillHeight > 0) {
+          addBox(
+            p.openingWidth,
+            p.sillHeight,
+            wallThickness,
+            centerX,
+            floorBase + p.sillHeight / 2,
+            0,
+            0x9ba6ad,
+            { roughness: 0.84, edgeOpacity: 0.16 }
+          );
+        }
+
+        if (headHeight > 0) {
+          addBox(
+            p.openingWidth,
+            headHeight,
+            wallThickness,
+            centerX,
+            openingBottom + p.openingHeight + headHeight / 2,
+            0,
+            0x9ba6ad,
+            { roughness: 0.84, edgeOpacity: 0.16 }
+          );
+        }
+
+        addBox(
+          p.openingWidth * 0.96,
+          p.openingHeight * 0.96,
+          glassDepth,
+          centerX,
+          openingCenterY,
+          wallThickness * 0.58,
+          0x4d9ab5,
+          {
+            roughness: 0.18,
+            metalness: 0.08,
+            edgeColor: 0xaee5f5,
+            edgeOpacity: 0.55,
+            material: { transparent: true, opacity: 0.48 }
+          }
+        );
+      }
+    }
+
+    const roofRailHeight = Math.min(0.45, p.floorHeight * 0.14);
+    addBox(p.width + 0.15, roofRailHeight, wallThickness, 0, model.height + roofRailHeight / 2, 0, 0x5f6f78, {
+      roughness: 0.7
+    });
+  }
+
+  function ensureLive() {
+    if (disposed) throw new Error('Building envelope asset has been disposed.');
+  }
+
+  function snapshot() {
+    ensureLive();
+    return {
+      id: 'bld-building-envelope',
+      timeSeconds,
+      parameters: { ...parameters },
+      state: {
+        model: buildEnvelopeModel(parameters),
+        viewport: { ...viewport }
+      }
+    };
+  }
+
+  rebuild();
 
   return {
     setParameters(next = {}) {
-      assertLive();
-      const candidate = buildEnvelopeModel({ ...parameters, ...next });
-      parameters = { ...candidate.parameters };
-      model = candidate;
-      renderScene(svg, summary, model);
+      ensureLive();
+      parameters = normalizeParameters({ ...parameters, ...next });
+      rebuild();
+      return snapshot();
     },
     update(nextTimeSeconds) {
-      assertLive();
-      if (!Number.isFinite(nextTimeSeconds)) throw new TypeError("timeSeconds must be finite");
+      ensureLive();
+      if (!Number.isFinite(nextTimeSeconds) || nextTimeSeconds < 0) {
+        throw new RangeError('timeSeconds must be a finite non-negative number.');
+      }
       timeSeconds = nextTimeSeconds;
+      return snapshot();
     },
     reset() {
-      assertLive();
-      parameters = { ...DEFAULT_PARAMETERS };
-      model = buildEnvelopeModel(parameters);
+      ensureLive();
+      parameters = normalizeParameters(DEFAULT_PARAMETERS);
       timeSeconds = 0;
-      renderScene(svg, summary, model);
+      rebuild();
+      return snapshot();
     },
     resize(width, height, pixelRatio = 1) {
-      assertLive();
-      if (![width, height, pixelRatio].every(Number.isFinite)) {
-        throw new TypeError("resize values must be finite");
+      ensureLive();
+      if (![width, height, pixelRatio].every((value) => Number.isFinite(value) && value > 0)) {
+        throw new RangeError('resize requires positive finite values.');
       }
-      if (width <= 0 || height <= 0 || pixelRatio <= 0) {
-        throw new RangeError("resize values must be greater than zero");
-      }
-      root.style.maxWidth = width + "px";
+      viewport = { width, height, pixelRatio };
+      return snapshot();
     },
-    snapshot() {
-      assertLive();
-      return {
-        parameters: { ...parameters },
-        timeSeconds,
-        bounds: {
-          min: { ...model.bounds.min },
-          max: { ...model.bounds.max }
-        },
-        floorElevations: [...model.floorElevations],
-        openingCount: model.openings.length,
-        cutawayDepth: model.cutawayDepth
-      };
-    },
+    snapshot,
     dispose() {
       if (disposed) return;
       disposed = true;
-      root.remove();
+      scene.remove(root);
+      disposeObject(root);
     }
   };
 }

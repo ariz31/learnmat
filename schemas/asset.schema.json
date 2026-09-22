@@ -117,11 +117,8 @@
       "minLength": 1
     },
     "previewImage": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "minLength": 1
+      "type": "null",
+      "const": null
     },
     "reviewFile": {
       "type": [

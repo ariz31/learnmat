@@ -20,7 +20,7 @@
   "status": "candidate",
   "entrypoint": "assets/structural-analysis/str-truss-load-path/demo/index.html",
   "readme": "assets/structural-analysis/str-truss-load-path/README.md",
-  "previewImage": "assets/structural-analysis/str-truss-load-path/previews/preview.svg",
+  "previewImage": null,
   "reviewFile": "assets/structural-analysis/str-truss-load-path/REVIEW.md",
   "derivedFrom": null,
   "networkRequired": true,

@@ -1,70 +1,22 @@
 {
-  "contractVersion": "1.0.0",
-  "implemented": true,
-  "module": "assets/buildings/bld-building-envelope/src/asset.mjs",
-  "lengthUnit": "m",
-  "timeUnit": "s",
-  "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Axis-aligned envelope from x=-width/2 to +width/2, y=0 to floors*floorHeight, and z=-depth to 0.",
-  "parameters": {
-    "width": {
-      "unit": "m",
-      "min": 6,
-      "max": 40,
-      "default": 18
-    },
-    "depth": {
-      "unit": "m",
-      "min": 6,
-      "max": 30,
-      "default": 12
-    },
-    "floorHeight": {
-      "unit": "m",
-      "min": 2.4,
-      "max": 5,
-      "default": 3.2
-    },
-    "floors": {
-      "unit": "count",
-      "min": 1,
-      "max": 12,
-      "default": 4,
-      "integer": true
-    },
-    "bays": {
-      "unit": "count",
-      "min": 1,
-      "max": 10,
-      "default": 4,
-      "integer": true
-    },
-    "openingWidth": {
-      "unit": "m",
-      "min": 0.6,
-      "max": 4,
-      "default": 1.8,
-      "constraint": "<= 0.72 * width / bays"
-    },
-    "openingHeight": {
-      "unit": "m",
-      "min": 0.6,
-      "max": 3,
-      "default": 1.5
-    },
-    "sillHeight": {
-      "unit": "m",
-      "min": 0,
-      "max": 1.5,
-      "default": 0.9,
-      "constraint": "sillHeight + openingHeight <= floorHeight - 0.25"
-    },
-    "cutaway": {
-      "unit": "ratio",
-      "min": 0,
-      "max": 0.8,
-      "default": 0.36
-    }
+  "contractVersion":"1.0.0",
+  "implemented":true,
+  "module":"assets/buildings/bld-building-envelope/src/asset.mjs",
+  "lengthUnit":"m",
+  "timeUnit":"s",
+  "coordinates":"right-handed-y-up-north-minus-z",
+  "boundsDescription":"Axis-aligned envelope from x=-width/2 to +width/2, y=0 to floors*floorHeight, and z=-depth to 0. Cutaway removes a front portion of one side enclosure while retaining floor plates.",
+  "parameters":{
+    "width":{"type":"number","unit":"m","min":6,"max":40,"default":18},
+    "depth":{"type":"number","unit":"m","min":6,"max":30,"default":12},
+    "floorHeight":{"type":"number","unit":"m","min":2.4,"max":5,"default":3.2},
+    "floors":{"type":"integer","unit":"count","min":1,"max":12,"default":4},
+    "bays":{"type":"integer","unit":"count","min":1,"max":10,"default":4},
+    "openingWidth":{"type":"number","unit":"m","min":0.6,"max":4,"default":1.8},
+    "openingHeight":{"type":"number","unit":"m","min":0.6,"max":3,"default":1.5},
+    "sillHeight":{"type":"number","unit":"m","min":0,"max":1.5,"default":0.9},
+    "cutaway":{"type":"number","unit":"ratio","min":0,"max":0.8,"default":0.36}
   },
-  "assetDependencies": []
+  "assetDependencies":[],
+  "peerDependencies":[{"name":"three","version":"0.185.1","injectedByHost":true}]
 }

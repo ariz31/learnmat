@@ -22,12 +22,12 @@ A static reference component may teach through labels, comparison, sectioning,
 annotations, state changes, or inspection. Do not force artificial procedural
 steps onto a concept that is not procedural.
 
-## 3D-first visual standard
+## 3D-only curated visual standard
 
-LearnMat prioritizes real 3D educational presentation. For new or substantially
-reworked assets, begin from the assumption that the learner should see the object,
-field procedure, system, experiment, structure, material, building, terrain, fluid,
-or mechanism in a coherent 3D scene.
+LearnMat curated assets use real Three.js 3D as their primary presentation. New or
+substantially reworked assets must place the object, field procedure, system,
+experiment, structure, material, building, terrain, fluid, or mechanism in a
+coherent 3D scene. Curated `assets/` records must declare `renderer: threejs`.
 
 Use the current surveying examples as a preferred visual direction: recognizable
 spatial equipment/objects, perspective camera, depth cues, contextual ground or
@@ -42,19 +42,15 @@ drawing, or a perspective-styled card. Prefer real 3D meshes/geometry, a perspec
 or intentionally chosen orthographic camera, lighting/material cues where useful,
 and navigable or staged viewpoints when they improve understanding.
 
-Use 2D as the primary visual only when one of these is documented in the review:
-- the learning object is inherently planar or symbolic and depth adds no information;
-- a graph, equation, diagram, or section must be read exactly in 2D;
-- 3D would materially reduce engineering clarity, accessibility, or performance;
-- the asset is a supporting overlay/component intended to be composed into a 3D lesson.
+Use 2D freely inside the Three.js lesson for equations, plots, measurements, labels,
+tables, vectors, section cuts, symbolic diagrams, and step guidance. These are
+supporting analytical layers, not alternative primary renderers. If a concept is
+inherently planar, place the exact 2D representation in or beside the 3D lesson
+rather than creating a separate SVG/Canvas2D-primary curated asset.
 
-Even in a 3D-first asset, use 2D overlays freely for equations, plots, measurements,
-labels, tables, vectors, section cuts, and step guidance. The 3D scene teaches the
-spatial/physical system; the 2D layer communicates exact analytical information.
-
-Do not downgrade a requested or spatially meaningful asset to SVG/Canvas2D solely
-because it is faster to implement. If real 3D is practical and educationally useful,
-it is the default.
+Do not downgrade a curated asset to SVG, raster imagery, Canvas2D, faux-isometric
+graphics, or decorative CSS transforms. Static image files are not catalog previews;
+the authoritative viewer surface is the live Three.js entrypoint.
 
 ## Step-by-step procedure when one exists
 
@@ -141,9 +137,9 @@ Where animation is useful, prefer:
 - responsive, touch-friendly presentation on desktop, tablet, and narrow mobile;
 - a useful reduced-motion mode that still preserves the instructional sequence.
 
-For spatial subjects, 3D is the default rather than an optional enhancement. Use
-camera movement sparingly and purposefully; the learner should not fight the camera
-to understand the lesson. High quality means clear, accurate, purposeful, smooth,
+For curated subjects, the primary asset is 3D rather than an optional enhancement.
+Use camera movement sparingly and purposefully; the learner should not fight the
+camera to understand the lesson. High quality means clear, accurate, purposeful, smooth,
 legible, spatially coherent, and stable—not merely visually busy.
 
 ## Focus/maximize presentation mode
@@ -193,8 +189,9 @@ must cover all of the following:
   applicable, agreement between motion and the model, focus/maximize behavior,
   exit/state restoration, and reduced-motion behavior;
 - **accessibility** — keyboard/focus/labels, text equivalents, and reduced motion;
-- **spatial3d** — real 3D geometry/scene quality, depth/camera/material coherence,
-  and justification for any 2D-primary exception;
+- **spatial3d** — real Three.js geometry/scene quality and coherent
+  depth/camera/material treatment, with any 2D analytical content kept subordinate
+  to the live 3D scene;
 - **visual** — legibility, hierarchy, responsive layout, and actual captured evidence;
 - **reuse** — documented inputs/outputs, dependencies, limits, rights, and cleanup.
 

@@ -22,18 +22,19 @@ Use templates/asset-metadata.json and templates/ASSET-README.md as starting poin
 5. For interactive/animated work, provide a focus/maximize presentation mode that
    hides steps and nonessential panels while retaining an obvious exit and essential
    animation controls. The focused view must remain responsive and understandable.
-6. Design the primary visualization as real 3D whenever practical. Prefer actual
-   spatial geometry, perspective/depth, meaningful camera framing, and animated
+6. Design every curated primary visualization as real Three.js 3D. Use actual
+   spatial geometry, perspective/depth, meaningful camera framing, and purposeful
    object relationships similar in visual ambition to the surveying examples.
-   A flat 2D/SVG primary visual must be justified in the review as educationally
-   clearer or inherently non-spatial. 2D equations, plots, labels, and overlays may
-   supplement the 3D scene.
+   Flat SVG/raster/Canvas2D output may appear only as an analytical overlay within
+   the 3D lesson, never as the curated asset's primary renderer.
 7. Extract reusable geometry, calculations, or scene controls without importing
    presentation-specific global IDs or unscoped CSS into the consumer.
 8. Make animation purposeful, smooth, deterministic where practical, and consistent
    with the authoritative model. Avoid decorative motion.
 9. Provide a minimal usage example and documented lifecycle cleanup.
-10. Produce an actual preview image from a recorded state after implementation.
+10. Keep `previewImage: null` and do not add static catalog preview files. If a
+    rendered capture is needed for review evidence, record its source version,
+    viewport, and state outside the runtime asset catalog.
 11. Complete templates/REVIEW.md and the checks in docs/QUALITY.md and
     docs/EDUCATIONAL-DESIGN.md.
 12. Update catalog/catalog.json when working in the authorized integrator workflow;

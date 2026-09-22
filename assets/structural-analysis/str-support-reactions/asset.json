@@ -19,7 +19,7 @@
   "status": "candidate",
   "entrypoint": "assets/structural-analysis/str-support-reactions/demo/index.html",
   "readme": "assets/structural-analysis/str-support-reactions/README.md",
-  "previewImage": "assets/structural-analysis/str-support-reactions/previews/preview.svg",
+  "previewImage": null,
   "reviewFile": "assets/structural-analysis/str-support-reactions/REVIEW.md",
   "derivedFrom": null,
   "networkRequired": true,
