@@ -14,11 +14,16 @@ function human(T){
  limb(-.69,.94,.86,.07,pants,.08);limb(-.47,.94,.86,.07,pants,-.08);
  const arm=limb(-.34,1.48,.55,.055,skin,-.72);const fore=new T.Group();fore.position.set(0,-.52,0);fore.rotation.z=.72;const fm=mesh(T,new T.CylinderGeometry(.05,.05,.42,14),skin);fm.position.y=-.21;fore.add(fm);arm.add(fore);
  limb(-.82,1.48,.64,.055,skin,.18);
+ const reflective=m(T,0xf5f5e8,.38,.08);for(const y of[1.18,1.38]){const strip=mesh(T,new T.BoxGeometry(.505,.035,.30),reflective);strip.position.set(-.58,y,0);root.add(strip);}
+ const boot=m(T,0x282623,.94,.02);for(const x of[-.70,-.46]){const b=mesh(T,new T.BoxGeometry(.16,.105,.29),boot);b.position.set(x,.055,.055);root.add(b);}
+ const hand=mesh(T,new T.SphereGeometry(.062,16,12),skin);hand.position.set(-.01,1.12,.02);root.add(hand);
  root.userData={torso};return root;
 }
 function staff(T){
  const g=new T.Group(),shaft=mesh(T,new T.BoxGeometry(.055,1,.038),m(T,0xf2f2ee,.6,.1));shaft.position.y=.5;g.add(shaft);
- for(let i=0;i<20;i++){const band=mesh(T,new T.BoxGeometry(.063,.035,.045),m(T,i%5===0?0xd63b32:0x22292d,.7));band.position.set(.004,(i+.5)/20,.004);g.add(band);}
+ for(let i=0;i<20;i++){const major=i%5===0,w=major?.078:.058;const band=mesh(T,new T.BoxGeometry(w,.024,.048),m(T,major?0xd63b32:0x22292d,.62));band.position.set((w-.055)/2,(i+.5)/20,.006);g.add(band);}
+ const rail=m(T,0xb5bdbe,.32,.68);for(const x of[-.045,.045]){const r=mesh(T,new T.BoxGeometry(.018,1.0,.048),rail);r.position.set(x,.5,-.006);g.add(r);}
+ const shoe=mesh(T,new T.BoxGeometry(.105,.035,.075),m(T,0x353a3b,.58,.35));shoe.position.y=.018;g.add(shoe);
  const cap=mesh(T,new T.BoxGeometry(.075,.04,.055),m(T,0x171b1c,.6));cap.position.y=1.01;g.add(cap);return g;
 }
 function dispose(o){o.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material)(Array.isArray(n.material)?n.material:[n.material]).forEach(x=>x.dispose())});}
