@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "mat-timber-grain",
   "version": "0.2.0",
-  "title": "Timber grain orientation — 3D",
+  "title": "Timber Grain Orientation",
   "description": "Procedural 3D timber prism with deterministic grain texture and explicit longitudinal/grain direction arrows.",
   "category": "construction-materials",
   "topics": [
