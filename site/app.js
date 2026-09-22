@@ -7,20 +7,28 @@ const state = {
   viewport: localStorage.getItem("learnmat-viewer-viewport") || "fit"
 };
 
+const mobileQuery = matchMedia("(max-width: 760px)");
+
 const els = {
-  catalogSummary: document.querySelector("#catalog-summary"),
+  workspace: document.querySelector("#workspace"),
   catalogPanel: document.querySelector("#catalog-panel"),
   catalogToggle: document.querySelector("#catalog-toggle"),
+  homeLink: document.querySelector("#home-link"),
+  topbarContext: document.querySelector("#topbar-context"),
+  assetTools: document.querySelector("#asset-tools"),
+  filterToggle: document.querySelector("#filter-toggle"),
+  filterPanel: document.querySelector("#filter-panel"),
   search: document.querySelector("#search-input"),
   category: document.querySelector("#category-filter"),
   status: document.querySelector("#status-filter"),
   renderer: document.querySelector("#renderer-filter"),
   origin: document.querySelector("#origin-filter"),
   clearFilters: document.querySelector("#clear-filters"),
-  resultCount: document.querySelector("#result-count"),
   assetList: document.querySelector("#asset-list"),
   catalogEmpty: document.querySelector("#catalog-empty"),
-  viewerEmpty: document.querySelector("#viewer-empty"),
+  homeView: document.querySelector("#home-view"),
+  homeGrid: document.querySelector("#home-grid"),
+  homeEmpty: document.querySelector("#home-empty"),
   assetView: document.querySelector("#asset-view"),
   eyebrow: document.querySelector("#asset-eyebrow"),
   title: document.querySelector("#asset-title"),
@@ -65,17 +73,21 @@ function normalize(value) {
 }
 
 function unique(values) {
-  return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b));
-}
-
-function humanize(value) {
-  return String(value || "unknown").replace(/[-_]+/g, " ").replace(/\b\w/g, function (char) {
-    return char.toUpperCase();
+  return [...new Set(values.filter(Boolean))].sort(function (a, b) {
+    return a.localeCompare(b);
   });
 }
 
+function humanize(value) {
+  return String(value || "unknown")
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, function (char) { return char.toUpperCase(); });
+}
+
 function statusClass(value) {
-  return "status-" + String(value || "unknown").replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+  return "status-" + String(value || "unknown")
+    .replace(/[^a-z0-9]+/gi, "-")
+    .toLowerCase();
 }
 
 function assetSearchText(asset) {
@@ -100,7 +112,10 @@ function selectedAsset() {
 
 function updateHash(id) {
   const next = id ? "#asset=" + encodeURIComponent(id) : "";
-  if (location.hash !== next) history.replaceState(null, "", location.pathname + location.search + next);
+  const target = location.pathname + location.search + next;
+  if (location.pathname + location.search + location.hash !== target) {
+    history.replaceState(null, "", target);
+  }
 }
 
 function assetFromHash() {
@@ -154,12 +169,30 @@ function applyFilters() {
   });
 
   renderAssetList();
+  renderHomeGrid();
+}
+
+function makePreview(target, asset, className) {
+  const preview = create("span", className);
+  if (asset.previewUrl) {
+    const image = document.createElement("img");
+    image.src = asset.previewUrl;
+    image.alt = "";
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.addEventListener("error", function () {
+      preview.replaceChildren(create("span", "", asset.renderer ? asset.renderer.toUpperCase() : "HTML"));
+    }, { once: true });
+    preview.appendChild(image);
+  } else {
+    preview.appendChild(create("span", "", asset.renderer ? asset.renderer.toUpperCase() : "HTML"));
+  }
+  target.appendChild(preview);
 }
 
 function renderAssetList() {
   els.assetList.replaceChildren();
   els.catalogEmpty.hidden = state.filtered.length !== 0;
-  els.resultCount.textContent = state.filtered.length + (state.filtered.length === 1 ? " asset" : " assets");
 
   state.filtered.forEach(function (asset) {
     const button = create("button", "asset-item");
@@ -168,37 +201,49 @@ function renderAssetList() {
     button.setAttribute("aria-current", asset.id === state.selectedId ? "true" : "false");
     if (asset.id === state.selectedId) button.classList.add("is-selected");
 
-    const thumb = create("span", "asset-thumb");
-    if (asset.previewUrl) {
-      const image = document.createElement("img");
-      image.src = asset.previewUrl;
-      image.alt = "";
-      image.loading = "lazy";
-      image.decoding = "async";
-      image.addEventListener("error", function () {
-        thumb.replaceChildren(create("span", "", asset.renderer ? asset.renderer.toUpperCase() : "HTML"));
-      }, { once: true });
-      thumb.appendChild(image);
-    } else {
-      thumb.appendChild(create("span", "", asset.renderer ? asset.renderer.toUpperCase() : "HTML"));
-    }
+    makePreview(button, asset, "asset-thumb");
 
     const copy = create("span", "asset-item-copy");
     copy.appendChild(create("span", "asset-item-title", asset.title || asset.id));
+    copy.appendChild(create("span", "asset-item-subtitle", humanize(asset.category)));
+    button.appendChild(copy);
 
-    const meta = create("span", "asset-item-meta");
-    const status = create("span", "mini-badge " + statusClass(asset.status), humanize(asset.status));
-    const category = create("span", "mini-badge", humanize(asset.category));
-    meta.append(status, category);
-    if (asset.networkRequired === true) meta.appendChild(create("span", "mini-badge", "Network"));
-    copy.appendChild(meta);
-
-    button.append(thumb, copy);
     button.addEventListener("click", function () {
       selectAsset(asset.id);
-      if (matchMedia("(max-width: 760px)").matches) setCatalogOpen(false);
+      if (mobileQuery.matches) setCatalogOpen(false);
     });
+
     els.assetList.appendChild(button);
+  });
+}
+
+function renderHomeGrid() {
+  els.homeGrid.replaceChildren();
+  els.homeEmpty.hidden = state.filtered.length !== 0;
+
+  state.filtered.forEach(function (asset) {
+    const button = create("button", "home-card");
+    button.type = "button";
+    button.setAttribute("aria-label", "Open " + (asset.title || asset.id));
+
+    makePreview(button, asset, "home-card-preview");
+
+    const copy = create("span", "home-card-copy");
+    copy.appendChild(create("span", "home-card-title", asset.title || asset.id));
+
+    const meta = [
+      humanize(asset.category),
+      humanize(asset.renderer),
+      humanize(asset.status)
+    ].filter(Boolean).join(" · ");
+    copy.appendChild(create("span", "home-card-meta", meta));
+    button.appendChild(copy);
+
+    button.addEventListener("click", function () {
+      selectAsset(asset.id);
+    });
+
+    els.homeGrid.appendChild(button);
   });
 }
 
@@ -206,7 +251,8 @@ function metadataRows(target, rows) {
   target.replaceChildren();
   rows.forEach(function (row) {
     const dt = create("dt", "", row[0]);
-    const dd = create("dd", "", row[1] === null || row[1] === undefined || row[1] === "" ? "—" : row[1]);
+    const value = row[1] === null || row[1] === undefined || row[1] === "" ? "—" : row[1];
+    const dd = create("dd", "", value);
     target.append(dt, dd);
   });
 }
@@ -228,25 +274,32 @@ function renderObjectives(asset) {
 function renderReviews(asset) {
   els.reviewGrid.replaceChildren();
   const verification = asset.verification || {};
+
   [
     ["Engineering", verification.engineeringReview],
     ["Browser", verification.browserReview],
     ["Accessibility", verification.accessibilityReview]
   ].forEach(function (entry) {
     const item = create("div", "review-item");
-    item.append(create("strong", "", entry[0]), create("span", statusClass(entry[1]), humanize(entry[1])));
+    item.append(
+      create("strong", "", entry[0]),
+      create("span", statusClass(entry[1]), humanize(entry[1]))
+    );
     els.reviewGrid.appendChild(item);
   });
+
   els.verificationNote.textContent = verification.notes || "No verification note is recorded.";
 }
 
 function renderDependencies(asset) {
   els.dependencies.replaceChildren();
   const deps = asset.dependencies || [];
+
   if (!deps.length) {
     els.dependencies.appendChild(create("p", "detail-note", "No external runtime dependencies declared."));
     return;
   }
+
   const list = create("ul", "dependency-list");
   deps.forEach(function (dep) {
     const label = [dep.name, dep.version].filter(Boolean).join(" · ");
@@ -266,8 +319,11 @@ function renderParameters(asset) {
   const component = asset.component;
   const params = component && component.parameters ? component.parameters : {};
   const names = Object.keys(params);
+
   els.parameterEmpty.hidden = names.length !== 0;
-  els.runtimeContract.textContent = component ? "Contract " + (component.contractVersion || "unknown") : "No component contract";
+  els.runtimeContract.textContent = component
+    ? "Contract " + (component.contractVersion || "unknown")
+    : "No component contract";
 
   names.sort().forEach(function (name) {
     const spec = params[name] || {};
@@ -275,26 +331,40 @@ function renderParameters(asset) {
     const range = spec.min !== undefined || spec.max !== undefined
       ? formatParameterValue(spec.min) + " – " + formatParameterValue(spec.max)
       : "—";
+
     [name, formatParameterValue(spec.default), range, spec.unit || "—"].forEach(function (value) {
       tr.appendChild(create("td", "", value));
     });
+
     els.parameterBody.appendChild(tr);
   });
 }
 
 function sandboxFor(asset) {
-  const capabilities = ["allow-scripts", "allow-forms", "allow-modals", "allow-pointer-lock", "allow-downloads"];
-  if (asset.previewPolicy === "repository-component") capabilities.push("allow-same-origin");
+  const capabilities = [
+    "allow-scripts",
+    "allow-forms",
+    "allow-modals",
+    "allow-pointer-lock",
+    "allow-downloads"
+  ];
+
+  if (asset.previewPolicy === "repository-component") {
+    capabilities.push("allow-same-origin");
+  }
+
   return capabilities.join(" ");
 }
 
 function previewNotice(asset) {
   const parts = [];
+
   if (asset.previewPolicy === "repository-component") {
     parts.push("Repository-authored component preview: same-origin is enabled so local ES modules can load.");
   } else {
     parts.push("Legacy/intake HTML runs in a stricter opaque-origin sandbox.");
   }
+
   if (asset.networkRequired === true) {
     parts.push("This entry declares network dependencies; remote libraries may be required.");
   } else if (asset.networkRequired === false) {
@@ -302,27 +372,34 @@ function previewNotice(asset) {
   } else {
     parts.push("Network requirement has not been verified.");
   }
+
   if (asset.status !== "approved") {
     parts.push("Status: " + humanize(asset.status) + "; this viewer does not imply approval.");
   }
+
   return parts.join(" ");
 }
 
 function applyViewport() {
   const value = state.viewport;
   els.viewport.value = value;
+
   if (value === "fit") {
     els.deviceFrame.style.width = "100%";
-    els.deviceFrame.style.height = matchMedia("(max-width: 760px)").matches ? "560px" : "700px";
+    els.deviceFrame.style.height = mobileQuery.matches ? "560px" : "700px";
     return;
   }
+
   const parts = value.split("x").map(Number);
   els.deviceFrame.style.width = parts[0] + "px";
   els.deviceFrame.style.height = parts[1] + "px";
 }
 
 function renderPreview(asset, forceReload) {
-  if (state.previewMode === "image" && !asset.previewUrl) state.previewMode = "interactive";
+  if (state.previewMode === "image" && !asset.previewUrl) {
+    state.previewMode = "interactive";
+  }
+
   const imageMode = state.previewMode === "image" && asset.previewUrl;
   els.previewImage.hidden = !imageMode;
   els.frame.hidden = imageMode;
@@ -336,17 +413,20 @@ function renderPreview(asset, forceReload) {
 
   if (imageMode) {
     els.previewLoading.hidden = true;
-    if (els.previewImage.src !== new URL(asset.previewUrl, location.href).href || forceReload) {
+    const target = new URL(asset.previewUrl, location.href).href;
+    if (els.previewImage.src !== target || forceReload) {
       els.previewImage.src = asset.previewUrl;
     }
-    els.previewImage.alt = asset.title + " static preview";
+    els.previewImage.alt = (asset.title || asset.id) + " static preview";
   } else {
     els.previewLoading.hidden = false;
     els.previewLoading.textContent = "Loading interactive preview…";
-    const sandbox = sandboxFor(asset);
-    els.frame.setAttribute("sandbox", sandbox);
-    els.previewSecurity.textContent = asset.previewPolicy === "repository-component" ? "Repository component sandbox" : "Strict candidate sandbox";
-    els.frame.title = asset.title + " interactive preview";
+    els.frame.setAttribute("sandbox", sandboxFor(asset));
+    els.previewSecurity.textContent = asset.previewPolicy === "repository-component"
+      ? "Repository component sandbox"
+      : "Strict candidate sandbox";
+    els.frame.title = (asset.title || asset.id) + " interactive preview";
+
     const current = els.frame.dataset.assetId;
     if (forceReload || current !== asset.id) {
       els.frame.dataset.assetId = asset.id;
@@ -359,13 +439,23 @@ function renderPreview(asset, forceReload) {
 }
 
 function renderAsset(asset) {
-  els.viewerEmpty.hidden = true;
+  els.homeView.hidden = true;
   els.assetView.hidden = false;
+  els.assetTools.hidden = false;
+  els.topbarContext.textContent = asset.title || asset.id;
 
   els.eyebrow.textContent = humanize(asset.category) + " · " + humanize(asset.renderer) + " · v" + asset.version;
   els.title.textContent = asset.title || asset.id;
   els.description.textContent = asset.description || "";
-  els.sourceLink.href = asset.entrypointSourceUrl || asset.sourceUrl;
+
+  const source = asset.entrypointSourceUrl || asset.sourceUrl;
+  if (source) {
+    els.sourceLink.href = source;
+    els.sourceLink.removeAttribute("aria-disabled");
+  } else {
+    els.sourceLink.removeAttribute("href");
+    els.sourceLink.setAttribute("aria-disabled", "true");
+  }
 
   els.statusBadge.textContent = humanize(asset.status);
   els.statusBadge.className = "badge " + statusClass(asset.status);
@@ -394,11 +484,32 @@ function renderAsset(asset) {
   renderDependencies(asset);
   renderParameters(asset);
   renderPreview(asset, false);
+
+  document.title = (asset.title || asset.id) + " · LearnMat";
+}
+
+function showHome(updateUrl) {
+  state.selectedId = null;
+  els.assetView.hidden = true;
+  els.homeView.hidden = false;
+  els.assetTools.hidden = true;
+  els.topbarContext.textContent = "Assets";
+  els.frame.src = "about:blank";
+  els.frame.dataset.assetId = "";
+  renderAssetList();
+  renderHomeGrid();
+
+  if (updateUrl !== false) updateHash(null);
+  document.title = "LearnMat Asset Viewer";
 }
 
 function selectAsset(id) {
-  const asset = state.assets.find(function (item) { return item.id === id; });
+  const asset = state.assets.find(function (item) {
+    return item.id === id;
+  });
+
   if (!asset) return;
+
   state.selectedId = id;
   updateHash(id);
   renderAssetList();
@@ -408,6 +519,7 @@ function selectAsset(id) {
 function reloadPreview() {
   const asset = selectedAsset();
   if (!asset || state.previewMode === "image") return;
+
   els.previewLoading.hidden = false;
   els.frame.src = "about:blank";
   requestAnimationFrame(function () {
@@ -416,8 +528,29 @@ function reloadPreview() {
 }
 
 function setCatalogOpen(open) {
-  els.catalogPanel.classList.toggle("is-open", open);
+  if (mobileQuery.matches) {
+    els.workspace.classList.remove("sidebar-hidden");
+    els.catalogPanel.classList.toggle("is-open", open);
+  } else {
+    els.catalogPanel.classList.remove("is-open");
+    els.workspace.classList.toggle("sidebar-hidden", !open);
+  }
+
   els.catalogToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  els.catalogToggle.setAttribute("aria-label", open ? "Hide asset sidebar" : "Show asset sidebar");
+  els.catalogToggle.title = open ? "Hide sidebar" : "Show sidebar";
+}
+
+function catalogIsOpen() {
+  if (mobileQuery.matches) return els.catalogPanel.classList.contains("is-open");
+  return !els.workspace.classList.contains("sidebar-hidden");
+}
+
+function setFiltersOpen(open) {
+  els.filterPanel.hidden = !open;
+  els.filterToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  els.filterToggle.setAttribute("aria-label", open ? "Hide filters" : "Show filters");
+  els.filterToggle.title = open ? "Hide filters" : "Filters";
 }
 
 function clearFilters() {
@@ -445,7 +578,9 @@ function initTheme() {
 async function copyShareLink() {
   const asset = selectedAsset();
   if (!asset) return;
+
   const url = location.origin + location.pathname + "#asset=" + encodeURIComponent(asset.id);
+
   try {
     await navigator.clipboard.writeText(url);
     showToast("Asset link copied.");
@@ -460,8 +595,19 @@ function bindEvents() {
   });
 
   els.clearFilters.addEventListener("click", clearFilters);
+
+  els.filterToggle.addEventListener("click", function () {
+    setFiltersOpen(els.filterPanel.hidden);
+  });
+
   els.catalogToggle.addEventListener("click", function () {
-    setCatalogOpen(!els.catalogPanel.classList.contains("is-open"));
+    setCatalogOpen(!catalogIsOpen());
+  });
+
+  els.homeLink.addEventListener("click", function (event) {
+    event.preventDefault();
+    showHome(true);
+    if (mobileQuery.matches) setCatalogOpen(false);
   });
 
   els.themeToggle.addEventListener("click", function () {
@@ -479,16 +625,19 @@ function bindEvents() {
       const asset = selectedAsset();
       if (!asset) return;
       if (button.dataset.previewMode === "image" && !asset.previewUrl) return;
+
       state.previewMode = button.dataset.previewMode;
       renderPreview(asset, false);
     });
   });
 
   els.reload.addEventListener("click", reloadPreview);
+
   els.open.addEventListener("click", function () {
     const asset = selectedAsset();
     if (asset) window.open(asset.entrypointUrl, "_blank", "noopener,noreferrer");
   });
+
   els.fullscreen.addEventListener("click", async function () {
     try {
       await els.previewStage.requestFullscreen();
@@ -496,6 +645,7 @@ function bindEvents() {
       showToast("Fullscreen is not available in this browser context.");
     }
   });
+
   els.shareButton.addEventListener("click", copyShareLink);
 
   els.frame.addEventListener("load", function () {
@@ -506,6 +656,7 @@ function bindEvents() {
   els.previewImage.addEventListener("load", function () {
     els.previewLoading.hidden = true;
   });
+
   els.previewImage.addEventListener("error", function () {
     els.previewLoading.hidden = false;
     els.previewLoading.textContent = "Static preview failed to load.";
@@ -513,26 +664,48 @@ function bindEvents() {
 
   addEventListener("hashchange", function () {
     const id = assetFromHash();
-    if (id && id !== state.selectedId) selectAsset(id);
+    if (id) {
+      if (id !== state.selectedId) selectAsset(id);
+    } else if (state.selectedId) {
+      showHome(false);
+    }
+  });
+
+  mobileQuery.addEventListener("change", function () {
+    setCatalogOpen(!mobileQuery.matches);
+    applyViewport();
   });
 
   addEventListener("keydown", function (event) {
     const target = event.target;
-    const editing = target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement || target?.isContentEditable;
+    const editing = target instanceof HTMLInputElement ||
+      target instanceof HTMLSelectElement ||
+      target instanceof HTMLTextAreaElement ||
+      target?.isContentEditable;
+
     if (event.key === "/" && !editing) {
       event.preventDefault();
-      els.search.focus();
+      if (!catalogIsOpen()) setCatalogOpen(true);
+      setTimeout(function () { els.search.focus(); }, 0);
       return;
     }
-    if (event.key === "Escape" && els.catalogPanel.classList.contains("is-open")) {
+
+    if (event.key === "Escape" && !els.filterPanel.hidden) {
+      setFiltersOpen(false);
+      return;
+    }
+
+    if (event.key === "Escape" && mobileQuery.matches && catalogIsOpen()) {
       setCatalogOpen(false);
       return;
     }
-    if (!editing && (event.key === "r" || event.key === "R")) {
+
+    if (!editing && state.selectedId && (event.key === "r" || event.key === "R")) {
       event.preventDefault();
       reloadPreview();
     }
-    if (!editing && (event.key === "f" || event.key === "F")) {
+
+    if (!editing && state.selectedId && (event.key === "f" || event.key === "F")) {
       event.preventDefault();
       els.fullscreen.click();
     }
@@ -542,8 +715,11 @@ function bindEvents() {
 async function loadCatalog() {
   const response = await fetch("/catalog.json", { cache: "no-store" });
   if (!response.ok) throw new Error("Catalog request failed with HTTP " + response.status);
+
   const catalog = await response.json();
-  if (!catalog || !Array.isArray(catalog.assets)) throw new Error("Invalid generated catalog");
+  if (!catalog || !Array.isArray(catalog.assets)) {
+    throw new Error("Invalid generated catalog");
+  }
 
   state.catalog = catalog;
   state.assets = catalog.assets.map(function (asset) {
@@ -553,31 +729,32 @@ async function loadCatalog() {
     return category || String(a.title || a.id).localeCompare(String(b.title || b.id));
   });
 
-  const categoryCount = unique(state.assets.map(function (asset) { return asset.category; })).length;
-  els.catalogSummary.textContent = state.assets.length + " assets · " + categoryCount + " categories · source " + String(catalog.sourceCommit || "unknown").slice(0, 7);
-
   initFilters();
   applyFilters();
 
   const requested = assetFromHash();
-  const defaultId = requested && state.assets.some(function (asset) { return asset.id === requested; })
-    ? requested
-    : state.assets[0]?.id;
-
-  if (defaultId) selectAsset(defaultId);
+  if (requested && state.assets.some(function (asset) { return asset.id === requested; })) {
+    selectAsset(requested);
+  } else {
+    showHome(false);
+  }
 }
 
 async function start() {
   initTheme();
   bindEvents();
+  setFiltersOpen(false);
+  setCatalogOpen(!mobileQuery.matches);
   els.viewport.value = state.viewport;
+
   try {
     await loadCatalog();
   } catch (error) {
     console.error(error);
-    els.catalogSummary.textContent = "Catalog unavailable";
-    els.viewerEmpty.querySelector("h1").textContent = "The catalog could not be loaded";
-    els.viewerEmpty.querySelector("p").textContent = error instanceof Error ? error.message : String(error);
+    els.homeGrid.replaceChildren();
+    els.homeView.querySelector("h1").textContent = "Catalog unavailable";
+    els.homeView.querySelector(".home-heading p:not(.eyebrow)").textContent =
+      error instanceof Error ? error.message : String(error);
   }
 }
 
