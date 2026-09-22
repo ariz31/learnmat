@@ -77,7 +77,7 @@ def should_publish_runtime_file(relative_to_asset: Path) -> bool:
     parts = relative_to_asset.parts
     if not parts:
         return False
-    if parts[0] == "checks":
+    if parts[0] in {"checks", "previews"}:
         return False
     if relative_to_asset.name in {"asset.json", "README.md", "REVIEW.md"}:
         return False
@@ -140,16 +140,13 @@ def build_catalog() -> dict:
         metadata_path = pointer["metadata"]
         require(asset_id in validated_by_id, f"Validated record missing: {asset_id}")
         record = validated_by_id[asset_id]
+        if record.get("renderer") != "threejs":
+            continue
         entrypoint = safe_repo_file(record["entrypoint"])
         require(entrypoint.suffix.lower() == ".html",
                 f"Viewer requires an HTML entrypoint for {asset_id}: {record['entrypoint']}")
 
         copy_asset_runtime(metadata_path)
-
-        preview_url = None
-        if record.get("previewImage"):
-            safe_repo_file(record["previewImage"])
-            preview_url = "/" + PurePosixPath(record["previewImage"]).as_posix()
 
         license_url = copy_license(record)
 
@@ -166,7 +163,6 @@ def build_catalog() -> dict:
         item.update({
             "metadataPath": metadata_path,
             "entrypointUrl": "/" + PurePosixPath(record["entrypoint"]).as_posix(),
-            "previewUrl": preview_url,
             "licenseUrl": license_url,
             "origin": origin,
             "previewPolicy": "repository-component" if original_component else "isolated-candidate",
@@ -187,8 +183,9 @@ def build_catalog() -> dict:
         "schemaVersion": "1.0.0",
         "audience": "development-viewer",
         "description": (
-            "Internal/development viewer inventory. Candidate or in-review presence "
-            "does not imply approval, rights clearance, or public-release eligibility."
+            "3D-only development viewer inventory. Only Three.js records are published "
+            "to the viewer; candidate or in-review presence does not imply approval, "
+            "rights clearance, or public-release eligibility."
         ),
         "sourceCommit": commit,
         "assetCount": len(output),

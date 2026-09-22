@@ -101,6 +101,11 @@ def main():
                 'Invalid catalog index entry')
         record = read_json(local_file(item['metadata']))
         check(record, schema, item['metadata'])
+        if item['metadata'].startswith('assets/'):
+            require(record['renderer'] == 'threejs',
+                    f'{record["id"]}: curated assets must use the Three.js renderer')
+        require(record['previewImage'] is None,
+                f'{record["id"]}: static previewImage assets are not allowed')
         require(item['id'] == record['id'], 'Index ID differs from metadata')
         require(record['id'] not in seen, f'Duplicate ID: {record["id"]}')
         seen.add(record['id'])
@@ -117,8 +122,8 @@ def main():
                     f'{record["id"]}: incomplete release reviews')
             require(rights['status'] == 'cleared' and rights['licenseExpression']
                     and rights['licenseFile'], f'{record["id"]}: rights not cleared')
-            require(record['previewImage'] and record['reviewFile'],
-                    f'{record["id"]}: missing preview/review evidence')
+            require(record['reviewFile'],
+                    f'{record["id"]}: missing review evidence')
     for record in assets:
         if record['derivedFrom']:
             require(record['derivedFrom'] in seen and record['derivedFrom'] != record['id'],

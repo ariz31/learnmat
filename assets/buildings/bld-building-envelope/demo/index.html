@@ -1,78 +1,50 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>LearnMat · Parametric Building Envelope</title>
-  <style>
-    :root{font-family:system-ui,-apple-system,sans-serif;color:#172033;background:#f5f7fa}
-    *{box-sizing:border-box}
-    body{margin:0;padding:20px}
-    main{max-width:1120px;margin:auto;display:grid;grid-template-columns:minmax(240px,300px) minmax(0,1fr);gap:16px;align-items:start}
-    form{background:#fff;border:1px solid #d7deea;border-radius:14px;padding:16px;display:grid;gap:12px}
-    h1{font-size:1.2rem;margin:0 0 4px}
-    .note{font-size:.86rem;color:#58677a;margin:0}
-    label{display:grid;gap:5px;font-size:.86rem;font-weight:650}
-    input{width:100%;padding:8px;border:1px solid #aeb9c7;border-radius:8px;font:inherit}
-    button{padding:9px 12px;border:1px solid #8291a4;border-radius:9px;background:#fff;font:inherit;font-weight:650;cursor:pointer}
-    #error{min-height:1.3em;color:#a33;font-size:.83rem}
-    @media(max-width:760px){body{padding:10px}main{grid-template-columns:1fr}}
-  </style>
-</head>
-<body>
-  <main>
-    <form id="controls">
-      <div>
-        <h1>Building envelope</h1>
-        <p class="note">Geometry-only teaching asset. It does not assert building-code compliance.</p>
-      </div>
-      <label>Width (m)<input name="width" type="number" min="6" max="40" step="0.5" value="18"></label>
-      <label>Depth (m)<input name="depth" type="number" min="6" max="30" step="0.5" value="12"></label>
-      <label>Floors<input name="floors" type="number" min="1" max="12" step="1" value="4"></label>
-      <label>Floor height (m)<input name="floorHeight" type="number" min="2.4" max="5" step="0.1" value="3.2"></label>
-      <label>Facade bays<input name="bays" type="number" min="1" max="10" step="1" value="4"></label>
-      <label>Cutaway fraction<input name="cutaway" type="range" min="0" max="0.8" step="0.02" value="0.36"></label>
-      <button type="button" id="reset">Reset defaults</button>
-      <div id="error" role="status" aria-live="polite"></div>
-    </form>
-    <div id="asset"></div>
-  </main>
-  <script type="module">
-    import { createAsset } from "../src/asset.mjs";
-
-    const host = document.querySelector("#asset");
-    const form = document.querySelector("#controls");
-    const error = document.querySelector("#error");
-    const asset = createAsset({ container: host, reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches });
-
-    function values() {
-      const data = new FormData(form);
-      return {
-        width: Number(data.get("width")),
-        depth: Number(data.get("depth")),
-        floors: Number(data.get("floors")),
-        floorHeight: Number(data.get("floorHeight")),
-        bays: Number(data.get("bays")),
-        cutaway: Number(data.get("cutaway"))
-      };
-    }
-
-    form.addEventListener("input", () => {
-      try {
-        asset.setParameters(values());
-        error.textContent = "";
-      } catch (reason) {
-        error.textContent = reason instanceof Error ? reason.message : String(reason);
-      }
-    });
-
-    document.querySelector("#reset").addEventListener("click", () => {
-      form.reset();
-      asset.reset();
-      error.textContent = "";
-    });
-
-    addEventListener("beforeunload", () => asset.dispose(), { once: true });
-  </script>
-</body>
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Building Envelope — 3D — LearnMat</title>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"}}</script>
+<style>
+:root{--bg:#06111c;--panel:rgba(6,17,28,.91);--line:rgba(190,220,245,.17);--text:#eef7ff;--muted:#9fb8ca;--cyan:#50d8ff;--green:#66e4a8;--amber:#ffc857;--shadow:0 22px 70px rgba(0,0,0,.38)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:linear-gradient(180deg,#091725,#06111c);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}.app{position:relative;width:100%;height:100%;padding:8px}.shell{display:grid;grid-template-columns:minmax(250px,310px) minmax(0,1fr);gap:8px;width:100%;height:100%}
+.panel,.stage{border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow)}.panel{border-radius:16px;padding:14px;overflow:auto}.stage{position:relative;border-radius:16px;overflow:hidden;background:#07131f}
+.eyebrow{color:var(--cyan);text-transform:uppercase;letter-spacing:.13em;font-size:.62rem;font-weight:850}.panel h1{margin:6px 0;font-size:1.18rem;line-height:1.12}.lead{margin:0 0 10px;color:var(--muted);font-size:.72rem;line-height:1.45}
+label{display:grid;grid-template-columns:1fr auto;gap:4px;margin:8px 0;color:var(--muted);font-size:.65rem;font-weight:750}label input{grid-column:1/3;width:100%}output{color:var(--text);font-variant-numeric:tabular-nums}.formula{border:1px solid rgba(80,216,255,.20);background:rgba(80,216,255,.055);border-radius:10px;padding:8px;margin:9px 0;color:#cdefff;font:650 .64rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
+details{border-top:1px solid var(--line);margin-top:10px;padding-top:9px}summary{cursor:pointer;color:var(--cyan);font-size:.66rem;font-weight:800}ol{padding-left:18px;color:var(--muted);font-size:.64rem;line-height:1.45}li+li{margin-top:4px}
+#threeHost{position:absolute;inset:0}#threeHost canvas{display:block;width:100%;height:100%}.hud{position:absolute;z-index:4;left:10px;top:10px;display:grid;gap:6px;pointer-events:none}.hud-card,.tools{border:1px solid var(--line);background:rgba(4,14,24,.80);backdrop-filter:blur(10px);border-radius:12px}.hud-card{padding:9px 11px;min-width:210px}.hud-card b{display:block;font-size:.92rem}.hud-card span{display:block;margin-top:3px;color:var(--muted);font-size:.61rem}.metrics{display:flex;flex-wrap:wrap;gap:5px}.metric{padding:5px 7px;border:1px solid var(--line);background:rgba(4,14,24,.76);border-radius:999px;font-size:.58rem;color:var(--muted)}.metric strong{color:var(--text);font-variant-numeric:tabular-nums}
+.tools{position:absolute;z-index:5;right:10px;top:10px;padding:5px;display:flex;gap:4px}.btn{min-height:31px;border:1px solid var(--line);background:rgba(255,255,255,.055);color:var(--text);border-radius:8px;padding:5px 8px;font-size:.62rem;font-weight:750}.btn.primary{background:var(--cyan);border-color:transparent;color:#03141d}
+.note{position:absolute;z-index:4;left:10px;bottom:10px;max-width:min(620px,calc(100% - 20px));border:1px solid var(--line);background:rgba(4,14,24,.80);backdrop-filter:blur(10px);border-radius:11px;padding:8px 10px;color:var(--muted);font-size:.60rem;line-height:1.42}.note strong{color:var(--green)}
+.app.focus .panel{display:none}.app.focus .shell{grid-template-columns:1fr}.app.focus{padding:0}.app.focus .stage{border-radius:0;border:0}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+@media(max-width:800px){.shell{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}.panel{order:2;max-height:45vh}.stage{order:1}.hud-card{min-width:170px}}
+</style></head><body><main class="app" id="app"><div class="shell">
+<aside class="panel"><div class="eyebrow">LearnMat · Buildings 3D</div><h1>Building envelope</h1><p class="lead">Orbit a dimensional shell. Openings are true facade voids; the cutaway exposes floor plates.</p>
+<label>Width <output id="ow">18.0 m</output><input id="width" type="range" min="6" max="40" step=".5" value="18"></label>
+<label>Depth <output id="od">12.0 m</output><input id="depth" type="range" min="6" max="30" step=".5" value="12"></label>
+<label>Floors <output id="of">4</output><input id="floors" type="range" min="1" max="12" step="1" value="4"></label>
+<label>Floor height <output id="ofh">3.20 m</output><input id="floorHeight" type="range" min="2.4" max="5" step=".05" value="3.2"></label>
+<label>Facade bays <output id="ob">4</output><input id="bays" type="range" min="1" max="10" step="1" value="4"></label>
+<label>Opening width <output id="oow">1.80 m</output><input id="openingWidth" type="range" min=".6" max="4" step=".05" value="1.8"></label>
+<label>Opening height <output id="ooh">1.50 m</output><input id="openingHeight" type="range" min=".6" max="3" step=".05" value="1.5"></label>
+<label>Sill height <output id="osh">0.90 m</output><input id="sillHeight" type="range" min="0" max="1.5" step=".05" value=".9"></label>
+<label>Cutaway <output id="oc">36%</output><input id="cutaway" type="range" min="0" max=".8" step=".02" value=".36"></label>
+<div class="formula">H = floors × floorHeight<br>bay width = width ÷ bays</div>
+<details><summary>Teaching sequence</summary><ol><li>Set overall width, depth, floors, and floor height.</li><li>Divide the facade into repeated bays.</li><li>Inspect sill, opening, and head geometry as actual voids.</li><li>Increase cutaway to expose floor plates spatially.</li><li>Interpret geometry only; no code or structural adequacy is implied.</li></ol></details></aside>
+<section class="stage"><div id="threeHost" role="img" aria-label="Interactive 3D parametric building envelope"></div><div class="hud"><div class="hud-card"><b>Building envelope — 3D</b><span>Real spatial shell driven by one dimensional model</span></div><div class="metrics" id="metrics"></div></div>
+<div class="tools"><button class="btn" id="home" type="button">Camera</button><button class="btn" id="reset" type="button">Reset</button><button class="btn primary" id="focus" type="button" aria-pressed="false">Focus</button></div>
+<div class="note"><strong>3D inspection:</strong> drag to orbit · wheel/pinch to zoom · cutaway is a viewing aid, not a construction detail.</div></section></div></main>
+<script type="module">
+import * as THREE from 'three';import{OrbitControls}from'three/addons/controls/OrbitControls.js';import{createAsset}from'../src/asset.mjs';
+const q=s=>document.querySelector(s),host=q('#threeHost'),app=q('#app'),metrics=q('#metrics');
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;host.append(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x07131f);scene.fog=new THREE.Fog(0x07131f,55,145);
+const camera=new THREE.PerspectiveCamera(42,1,.05,250);const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.065;controls.maxPolarAngle=Math.PI*.49;
+scene.add(new THREE.HemisphereLight(0xccecff,0x28323a,1.9));const key=new THREE.DirectionalLight(0xfff1d5,3.5);key.position.set(-18,32,20);key.castShadow=true;key.shadow.mapSize.set(2048,2048);scene.add(key);const rim=new THREE.DirectionalLight(0x52d9ff,1.05);rim.position.set(18,14,-24);scene.add(rim);
+const asset=createAsset({THREE,scene});
+const ids=['width','depth','floors','floorHeight','bays','openingWidth','openingHeight','sillHeight','cutaway'];const el=Object.fromEntries(ids.map(id=>[id,q('#'+id)]));
+function fit(){const m=asset.snapshot().state.model;const center=new THREE.Vector3(0,m.height*.48,-m.depth*.52);const r=Math.max(m.width,m.height,m.depth);camera.position.set(r*.95,m.height*.74+r*.24,r*.96);controls.target.copy(center);controls.update();}
+function apply(refit=false){const width=+el.width.value,bays=+el.bays.value,floorHeight=+el.floorHeight.value;const maxW=Math.max(.6,width/bays*.72);el.openingWidth.max=Math.min(4,maxW).toFixed(3);if(+el.openingWidth.value>+el.openingWidth.max)el.openingWidth.value=el.openingWidth.max;const maxOH=Math.max(.6,floorHeight-(+el.sillHeight.value)-.25);el.openingHeight.max=Math.min(3,maxOH).toFixed(3);if(+el.openingHeight.value>+el.openingHeight.max)el.openingHeight.value=el.openingHeight.max;
+const snap=asset.setParameters({width,depth:+el.depth.value,floors:+el.floors.value,floorHeight,bays,openingWidth:+el.openingWidth.value,openingHeight:+el.openingHeight.value,sillHeight:+el.sillHeight.value,cutaway:+el.cutaway.value});const m=snap.state.model;
+q('#ow').value=width.toFixed(1)+' m';q('#od').value=(+el.depth.value).toFixed(1)+' m';q('#of').value=el.floors.value;q('#ofh').value=floorHeight.toFixed(2)+' m';q('#ob').value=el.bays.value;q('#oow').value=(+el.openingWidth.value).toFixed(2)+' m';q('#ooh').value=(+el.openingHeight.value).toFixed(2)+' m';q('#osh').value=(+el.sillHeight.value).toFixed(2)+' m';q('#oc').value=Math.round(+el.cutaway.value*100)+'%';
+metrics.innerHTML='<span class="metric">Height <strong>'+m.height.toFixed(2)+' m</strong></span><span class="metric">Bay <strong>'+m.bayWidth.toFixed(2)+' m</strong></span><span class="metric">Openings <strong>'+m.openings.length+'</strong></span><span class="metric">Cutaway <strong>'+m.cutawayDepth.toFixed(2)+' m</strong></span>';if(refit)fit();}
+ids.forEach(id=>el[id].addEventListener('input',()=>apply(false)));q('#home').onclick=fit;q('#reset').onclick=()=>{el.width.value=18;el.depth.value=12;el.floors.value=4;el.floorHeight.value=3.2;el.bays.value=4;el.openingWidth.value=1.8;el.openingHeight.value=1.5;el.sillHeight.value=.9;el.cutaway.value=.36;apply(true)};q('#focus').onclick=()=>{const on=!app.classList.contains('focus');app.classList.toggle('focus',on);q('#focus').textContent=on?'Exit':'Focus';q('#focus').setAttribute('aria-pressed',String(on));setTimeout(resize,0)};
+function resize(){const r=host.getBoundingClientRect();if(r.width<2||r.height<2)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();asset.resize(r.width,r.height,renderer.getPixelRatio())}new ResizeObserver(resize).observe(host);addEventListener('keydown',e=>{if(e.key==='Escape'&&app.classList.contains('focus'))q('#focus').click()});resize();apply(true);
+let start=performance.now();function frame(now){asset.update((now-start)/1000);controls.update();renderer.render(scene,camera);requestAnimationFrame(frame)}requestAnimationFrame(frame);addEventListener('beforeunload',()=>{asset.dispose();renderer.dispose();controls.dispose()},{once:true});
+</script></body></html>

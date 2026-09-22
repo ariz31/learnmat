@@ -20,7 +20,7 @@
   "status": "candidate",
   "entrypoint": "assets/steel-and-timber/str-steel-connection/demo/index.html",
   "readme": "assets/steel-and-timber/str-steel-connection/README.md",
-  "previewImage": "assets/steel-and-timber/str-steel-connection/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/steel-and-timber/str-steel-connection/REVIEW.md",
   "derivedFrom": null,
   "networkRequired": true,

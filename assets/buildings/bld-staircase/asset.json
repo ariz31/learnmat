@@ -1,45 +1,43 @@
 {
   "schemaVersion": "1.0.0",
   "id": "bld-staircase",
-  "version": "0.1.0",
-  "title": "Parametric Staircase Geometry",
-  "description": "Reusable SVG straight-flight staircase geometry with derived riser height, going count, total run, width, and geometric pitch labels.",
+  "version": "0.2.0",
+  "title": "Parametric Staircase Geometry — 3D",
+  "description": "Real Three.js straight-flight stair whose riser height, going count, run, width, and geometric pitch are driven by one deterministic model.",
   "category": "buildings",
-  "topics": [
-    "staircase-geometry",
-    "rise-and-going",
-    "building-circulation"
-  ],
+  "topics": ["staircase-geometry", "rise-and-going", "building-circulation", "3d"],
   "learningObjectives": [
-    "Compute individual riser height from total rise and number of risers.",
-    "Relate a straight stair flight's number of goings to its riser count and horizontal run.",
-    "Read rise, going, width, total rise, run, and geometric pitch without treating the graphic as a code-compliance check."
+    "Compute individual riser height from total rise and riser count.",
+    "Relate the number of goings to horizontal run while inspecting the stair as spatial geometry.",
+    "Read rise, going, width, run, and geometric pitch without treating the asset as a code-compliance check."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/buildings/bld-staircase/demo/index.html",
   "readme": "assets/buildings/bld-staircase/README.md",
-  "previewImage": "assets/buildings/bld-staircase/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/buildings/bld-staircase/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {"name":"three","version":"0.185.1","url":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","embedded":false}
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party models, textures, fonts, or datasets are embedded."
+    "attribution": "Original LearnMat procedural 3D geometry; no third-party models, textures, fonts, or datasets are embedded."
   },
   "verification": {
     "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Candidate geometry uses explicit stair-count conventions and independent arithmetic spot-checks. Independent browser, accessibility, and release engineering review remain required before approval."
+    "notes": "The existing rise/going arithmetic is preserved and now drives real Three.js stair solids. Independent engineering, browser, and accessibility review remain required before approval."
   },
   "source": {
     "type": "original",
-    "reference": "Reserved buildings-agent task bld-staircase; implemented as original dependency-free SVG/DOM source.",
+    "reference": "3D replacement of reserved buildings-agent task bld-staircase.",
     "sha256": null
   }
 }

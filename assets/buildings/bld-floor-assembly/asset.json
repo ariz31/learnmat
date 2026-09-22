@@ -1,45 +1,43 @@
 {
   "schemaVersion": "1.0.0",
   "id": "bld-floor-assembly",
-  "version": "0.1.0",
-  "title": "Exploded Floor Assembly",
-  "description": "Reusable SVG floor assembly showing dimensioned finish, screed, slab geometry, service void, and ceiling board with adjustable exploded spacing.",
+  "version": "0.2.0",
+  "title": "Exploded Floor Assembly — 3D",
+  "description": "Real Three.js exploded floor build-up with dimensionally linked finish, screed, slab, service void, and ceiling board.",
   "category": "buildings",
-  "topics": [
-    "floor-assembly",
-    "building-layers",
-    "construction-detailing"
-  ],
+  "topics": ["floor-assembly", "building-layers", "construction-detailing", "3d"],
   "learningObjectives": [
-    "Identify the vertical order and thickness of common floor assembly layers.",
-    "Distinguish physical build-up from display-only exploded separation.",
+    "Identify the vertical order and physical thickness of common floor assembly layers in 3D.",
+    "Distinguish physical build-up from the display-only exploded separation.",
     "Compare solid layer thickness with service-void depth without implying structural or code compliance."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/buildings/bld-floor-assembly/demo/index.html",
   "readme": "assets/buildings/bld-floor-assembly/README.md",
-  "previewImage": "assets/buildings/bld-floor-assembly/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/buildings/bld-floor-assembly/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {"name":"three","version":"0.185.1","url":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","embedded":false}
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party models, textures, fonts, or datasets are embedded."
+    "attribution": "Original LearnMat procedural 3D geometry; no third-party models, textures, fonts, or datasets are embedded."
   },
   "verification": {
     "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Candidate implementation includes deterministic thickness arithmetic and source review. Independent live-browser, visual, accessibility, and engineering review remain required before approval."
+    "notes": "The existing layer-thickness model is preserved and now drives real Three.js solids plus a non-solid service-void volume. Independent browser, accessibility, and engineering review remain required before approval."
   },
   "source": {
     "type": "original",
-    "reference": "Reserved buildings-agent task bld-floor-assembly; implemented as original dependency-free SVG/DOM source.",
+    "reference": "3D replacement of reserved buildings-agent task bld-floor-assembly.",
     "sha256": null
   }
 }

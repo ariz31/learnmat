@@ -4,31 +4,42 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Browse and interact with LearnMat civil-engineering assets and catalog HTML previews.">
-  <title>LearnMat Asset Viewer</title>
+  <meta name="description" content="Browse LearnMat real-3D civil-engineering assets.">
+  <title>LearnMat 3D Asset Viewer</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
-      <a class="brand" id="home-link" href="/" aria-label="LearnMat assets home" title="Home">
-        <img src="/learnmat-logo.svg" alt="" width="32" height="32">
+      <a class="brand" id="home-link" href="/" aria-label="LearnMat 3D assets home" title="Home">
+        <svg class="brand-logo" viewBox="0 0 64 64" role="img" aria-label="LearnMat">
+          <defs>
+            <linearGradient id="lm-cap" x1="12" y1="10" x2="53" y2="38" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#312E81"/>
+              <stop offset="1" stop-color="#4F46E5"/>
+            </linearGradient>
+            <linearGradient id="lm-base" x1="15" y1="31" x2="48" y2="55" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#8B5CF6"/>
+              <stop offset="1" stop-color="#6366F1"/>
+            </linearGradient>
+          </defs>
+          <path d="M6.8 22.9 29.9 10.5a4.4 4.4 0 0 1 4.2 0l23.1 12.4a2.7 2.7 0 0 1 0 4.8L34.1 40.1a4.4 4.4 0 0 1-4.2 0L6.8 27.7a2.7 2.7 0 0 1 0-4.8Z" fill="url(#lm-cap)"/>
+          <path d="M14 32.3 29.7 40.7a4.8 4.8 0 0 0 4.6 0L50 32.3v10.2a5.4 5.4 0 0 1-2.8 4.7l-12.6 7a5.4 5.4 0 0 1-5.2 0l-12.6-7a5.4 5.4 0 0 1-2.8-4.7V32.3Z" fill="url(#lm-base)"/>
+          <path d="M53.3 26.6v13.2" fill="none" stroke="#4338CA" stroke-width="3.8" stroke-linecap="round"/>
+          <circle cx="53.3" cy="42.4" r="2.7" fill="#4338CA"/>
+        </svg>
       </a>
 
       <button class="icon-button" id="catalog-toggle" type="button" aria-label="Hide asset sidebar" aria-expanded="true" title="Hide sidebar">
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4.5h14M3 10h14M3 15.5h14"/></svg>
       </button>
 
-      <div class="topbar-context" id="topbar-context" aria-live="polite">Assets</div>
-
+      <div class="topbar-context" id="topbar-context" aria-live="polite">3D Assets</div>
       <div class="topbar-spacer"></div>
 
       <div class="topbar-asset-tools" id="asset-tools" hidden>
-        <div class="segmented compact-segmented" role="group" aria-label="Preview mode">
-          <button type="button" class="is-active" data-preview-mode="interactive">Live</button>
-          <button type="button" data-preview-mode="image">Image</button>
-        </div>
+        <span class="three-badge" aria-label="Three-dimensional asset">3D</span>
 
         <label class="compact-select topbar-viewport">
           <span class="sr-only">Preview viewport</span>
@@ -46,13 +57,13 @@
         <button class="icon-button optional-tool" id="share-button" type="button" aria-label="Copy asset link" title="Copy link">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.6 12.4 12.4 7.6M6.3 8.5 4.6 10.2a3 3 0 0 0 4.2 4.2l1.7-1.7M13.7 11.5l1.7-1.7a3 3 0 0 0-4.2-4.2L9.5 7.3"/></svg>
         </button>
-        <button class="icon-button" id="reload-preview" type="button" aria-label="Reload preview" title="Reload preview">
+        <button class="icon-button" id="reload-preview" type="button" aria-label="Reload 3D preview" title="Reload preview">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.6 6.1A6 6 0 1 0 16 13M15.6 6.1V2.8M15.6 6.1h-3.4"/></svg>
         </button>
-        <button class="icon-button" id="open-preview" type="button" aria-label="Open asset standalone" title="Open asset">
+        <button class="icon-button" id="open-preview" type="button" aria-label="Open 3D asset standalone" title="Open asset">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4.7A1.7 1.7 0 0 0 3 5.7v9.6A1.7 1.7 0 0 0 4.7 17h9.6a1.7 1.7 0 0 0 1.7-1.7V12M11 3h6v6M17 3l-8 8"/></svg>
         </button>
-        <button class="icon-button" id="fullscreen-preview" type="button" aria-label="View preview fullscreen" title="Fullscreen">
+        <button class="icon-button" id="fullscreen-preview" type="button" aria-label="View 3D asset fullscreen" title="Fullscreen">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 7V3.5H7M13 3.5h3.5V7M16.5 13v3.5H13M7 16.5H3.5V13"/></svg>
         </button>
       </div>
@@ -63,13 +74,13 @@
     </header>
 
     <main class="workspace" id="workspace">
-      <aside class="catalog-panel" id="catalog-panel" aria-label="Asset catalog">
+      <aside class="catalog-panel" id="catalog-panel" aria-label="3D asset catalog">
         <div class="catalog-controls">
           <div class="catalog-search-row">
             <label class="search-box">
-              <span class="sr-only">Search assets</span>
+              <span class="sr-only">Search 3D assets</span>
               <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="4.5"/><path d="m12 12 4 4"/></svg>
-              <input id="search-input" type="search" placeholder="Search assets" autocomplete="off">
+              <input id="search-input" type="search" placeholder="Search 3D assets" autocomplete="off">
               <kbd>/</kbd>
             </label>
             <button class="icon-button filter-toggle" id="filter-toggle" type="button" aria-label="Show filters" aria-expanded="false" title="Filters">
@@ -87,16 +98,12 @@
                 <span>Status</span>
                 <select id="status-filter"><option value="">All statuses</option></select>
               </label>
-              <label>
-                <span>Renderer</span>
-                <select id="renderer-filter"><option value="">All renderers</option></select>
-              </label>
-              <label>
+              <label class="filter-span">
                 <span>Source</span>
                 <select id="origin-filter">
                   <option value="">All sources</option>
                   <option value="curated">Curated assets</option>
-                  <option value="legacy-example">Catalog examples</option>
+                  <option value="legacy-example">3D catalog examples</option>
                 </select>
               </label>
             </div>
@@ -104,25 +111,25 @@
           </div>
         </div>
 
-        <nav class="asset-list" id="asset-list" aria-label="Available assets"></nav>
+        <nav class="asset-list" id="asset-list" aria-label="Available 3D assets"></nav>
         <div class="catalog-empty" id="catalog-empty" hidden>
-          <strong>No matching assets</strong>
+          <strong>No matching 3D assets</strong>
           <span>Adjust your search or filters.</span>
         </div>
       </aside>
 
-      <section class="viewer-panel" aria-label="Asset viewer">
+      <section class="viewer-panel" aria-label="3D asset viewer">
         <section class="home-view" id="home-view">
           <header class="home-heading">
             <div>
               <p class="eyebrow">LearnMat Library</p>
-              <h1>Assets</h1>
-              <p>Browse the complete visual and interactive catalog.</p>
+              <h1>3D Assets</h1>
+              <p>Open any asset to inspect its live Three.js scene.</p>
             </div>
           </header>
-          <div class="home-grid" id="home-grid" aria-label="All assets"></div>
+          <div class="home-grid" id="home-grid" aria-label="All 3D assets"></div>
           <div class="home-empty" id="home-empty" hidden>
-            <strong>No matching assets</strong>
+            <strong>No matching 3D assets</strong>
             <span>Adjust your search or filters in the sidebar.</span>
           </div>
         </section>
@@ -137,17 +144,16 @@
           </header>
 
           <div class="preview-stage" id="preview-stage">
-            <div class="preview-loading" id="preview-loading">Loading interactive preview…</div>
+            <div class="preview-loading" id="preview-loading">Loading 3D asset…</div>
             <div class="device-frame" id="device-frame">
               <iframe
                 id="asset-frame"
-                title="Interactive LearnMat asset preview"
+                title="Interactive LearnMat 3D asset"
                 loading="eager"
                 referrerpolicy="strict-origin-when-cross-origin"
                 allow="fullscreen"
                 allowfullscreen
               ></iframe>
-              <img id="preview-image" alt="" hidden>
             </div>
           </div>
 
@@ -188,9 +194,7 @@
               </div>
               <div class="parameter-wrap">
                 <table class="parameter-table">
-                  <thead>
-                    <tr><th>Parameter</th><th>Default</th><th>Range</th><th>Unit</th></tr>
-                  </thead>
+                  <thead><tr><th>Parameter</th><th>Default</th><th>Range</th><th>Unit</th></tr></thead>
                   <tbody id="parameter-table-body"></tbody>
                 </table>
                 <p class="detail-note" id="parameter-empty" hidden>No component parameter contract is declared for this catalog entry.</p>

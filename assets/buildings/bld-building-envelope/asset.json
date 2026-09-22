@@ -1,45 +1,43 @@
 {
   "schemaVersion": "1.0.0",
   "id": "bld-building-envelope",
-  "version": "0.1.0",
-  "title": "Parametric Building Envelope",
-  "description": "Reusable SVG building shell with configurable floors, facade bays, openings, dimensions, and a cutaway that exposes floor plates.",
+  "version": "0.2.0",
+  "title": "Parametric Building Envelope — 3D",
+  "description": "Real Three.js building shell with dimensional floor plates, facade bays, true opening geometry, glazing, and a spatial cutaway.",
   "category": "buildings",
-  "topics": [
-    "building-envelope",
-    "building-geometry",
-    "architectural-visualization"
-  ],
+  "topics": ["building-envelope", "building-geometry", "architectural-visualization", "3d"],
   "learningObjectives": [
-    "Relate building width, depth, floor count, and floor-to-floor height to overall envelope geometry.",
-    "Visualize repeated facade bays and openings while maintaining explicit dimensions.",
-    "Use a cutaway view to inspect floor plate elevations without implying code compliance."
+    "Relate building width, depth, floor count, and floor-to-floor height to the resulting 3D envelope.",
+    "Inspect facade bay spacing, opening dimensions, sill height, and floor elevations as spatial geometry.",
+    "Use the cutaway to expose floor plates and interior depth without implying code compliance."
   ],
   "kind": "component",
-  "renderer": "svg",
+  "renderer": "threejs",
   "status": "candidate",
   "entrypoint": "assets/buildings/bld-building-envelope/demo/index.html",
   "readme": "assets/buildings/bld-building-envelope/README.md",
-  "previewImage": "assets/buildings/bld-building-envelope/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/buildings/bld-building-envelope/REVIEW.md",
   "derivedFrom": null,
-  "networkRequired": false,
-  "dependencies": [],
+  "networkRequired": true,
+  "dependencies": [
+    {"name":"three","version":"0.185.1","url":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","embedded":false}
+  ],
   "rights": {
     "status": "cleared",
     "licenseExpression": "MIT",
     "licenseFile": "LICENSE",
-    "attribution": "Original LearnMat repository contribution; no third-party models, textures, fonts, or datasets are embedded."
+    "attribution": "Original LearnMat procedural 3D geometry; no third-party models, textures, fonts, or datasets are embedded."
   },
   "verification": {
     "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "Candidate implementation includes deterministic geometry checks and source review. Independent engineering, live browser, screenshot, and accessibility review remain required before approval."
+    "notes": "The existing deterministic envelope model is preserved and now drives real Three.js geometry. Independent engineering, browser, and accessibility review remain required before approval."
   },
   "source": {
     "type": "original",
-    "reference": "Reserved buildings-agent task bld-building-envelope; implemented as original dependency-free SVG/DOM source.",
+    "reference": "3D replacement of reserved buildings-agent task bld-building-envelope.",
     "sha256": null
   }
 }

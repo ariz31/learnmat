@@ -20,7 +20,7 @@
   "status": "candidate",
   "entrypoint": "assets/structural-analysis/str-beam-deflection/demo/index.html",
   "readme": "assets/structural-analysis/str-beam-deflection/README.md",
-  "previewImage": "assets/structural-analysis/str-beam-deflection/previews/preview.svg",
+  "previewImage": null,
   "reviewFile": "assets/structural-analysis/str-beam-deflection/REVIEW.md",
   "derivedFrom": null,
   "networkRequired": true,

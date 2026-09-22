@@ -1,61 +1,17 @@
-# Exploded Floor Assembly
+# Exploded Floor Assembly — 3D
 
-Status: candidate.
+Status: candidate. Version 0.2.0 replaces the SVG-primary layer stack with real Three.js solids.
 
-This dependency-free SVG component visualizes a floor build-up as an exploded
-axonometric assembly. It separates physical layer thickness from display-only gaps
-so learners can inspect thin layers without mistaking the exploded view for the
-actual construction depth.
+## Learning objective
 
-## Model and assumptions
+Inspect the order and physical thickness of finish, screed, slab, service void, and ceiling board while distinguishing real build-up from display-only exploded separation.
 
-The asset uses metres internally and the LearnMat right-handed convention: +Y is
-up, +X is right/east, and north is along -Z. The default physical stack, from
-bottom to top, is:
+## Authoritative model
 
-1. 12 mm ceiling board
-2. 300 mm service void
-3. 150 mm slab geometry
-4. 40 mm screed / bedding
-5. 12 mm floor finish
+`src/model.mjs` remains the single source of layer thicknesses and exploded offsets. The service void is represented as a non-solid spatial volume; it is not counted as solid thickness.
 
-Default physical build-up:
+## 3D presentation
 
-    12 + 300 + 150 + 40 + 12 = 514 mm
+Each solid layer is a dimensionally linked box with edge cues. The service void is shown as a transparent/wire volume with illustrative service runs so its non-solid nature is visually explicit. The host owns renderer, camera, controls, lighting, and animation.
 
-Default solid-material thickness, excluding the service void:
-
-    12 + 150 + 40 + 12 = 214 mm
-
-The exploded gap is a display-only separation and is not included in either
-physical build-up or component bounds. Vertical thicknesses are visually
-exaggerated in the SVG so thin layers remain legible; numerical labels remain the
-authoritative dimensions.
-
-The slab is represented only as an assembly layer. This asset does not calculate
-structural capacity, reinforcement, fire resistance, acoustics, thermal performance,
-or jurisdiction-specific code compliance.
-
-## Usage
-
-The demo entrypoint is assets/buildings/bld-floor-assembly/demo/index.html.
-The reusable module is src/asset.mjs and exports createAsset(context).
-
-The runtime supports setParameters, update, reset, resize, snapshot, and idempotent
-dispose. update accepts absolute seconds but the asset is intentionally static.
-There are no network or third-party runtime dependencies.
-
-## Reuse and rights
-
-The source is original repository work with no embedded third-party models,
-textures, fonts, or datasets. Repository MIT licensing applies.
-
-## Review evidence
-
-REVIEW.md records candidate review status. previews/default.svg is a deterministic
-static reference illustration of the default parameter set, not a browser screenshot.
-Independent browser and accessibility inspection remain required before approval.
-
-## Change history
-
-- 0.1.0: Initial exploded floor assembly component and demo.
+No structural capacity, acoustic rating, fire rating, or code-compliance claim is made.

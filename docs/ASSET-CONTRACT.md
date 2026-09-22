@@ -9,18 +9,20 @@ symlink outside it. IDs are stable kebab-case strings and unique across categori
 
 Each asset needs `asset.json`, a README, and an existing entrypoint. Metadata records
 title, category, topics, objectives, kind, renderer, dependencies, network needs,
-rights, review state, source provenance, and optional preview/review paths.
-Unknown values must be explicit; do not invent dimensions, author names, verified
-licenses, GLB exports, performance scores, or preview URLs.
+rights, review state, source provenance, and the review path. Curated assets use
+`renderer: threejs`; `previewImage` is retained only as a compatibility field and
+must be `null`. Static PNG/JPG/WebP/GIF/SVG preview assets are not part of the
+runtime catalog. Unknown values must be explicit; do not invent dimensions, author
+names, verified licenses, GLB exports, performance scores, or preview URLs.
 
-For a published asset, also provide an actual preview, completed review record,
-license text path, versioned distributable, and usage instructions. The review
+For a published asset, provide a working live Three.js entrypoint, completed review
+record, license text path, versioned distributable, and usage instructions. The review
 record must also demonstrate the educational design requirements in
 EDUCATIONAL-DESIGN.md: the repository's 3D-first rule (or a documented 2D-primary
 exception), a meaningful learning outcome, stepwise reasoning when a real procedure
 exists, minimal-text information hierarchy, purposeful animation when used, and
-focus/maximize presentation behavior for interactive animation. Asset previews
-are evidence from the source, not AI-generated substitutes. Component APIs need
+focus/maximize presentation behavior for interactive animation. Rendered captures may be used as review evidence, but they are not checked-in
+catalog image assets or substitutes for the live 3D entrypoint. Component APIs need
 documented input ranges, units, return values, errors, and resource disposal.
 
 ## Lifecycle
@@ -35,7 +37,7 @@ documented input ranges, units, return values, errors, and resource disposal.
 Approval requires `engineeringReview`, `browserReview`, and `accessibilityReview`
 all equal `passed`; the completed review must also satisfy the educational and
 presentation requirements in docs/EDUCATIONAL-DESIGN.md; rights status `cleared`; nonempty license expression and
-existing license text; existing preview and review files. Passing metadata checks
+existing license text; a working Three.js entrypoint and an existing review file. Passing metadata checks
 alone does not establish any of these facts. Deprecation records must retain the
 prior evidence and state the reason in the README. Unsafe or rights-disputed
 downloads may need withdrawal with a visible replacement notice.

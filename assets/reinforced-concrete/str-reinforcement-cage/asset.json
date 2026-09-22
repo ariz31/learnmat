@@ -20,7 +20,7 @@
   "status": "candidate",
   "entrypoint": "assets/reinforced-concrete/str-reinforcement-cage/demo/index.html",
   "readme": "assets/reinforced-concrete/str-reinforcement-cage/README.md",
-  "previewImage": "assets/reinforced-concrete/str-reinforcement-cage/previews/default.svg",
+  "previewImage": null,
   "reviewFile": "assets/reinforced-concrete/str-reinforcement-cage/REVIEW.md",
   "derivedFrom": null,
   "networkRequired": true,

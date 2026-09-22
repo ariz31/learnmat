@@ -1,63 +1,21 @@
 {
-  "contractVersion": "1.0.0",
-  "implemented": true,
-  "module": "assets/buildings/bld-floor-assembly/src/asset.mjs",
-  "lengthUnit": "m",
-  "timeUnit": "s",
-  "coordinates": "right-handed-y-up-north-minus-z",
-  "boundsDescription": "Physical assembly bounds span x=-width/2 to +width/2, z=-depth to 0, and y=0 to the sum of ceiling board, service void, slab, screed, and finish thicknesses. Exploded display offsets are excluded from physical bounds.",
-  "parameters": {
-    "width": {
-      "unit": "m",
-      "min": 2,
-      "max": 12,
-      "default": 6
-    },
-    "depth": {
-      "unit": "m",
-      "min": 2,
-      "max": 12,
-      "default": 4
-    },
-    "finishThickness": {
-      "unit": "m",
-      "min": 0.005,
-      "max": 0.04,
-      "default": 0.012
-    },
-    "screedThickness": {
-      "unit": "m",
-      "min": 0.01,
-      "max": 0.1,
-      "default": 0.04
-    },
-    "slabThickness": {
-      "unit": "m",
-      "min": 0.08,
-      "max": 0.4,
-      "default": 0.15,
-      "note": "Geometric layer thickness only; no structural capacity is calculated."
-    },
-    "serviceVoid": {
-      "unit": "m",
-      "min": 0,
-      "max": 1,
-      "default": 0.3,
-      "note": "Clear geometric void, not solid material."
-    },
-    "ceilingBoardThickness": {
-      "unit": "m",
-      "min": 0.006,
-      "max": 0.03,
-      "default": 0.012
-    },
-    "explodeGap": {
-      "unit": "m",
-      "min": 0,
-      "max": 0.25,
-      "default": 0.08,
-      "note": "Display-only separation between layers; excluded from physical build-up."
-    }
+  "contractVersion":"1.0.0",
+  "implemented":true,
+  "module":"assets/buildings/bld-floor-assembly/src/asset.mjs",
+  "lengthUnit":"m",
+  "timeUnit":"s",
+  "coordinates":"right-handed-y-up-north-minus-z",
+  "boundsDescription":"Physical assembly spans x=-width/2 to +width/2, z=-depth/2 to +depth/2, and y=0 to the physical build-up. Exploded display offsets are excluded from physical bounds.",
+  "parameters":{
+    "width":{"type":"number","unit":"m","min":2,"max":12,"default":6},
+    "depth":{"type":"number","unit":"m","min":2,"max":12,"default":4},
+    "finishThickness":{"type":"number","unit":"m","min":0.005,"max":0.04,"default":0.012},
+    "screedThickness":{"type":"number","unit":"m","min":0.01,"max":0.1,"default":0.04},
+    "slabThickness":{"type":"number","unit":"m","min":0.08,"max":0.4,"default":0.15},
+    "serviceVoid":{"type":"number","unit":"m","min":0,"max":1,"default":0.3},
+    "ceilingBoardThickness":{"type":"number","unit":"m","min":0.006,"max":0.03,"default":0.012},
+    "explodeGap":{"type":"number","unit":"m","min":0,"max":0.25,"default":0.08}
   },
-  "assetDependencies": []
+  "assetDependencies":[],
+  "peerDependencies":[{"name":"three","version":"0.185.1","injectedByHost":true}]
 }

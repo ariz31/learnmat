@@ -3,7 +3,6 @@ const state = {
   assets: [],
   filtered: [],
   selectedId: null,
-  previewMode: "interactive",
   viewport: localStorage.getItem("learnmat-viewer-viewport") || "fit"
 };
 
@@ -21,7 +20,6 @@ const els = {
   search: document.querySelector("#search-input"),
   category: document.querySelector("#category-filter"),
   status: document.querySelector("#status-filter"),
-  renderer: document.querySelector("#renderer-filter"),
   origin: document.querySelector("#origin-filter"),
   clearFilters: document.querySelector("#clear-filters"),
   assetList: document.querySelector("#asset-list"),
@@ -39,7 +37,6 @@ const els = {
   previewStage: document.querySelector("#preview-stage"),
   deviceFrame: document.querySelector("#device-frame"),
   frame: document.querySelector("#asset-frame"),
-  previewImage: document.querySelector("#preview-image"),
   previewLoading: document.querySelector("#preview-loading"),
   previewNotice: document.querySelector("#preview-notice"),
   previewSecurity: document.querySelector("#preview-security"),
@@ -73,15 +70,13 @@ function normalize(value) {
 }
 
 function unique(values) {
-  return [...new Set(values.filter(Boolean))].sort(function (a, b) {
-    return a.localeCompare(b);
-  });
+  return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b));
 }
 
 function humanize(value) {
   return String(value || "unknown")
     .replace(/[-_]+/g, " ")
-    .replace(/\b\w/g, function (char) { return char.toUpperCase(); });
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 function statusClass(value) {
@@ -98,16 +93,13 @@ function assetSearchText(asset) {
     asset.category,
     asset.status,
     asset.kind,
-    asset.renderer,
     ...(asset.topics || []),
     ...(asset.learningObjectives || [])
   ].join(" ").toLowerCase();
 }
 
 function selectedAsset() {
-  return state.assets.find(function (asset) {
-    return asset.id === state.selectedId;
-  }) || null;
+  return state.assets.find((asset) => asset.id === state.selectedId) || null;
 }
 
 function updateHash(id) {
@@ -127,43 +119,36 @@ function showToast(message) {
   els.toast.textContent = message;
   els.toast.hidden = false;
   clearTimeout(showToast.timer);
-  showToast.timer = setTimeout(function () {
-    els.toast.hidden = true;
-  }, 2200);
+  showToast.timer = setTimeout(() => { els.toast.hidden = true; }, 2200);
 }
 
 function fillSelect(select, values, labeler) {
   const current = select.value;
   while (select.options.length > 1) select.remove(1);
-  values.forEach(function (value) {
+  values.forEach((value) => {
     const option = document.createElement("option");
     option.value = value;
     option.textContent = labeler ? labeler(value) : humanize(value);
     select.appendChild(option);
   });
-  if ([...select.options].some(function (option) { return option.value === current; })) {
-    select.value = current;
-  }
+  if ([...select.options].some((option) => option.value === current)) select.value = current;
 }
 
 function initFilters() {
-  fillSelect(els.category, unique(state.assets.map(function (asset) { return asset.category; })));
-  fillSelect(els.status, unique(state.assets.map(function (asset) { return asset.status; })));
-  fillSelect(els.renderer, unique(state.assets.map(function (asset) { return asset.renderer; })));
+  fillSelect(els.category, unique(state.assets.map((asset) => asset.category)));
+  fillSelect(els.status, unique(state.assets.map((asset) => asset.status)));
 }
 
 function applyFilters() {
   const query = normalize(els.search.value);
   const category = els.category.value;
   const status = els.status.value;
-  const renderer = els.renderer.value;
   const origin = els.origin.value;
 
-  state.filtered = state.assets.filter(function (asset) {
+  state.filtered = state.assets.filter((asset) => {
     if (query && !asset._search.includes(query)) return false;
     if (category && asset.category !== category) return false;
     if (status && asset.status !== status) return false;
-    if (renderer && asset.renderer !== renderer) return false;
     if (origin && asset.origin !== origin) return false;
     return true;
   });
@@ -172,43 +157,24 @@ function applyFilters() {
   renderHomeGrid();
 }
 
-function makePreview(target, asset, className) {
-  const preview = create("span", className);
-  if (asset.previewUrl) {
-    const image = document.createElement("img");
-    image.src = asset.previewUrl;
-    image.alt = "";
-    image.loading = "lazy";
-    image.decoding = "async";
-    image.addEventListener("error", function () {
-      preview.replaceChildren(create("span", "", asset.renderer ? asset.renderer.toUpperCase() : "HTML"));
-    }, { once: true });
-    preview.appendChild(image);
-  } else {
-    preview.appendChild(create("span", "", asset.renderer ? asset.renderer.toUpperCase() : "HTML"));
-  }
-  target.appendChild(preview);
-}
-
 function renderAssetList() {
   els.assetList.replaceChildren();
   els.catalogEmpty.hidden = state.filtered.length !== 0;
 
-  state.filtered.forEach(function (asset) {
+  state.filtered.forEach((asset) => {
     const button = create("button", "asset-item");
     button.type = "button";
     button.dataset.assetId = asset.id;
     button.setAttribute("aria-current", asset.id === state.selectedId ? "true" : "false");
     if (asset.id === state.selectedId) button.classList.add("is-selected");
 
-    makePreview(button, asset, "asset-thumb");
-
+    const mark = create("span", "asset-3d-mark", "3D");
     const copy = create("span", "asset-item-copy");
     copy.appendChild(create("span", "asset-item-title", asset.title || asset.id));
     copy.appendChild(create("span", "asset-item-subtitle", humanize(asset.category)));
-    button.appendChild(copy);
+    button.append(mark, copy);
 
-    button.addEventListener("click", function () {
+    button.addEventListener("click", () => {
       selectAsset(asset.id);
       if (mobileQuery.matches) setCatalogOpen(false);
     });
@@ -221,65 +187,58 @@ function renderHomeGrid() {
   els.homeGrid.replaceChildren();
   els.homeEmpty.hidden = state.filtered.length !== 0;
 
-  state.filtered.forEach(function (asset) {
+  state.filtered.forEach((asset) => {
     const button = create("button", "home-card");
     button.type = "button";
     button.setAttribute("aria-label", "Open " + (asset.title || asset.id));
 
-    makePreview(button, asset, "home-card-preview");
+    const top = create("span", "home-card-top");
+    top.append(
+      create("span", "home-3d-badge", "3D"),
+      create("span", "home-card-category", humanize(asset.category))
+    );
 
     const copy = create("span", "home-card-copy");
     copy.appendChild(create("span", "home-card-title", asset.title || asset.id));
-
-    const meta = [
-      humanize(asset.category),
-      humanize(asset.renderer),
-      humanize(asset.status)
-    ].filter(Boolean).join(" · ");
-    copy.appendChild(create("span", "home-card-meta", meta));
-    button.appendChild(copy);
-
-    button.addEventListener("click", function () {
-      selectAsset(asset.id);
-    });
-
+    copy.appendChild(create(
+      "span",
+      "home-card-meta",
+      [humanize(asset.status), asset.networkRequired === true ? "Live WebGL" : "Three.js"].join(" · ")
+    ));
+    button.append(top, copy);
+    button.addEventListener("click", () => selectAsset(asset.id));
     els.homeGrid.appendChild(button);
   });
 }
 
 function metadataRows(target, rows) {
   target.replaceChildren();
-  rows.forEach(function (row) {
-    const dt = create("dt", "", row[0]);
-    const value = row[1] === null || row[1] === undefined || row[1] === "" ? "—" : row[1];
-    const dd = create("dd", "", value);
-    target.append(dt, dd);
+  rows.forEach((row) => {
+    target.append(
+      create("dt", "", row[0]),
+      create("dd", "", row[1] === null || row[1] === undefined || row[1] === "" ? "—" : row[1])
+    );
   });
 }
 
 function renderTopics(asset) {
   els.topics.replaceChildren();
-  (asset.topics || []).forEach(function (topic) {
-    els.topics.appendChild(create("span", "", topic));
-  });
+  (asset.topics || []).forEach((topic) => els.topics.appendChild(create("span", "", topic)));
 }
 
 function renderObjectives(asset) {
   els.objectives.replaceChildren();
-  (asset.learningObjectives || []).forEach(function (objective) {
-    els.objectives.appendChild(create("li", "", objective));
-  });
+  (asset.learningObjectives || []).forEach((objective) => els.objectives.appendChild(create("li", "", objective)));
 }
 
 function renderReviews(asset) {
   els.reviewGrid.replaceChildren();
   const verification = asset.verification || {};
-
   [
     ["Engineering", verification.engineeringReview],
     ["Browser", verification.browserReview],
     ["Accessibility", verification.accessibilityReview]
-  ].forEach(function (entry) {
+  ].forEach((entry) => {
     const item = create("div", "review-item");
     item.append(
       create("strong", "", entry[0]),
@@ -287,21 +246,18 @@ function renderReviews(asset) {
     );
     els.reviewGrid.appendChild(item);
   });
-
   els.verificationNote.textContent = verification.notes || "No verification note is recorded.";
 }
 
 function renderDependencies(asset) {
   els.dependencies.replaceChildren();
   const deps = asset.dependencies || [];
-
   if (!deps.length) {
     els.dependencies.appendChild(create("p", "detail-note", "No external runtime dependencies declared."));
     return;
   }
-
   const list = create("ul", "dependency-list");
-  deps.forEach(function (dep) {
+  deps.forEach((dep) => {
     const label = [dep.name, dep.version].filter(Boolean).join(" · ");
     list.appendChild(create("li", "", label + (dep.embedded ? " · embedded" : " · external")));
   });
@@ -325,113 +281,63 @@ function renderParameters(asset) {
     ? "Contract " + (component.contractVersion || "unknown")
     : "No component contract";
 
-  names.sort().forEach(function (name) {
+  names.sort().forEach((name) => {
     const spec = params[name] || {};
     const tr = document.createElement("tr");
     const range = spec.min !== undefined || spec.max !== undefined
       ? formatParameterValue(spec.min) + " – " + formatParameterValue(spec.max)
       : "—";
-
-    [name, formatParameterValue(spec.default), range, spec.unit || "—"].forEach(function (value) {
+    [name, formatParameterValue(spec.default), range, spec.unit || "—"].forEach((value) => {
       tr.appendChild(create("td", "", value));
     });
-
     els.parameterBody.appendChild(tr);
   });
 }
 
 function sandboxFor(asset) {
-  const capabilities = [
-    "allow-scripts",
-    "allow-forms",
-    "allow-modals",
-    "allow-pointer-lock",
-    "allow-downloads"
-  ];
-
-  if (asset.previewPolicy === "repository-component") {
-    capabilities.push("allow-same-origin");
-  }
-
+  const capabilities = ["allow-scripts", "allow-forms", "allow-modals", "allow-pointer-lock", "allow-downloads"];
+  if (asset.previewPolicy === "repository-component") capabilities.push("allow-same-origin");
   return capabilities.join(" ");
 }
 
 function previewNotice(asset) {
-  const parts = [];
-
+  const parts = ["Live Three.js asset. Static image previews are not used."];
   if (asset.previewPolicy === "repository-component") {
-    parts.push("Repository-authored component preview: same-origin is enabled so local ES modules can load.");
+    parts.push("Repository-authored component sandbox permits same-origin module loading.");
   } else {
-    parts.push("Legacy/intake HTML runs in a stricter opaque-origin sandbox.");
+    parts.push("Catalog example runs in the stricter isolated sandbox.");
   }
-
-  if (asset.networkRequired === true) {
-    parts.push("This entry declares network dependencies; remote libraries may be required.");
-  } else if (asset.networkRequired === false) {
-    parts.push("No network dependency is declared.");
-  } else {
-    parts.push("Network requirement has not been verified.");
-  }
-
-  if (asset.status !== "approved") {
-    parts.push("Status: " + humanize(asset.status) + "; this viewer does not imply approval.");
-  }
-
+  if (asset.networkRequired === true) parts.push("Remote runtime dependencies may be required.");
+  if (asset.status !== "approved") parts.push("Status: " + humanize(asset.status) + "; presence does not imply approval.");
   return parts.join(" ");
 }
 
 function applyViewport() {
   const value = state.viewport;
   els.viewport.value = value;
-
   if (value === "fit") {
     els.deviceFrame.style.width = "100%";
     els.deviceFrame.style.height = mobileQuery.matches ? "560px" : "700px";
     return;
   }
-
   const parts = value.split("x").map(Number);
   els.deviceFrame.style.width = parts[0] + "px";
   els.deviceFrame.style.height = parts[1] + "px";
 }
 
 function renderPreview(asset, forceReload) {
-  if (state.previewMode === "image" && !asset.previewUrl) {
-    state.previewMode = "interactive";
-  }
+  els.previewLoading.hidden = false;
+  els.previewLoading.textContent = "Loading 3D asset…";
+  els.frame.setAttribute("sandbox", sandboxFor(asset));
+  els.previewSecurity.textContent = asset.previewPolicy === "repository-component"
+    ? "Repository component sandbox"
+    : "Strict candidate sandbox";
+  els.frame.title = (asset.title || asset.id) + " live 3D asset";
 
-  const imageMode = state.previewMode === "image" && asset.previewUrl;
-  els.previewImage.hidden = !imageMode;
-  els.frame.hidden = imageMode;
-  els.reload.disabled = imageMode;
-
-  document.querySelectorAll("[data-preview-mode]").forEach(function (button) {
-    const requested = button.dataset.previewMode;
-    button.classList.toggle("is-active", requested === state.previewMode);
-    if (requested === "image") button.disabled = !asset.previewUrl;
-  });
-
-  if (imageMode) {
-    els.previewLoading.hidden = true;
-    const target = new URL(asset.previewUrl, location.href).href;
-    if (els.previewImage.src !== target || forceReload) {
-      els.previewImage.src = asset.previewUrl;
-    }
-    els.previewImage.alt = (asset.title || asset.id) + " static preview";
-  } else {
-    els.previewLoading.hidden = false;
-    els.previewLoading.textContent = "Loading interactive preview…";
-    els.frame.setAttribute("sandbox", sandboxFor(asset));
-    els.previewSecurity.textContent = asset.previewPolicy === "repository-component"
-      ? "Repository component sandbox"
-      : "Strict candidate sandbox";
-    els.frame.title = (asset.title || asset.id) + " interactive preview";
-
-    const current = els.frame.dataset.assetId;
-    if (forceReload || current !== asset.id) {
-      els.frame.dataset.assetId = asset.id;
-      els.frame.src = asset.entrypointUrl;
-    }
+  const current = els.frame.dataset.assetId;
+  if (forceReload || current !== asset.id) {
+    els.frame.dataset.assetId = asset.id;
+    els.frame.src = asset.entrypointUrl;
   }
 
   els.previewNotice.textContent = previewNotice(asset);
@@ -444,7 +350,7 @@ function renderAsset(asset) {
   els.assetTools.hidden = false;
   els.topbarContext.textContent = asset.title || asset.id;
 
-  els.eyebrow.textContent = humanize(asset.category) + " · " + humanize(asset.renderer) + " · v" + asset.version;
+  els.eyebrow.textContent = humanize(asset.category) + " · Three.js · v" + asset.version;
   els.title.textContent = asset.title || asset.id;
   els.description.textContent = asset.description || "";
 
@@ -463,9 +369,9 @@ function renderAsset(asset) {
   metadataRows(els.overview, [
     ["Asset ID", asset.id],
     ["Kind", humanize(asset.kind)],
-    ["Renderer", humanize(asset.renderer)],
+    ["Renderer", "Three.js"],
     ["Entrypoint", asset.entrypoint],
-    ["Source class", asset.origin === "curated" ? "Curated asset" : "Catalog example"],
+    ["Source class", asset.origin === "curated" ? "Curated asset" : "3D catalog example"],
     ["Network required", asset.networkRequired === true ? "Yes" : asset.networkRequired === false ? "No" : "Unknown"]
   ]);
 
@@ -484,7 +390,6 @@ function renderAsset(asset) {
   renderDependencies(asset);
   renderParameters(asset);
   renderPreview(asset, false);
-
   document.title = (asset.title || asset.id) + " · LearnMat";
 }
 
@@ -493,23 +398,18 @@ function showHome(updateUrl) {
   els.assetView.hidden = true;
   els.homeView.hidden = false;
   els.assetTools.hidden = true;
-  els.topbarContext.textContent = "Assets";
+  els.topbarContext.textContent = "3D Assets";
   els.frame.src = "about:blank";
   els.frame.dataset.assetId = "";
   renderAssetList();
   renderHomeGrid();
-
   if (updateUrl !== false) updateHash(null);
-  document.title = "LearnMat Asset Viewer";
+  document.title = "LearnMat 3D Asset Viewer";
 }
 
 function selectAsset(id) {
-  const asset = state.assets.find(function (item) {
-    return item.id === id;
-  });
-
+  const asset = state.assets.find((item) => item.id === id);
   if (!asset) return;
-
   state.selectedId = id;
   updateHash(id);
   renderAssetList();
@@ -518,13 +418,10 @@ function selectAsset(id) {
 
 function reloadPreview() {
   const asset = selectedAsset();
-  if (!asset || state.previewMode === "image") return;
-
+  if (!asset) return;
   els.previewLoading.hidden = false;
   els.frame.src = "about:blank";
-  requestAnimationFrame(function () {
-    els.frame.src = asset.entrypointUrl;
-  });
+  requestAnimationFrame(() => { els.frame.src = asset.entrypointUrl; });
 }
 
 function setCatalogOpen(open) {
@@ -535,15 +432,15 @@ function setCatalogOpen(open) {
     els.catalogPanel.classList.remove("is-open");
     els.workspace.classList.toggle("sidebar-hidden", !open);
   }
-
   els.catalogToggle.setAttribute("aria-expanded", open ? "true" : "false");
   els.catalogToggle.setAttribute("aria-label", open ? "Hide asset sidebar" : "Show asset sidebar");
   els.catalogToggle.title = open ? "Hide sidebar" : "Show sidebar";
 }
 
 function catalogIsOpen() {
-  if (mobileQuery.matches) return els.catalogPanel.classList.contains("is-open");
-  return !els.workspace.classList.contains("sidebar-hidden");
+  return mobileQuery.matches
+    ? els.catalogPanel.classList.contains("is-open")
+    : !els.workspace.classList.contains("sidebar-hidden");
 }
 
 function setFiltersOpen(open) {
@@ -557,7 +454,6 @@ function clearFilters() {
   els.search.value = "";
   els.category.value = "";
   els.status.value = "";
-  els.renderer.value = "";
   els.origin.value = "";
   applyFilters();
   els.search.focus();
@@ -571,16 +467,13 @@ function applyTheme(theme) {
 
 function initTheme() {
   const stored = localStorage.getItem("learnmat-viewer-theme");
-  const theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-  applyTheme(theme);
+  applyTheme(stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
 }
 
 async function copyShareLink() {
   const asset = selectedAsset();
   if (!asset) return;
-
   const url = location.origin + location.pathname + "#asset=" + encodeURIComponent(asset.id);
-
   try {
     await navigator.clipboard.writeText(url);
     showToast("Asset link copied.");
@@ -590,55 +483,37 @@ async function copyShareLink() {
 }
 
 function bindEvents() {
-  [els.search, els.category, els.status, els.renderer, els.origin].forEach(function (control) {
+  [els.search, els.category, els.status, els.origin].forEach((control) => {
     control.addEventListener(control === els.search ? "input" : "change", applyFilters);
   });
 
   els.clearFilters.addEventListener("click", clearFilters);
+  els.filterToggle.addEventListener("click", () => setFiltersOpen(els.filterPanel.hidden));
+  els.catalogToggle.addEventListener("click", () => setCatalogOpen(!catalogIsOpen()));
 
-  els.filterToggle.addEventListener("click", function () {
-    setFiltersOpen(els.filterPanel.hidden);
-  });
-
-  els.catalogToggle.addEventListener("click", function () {
-    setCatalogOpen(!catalogIsOpen());
-  });
-
-  els.homeLink.addEventListener("click", function (event) {
+  els.homeLink.addEventListener("click", (event) => {
     event.preventDefault();
     showHome(true);
     if (mobileQuery.matches) setCatalogOpen(false);
   });
 
-  els.themeToggle.addEventListener("click", function () {
+  els.themeToggle.addEventListener("click", () => {
     applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
   });
 
-  els.viewport.addEventListener("change", function () {
+  els.viewport.addEventListener("change", () => {
     state.viewport = els.viewport.value;
     localStorage.setItem("learnmat-viewer-viewport", state.viewport);
     applyViewport();
   });
 
-  document.querySelectorAll("[data-preview-mode]").forEach(function (button) {
-    button.addEventListener("click", function () {
-      const asset = selectedAsset();
-      if (!asset) return;
-      if (button.dataset.previewMode === "image" && !asset.previewUrl) return;
-
-      state.previewMode = button.dataset.previewMode;
-      renderPreview(asset, false);
-    });
-  });
-
   els.reload.addEventListener("click", reloadPreview);
-
-  els.open.addEventListener("click", function () {
+  els.open.addEventListener("click", () => {
     const asset = selectedAsset();
     if (asset) window.open(asset.entrypointUrl, "_blank", "noopener,noreferrer");
   });
 
-  els.fullscreen.addEventListener("click", async function () {
+  els.fullscreen.addEventListener("click", async () => {
     try {
       await els.previewStage.requestFullscreen();
     } catch {
@@ -647,22 +522,11 @@ function bindEvents() {
   });
 
   els.shareButton.addEventListener("click", copyShareLink);
-
-  els.frame.addEventListener("load", function () {
-    if (els.frame.src === "about:blank") return;
-    els.previewLoading.hidden = true;
+  els.frame.addEventListener("load", () => {
+    if (els.frame.src !== "about:blank") els.previewLoading.hidden = true;
   });
 
-  els.previewImage.addEventListener("load", function () {
-    els.previewLoading.hidden = true;
-  });
-
-  els.previewImage.addEventListener("error", function () {
-    els.previewLoading.hidden = false;
-    els.previewLoading.textContent = "Static preview failed to load.";
-  });
-
-  addEventListener("hashchange", function () {
+  addEventListener("hashchange", () => {
     const id = assetFromHash();
     if (id) {
       if (id !== state.selectedId) selectAsset(id);
@@ -671,12 +535,12 @@ function bindEvents() {
     }
   });
 
-  mobileQuery.addEventListener("change", function () {
+  mobileQuery.addEventListener("change", () => {
     setCatalogOpen(!mobileQuery.matches);
     applyViewport();
   });
 
-  addEventListener("keydown", function (event) {
+  addEventListener("keydown", (event) => {
     const target = event.target;
     const editing = target instanceof HTMLInputElement ||
       target instanceof HTMLSelectElement ||
@@ -686,7 +550,7 @@ function bindEvents() {
     if (event.key === "/" && !editing) {
       event.preventDefault();
       if (!catalogIsOpen()) setCatalogOpen(true);
-      setTimeout(function () { els.search.focus(); }, 0);
+      setTimeout(() => els.search.focus(), 0);
       return;
     }
 
@@ -717,27 +581,23 @@ async function loadCatalog() {
   if (!response.ok) throw new Error("Catalog request failed with HTTP " + response.status);
 
   const catalog = await response.json();
-  if (!catalog || !Array.isArray(catalog.assets)) {
-    throw new Error("Invalid generated catalog");
-  }
+  if (!catalog || !Array.isArray(catalog.assets)) throw new Error("Invalid generated catalog");
 
   state.catalog = catalog;
-  state.assets = catalog.assets.map(function (asset) {
-    return Object.assign({}, asset, { _search: assetSearchText(asset) });
-  }).sort(function (a, b) {
-    const category = String(a.category).localeCompare(String(b.category));
-    return category || String(a.title || a.id).localeCompare(String(b.title || b.id));
-  });
+  state.assets = catalog.assets
+    .filter((asset) => asset.renderer === "threejs")
+    .map((asset) => Object.assign({}, asset, { _search: assetSearchText(asset) }))
+    .sort((a, b) => {
+      const category = String(a.category).localeCompare(String(b.category));
+      return category || String(a.title || a.id).localeCompare(String(b.title || b.id));
+    });
 
   initFilters();
   applyFilters();
 
   const requested = assetFromHash();
-  if (requested && state.assets.some(function (asset) { return asset.id === requested; })) {
-    selectAsset(requested);
-  } else {
-    showHome(false);
-  }
+  if (requested && state.assets.some((asset) => asset.id === requested)) selectAsset(requested);
+  else showHome(false);
 }
 
 async function start() {
