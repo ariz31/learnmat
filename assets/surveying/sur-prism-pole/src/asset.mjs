@@ -8,7 +8,10 @@ function human(T){
  const torso=mesh(T,new T.BoxGeometry(.46,.60,.27),cloth);torso.position.set(-.65,1.24,0);g.add(torso);const v=mesh(T,new T.BoxGeometry(.49,.40,.29),vest);v.position.set(-.65,1.26,0);g.add(v);
  const head=mesh(T,new T.SphereGeometry(.15,20,16),skin);head.position.set(-.65,1.71,0);g.add(head);const brim=mesh(T,new T.CylinderGeometry(.19,.19,.035,24),hat);brim.position.set(-.65,1.865,0);g.add(brim);const dome=mesh(T,new T.SphereGeometry(.165,20,12,0,Math.PI*2,0,Math.PI/2),hat);dome.position.set(-.65,1.865,0);g.add(dome);
  function limb(x,y,len,r,mtrl,rot=0){const j=new T.Group();j.position.set(x,y,0);j.rotation.z=rot;const q=mesh(T,new T.CylinderGeometry(r,r,len,12),mtrl);q.position.y=-len/2;j.add(q);g.add(j);return j}
- limb(-.77,.93,.84,.07,pants,.07);limb(-.54,.93,.84,.07,pants,-.07);const arm=limb(-.39,1.46,.52,.055,skin,-.72);const fore=new T.Group();fore.position.set(0,-.49,0);fore.rotation.z=.70;const fm=mesh(T,new T.CylinderGeometry(.05,.05,.42,12),skin);fm.position.y=-.21;fore.add(fm);arm.add(fore);limb(-.90,1.46,.62,.055,skin,.18);return g
+ limb(-.77,.93,.84,.07,pants,.07);limb(-.54,.93,.84,.07,pants,-.07);const arm=limb(-.39,1.46,.52,.055,skin,-.72);const fore=new T.Group();fore.position.set(0,-.49,0);fore.rotation.z=.70;const fm=mesh(T,new T.CylinderGeometry(.05,.05,.42,12),skin);fm.position.y=-.21;fore.add(fm);arm.add(fore);limb(-.90,1.46,.62,.055,skin,.18);
+ const reflective=mat(T,0xf4f5ea,.38,.08);for(const y of[1.17,1.37]){const strip=mesh(T,new T.BoxGeometry(.505,.035,.302),reflective);strip.position.set(-.65,y,0);g.add(strip)}
+ const bootMat=mat(T,0x252522,.94,.02);for(const x of[-.78,-.53]){const boot=mesh(T,new T.BoxGeometry(.16,.105,.29),bootMat);boot.position.set(x,.055,.055);g.add(boot)}
+ const hand=mesh(T,new T.SphereGeometry(.064,16,12),skin);hand.position.set(-.06,1.12,.02);g.add(hand);return g
 }
 function disposeObj(o){o.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material)(Array.isArray(n.material)?n.material:[n.material]).forEach(x=>x.dispose())})}
 export function createAsset(context={}){
@@ -18,10 +21,13 @@ export function createAsset(context={}){
  const poleRoot=new T.Group();root.add(poleRoot);const shaftGroup=new T.Group();poleRoot.add(shaftGroup);
  const white=mat(T,0xe7ebea,.55,.15),red=mat(T,0xd6473c,.62,.08),dark=mat(T,0x252b2d,.48,.3);
  const shaft=mesh(T,new T.CylinderGeometry(.025,.025,1,16),white);shaft.position.y=.5;shaftGroup.add(shaft);
- for(let i=0;i<8;i++){const band=mesh(T,new T.CylinderGeometry(.027,.027,.10,16),i%2?white:red);band.position.y=.10+i*.12;shaftGroup.add(band)}
+ for(let i=0;i<8;i++){const band=mesh(T,new T.CylinderGeometry(.027,.027,.10,24),i%2?white:red);band.position.y=.10+i*.12;shaftGroup.add(band)}
+ const collarMat=mat(T,0x8b9498,.32,.72);for(const y of[.34,.67]){const collar=mesh(T,new T.CylinderGeometry(.035,.035,.032,24),collarMat);collar.position.y=y;shaftGroup.add(collar)}
  const tip=mesh(T,new T.ConeGeometry(.035,.14,14),dark);tip.position.y=-.07;poleRoot.add(tip);
  const prism=new T.Group();poleRoot.add(prism);
- const reflector=mesh(T,new T.OctahedronGeometry(.13,1),mat(T,0xf06b3d,.22,.18,{emissive:0x44140b,emissiveIntensity:.18}));prism.add(reflector);
+ const reflector=mesh(T,new T.OctahedronGeometry(.13,2),mat(T,0xf06b3d,.18,.18,{emissive:0x44140b,emissiveIntensity:.18}));prism.add(reflector);
+ const backing=mesh(T,new T.CylinderGeometry(.165,.165,.045,32),dark);backing.rotation.x=Math.PI/2;backing.position.z=.045;prism.add(backing);
+ const glassRing=mesh(T,new T.TorusGeometry(.142,.012,12,36),mat(T,0xdde9e7,.16,.28));glassRing.position.z=-.025;prism.add(glassRing);
  const frameMat=dark;for(const [x,y,w,h] of [[0,.19,.42,.045],[0,-.19,.42,.045],[-.19,0,.045,.42],[.19,0,.045,.42]]){const b=mesh(T,new T.BoxGeometry(w,h,.055),frameMat);b.position.set(x,y,0);prism.add(b)}
  const targetRing=mesh(T,new T.TorusGeometry(.09,.018,10,24),mat(T,0xffa42c,.42,.12));targetRing.rotation.y=Math.PI/2;prism.add(targetRing);
  const plumbMat=new T.LineDashedMaterial({color:0x2a7f7a,dashSize:.12,gapSize:.08,transparent:true,opacity:.55});const plumb=new T.Line(new T.BufferGeometry().setFromPoints([new T.Vector3(0,0,0),new T.Vector3(0,3.8,0)]),plumbMat);plumb.computeLineDistances();root.add(plumb);
