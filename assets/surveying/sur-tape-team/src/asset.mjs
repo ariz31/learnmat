@@ -9,7 +9,10 @@ function human(T,vestColor=0xf07638){
  const torso=mesh(T,new T.BoxGeometry(.46,.60,.27),cloth);torso.position.y=1.25;g.add(torso);const v=mesh(T,new T.BoxGeometry(.49,.39,.29),vest);v.position.y=1.27;g.add(v);
  const head=mesh(T,new T.SphereGeometry(.15,18,14),skin);head.position.y=1.72;g.add(head);const brim=mesh(T,new T.CylinderGeometry(.19,.19,.035,20),hat);brim.position.y=1.875;g.add(brim);const dome=mesh(T,new T.SphereGeometry(.165,20,12,0,Math.PI*2,0,Math.PI/2),hat);dome.position.y=1.875;g.add(dome);
  function limb(x,y,len,r,mtrl,rot=0){const j=new T.Group();j.position.set(x,y,0);j.rotation.z=rot;const q=mesh(T,new T.CylinderGeometry(r,r,len,12),mtrl);q.position.y=-len/2;j.add(q);g.add(j);return j}
- limb(-.12,.94,.86,.07,pants,.06);limb(.12,.94,.86,.07,pants,-.06);const a1=limb(.28,1.47,.48,.055,skin,-.65),a2=limb(-.28,1.47,.48,.055,skin,.65);g.userData={a1,a2};return g
+ limb(-.12,.94,.86,.07,pants,.06);limb(.12,.94,.86,.07,pants,-.06);const a1=limb(.28,1.47,.48,.055,skin,-.65),a2=limb(-.28,1.47,.48,.055,skin,.65);
+ const reflective=mat(T,0xf6f3df,.38,.08);for(const y of[1.18,1.37]){const strip=mesh(T,new T.BoxGeometry(.505,.035,.302),reflective);strip.position.set(0,y,0);g.add(strip)}
+ const boot=mat(T,0x282623,.94,.02);for(const x of[-.12,.12]){const b=mesh(T,new T.BoxGeometry(.16,.105,.29),boot);b.position.set(x,.055,.055);g.add(b)}
+ const h1=mesh(T,new T.SphereGeometry(.06,14,10),skin),h2=h1.clone();h1.position.set(.55,1.12,0);h2.position.set(-.55,1.12,0);g.add(h1,h2);g.userData={a1,a2};return g
 }
 function dispose(o){o.traverse(n=>{if(n.geometry)n.geometry.dispose();if(n.material)(Array.isArray(n.material)?n.material:[n.material]).forEach(x=>x.dispose())})}
 export function createAsset(context={}){
@@ -18,7 +21,10 @@ export function createAsset(context={}){
  const root=new T.Group();scene.add(root);const left=human(T,0xef7a35),right=human(T,0xe9d83b);root.add(left,right);
  const endpointMat=mat(T,0xdcd5bf,.82),markerMat=mat(T,0x223038,.66),tapeMat=mat(T,0xf5c53a,.42,.16);
  const stakeL=mesh(T,new T.CylinderGeometry(.028,.035,.55,12),endpointMat),stakeR=stakeL.clone();stakeL.position.y=.275;stakeR.position.y=.275;root.add(stakeL,stakeR);
- const reel=mesh(T,new T.TorusGeometry(.22,.055,12,30),markerMat);reel.rotation.x=Math.PI/2;reel.position.y=.28;root.add(reel);
+ const reel=mesh(T,new T.TorusGeometry(.22,.045,16,40),markerMat);reel.rotation.x=Math.PI/2;reel.position.y=.31;root.add(reel);
+ const reelHub=mesh(T,new T.CylinderGeometry(.055,.055,.11,20),endpointMat);reelHub.rotation.x=Math.PI/2;reelHub.position.set(-.5,.31,0);root.add(reelHub);
+ for(let i=0;i<4;i++){const spoke=mesh(T,new T.BoxGeometry(.018,.18,.018),endpointMat);spoke.position.set(-.5,.31,0);spoke.rotation.z=i*Math.PI/4;root.add(spoke)}
+ const handle=mesh(T,new T.CylinderGeometry(.026,.026,.22,16),markerMat);handle.rotation.z=Math.PI/2;handle.position.set(-.5,.55,0);root.add(handle);
  const tape=mesh(T,new T.TubeGeometry(new T.LineCurve3(new T.Vector3(0,1.2,0),new T.Vector3(1,1.2,0)),16,.012,8,false),tapeMat);root.add(tape);
  const straightMat=new T.LineDashedMaterial({color:0x537c78,dashSize:.25,gapSize:.18,transparent:true,opacity:.55});const straight=new T.Line(new T.BufferGeometry(),straightMat);root.add(straight);
  function state(){return catenaryState(p)}
