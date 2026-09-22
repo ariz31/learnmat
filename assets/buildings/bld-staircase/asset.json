@@ -2,10 +2,15 @@
   "schemaVersion": "1.0.0",
   "id": "bld-staircase",
   "version": "0.2.0",
-  "title": "Parametric Staircase Geometry — 3D",
+  "title": "Parametric Staircase Geometry",
   "description": "Real Three.js straight-flight stair whose riser height, going count, run, width, and geometric pitch are driven by one deterministic model.",
   "category": "buildings",
-  "topics": ["staircase-geometry", "rise-and-going", "building-circulation", "3d"],
+  "topics": [
+    "staircase-geometry",
+    "rise-and-going",
+    "building-circulation",
+    "3d"
+  ],
   "learningObjectives": [
     "Compute individual riser height from total rise and riser count.",
     "Relate the number of goings to horizontal run while inspecting the stair as spatial geometry.",
@@ -21,7 +26,12 @@
   "derivedFrom": null,
   "networkRequired": true,
   "dependencies": [
-    {"name":"three","version":"0.185.1","url":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","embedded":false}
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
   ],
   "rights": {
     "status": "cleared",
