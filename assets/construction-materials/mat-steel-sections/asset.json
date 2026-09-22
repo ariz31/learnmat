@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "mat-steel-sections",
   "version": "0.2.0",
-  "title": "Parametric steel sections — 3D",
+  "title": "Parametric Steel Sections",
   "description": "Extruded real-3D I-section, channel, and angle specimens with highlighted analytical cross-section.",
   "category": "construction-materials",
   "topics": [
