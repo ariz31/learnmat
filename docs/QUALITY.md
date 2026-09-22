@@ -49,6 +49,12 @@ image, perspective-styled 2D drawing, Canvas2D scene, or decorative CSS transfor
 Check that geometry is dimensionally coherent with the model, that camera choices do
 not hide critical relationships, that clipping/z-fighting/intersections are controlled,
 and that lighting/material treatment improves rather than obscures understanding.
+Initial and explicit Overview/Fit views should derive framing from the current 3D
+bounds rather than unexplained fixed camera coordinates. Ordinary engineering
+parameter changes must preserve the learner's camera position, orbit target, zoom,
+and viewing direction; only an explicit camera/view control or a necessary viewport
+resize may reframe the scene. Provide an explicit Overview/Fit action when parameter
+ranges can materially expand or relocate geometry.
 2D analytical overlays remain encouraged on top of or beside the 3D scene for exact
 equations, plots, dimensions, tables, section cuts, and symbolic information.
 
