@@ -7,7 +7,7 @@ export function createAsset(context={}){
  const root=new T.Group();root.name='geo-open-channel';context.scene.add(root);let dynamic=new T.Group();root.add(dynamic);
  const ownedMaterials=[];let ownedGeometries=[],particles=[];
  const mat=(opts,physical=false)=>{const m=physical?new T.MeshPhysicalMaterial(opts):new T.MeshStandardMaterial(opts);ownedMaterials.push(m);return m};
- const concrete=mat({color:0xaab1b2,roughness:.82,metalness:.02}),water=mat({color:0x1d9dd2,transparent:true,opacity:.58,roughness:.08,transmission:.28,depthWrite:false},true),cyan=mat({color:0x6ce5ff,emissive:0x0d596d,emissiveIntensity:.5}),amber=mat({color:0xffbd59,emissive:0x5f3500,emissiveIntensity:.25}),dark=mat({color:0x253038,roughness:.62});
+ const concrete=mat({color:0xaab1b2,roughness:.82,metalness:.02}),water=mat({color:0x1d9dd2,transparent:true,opacity:.58,roughness:.08,transmission:.28,depthWrite:false},true),cyan=mat({color:0x6ce5ff,emissive:0x0d596d,emissiveIntensity:.5}),amber=mat({color:0xffbd59,emissive:0x5f3500,emissiveIntensity:.25}),dark=mat({color:0x253038,roughness:.62}),staffMat=mat({color:0xf2f0e7,roughness:.68});
  const groundMat=mat({color:0x26343b,roughness:.98});
  const groundGeo=new T.BoxGeometry(10,.12,7);ownedGeometries.push(groundGeo);const ground=new T.Mesh(groundGeo,groundMat);ground.position.y=-.25;ground.receiveShadow=true;root.add(ground);
  function mesh(g,m){ownedGeometries.push(g);const x=new T.Mesh(g,m);x.castShadow=true;x.receiveShadow=true;dynamic.add(x);return x}
@@ -19,7 +19,7 @@ export function createAsset(context={}){
    const left=mesh(new T.BoxGeometry(L,wallH,wallT),concrete);left.position.set(0,wallH/2-wallT/2,-b/2-wallT/2);
    const right=mesh(new T.BoxGeometry(L,wallH,wallT),concrete);right.position.set(0,wallH/2-wallT/2,b/2+wallT/2);
    const waterBody=mesh(new T.BoxGeometry(L-.28,y,b-.05),water);waterBody.position.y=y/2+.015;waterBody.castShadow=false;const surface=mesh(new T.BoxGeometry(L-.22,.018,b-.02),water);surface.position.y=y+.025;surface.castShadow=false;surface.material=water;for(const x of[-2.5,0,2.5]){const joint=mesh(new T.BoxGeometry(.035,.19,b+wallT*2+.03),dark);joint.position.set(x,-.075,0);joint.material.transparent=true;joint.material.opacity=.42}
-   const staff=mesh(new T.BoxGeometry(.085,wallH+.8,.035),new T.MeshStandardMaterial({color:0xf2f0e7,roughness:.68}));staff.position.set(-2.4,(wallH+.8)/2,-b/2-.38);
+   const staff=mesh(new T.BoxGeometry(.085,wallH+.8,.035),staffMat);staff.position.set(-2.4,(wallH+.8)/2,-b/2-.38);
    for(let i=0;i<12;i++){const major=i%3===0,w=major?.105:.072;const band=mesh(new T.BoxGeometry(w,.025,.042),i%2?cyan:amber);band.position.set(-2.4+(w-.085)/2,.12+i*(wallH+.58)/12,-b/2-.358)}
    const pgeo=new T.SphereGeometry(.055,10,8);ownedGeometries.push(pgeo);
    for(let lane=0;lane<5;lane++)for(let i=0;i<9;i++){const p=new T.Mesh(pgeo,cyan);p.castShadow=false;dynamic.add(p);particles.push({mesh:p,lane,i,b,L,y});}
