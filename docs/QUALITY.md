@@ -40,18 +40,17 @@ not in permanently visible walls of text.
 
 ## 3D spatial quality
 
-Treat real 3D as the preferred primary visualization for new spatial educational
+Treat real Three.js 3D as the required primary visualization for curated educational
 assets. Review whether the scene uses meaningful spatial geometry, perspective/depth,
 camera framing, scale relationships, occlusion, and contextual placement comparable
-in ambition to the surveying examples. Do not award 3D credit to a flat SVG,
-perspective-styled 2D drawing, or decorative CSS transform.
+in ambition to the surveying examples. Do not award 3D credit to a flat SVG, raster
+image, perspective-styled 2D drawing, Canvas2D scene, or decorative CSS transform.
 
 Check that geometry is dimensionally coherent with the model, that camera choices do
 not hide critical relationships, that clipping/z-fighting/intersections are controlled,
 and that lighting/material treatment improves rather than obscures understanding.
-When the primary visual is 2D, require a concrete educational justification for why
-3D adds no useful information or would reduce clarity/accessibility/performance.
-2D analytical overlays remain encouraged on top of or beside a 3D scene.
+2D analytical overlays remain encouraged on top of or beside the 3D scene for exact
+equations, plots, dimensions, tables, section cuts, and symbolic information.
 
 ## Animation and presentation quality
 
@@ -101,7 +100,8 @@ identified device; do not publish fabricated universal FPS scores.
 ## Evidence and decision
 
 Complete templates/REVIEW.md with observed results and unresolved defects.
-Screenshots need a source version, viewport, inputs, and capture state. Approval
+Rendered review captures need a source version, viewport, inputs, and capture state,
+but must not be checked in or referenced as static catalog preview assets. Approval
 requires engineering, browser, accessibility, and rights gates, plus reproducible
 usage. A numeric quality score is optional and cannot override a failed gate.
 This starter has structural validation only; no sample is approved.

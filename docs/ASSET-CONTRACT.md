@@ -18,11 +18,12 @@ names, verified licenses, GLB exports, performance scores, or preview URLs.
 For a published asset, provide a working live Three.js entrypoint, completed review
 record, license text path, versioned distributable, and usage instructions. The review
 record must also demonstrate the educational design requirements in
-EDUCATIONAL-DESIGN.md: the repository's 3D-first rule (or a documented 2D-primary
-exception), a meaningful learning outcome, stepwise reasoning when a real procedure
-exists, minimal-text information hierarchy, purposeful animation when used, and
-focus/maximize presentation behavior for interactive animation. Rendered captures may be used as review evidence, but they are not checked-in
-catalog image assets or substitutes for the live 3D entrypoint. Component APIs need
+EDUCATIONAL-DESIGN.md: the repository's Three.js-primary 3D rule, a meaningful
+learning outcome, stepwise reasoning when a real procedure exists, minimal-text
+information hierarchy, purposeful animation when used, and
+focus/maximize presentation behavior for interactive animation. Rendered captures
+may be used as review evidence, but they are not checked-in catalog image assets or
+substitutes for the live 3D entrypoint. Component APIs need
 documented input ranges, units, return values, errors, and resource disposal.
 
 ## Lifecycle
