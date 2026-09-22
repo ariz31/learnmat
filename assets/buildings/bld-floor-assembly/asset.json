@@ -2,10 +2,15 @@
   "schemaVersion": "1.0.0",
   "id": "bld-floor-assembly",
   "version": "0.2.0",
-  "title": "Exploded Floor Assembly — 3D",
+  "title": "Exploded Floor Assembly",
   "description": "Real Three.js exploded floor build-up with dimensionally linked finish, screed, slab, service void, and ceiling board.",
   "category": "buildings",
-  "topics": ["floor-assembly", "building-layers", "construction-detailing", "3d"],
+  "topics": [
+    "floor-assembly",
+    "building-layers",
+    "construction-detailing",
+    "3d"
+  ],
   "learningObjectives": [
     "Identify the vertical order and physical thickness of common floor assembly layers in 3D.",
     "Distinguish physical build-up from the display-only exploded separation.",
@@ -21,7 +26,12 @@
   "derivedFrom": null,
   "networkRequired": true,
   "dependencies": [
-    {"name":"three","version":"0.185.1","url":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","embedded":false}
+    {
+      "name": "three",
+      "version": "0.185.1",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "embedded": false
+    }
   ],
   "rights": {
     "status": "cleared",
