@@ -8,7 +8,7 @@ export function createAsset(context){
   const U={A:new THREE.Vector3(-w/2,0,0),B:new THREE.Vector3(w/2,0,0),C:new THREE.Vector3(-w/2,h,0),D:new THREE.Vector3(w/2,h,0)};
   const D={A:U.A.clone(),B:U.B.clone(),C:new THREE.Vector3(-w/2+dx,h,0),D:new THREE.Vector3(w/2+dx,h,0)};
   root.add(makeBoxBetween(THREE,U.A,U.C,.22,.36,m.ghost),makeBoxBetween(THREE,U.C,U.D,.22,.36,m.ghost),makeBoxBetween(THREE,U.B,U.D,.22,.36,m.ghost));
-  root.add(makeBoxBetween(THREE,D.A,D.C,.25,.4,m.steel),makeBoxBetween(THREE,D.C,D.D,.25,.4,m.steel),makeBoxBetween(THREE,D.B,D.D,.25,.4,m.steel));
+  root.add(makeBoxBetween(THREE,D.A,D.C,.25,.4,m.steel),makeBoxBetween(THREE,D.C,D.D,.25,.4,m.steel),makeBoxBetween(THREE,D.B,D.D,.25,.4,m.steel));for(const p of[D.C,D.D]){const joint=new THREE.Mesh(new THREE.BoxGeometry(.46,.46,.46),m.dark);joint.position.copy(p);joint.castShadow=true;root.add(joint);for(const z of[-.17,.17])for(const yoff of[-.14,.14]){const bolt=new THREE.Mesh(new THREE.CylinderGeometry(.028,.028,.50,14),m.bolt);bolt.rotation.x=Math.PI/2;bolt.position.set(p.x,p.y+yoff,z);bolt.castShadow=true;root.add(bolt)}}
   for(const p of[D.A,D.B]){const plate=new THREE.Mesh(new THREE.BoxGeometry(.75,.08,.68),m.dark);plate.position.set(p.x,.02,0);plate.castShadow=true;root.add(plate);for(const z of[-.24,.24])for(const xoff of[-.24,.24]){const bolt=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,.1,16),m.bolt);bolt.position.set(p.x+xoff,.09,z);bolt.castShadow=true;root.add(bolt);}}
   const from=new THREE.Vector3(0,h+.75,.28),to=new THREE.Vector3(Math.sign(dx||1)*1.45,h+.75,.28);root.add(makeArrow(THREE,from,to,0xb54a4a));
   const trueL=makeLabelSprite(THREE,'true Δ = '+(s.deltaXM*1000).toFixed(1)+' mm',{scale:.65});trueL.position.set(dx/2,h+.28,.32);root.add(trueL);
