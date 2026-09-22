@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
   "id": "str-support-reactions",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "title": "Support reactions and restraints",
-  "description": "Three.js component comparing pin, roller, and fixed support restraints with ordered leader annotations and minimalist progressive controls.",
+  "description": "Three.js support-restraint study with ordered leader annotations, progressive parameters, in-scene display toggles, and corrected focus-mode controls.",
   "category": "structural-analysis",
   "topics": [
     "support-reactions",
@@ -42,7 +42,7 @@
     "engineeringReview": "not-reviewed",
     "browserReview": "not-reviewed",
     "accessibilityReview": "not-reviewed",
-    "notes": "0.3.1 keeps the ordered leader system while removing redundant visualization text and making parameters and scene commands default-collapsed. Independent engineering, live-browser, and accessibility review remain required before approval."
+    "notes": "0.3.2 adds independent Information and Labels visibility controls and fixes Focus View menu contrast while preserving the analytical model and ordered leader system. Independent engineering, live-browser, and accessibility review remain required before approval."
   },
   "source": {
     "type": "original",
