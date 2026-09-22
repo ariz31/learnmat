@@ -168,11 +168,10 @@ function renderAssetList() {
     button.setAttribute("aria-current", asset.id === state.selectedId ? "true" : "false");
     if (asset.id === state.selectedId) button.classList.add("is-selected");
 
-    const mark = create("span", "asset-3d-mark", "3D");
     const copy = create("span", "asset-item-copy");
     copy.appendChild(create("span", "asset-item-title", asset.title || asset.id));
     copy.appendChild(create("span", "asset-item-subtitle", humanize(asset.category)));
-    button.append(mark, copy);
+    button.append(copy);
 
     button.addEventListener("click", () => {
       selectAsset(asset.id);
@@ -193,10 +192,7 @@ function renderHomeGrid() {
     button.setAttribute("aria-label", "Open " + (asset.title || asset.id));
 
     const top = create("span", "home-card-top");
-    top.append(
-      create("span", "home-3d-badge", "3D"),
-      create("span", "home-card-category", humanize(asset.category))
-    );
+    top.append(create("span", "home-card-category", humanize(asset.category)));
 
     const copy = create("span", "home-card-copy");
     copy.appendChild(create("span", "home-card-title", asset.title || asset.id));
@@ -327,12 +323,12 @@ function applyViewport() {
 
 function renderPreview(asset, forceReload) {
   els.previewLoading.hidden = false;
-  els.previewLoading.textContent = "Loading 3D asset…";
+  els.previewLoading.textContent = "Loading asset…";
   els.frame.setAttribute("sandbox", sandboxFor(asset));
   els.previewSecurity.textContent = asset.previewPolicy === "repository-component"
     ? "Repository component sandbox"
     : "Strict candidate sandbox";
-  els.frame.title = (asset.title || asset.id) + " live 3D asset";
+  els.frame.title = (asset.title || asset.id) + " live asset";
 
   const current = els.frame.dataset.assetId;
   if (forceReload || current !== asset.id) {
@@ -371,7 +367,7 @@ function renderAsset(asset) {
     ["Kind", humanize(asset.kind)],
     ["Renderer", "Three.js"],
     ["Entrypoint", asset.entrypoint],
-    ["Source class", asset.origin === "curated" ? "Curated asset" : "3D catalog example"],
+    ["Source class", asset.origin === "curated" ? "Curated asset" : "Catalog example"],
     ["Network required", asset.networkRequired === true ? "Yes" : asset.networkRequired === false ? "No" : "Unknown"]
   ]);
 
@@ -398,13 +394,13 @@ function showHome(updateUrl) {
   els.assetView.hidden = true;
   els.homeView.hidden = false;
   els.assetTools.hidden = true;
-  els.topbarContext.textContent = "3D Assets";
+  els.topbarContext.textContent = "Assets";
   els.frame.src = "about:blank";
   els.frame.dataset.assetId = "";
   renderAssetList();
   renderHomeGrid();
   if (updateUrl !== false) updateHash(null);
-  document.title = "LearnMat 3D Asset Viewer";
+  document.title = "LearnMat Asset Viewer";
 }
 
 function selectAsset(id) {
