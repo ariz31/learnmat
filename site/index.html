@@ -4,15 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Browse LearnMat real-3D civil-engineering assets.">
-  <title>LearnMat 3D Asset Viewer</title>
+  <meta name="description" content="Browse LearnMat interactive civil-engineering assets.">
+  <title>LearnMat Asset Viewer</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
-      <a class="brand" id="home-link" href="/" aria-label="LearnMat 3D assets home" title="Home">
+      <a class="brand" id="home-link" href="/" aria-label="LearnMat assets home" title="Home">
         <svg class="brand-logo" viewBox="0 0 64 64" role="img" aria-label="LearnMat">
           <defs>
             <linearGradient id="lm-cap" x1="12" y1="10" x2="53" y2="38" gradientUnits="userSpaceOnUse">
@@ -35,12 +35,10 @@
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4.5h14M3 10h14M3 15.5h14"/></svg>
       </button>
 
-      <div class="topbar-context" id="topbar-context" aria-live="polite">3D Assets</div>
+      <div class="topbar-context" id="topbar-context" aria-live="polite">Assets</div>
       <div class="topbar-spacer"></div>
 
       <div class="topbar-asset-tools" id="asset-tools" hidden>
-        <span class="three-badge" aria-label="Three-dimensional asset">3D</span>
-
         <label class="compact-select topbar-viewport">
           <span class="sr-only">Preview viewport</span>
           <select id="viewport-select" aria-label="Preview viewport" title="Preview viewport">
@@ -57,13 +55,13 @@
         <button class="icon-button optional-tool" id="share-button" type="button" aria-label="Copy asset link" title="Copy link">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.6 12.4 12.4 7.6M6.3 8.5 4.6 10.2a3 3 0 0 0 4.2 4.2l1.7-1.7M13.7 11.5l1.7-1.7a3 3 0 0 0-4.2-4.2L9.5 7.3"/></svg>
         </button>
-        <button class="icon-button" id="reload-preview" type="button" aria-label="Reload 3D preview" title="Reload preview">
+        <button class="icon-button" id="reload-preview" type="button" aria-label="Reload preview" title="Reload preview">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.6 6.1A6 6 0 1 0 16 13M15.6 6.1V2.8M15.6 6.1h-3.4"/></svg>
         </button>
-        <button class="icon-button" id="open-preview" type="button" aria-label="Open 3D asset standalone" title="Open asset">
+        <button class="icon-button" id="open-preview" type="button" aria-label="Open asset standalone" title="Open asset">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4.7A1.7 1.7 0 0 0 3 5.7v9.6A1.7 1.7 0 0 0 4.7 17h9.6a1.7 1.7 0 0 0 1.7-1.7V12M11 3h6v6M17 3l-8 8"/></svg>
         </button>
-        <button class="icon-button" id="fullscreen-preview" type="button" aria-label="View 3D asset fullscreen" title="Fullscreen">
+        <button class="icon-button" id="fullscreen-preview" type="button" aria-label="View asset fullscreen" title="Fullscreen">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 7V3.5H7M13 3.5h3.5V7M16.5 13v3.5H13M7 16.5H3.5V13"/></svg>
         </button>
       </div>
@@ -74,13 +72,13 @@
     </header>
 
     <main class="workspace" id="workspace">
-      <aside class="catalog-panel" id="catalog-panel" aria-label="3D asset catalog">
+      <aside class="catalog-panel" id="catalog-panel" aria-label="Asset catalog">
         <div class="catalog-controls">
           <div class="catalog-search-row">
             <label class="search-box">
-              <span class="sr-only">Search 3D assets</span>
+              <span class="sr-only">Search assets</span>
               <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="4.5"/><path d="m12 12 4 4"/></svg>
-              <input id="search-input" type="search" placeholder="Search 3D assets" autocomplete="off">
+              <input id="search-input" type="search" placeholder="Search assets" autocomplete="off">
               <kbd>/</kbd>
             </label>
             <button class="icon-button filter-toggle" id="filter-toggle" type="button" aria-label="Show filters" aria-expanded="false" title="Filters">
@@ -103,7 +101,7 @@
                 <select id="origin-filter">
                   <option value="">All sources</option>
                   <option value="curated">Curated assets</option>
-                  <option value="legacy-example">3D catalog examples</option>
+                  <option value="legacy-example">Catalog examples</option>
                 </select>
               </label>
             </div>
@@ -111,25 +109,25 @@
           </div>
         </div>
 
-        <nav class="asset-list" id="asset-list" aria-label="Available 3D assets"></nav>
+        <nav class="asset-list" id="asset-list" aria-label="Available assets"></nav>
         <div class="catalog-empty" id="catalog-empty" hidden>
-          <strong>No matching 3D assets</strong>
+          <strong>No matching assets</strong>
           <span>Adjust your search or filters.</span>
         </div>
       </aside>
 
-      <section class="viewer-panel" aria-label="3D asset viewer">
+      <section class="viewer-panel" aria-label="Asset viewer">
         <section class="home-view" id="home-view">
           <header class="home-heading">
             <div>
               <p class="eyebrow">LearnMat Library</p>
-              <h1>3D Assets</h1>
+              <h1>Assets</h1>
               <p>Open any asset to inspect its live Three.js scene.</p>
             </div>
           </header>
-          <div class="home-grid" id="home-grid" aria-label="All 3D assets"></div>
+          <div class="home-grid" id="home-grid" aria-label="All assets"></div>
           <div class="home-empty" id="home-empty" hidden>
-            <strong>No matching 3D assets</strong>
+            <strong>No matching assets</strong>
             <span>Adjust your search or filters in the sidebar.</span>
           </div>
         </section>
@@ -144,11 +142,11 @@
           </header>
 
           <div class="preview-stage" id="preview-stage">
-            <div class="preview-loading" id="preview-loading">Loading 3D asset…</div>
+            <div class="preview-loading" id="preview-loading">Loading asset…</div>
             <div class="device-frame" id="device-frame">
               <iframe
                 id="asset-frame"
-                title="Interactive LearnMat 3D asset"
+                title="Interactive LearnMat asset"
                 loading="eager"
                 referrerpolicy="strict-origin-when-cross-origin"
                 allow="fullscreen"
