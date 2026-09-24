@@ -275,8 +275,12 @@ def validate() -> list[str]:
         if folder == "todo":
             if task.get("claimed_by") is not None:
                 errors.append(f"{path.relative_to(ROOT)}: TODO must not be claimed")
+            if task.get("branch") is not None:
+                errors.append(f"{path.relative_to(ROOT)}: TODO must not have a branch")
             if task.get("pr") is not None:
                 errors.append(f"{path.relative_to(ROOT)}: TODO must not have a PR")
+            if task.get("completed") is not None:
+                errors.append(f"{path.relative_to(ROOT)}: TODO must not be completed")
         elif folder == "implementing":
             if not task.get("claimed_by"):
                 errors.append(f"{path.relative_to(ROOT)}: active task needs claimed_by")
@@ -286,10 +290,20 @@ def validate() -> list[str]:
                 errors.append(
                     f"{path.relative_to(ROOT)}: active task must record its draft/open PR number"
                 )
-        elif folder == "completed":
-            if task.get("status") in CLOSED_STATUSES and not _is_positive_pr(task.get("pr")):
+            if task.get("completed") is not None:
+                errors.append(f"{path.relative_to(ROOT)}: active task must not be completed")
+            if status == "blocked" and not task.get("block_reason"):
+                errors.append(f"{path.relative_to(ROOT)}: blocked task needs block_reason")
+            if status != "blocked" and task.get("block_reason") is not None:
                 errors.append(
-                    f"{path.relative_to(ROOT)}: closed task must retain its PR number"
+                    f"{path.relative_to(ROOT)}: non-blocked task must clear block_reason"
+                )
+        elif folder == "completed":
+            if not task.get("completed"):
+                errors.append(f"{path.relative_to(ROOT)}: closed task needs completed date")
+            if status == "completed" and not _is_positive_pr(task.get("pr")):
+                errors.append(
+                    f"{path.relative_to(ROOT)}: completed implementation must retain its PR number"
                 )
 
     parsed = [task for task in tasks if "_parse_error" not in task]
@@ -331,7 +345,22 @@ def validate() -> list[str]:
                 )
             seen_prs[str(pr)] = task_id
 
-        for dep in task.get("depends_on", []) if isinstance(task.get("depends_on"), list) else []:
+        for conflict in (
+            task.get("conflicts_with", [])
+            if isinstance(task.get("conflicts_with"), list)
+            else []
+        ):
+            matches = by_id.get(conflict, [])
+            if matches and matches[0].get("status") in ACTIVE_STATUSES:
+                errors.append(
+                    f"{task_id}: conflicts with active task {conflict}"
+                )
+
+        for dep in (
+            task.get("depends_on", [])
+            if isinstance(task.get("depends_on"), list)
+            else []
+        ):
             matches = by_id.get(dep, [])
             if matches and matches[0].get("status") != "completed":
                 errors.append(f"{task_id}: dependency {dep} is not completed")
@@ -475,9 +504,18 @@ def claim_task(args: argparse.Namespace) -> None:
         if not dependency or dependency.get("status") != "completed":
             raise TaskError(f"dependency {dep} is not completed")
 
+    for conflict in task.get("conflicts_with", []):
+        conflicting = by_id.get(conflict)
+        if conflicting and conflicting.get("status") in ACTIVE_STATUSES:
+            raise TaskError(f"conflicts with active task {conflict}")
+
     for other in tasks:
         if other.get("status") not in ACTIVE_STATUSES:
             continue
+        if task.get("id") in other.get("conflicts_with", []):
+            raise TaskError(
+                f"active task {other.get('id')} declares a conflict with {task.get('id')}"
+            )
         for mine in task.get("write_scope", []):
             for theirs in other.get("write_scope", []):
                 if scopes_overlap(str(mine), str(theirs)):
@@ -540,6 +578,8 @@ def close_task(args: argparse.Namespace) -> None:
     if args.status == "completed":
         if task["_folder"] != "implementing":
             raise TaskError("only an implementing task can be completed")
+        if task.get("status") != "ready":
+            raise TaskError("mark the implementation ready before completing it")
         if not _is_positive_pr(task.get("pr")):
             raise TaskError("record the implementation PR before completing the task")
     if args.status in {"cancelled", "superseded"} and not args.reason:
