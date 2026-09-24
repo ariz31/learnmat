@@ -7,6 +7,8 @@ const state = {
 };
 
 const mobileQuery = matchMedia("(max-width: 760px)");
+let previewLoadTimer = 0;
+let previewNavigation = 0;
 
 const els = {
   workspace: document.querySelector("#workspace"),
@@ -321,9 +323,20 @@ function applyViewport() {
   els.deviceFrame.style.height = parts[1] + "px";
 }
 
-function renderPreview(asset, forceReload) {
+function setPreviewLoading(message, stateName = "loading") {
+  els.previewLoading.textContent = message;
+  els.previewLoading.dataset.state = stateName;
   els.previewLoading.hidden = false;
-  els.previewLoading.textContent = "Loading asset…";
+}
+
+function clearPreviewLoading() {
+  clearTimeout(previewLoadTimer);
+  previewLoadTimer = 0;
+  els.previewLoading.hidden = true;
+  els.previewLoading.dataset.state = "";
+}
+
+function renderPreview(asset, forceReload) {
   els.frame.setAttribute("sandbox", sandboxFor(asset));
   els.previewSecurity.textContent = asset.previewPolicy === "repository-component"
     ? "Repository component sandbox"
@@ -331,9 +344,27 @@ function renderPreview(asset, forceReload) {
   els.frame.title = (asset.title || asset.id) + " live asset";
 
   const current = els.frame.dataset.assetId;
-  if (forceReload || current !== asset.id) {
+  const shouldNavigate = forceReload || current !== asset.id || els.frame.src === "about:blank";
+
+  if (shouldNavigate) {
+    const token = String(++previewNavigation);
+    clearTimeout(previewLoadTimer);
+    setPreviewLoading("Loading asset…");
     els.frame.dataset.assetId = asset.id;
+    els.frame.dataset.loadToken = token;
     els.frame.src = asset.entrypointUrl;
+
+    previewLoadTimer = setTimeout(() => {
+      if (
+        els.frame.dataset.loadToken === token &&
+        els.frame.dataset.assetId === asset.id &&
+        !els.previewLoading.hidden
+      ) {
+        setPreviewLoading("Still loading — tap to retry", "slow");
+      }
+    }, 8000);
+  } else {
+    clearPreviewLoading();
   }
 
   els.previewNotice.textContent = previewNotice(asset);
@@ -395,8 +426,10 @@ function showHome(updateUrl) {
   els.homeView.hidden = false;
   els.assetTools.hidden = true;
   els.topbarContext.textContent = "Assets";
+  clearPreviewLoading();
   els.frame.src = "about:blank";
   els.frame.dataset.assetId = "";
+  els.frame.dataset.loadToken = "";
   renderAssetList();
   renderHomeGrid();
   if (updateUrl !== false) updateHash(null);
@@ -415,9 +448,12 @@ function selectAsset(id) {
 function reloadPreview() {
   const asset = selectedAsset();
   if (!asset) return;
-  els.previewLoading.hidden = false;
+  clearTimeout(previewLoadTimer);
+  setPreviewLoading("Reloading asset…");
+  els.frame.dataset.assetId = "";
+  els.frame.dataset.loadToken = "";
   els.frame.src = "about:blank";
-  requestAnimationFrame(() => { els.frame.src = asset.entrypointUrl; });
+  requestAnimationFrame(() => renderPreview(asset, true));
 }
 
 function setCatalogOpen(open) {
@@ -518,8 +554,11 @@ function bindEvents() {
   });
 
   els.shareButton.addEventListener("click", copyShareLink);
+  els.previewLoading.addEventListener("click", () => {
+    if (els.previewLoading.dataset.state === "slow") reloadPreview();
+  });
   els.frame.addEventListener("load", () => {
-    if (els.frame.src !== "about:blank") els.previewLoading.hidden = true;
+    if (els.frame.src !== "about:blank") clearPreviewLoading();
   });
 
   addEventListener("hashchange", () => {
