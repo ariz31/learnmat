@@ -13,7 +13,10 @@ block_reason: null
 write_scope:
   - assets/**
   - shared/**
-  - scripts/build_site.py
+  - scripts/**
+  - site/**
+  - examples/surveying/pace-factor/**
+  - examples/surveying/profile-leveling/**
   - docs/VISUALIZATION-FRAMING-REVIEW.md
   - todo/**
   - implementing/**
