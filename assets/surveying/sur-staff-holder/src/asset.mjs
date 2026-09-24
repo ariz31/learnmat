@@ -28,7 +28,7 @@ export function createAsset(context={}){
  const root=new T.Group();scene.add(root);const person=human(T);root.add(person);const pole=staff(T);root.add(pole);
  const base=mesh(T,new T.CylinderGeometry(.08,.10,.035,24),m(T,0x59645d,.85));base.position.y=.0175;root.add(base);
  const reading=mesh(T,new T.TorusGeometry(.065,.008,10,24),m(T,0xe65b3e,.55));reading.rotation.x=Math.PI/2;pole.add(reading);
- const plumbMat=new T.LineBasicMaterial({color:0x3d7a77,transparent:true,opacity:.55});const plumbGeo=new T.BufferGeometry().setFromPoints([new T.Vector3(0,0,0),new T.Vector3(0,5.2,0)]);const plumb=new T.Line(plumbGeo,plumbMat);root.add(plumb);
+ const plumbMat=new T.LineBasicMaterial({color:0x3d7a77,transparent:true,opacity:.55});const plumbGeo=new T.BufferGeometry().setFromPoints([new T.Vector3(0,0,0),new T.Vector3(0,5.2,0)]);const plumb=new T.Line(plumbGeo,plumbMat);plumb.userData.fitExclude=true;root.add(plumb);
  function geometry(){return {topOffsetX:p.staffHeight*Math.sin(p.staffTiltRad),topVerticalProjection:p.staffHeight*Math.cos(p.staffTiltRad),verticalityErrorRad:p.staffTiltRad,verticalityErrorDeg:p.staffTiltRad*180/Math.PI};}
  function render(){pole.scale.set(1,p.staffHeight,1);pole.rotation.z=-p.staffTiltRad;reading.position.y=p.readingHeight/p.staffHeight;person.scale.setScalar(p.personHeight/1.7);if(!context.reducedMotion)person.position.y=Math.sin(time*1.4)*.004;else person.position.y=0;}
  function snap(){if(disposed)throw new Error('Asset has been disposed.');const g=geometry();return{id:'sur-staff-holder',timeSeconds:Math.max(0,time),parameters:{...p},result:g,pose:{staffBase:{x:0,y:0,z:0},staffTop:{x:g.topOffsetX,y:g.topVerticalProjection,z:0}}};}
