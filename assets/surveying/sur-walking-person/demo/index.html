@@ -23,6 +23,6 @@ const L=document.querySelector('#L'),V=document.querySelector('#V'),F=document.q
 function apply(){asset.setParameters({pathLength:+L.value,speed:+V.value,stepFrequency:+F.value});oL.value=(+L.value).toFixed(1)+' m';oV.value=(+V.value).toFixed(1)+' m/s';oF.value=(+F.value).toFixed(1)+' Hz';}
 [L,V,F].forEach(x=>x.addEventListener('input',apply));apply();
 play.onclick=()=>{playing=!playing;play.textContent=playing?'Pause':'Play';last=performance.now()};overview.onclick=()=>fitAssetView(new THREE.Vector3(.8,.45,1),1.38);reset.onclick=()=>{elapsed=0;asset.update(0)};focus.onclick=()=>stage.classList.toggle('focus');
-function resize(){const w=host.clientWidth,h=host.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);asset.resize(w,h,renderer.getPixelRatio())}addEventListener('resize',resize);resize();fitAssetView(new THREE.Vector3(.8,.45,1),1.38);
+function resize(){const w=host.clientWidth,h=host.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);asset.resize(w,h,renderer.getPixelRatio())}new ResizeObserver(resize).observe(host);resize();fitAssetView(new THREE.Vector3(.8,.45,1),1.38);
 function frame(now){const dt=(now-last)/1000;last=now;if(playing)elapsed+=Math.min(dt,.05);const s=asset.update(elapsed);distance.textContent=s.result.distanceTravelled.toFixed(2)+' m';controls.update();renderer.render(scene,camera);requestAnimationFrame(frame)}requestAnimationFrame(frame);
 </script></main></body></html>
