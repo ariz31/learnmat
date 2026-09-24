@@ -170,7 +170,16 @@ Never steal an `implementing/` task merely because it appears inactive.
 2. Establish whether the previous writer has stopped.
 3. Preserve useful changes/evidence.
 4. Reconcile ownership explicitly.
-5. Only then return or close the task through a deliberate integrator action.
+5. If the work should become available again, the integrator runs:
+
+```sh
+python scripts/task.py release TASK-ID --reason "Previous writer stopped; PR closed"
+python scripts/task.py validate
+```
+
+The release records the previous branch/PR in the task notes before clearing ownership.
+If the work should not continue, close it as `cancelled` or `superseded` with a
+reason instead.
 
 The ledger is Git-coordinated state, not a remote mutex. Two stale clones can still
 race. Collision-resistant IDs, refresh-before-claim, active-PR checks, and write-scope
@@ -197,6 +206,7 @@ while the existing orchestration controls domain-worker execution.
 - duplicate task IDs;
 - missing dependency/conflict references;
 - unresolved dependencies on active tasks;
+- semantic conflicts between active tasks;
 - duplicate active branches or PR numbers;
 - invalid path-scope syntax;
 - overlapping active write scopes.
