@@ -4,36 +4,40 @@ title: Establish repository task ledger for agentic swarm coordination
 status: implementing
 priority: high
 created: 2026-09-24
+completed: null
 claimed_by: chatgpt
 branch: task/TASK-0001-agent-task-ledger
-pr: pending
+pr: 37
 coordination: shared
-scope:
-  write:
-    - AGENTS.md
-    - CONTRIBUTING.md
-    - docs/AGENT-TASK-LIFECYCLE.md
-    - todo/**
-    - implementing/**
-    - completed/**
-    - templates/TASK.md
-    - scripts/task.py
-  read:
-    - orchestration/**
-    - scripts/**
-    - docs/**
-  forbidden: []
-depends_on: []
-conflicts_with: []
+block_reason: null
+write_scope:
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - docs/AGENT-TASK-LIFECYCLE.md
+  - todo/**
+  - implementing/**
+  - completed/**
+  - templates/TASK.md
+  - scripts/task.py
+read_scope:
+  - orchestration/**
+  - scripts/**
+  - docs/**
+forbidden_scope:
+depends_on:
+conflicts_with:
 ---
 
 ## Objective
 
-Introduce a repository-wide task ledger and claim protocol so multiple AI or human contributors can work concurrently with low duplication and low merge-conflict risk.
+Introduce a repository-wide task ledger and claim protocol so multiple AI or human
+contributors can work concurrently with low duplication and low merge-conflict risk.
 
 ## Current problem
 
-LearnMat already has specialized asset orchestration, ownership queues, and worker scope checks, but general repository work has no universal task lifecycle tying requests, ownership, branches, and pull requests together.
+LearnMat already has specialized asset orchestration, ownership queues, and worker
+scope checks, but general repository work has no universal task lifecycle tying
+requests, ownership, branches, and pull requests together.
 
 ## Acceptance criteria
 
@@ -41,26 +45,38 @@ LearnMat already has specialized asset orchestration, ownership queues, and work
 - Root task states exist for available, claimed, and historical work.
 - Exactly one active implementation and one implementation PR are allowed per task.
 - Each implementation PR maps to exactly one task ID.
-- Agents must inspect active tasks and open PRs before claiming work.
-- Task files declare write scope, dependencies, conflicts, validation, and out-of-scope boundaries.
+- Agents inspect active tasks and open PRs before claiming work.
+- Task files declare write scope, dependencies, conflicts, validation, and boundaries.
 - Unrelated discoveries become new TODOs rather than scope creep.
-- Existing asset orchestration remains authoritative for domain-worker ownership and is not replaced.
-- A lightweight local helper validates task metadata/state and supports safe task creation/claim/completion transitions without GitHub Actions.
+- Existing asset orchestration remains authoritative for domain-worker ownership.
+- A local helper validates task metadata/state and supports safe transitions without
+  GitHub Actions.
 
 ## Out of scope
 
 - Replacing orchestration/owners.json or domain queues.
 - Adding or triggering GitHub Actions.
 - Automatically merging implementation pull requests.
-- Building a remote lock service.
+- Claiming that Git files provide a distributed remote lock.
 
 ## Validation required
 
-- Validate the task ledger with scripts/task.py.
+- Run the task-ledger validator against the branch state.
 - Confirm AGENTS.md and CONTRIBUTING.md point to the same lifecycle.
-- Confirm the bootstrap task itself follows the lifecycle.
+- Confirm the bootstrap task itself follows the lifecycle and records PR #37.
 - Inspect the final PR for one-task-only scope and no unrelated changes.
+- Verify the helper's new, claim, set-pr, status, close, and validate transitions.
 
 ## Notes
 
-This is the bootstrap task for the task-ledger protocol itself. The task was documented in todo/ before substantive implementation and is now claimed in implementing/ on this branch.
+This is the bootstrap task for the task-ledger protocol itself. It was first created
+under todo/ before substantive implementation, then claimed into implementing/ and
+linked to draft PR #37.
+
+## Implementation summary
+
+- Added root todo, implementing, and completed ledgers with explicit semantics.
+- Added a reusable task template and collision-resistant future task IDs.
+- Added a stdlib-only task helper/validator with scope-overlap and dependency checks.
+- Added repository-wide mandatory preflight/claim rules to AGENTS.md.
+- Integrated the general ledger with the existing specialized asset orchestration.
