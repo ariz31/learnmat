@@ -546,6 +546,49 @@ def claim_task(args: argparse.Namespace) -> None:
     )
 
 
+def append_note(text: str, note: str) -> str:
+    marker = "\n## Notes\n"
+    start = text.find(marker)
+    if start < 0:
+        raise TaskError("task is missing the required Notes section")
+    content_start = start + len(marker)
+    next_section = text.find("\n## ", content_start)
+    insert_at = len(text) if next_section < 0 else next_section
+    before = text[:insert_at].rstrip()
+    after = text[insert_at:]
+    return f"{before}\n\n- {note}\n{after}"
+
+
+def release_task(args: argparse.Namespace) -> None:
+    task = task_by_id(args.task_id)
+    if task["_folder"] != "implementing":
+        raise TaskError("only an implementing task can be released")
+    previous_branch = task.get("branch")
+    previous_pr = task.get("pr")
+    today = datetime.now(timezone.utc).date().isoformat()
+    note = (
+        f"Released {today}: {args.reason}. "
+        f"Previous branch: {previous_branch}; PR: {previous_pr}."
+    )
+    text = update_scalars(
+        task["_text"],
+        {
+            "status": "todo",
+            "claimed_by": None,
+            "branch": None,
+            "pr": None,
+            "block_reason": None,
+        },
+    )
+    text = append_note(text, note)
+    source = task["_path"]
+    target = STATE_DIRS["todo"] / source.name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(text, encoding="utf-8")
+    source.unlink()
+    print(target.relative_to(ROOT))
+
+
 def set_pr(args: argparse.Namespace) -> None:
     task = task_by_id(args.task_id)
     if task["_folder"] != "implementing":
@@ -640,6 +683,14 @@ def build_parser() -> argparse.ArgumentParser:
     claim.add_argument("--agent", required=True)
     claim.add_argument("--branch", required=True)
     claim.set_defaults(func=claim_task)
+
+    release = sub.add_parser(
+        "release",
+        help="integrator-only: return a reconciled active task to todo/",
+    )
+    release.add_argument("task_id")
+    release.add_argument("--reason", required=True)
+    release.set_defaults(func=release_task)
 
     pr = sub.add_parser("set-pr", help="record the draft/open pull request number")
     pr.add_argument("task_id")
