@@ -24,7 +24,7 @@ export function createAsset(context={}){
  const reflector=mesh(T,new T.OctahedronGeometry(.13,1),mat(T,0xf06b3d,.22,.18,{emissive:0x44140b,emissiveIntensity:.18}));prism.add(reflector);
  const frameMat=dark;for(const [x,y,w,h] of [[0,.19,.42,.045],[0,-.19,.42,.045],[-.19,0,.045,.42],[.19,0,.045,.42]]){const b=mesh(T,new T.BoxGeometry(w,h,.055),frameMat);b.position.set(x,y,0);prism.add(b)}
  const targetRing=mesh(T,new T.TorusGeometry(.09,.018,10,24),mat(T,0xffa42c,.42,.12));targetRing.rotation.y=Math.PI/2;prism.add(targetRing);
- const plumbMat=new T.LineDashedMaterial({color:0x2a7f7a,dashSize:.12,gapSize:.08,transparent:true,opacity:.55});const plumb=new T.Line(new T.BufferGeometry().setFromPoints([new T.Vector3(0,0,0),new T.Vector3(0,3.8,0)]),plumbMat);plumb.computeLineDistances();root.add(plumb);
+ const plumbMat=new T.LineDashedMaterial({color:0x2a7f7a,dashSize:.12,gapSize:.08,transparent:true,opacity:.55});const plumb=new T.Line(new T.BufferGeometry().setFromPoints([new T.Vector3(0,0,0),new T.Vector3(0,3.8,0)]),plumbMat);plumb.userData.fitExclude=true;plumb.computeLineDistances();root.add(plumb);
  const base=mesh(T,new T.CylinderGeometry(.07,.08,.025,20),mat(T,0xd9d3c3,.9));base.position.y=.0125;root.add(base);
  function geometry(){return prismGeometry(p)}
  function render(){shaftGroup.scale.y=p.targetHeight;prism.position.y=p.targetHeight;poleRoot.rotation.z=-p.poleTiltRad;person.scale.setScalar(p.personHeight/1.7);if(!context.reducedMotion)person.position.y=Math.sin(time*1.3)*.004;else person.position.y=0}
