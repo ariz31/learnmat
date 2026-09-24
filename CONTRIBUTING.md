@@ -1,5 +1,19 @@
 # Contributing
 
+## Task lifecycle
+
+Before changing tracked repository content, document the requested work in the root
+task ledger and follow [docs/AGENT-TASK-LIFECYCLE.md](docs/AGENT-TASK-LIFECYCLE.md).
+Check active tasks and open pull requests before creating a new task.
+
+Implementation contributions use one task ID, one task branch, and one implementation
+PR. The PR must stay within the task's declared write scope. Record unrelated work as
+a separate TODO instead of expanding the current PR.
+
+Use `python scripts/task.py validate` before handoff. Specialized domain-agent work
+continues to follow `docs/AGENT-ORCHESTRATION.md`; its integrator maintains the root
+task lifecycle when worker scope excludes the root task folders.
+
 ## Intake
 
 Create a stable kebab-case asset ID, choose a category from docs/TAXONOMY.md,
