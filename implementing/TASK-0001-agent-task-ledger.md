@@ -1,7 +1,7 @@
 ---
 id: TASK-0001
 title: Establish repository task ledger for agentic swarm coordination
-status: implementing
+status: ready
 priority: high
 created: 2026-09-24
 completed: null
@@ -80,3 +80,15 @@ linked to draft PR #37.
 - Added a stdlib-only task helper/validator with scope-overlap and dependency checks.
 - Added repository-wide mandatory preflight/claim rules to AGENTS.md.
 - Integrated the general ledger with the existing specialized asset orchestration.
+
+
+## Validation evidence
+
+- PR #37 changed-file audit: 9 files, all within TASK-0001 declared scope.
+- Task helper syntax and lifecycle logic were exercised in an isolated local fixture:
+  create, claim, set-pr, validate, release, reclaim, ready, complete, cancellation,
+  and semantic-conflict rejection all passed.
+- Critical validator/claim/release code was re-read from the actual PR branch after
+  the hardening patches.
+- Vercel preview for head 71794a5f599fe9c9aa048403e298b9a90b8376a7 reported Ready.
+- No GitHub Actions workflow was added or manually triggered.
